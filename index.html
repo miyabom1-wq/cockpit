@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Vantage">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Vantage</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #ffffff; --surface: #ffffff; --surface-2: #f7f8fa; --surface-3: #eff1f5;
+    --border: #e4e7eb; --border-strong: #cdd2d8;
+    --text: #131722; --text-2: #5d606b; --text-3: #9ca3af;
+    --accent: #2962ff;
+    --green: #26a69a; --green-dim: #e8f5f3; --green-strong: #00897b;
+    --red: #ef5350; --red-dim: #fcebea; --red-strong: #d32f2f;
+    --amber: #ff9800; --amber-dim: #fff4e1; --amber-strong: #ef6c00;
+    --blue: #2962ff; --blue-dim: #e8eeff;
+    --purple: #ab47bc; --purple-dim: #f5e9f8;
+    --yellow: #fdd835; --yellow-dim: #fffcde;
+    --radius: 8px; --radius-lg: 12px;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: var(--bg); color: var(--text);
+    font-size: 15px; line-height: 1.55;
+    padding: 20px 16px 60px; max-width: 960px; margin: 0 auto;
+    -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  header .title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  header .title-dot { display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin-right: 10px; vertical-align: middle; }
+  header .actions { display: flex; gap: 8px; align-items: center; }
+  header .clock { font-size: 12px; color: var(--text-3); font-family: var(--mono); margin-right: 8px; }
+  .btn { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text-2); padding: 7px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s; font-weight: 500; }
+  .btn:hover { color: var(--text); background: var(--surface-2); }
+  .btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+  .btn.danger { color: var(--red); border-color: var(--red-dim); }
+  .btn.small { padding: 4px 10px; font-size: 12px; }
+  .btn.loading { opacity: 0.5; pointer-events: none; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .tab-btn { background: transparent; border: none; color: var(--text-2); padding: 12px 18px; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  section { margin-bottom: 28px; }
+  .sec-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+  .sec-title-left { display: flex; align-items: baseline; gap: 8px; }
+  .sec-title h2 { font-size: 13px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .item-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .item-row { display: grid; gap: 12px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .item-row:last-child { border-bottom: none; }
+
+  .item-row.event { grid-template-columns: 1fr auto auto; }
+  .item-row.event.imminent { background: var(--amber-dim); border-left: 3px solid var(--amber); }
+  .item-row.event.past { opacity: 0.5; }
+  .item-row.event .ev-name { font-size: 14px; font-weight: 500; }
+  .item-row.event .ev-time { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-top: 3px; }
+  .item-row.event .ev-notify { font-size: 10px; color: var(--accent); margin-top: 3px; }
+  .item-row.event .ev-countdown { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 80px; text-align: right; }
+  .item-row.event.imminent .ev-countdown { color: var(--amber-strong); }
+  .item-row.event.past .ev-countdown { font-size: 14px; color: var(--text-3); }
+
+  .item-row.alert { grid-template-columns: 1fr auto 100px auto auto; }
+  .item-row.alert.fired { background: var(--red-dim); border-left: 3px solid var(--red); }
+  .item-row.alert.disabled { opacity: 0.4; }
+  .item-row.alert.no-data { background: var(--amber-dim); }
+  .item-row.alert .al-cond { font-size: 14px; font-weight: 500; font-family: var(--mono); }
+  .item-row.alert .al-current { font-family: var(--mono); font-size: 13px; color: var(--text-2); font-weight: 500; }
+  .item-row.alert .al-current.met { color: var(--green-strong); }
+  .item-row.alert .al-current.fail { color: var(--amber-strong); font-size: 11px; }
+  .item-row.alert .al-state { font-size: 10px; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .item-row.alert .al-state.waiting { background: var(--surface-3); color: var(--text-2); }
+  .item-row.alert .al-state.fired { background: var(--red); color: white; }
+  .item-row.alert .al-state.disabled { background: var(--surface-3); color: var(--text-3); }
+  .item-row.alert .al-state.nodata { background: var(--amber-dim); color: var(--amber-strong); }
+  .item-row.alert .al-toggle { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; font-weight: 500; }
+
+  .item-row.auto { grid-template-columns: 88px 1fr auto auto; gap: 12px; }
+  .item-row.auto.disabled { opacity: 0.4; }
+  .item-row.auto.no-data .auto-val { color: var(--amber-strong); font-size: 12px; }
+  .item-row.auto .cat-tag { font-size: 9px; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; text-align: center; font-weight: 600; }
+  .item-row.auto .cat-tag.index     { background: var(--blue-dim); color: var(--accent); }
+  .item-row.auto .cat-tag.macro     { background: var(--amber-dim); color: var(--amber-strong); }
+  .item-row.auto .cat-tag.fx        { background: var(--surface-3); color: var(--text-2); }
+  .item-row.auto .cat-tag.crypto    { background: var(--purple-dim); color: var(--purple); }
+  .item-row.auto .cat-tag.commodity { background: var(--yellow-dim); color: #b89600; }
+  .item-row.auto .auto-name { font-size: 14px; font-weight: 500; }
+  .item-row.auto .auto-sub  { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+  .item-row.auto .auto-val { font-family: var(--mono); font-size: 14px; text-align: right; font-weight: 500; }
+  .item-row.auto .auto-chg { font-size: 11px; margin-top: 2px; }
+  .item-row.auto .auto-chg.up { color: var(--green-strong); }
+  .item-row.auto .auto-chg.down { color: var(--red-strong); }
+  .item-row.auto .auto-toggle { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; }
+
+  .item-row .del-btn { background: transparent; border: none; color: var(--text-3); cursor: pointer; padding: 4px 8px; font-size: 18px; }
+  .item-row .del-btn:hover { color: var(--red); }
+  .item-row .del-btn.hidden { display: none; }
+
+  .empty-state { padding: 32px 20px; text-align: center; color: var(--text-3); font-size: 13px; }
+  .empty-state .icon { font-size: 32px; margin-bottom: 8px; opacity: 0.5; }
+
+  .add-form { display: grid; gap: 8px; padding: 16px 20px; background: var(--surface-2); border-top: 1px solid var(--border); }
+  .add-form.event { grid-template-columns: 1.5fr 1.3fr 130px auto; }
+  .add-form.alert { grid-template-columns: 1.2fr 1.2fr 90px 100px auto; }
+  .add-form input, .add-form select { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 6px; font-family: inherit; font-size: 13px; }
+  .add-form input:focus, .add-form select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .add-form input.loading { background: var(--surface-2); }
+  .add-form-help { padding: 10px 20px; font-size: 11px; color: var(--text-3); background: var(--surface-2); border-top: 1px solid var(--border); line-height: 1.6; }
+  .add-form-help code { font-family: var(--mono); background: var(--surface); padding: 2px 6px; border-radius: 3px; color: var(--text-2); border: 1px solid var(--border); }
+
+  .info-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .info-box strong { color: var(--text); }
+  .info-box code { font-family: var(--mono); background: var(--surface); padding: 2px 6px; border-radius: 3px; color: var(--text-2); border: 1px solid var(--border); }
+
+  .toggle-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+  .toggle-switch input { display: none; }
+  .toggle-switch .track { width: 38px; height: 22px; background: var(--surface-3); border-radius: 11px; position: relative; transition: background 0.2s; }
+  .toggle-switch .track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+  .toggle-switch input:checked + .track { background: var(--green); }
+  .toggle-switch input:checked + .track::after { left: 18px; }
+
+  .err { background: var(--red-dim); color: var(--red-strong); padding: 12px 16px; border-radius: var(--radius); font-size: 13px; }
+  .loading { color: var(--text-3); font-size: 13px; text-align: center; padding: 24px; font-style: italic; }
+
+  footer { text-align: center; font-size: 11px; color: var(--text-3); padding-top: 20px; border-top: 1px solid var(--border); margin-top: 20px; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; max-width: 480px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+  .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+  .modal p { font-size: 13px; color: var(--text-2); margin-bottom: 12px; }
+  .modal .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .modal .row:last-child { border-bottom: none; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+  @media (max-width: 640px) {
+    body { padding: 16px 12px 40px; }
+    header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    header .actions { width: 100%; justify-content: space-between; }
+    .item-row.alert { grid-template-columns: 1fr auto; }
+    .item-row.alert .al-cond { grid-column: 1 / -1; }
+    .item-row.auto { grid-template-columns: auto 1fr auto; }
+    .item-row.auto .auto-toggle { grid-column: 1 / -1; justify-self: end; margin-top: 4px; }
+    .add-form.event, .add-form.alert { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title"><span class="title-dot"></span>Vantage</div>
+  <div class="actions">
+    <span class="clock num" id="clock">—</span>
+    <button class="btn" onclick="openSettings()">設定</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="events" onclick="switchTab('events')">イベント</button>
+  <button class="tab-btn" data-tab="alerts" onclick="switchTab('alerts')">アラート</button>
+  <button class="tab-btn" data-tab="auto" onclick="switchTab('auto')">急変動検知</button>
+</div>
+
+<!-- ============ TAB: イベント ============ -->
+<div class="tab-panel active" id="tab-events">
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>イベントカウントダウン</h2></div>
+      <button class="btn small" id="ev-edit-btn" onclick="toggleEditMode('events')">追加</button>
+    </div>
+    <div class="item-list" id="events-list"><div class="loading">読み込み中...</div></div>
+  </section>
+  <section>
+    <div class="info-box">
+      指定時刻の<strong>N分前</strong>にDiscord通知します。決算、FOMC、雇用統計などイベントを登録。
+    </div>
+  </section>
+</div>
+
+<!-- ============ TAB: アラート ============ -->
+<div class="tab-panel" id="tab-alerts">
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>個別アラート</h2></div>
+      <button class="btn small" id="al-edit-btn" onclick="toggleEditMode('alerts')">追加</button>
+    </div>
+    <div class="item-list" id="alerts-list"><div class="loading">読み込み中...</div></div>
+  </section>
+  <section>
+    <div class="info-box">
+      <strong>銘柄入力例</strong>:
+      米国株 <code>NVDA</code> /
+      日本株 <code>5803.T</code> /
+      為替 <code>USDJPY=X</code> /
+      クリプト <code>BTC-USD</code> /
+      コモディティ <code>GC=F</code> /
+      指数 <code>^GSPC</code><code>^VIX</code>
+      <br><br>
+      <strong>動作</strong>: 15分ごとチェック、条件「不成立→成立」変化時に1回通知、4時間クールダウン。
+      データ取得失敗時は判定をスキップ（誤発火防止）、4回連続失敗でDiscord警告。
+    </div>
+  </section>
+</div>
+
+<!-- ============ TAB: 急変動検知 ============ -->
+<div class="tab-panel" id="tab-auto">
+  <section>
+    <div class="info-box">
+      <strong>急変動の自動検知</strong>：主要指数・マクロ・為替・クリプト・コモディティを15分ごとに自動監視。
+      <div style="margin-top: 14px; display: flex; gap: 12px; align-items: center;">
+        <label class="toggle-switch">
+          <input type="checkbox" id="auto-master" onchange="toggleAutoMaster()">
+          <span class="track"></span>
+        </label>
+        <span id="auto-master-label" style="color: var(--text); font-weight: 500;">マスタースイッチ</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>監視対象</h2></div></div>
+    <div class="item-list" id="auto-list"><div class="loading">読み込み中...</div></div>
+  </section>
+</div>
+
+<footer>
+  バックエンド: 15分ごと自動評価 / Discord通知
+</footer>
+
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <h3>設定</h3>
+    <p>バックエンドの状態と通知テスト。</p>
+    <div class="row">
+      <div>
+        <div style="font-size: 13px; font-weight: 500;">バックエンドURL</div>
+        <div style="font-size: 11px; color: var(--text-3); font-family: var(--mono);" id="settings-api">—</div>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <div style="font-size: 13px; font-weight: 500;">Discord通知テスト</div>
+        <div style="font-size: 11px; color: var(--text-3);">Webhook動作確認</div>
+      </div>
+      <button class="btn small" onclick="testDiscord()">送信</button>
+    </div>
+    <div class="modal-actions"><button class="btn" onclick="closeSettings()">閉じる</button></div>
+  </div>
+</div>
+
+<script>
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:8787'
+  : 'https://cockpit-backend.miyab.workers.dev';
+
+let state = {
+  events: [], alerts: [], auto: null,
+  editMode: { events: false, alerts: false }
+};
+
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleString('ja-JP', {
+    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+}
+setInterval(updateClock, 1000); updateClock();
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
+  if (tab === 'events') loadEvents();
+  if (tab === 'alerts') loadAlerts();
+  if (tab === 'auto') loadAuto();
+}
+
+// ====== Events ======
+async function loadEvents() {
+  try {
+    const res = await fetch(API_BASE + '/api/events');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    state.events = data.events || [];
+    renderEvents();
+  } catch (err) {
+    document.getElementById('events-list').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function renderEvents() {
+  const list = document.getElementById('events-list');
+  const editing = state.editMode.events;
+  const now = new Date();
+  const sorted = [...state.events].sort((a, b) => new Date(a.time) - new Date(b.time));
+  let html = '';
+
+  if (sorted.length === 0 && !editing) {
+    html = '<div class="empty-state"><div class="icon">📅</div>イベント未登録。「追加」から登録してください。</div>';
+  } else {
+    sorted.forEach(ev => {
+      const target = new Date(ev.time);
+      const diffMs = target - now;
+      const past = diffMs < 0;
+      const totalMin = Math.abs(Math.round(diffMs / 60000));
+      const days = Math.floor(totalMin / 1440);
+      const remH = Math.floor((totalMin % 1440) / 60);
+      const remM = totalMin % 60;
+      let countdown = past ? '完了' : (days > 0 ? days + 'd ' + remH + 'h' : (totalMin >= 60 ? Math.floor(totalMin/60) + 'h ' + remM + 'm' : remM + 'm'));
+      const imminent = !past && diffMs < 24 * 3600000;
+      const dateStr = target.toLocaleString('ja-JP', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const notifyStr = ev.notify_before_min ? `🔔 ${ev.notify_before_min}分前に通知` : '';
+      html += '<div class="item-row event' + (past ? ' past' : '') + (imminent ? ' imminent' : '') + '">' +
+        '<div><div class="ev-name">' + escapeHtml(ev.name) + '</div>' +
+        '<div class="ev-time">' + dateStr + '</div>' +
+        (notifyStr ? '<div class="ev-notify">' + notifyStr + '</div>' : '') +
+        '</div>' +
+        '<div class="ev-countdown num">' + countdown + '</div>' +
+        '<button class="del-btn ' + (editing ? '' : 'hidden') + '" onclick="delEvent(\'' + ev.id + '\')">×</button>' +
+      '</div>';
+    });
+  }
+
+  if (editing) {
+    html += '<div class="add-form event">' +
+      '<input type="text" id="new-ev-name" placeholder="イベント名">' +
+      '<input type="datetime-local" id="new-ev-time">' +
+      '<select id="new-ev-notify">' +
+        '<option value="15">15分前</option>' +
+        '<option value="30">30分前</option>' +
+        '<option value="60" selected>1時間前</option>' +
+        '<option value="180">3時間前</option>' +
+        '<option value="1440">1日前</option>' +
+      '</select>' +
+      '<button class="btn primary small" onclick="addEvent()">追加</button>' +
+    '</div>';
+  }
+  list.innerHTML = html;
+}
+
+async function addEvent() {
+  const name = document.getElementById('new-ev-name').value.trim();
+  const time = document.getElementById('new-ev-time').value;
+  const notify_before_min = parseInt(document.getElementById('new-ev-notify').value);
+  if (!name || !time) { alert('イベント名と日時を入力'); return; }
+  try {
+    const res = await fetch(API_BASE + '/api/events', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', name, time, notify_before_min })
+    });
+    if (!res.ok) throw new Error('API ' + res.status);
+    await loadEvents();
+  } catch (err) { alert('追加失敗: ' + err.message); }
+}
+async function delEvent(id) {
+  if (!confirm('削除？')) return;
+  try {
+    await fetch(API_BASE + '/api/events', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    await loadEvents();
+  } catch (err) { alert('削除失敗: ' + err.message); }
+}
+setInterval(() => { if (document.getElementById('tab-events').classList.contains('active')) renderEvents(); }, 60000);
+
+// ====== Alerts ======
+async function loadAlerts() {
+  try {
+    const res = await fetch(API_BASE + '/api/alerts');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    state.alerts = data.alerts || [];
+    renderAlerts();
+  } catch (err) {
+    document.getElementById('alerts-list').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function renderAlerts() {
+  const list = document.getElementById('alerts-list');
+  const editing = state.editMode.alerts;
+  let html = '';
+  if (state.alerts.length === 0 && !editing) {
+    html = '<div class="empty-state"><div class="icon">🔔</div>アラート未登録。「追加」から登録してください。</div>';
+  } else {
+    state.alerts.forEach(a => {
+      const opSymbol = { lt: '<', gt: '>', lte: '≤', gte: '≥' }[a.op];
+      const dataOk = a.data_ok !== false;
+      let stateCls, stateLabel;
+      if (!a.enabled) { stateCls = 'disabled'; stateLabel = '無効'; }
+      else if (!dataOk) { stateCls = 'nodata'; stateLabel = '取得失敗'; }
+      else if (a.fired) { stateCls = 'fired'; stateLabel = '発火済'; }
+      else { stateCls = 'waiting'; stateLabel = '監視中'; }
+      const rowCls = (a.fired ? ' fired' : '') + (!a.enabled ? ' disabled' : '') + (!dataOk && a.enabled ? ' no-data' : '');
+      const currentCls = a.triggered ? 'met' : (!dataOk ? 'fail' : '');
+      html += '<div class="item-row alert' + rowCls + '">' +
+        '<div><div class="al-cond">' + escapeHtml(a.label || a.symbol) + ' ' + opSymbol + ' ' + a.threshold + '</div></div>' +
+        '<div class="al-current num ' + currentCls + '">' + escapeHtml(a.display_value || '—') + '</div>' +
+        '<div class="al-state ' + stateCls + '">' + stateLabel + '</div>' +
+        '<button class="al-toggle" onclick="toggleAlert(\'' + a.id + '\')">' + (a.enabled ? 'OFF' : 'ON') + '</button>' +
+        '<button class="del-btn" onclick="delAlert(\'' + a.id + '\')">×</button>' +
+      '</div>';
+    });
+  }
+  if (editing) {
+    html += '<div class="add-form alert">' +
+      '<input type="text" id="new-al-sym" placeholder="ティッカー" onblur="autoFillAlert()">' +
+      '<input type="text" id="new-al-label" placeholder="表示名 (自動補完)">' +
+      '<select id="new-al-op"><option value="lt">< 未満</option><option value="gt">> 超過</option><option value="lte">≤ 以下</option><option value="gte">≥ 以上</option></select>' +
+      '<input type="number" id="new-al-threshold" placeholder="閾値" step="0.01">' +
+      '<button class="btn primary small" onclick="addAlertItem()">追加</button>' +
+    '</div>' +
+    '<div class="add-form-help">ティッカー入力後フィールド離脱で<strong style="color:var(--text)">銘柄名自動入力</strong>。日本株4桁数字は <code>.T</code> 自動付与。</div>';
+  }
+  list.innerHTML = html;
+}
+
+async function autoFillAlert() {
+  let symbol = document.getElementById('new-al-sym').value.trim().toUpperCase();
+  if (!symbol) return;
+  if (/^\d{4}$/.test(symbol)) {
+    symbol += '.T';
+    document.getElementById('new-al-sym').value = symbol;
+  }
+  const nameInput = document.getElementById('new-al-label');
+  nameInput.classList.add('loading');
+  nameInput.placeholder = '検索中...';
+  try {
+    const res = await fetch(API_BASE + '/api/lookup?symbol=' + encodeURIComponent(symbol));
+    if (res.ok) {
+      const data = await res.json();
+      if (data.name) nameInput.value = data.name;
+    } else nameInput.placeholder = '見つからない（手動可）';
+  } catch { nameInput.placeholder = '手動入力'; }
+  finally { nameInput.classList.remove('loading'); }
+}
+
+async function addAlertItem() {
+  let symbol = document.getElementById('new-al-sym').value.trim().toUpperCase();
+  const label = document.getElementById('new-al-label').value.trim() || symbol;
+  const op = document.getElementById('new-al-op').value;
+  const threshold = parseFloat(document.getElementById('new-al-threshold').value);
+  if (!symbol || isNaN(threshold)) { alert('ティッカーと閾値を入力'); return; }
+  if (/^\d{4}$/.test(symbol)) symbol += '.T';
+  try {
+    const res = await fetch(API_BASE + '/api/alerts', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', symbol, label, op, threshold })
+    });
+    if (!res.ok) throw new Error('API ' + res.status);
+    await loadAlerts();
+  } catch (err) { alert('追加失敗: ' + err.message); }
+}
+
+async function delAlert(id) {
+  if (!confirm('削除？')) return;
+  await fetch(API_BASE + '/api/alerts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+  await loadAlerts();
+}
+async function toggleAlert(id) {
+  await fetch(API_BASE + '/api/alerts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle', id }) });
+  await loadAlerts();
+}
+async function testDiscord() {
+  try {
+    const res = await fetch(API_BASE + '/api/alerts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'test' }) });
+    const data = await res.json();
+    alert(data.ok ? 'Discordにテスト通知を送信しました。' : '失敗: ' + (data.error || '不明'));
+  } catch (err) { alert('失敗: ' + err.message); }
+}
+
+// ====== Auto ======
+async function loadAuto() {
+  try {
+    const res = await fetch(API_BASE + '/api/auto-status');
+    if (!res.ok) throw new Error('API ' + res.status);
+    state.auto = await res.json();
+    renderAuto();
+  } catch (err) {
+    document.getElementById('auto-list').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function renderAuto() {
+  if (!state.auto) { document.getElementById('auto-list').innerHTML = '<div class="loading">読み込み中...</div>'; return; }
+  document.getElementById('auto-master').checked = state.auto.enabled;
+  document.getElementById('auto-master-label').textContent = state.auto.enabled ? 'マスタースイッチ: 全体ON' : 'マスタースイッチ: 全体OFF';
+  const list = document.getElementById('auto-list');
+  let html = '';
+  state.auto.targets.forEach(t => {
+    const chgCls = t.change_pct >= 0 ? 'up' : 'down';
+    const chgSign = t.change_pct >= 0 ? '+' : '';
+    const catLabels = { index: '指数', macro: 'マクロ', fx: '為替', crypto: 'クリプト', commodity: 'コモディティ' };
+    let thresholdHint = '';
+    if (t.change_threshold) thresholdHint = '±' + t.change_threshold + '%';
+    if (t.abs_thresholds) {
+      thresholdHint += (thresholdHint ? ' / ' : '') + t.abs_thresholds.map(th => (th.op === 'gte' ? '≥' : '≤') + th.value).join(', ');
+    }
+    const dataOk = t.data_ok !== false;
+    const chgHtml = dataOk ? '<div class="auto-chg ' + chgCls + '">' + chgSign + (t.change_pct || 0) + '%</div>' : '';
+    html += '<div class="item-row auto' + (!t.enabled ? ' disabled' : '') + (!dataOk ? ' no-data' : '') + '">' +
+      '<div class="cat-tag ' + t.category + '">' + (catLabels[t.category] || t.category) + '</div>' +
+      '<div><div class="auto-name">' + escapeHtml(t.label) + '</div><div class="auto-sub">' + escapeHtml(t.symbol) + ' / 閾値: ' + thresholdHint + '</div></div>' +
+      '<div class="auto-val num">' + escapeHtml(t.display_value || '—') + chgHtml + '</div>' +
+      '<button class="auto-toggle" onclick="toggleAutoTarget(\'' + t.symbol + '\')">' + (t.enabled ? 'OFF' : 'ON') + '</button>' +
+    '</div>';
+  });
+  list.innerHTML = html;
+}
+
+async function toggleAutoMaster() {
+  await fetch(API_BASE + '/api/auto-config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle_master' }) });
+  await loadAuto();
+}
+async function toggleAutoTarget(symbol) {
+  await fetch(API_BASE + '/api/auto-config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle_target', symbol }) });
+  await loadAuto();
+}
+
+function toggleEditMode(section) {
+  state.editMode[section] = !state.editMode[section];
+  const btnId = section === 'events' ? 'ev-edit-btn' : 'al-edit-btn';
+  const btn = document.getElementById(btnId);
+  btn.textContent = state.editMode[section] ? '完了' : '追加';
+  btn.classList.toggle('primary', state.editMode[section]);
+  if (section === 'events') renderEvents();
+  else renderAlerts();
+}
+
+function openSettings() {
+  document.getElementById('settings-api').textContent = API_BASE;
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
+document.getElementById('settings-modal').addEventListener('click', e => { if (e.target.id === 'settings-modal') closeSettings(); });
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+loadEvents();
+</script>
+</body>
+</html>
