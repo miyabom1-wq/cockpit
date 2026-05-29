@@ -52,7 +52,7 @@
     -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
   }
   .num { font-variant-numeric: tabular-nums; font-family: var(--mono); }
-
+ 
   /* ---------- header ---------- */
   header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
   header .brand { display: flex; align-items: center; gap: 11px; }
@@ -72,7 +72,7 @@
   .btn.danger { color: var(--red); border-color: rgba(242,73,92,0.3); }
   .btn.small { padding: 5px 11px; font-size: 12px; }
   .btn.loading { opacity: 0.5; pointer-events: none; }
-
+ 
   /* ---------- tabs ---------- */
   .tabs { display: flex; gap: 2px; margin-bottom: 22px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
   .tabs::-webkit-scrollbar { display: none; }
@@ -83,17 +83,17 @@
   .tab-panel { display: none; animation: fade .25s ease; }
   .tab-panel.active { display: block; }
   @keyframes fade { from { opacity:0; transform: translateY(4px);} to { opacity:1; transform:none;} }
-
+ 
   section { margin-bottom: 26px; }
   .sec-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
   .sec-title-left { display: flex; align-items: baseline; gap: 8px; }
   .sec-title h2 { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.12em; }
-
+ 
   .item-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
   .item-row { display: grid; gap: 12px; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); transition: background .12s; }
   .item-row:last-child { border-bottom: none; }
   .item-row:hover { background: var(--surface-2); }
-
+ 
   /* events */
   .item-row.event { grid-template-columns: 1fr auto auto auto; }
   .item-row.event.imminent { background: var(--amber-dim); border-left: 3px solid var(--amber); }
@@ -107,7 +107,7 @@
   .item-row.event .ev-countdown { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; font-family: var(--mono); min-width: 84px; text-align: right; color: var(--text); }
   .item-row.event.imminent .ev-countdown { color: var(--amber-strong); }
   .item-row.event.past .ev-countdown { font-size: 14px; color: var(--text-3); }
-
+ 
   /* alerts */
   .item-row.alert { grid-template-columns: 1fr auto 100px auto auto; }
   .item-row.alert.fired { background: var(--red-dim); border-left: 3px solid var(--red); }
@@ -124,7 +124,7 @@
   .item-row.alert .al-state.nodata { background: var(--amber-dim); color: var(--amber-strong); }
   .item-row.alert .al-toggle { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 500; }
   .item-row.alert .al-toggle:hover { color: var(--text); }
-
+ 
   /* auto */
   .item-row.auto { grid-template-columns: 92px 1fr auto auto; gap: 12px; }
   .item-row.auto.disabled { opacity: 0.4; }
@@ -143,14 +143,14 @@
   .item-row.auto .auto-chg.down { color: var(--red-strong); }
   .item-row.auto .auto-toggle { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
   .item-row.auto .auto-toggle:hover { color: var(--text); }
-
+ 
   .item-row .del-btn { background: transparent; border: none; color: var(--text-3); cursor: pointer; padding: 4px 8px; font-size: 18px; line-height: 1; }
   .item-row .del-btn:hover { color: var(--red); }
   .item-row .del-btn.hidden { display: none; }
-
+ 
   .empty-state { padding: 36px 20px; text-align: center; color: var(--text-3); font-size: 13px; }
   .empty-state .icon { font-size: 30px; margin-bottom: 8px; opacity: 0.4; }
-
+ 
   .add-form { display: grid; gap: 8px; padding: 16px 18px; background: var(--surface-2); border-top: 1px solid var(--border); }
   .add-form.event { grid-template-columns: 1.5fr 1.5fr auto; }
   .add-form.alert { grid-template-columns: 1.2fr 1.2fr 90px 100px auto; }
@@ -160,30 +160,30 @@
   .add-form input.loading { background: var(--surface-2); }
   .add-form-help { padding: 10px 18px; font-size: 11px; color: var(--text-3); background: var(--surface-2); border-top: 1px solid var(--border); line-height: 1.6; }
   .add-form-help code { font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; color: var(--text-2); border: 1px solid var(--border); }
-
+ 
   .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
   .info-box strong { color: var(--text); }
   .info-box code { font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; color: var(--text-2); border: 1px solid var(--border); }
-
+ 
   .master-banner { display: none; background: var(--red-dim); border: 1px solid rgba(242,73,92,0.4); color: var(--red-strong); padding: 10px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
   .master-banner.show { display: block; }
-
+ 
   .toggle-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
   .toggle-switch input { display: none; }
   .toggle-switch .track { width: 38px; height: 22px; background: var(--surface-3); border-radius: 11px; position: relative; transition: background .2s; }
   .toggle-switch .track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #cfd6e0; border-radius: 50%; transition: all .2s; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
   .toggle-switch input:checked + .track { background: var(--green); }
   .toggle-switch input:checked + .track::after { left: 18px; background: #fff; }
-
+ 
   .err { background: var(--red-dim); color: var(--red-strong); padding: 12px 16px; border-radius: var(--radius); font-size: 13px; }
   .loading { color: var(--text-3); font-size: 13px; text-align: center; padding: 24px; font-style: italic; }
-
+ 
   /* offline pill */
   .net-pill { display:none; position: fixed; left:50%; bottom: 18px; transform: translateX(-50%); background: var(--amber-dim); color: var(--amber-strong); border:1px solid rgba(240,160,32,0.4); padding: 7px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; z-index: 90; box-shadow: var(--shadow-lg); }
   .net-pill.show { display:block; }
-
+ 
   footer { text-align: center; font-size: 11px; color: var(--text-3); padding-top: 20px; border-top: 1px solid var(--border); margin-top: 20px; letter-spacing: 0.02em; }
-
+ 
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 24px; max-width: 480px; width: 100%; box-shadow: var(--shadow-lg); }
@@ -192,7 +192,43 @@
   .modal .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .modal .row:last-child { border-bottom: none; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
-
+ 
+  /* ---------- stage ---------- */
+  .stage-fresh { font-size: 12px; font-family: var(--mono); color: var(--text-2); padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stage-fresh .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .stage-fresh .dot.ok { background: var(--green); box-shadow: 0 0 8px rgba(46,189,133,0.5); }
+  .stage-fresh .dot.partial { background: var(--amber); box-shadow: 0 0 8px rgba(240,160,32,0.5); }
+  .stage-fresh .updated { color: var(--text-3); margin-left: auto; }
+  #stage-jp-btn.active, #stage-us-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+ 
+  .stage-row { display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+  .stage-row:last-child { border-bottom: none; }
+  .stage-row:hover { background: var(--surface-2); }
+  .stage-row .s-name { font-size: 14px; font-weight: 600; }
+  .stage-row .s-code { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-left: 6px; font-weight: 400; }
+  .stage-row .s-judge { font-size: 11px; margin-top: 3px; }
+  .stage-row .s-judge.warn { color: var(--amber-strong); }
+  .stage-row .s-judge.bad { color: var(--red-strong); }
+  .stage-row .s-judge.good { color: var(--green-strong); }
+  .stage-row .s-judge.mid { color: var(--text-2); }
+  .stage-row .s-right { text-align: right; font-family: var(--mono); }
+  .stage-row .s-price { font-size: 14px; font-weight: 600; }
+  .stage-row .s-chg { font-size: 11px; margin-top: 2px; }
+  .stage-row .s-chg.up { color: var(--green-strong); }
+  .stage-row .s-chg.down { color: var(--red-strong); }
+  .stage-row .s-metrics { grid-column: 1 / -1; display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--text-3); padding-top: 2px; }
+  .stage-row .s-metrics b { color: var(--text-2); font-weight: 600; }
+  .stage-row .s-metrics .ext-hi { color: var(--red-strong); }
+  .stage-row .s-metrics .ext-mid { color: var(--amber-strong); }
+  .stage-macro-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--mono); }
+  .stage-macro-row:last-child { border-bottom: none; }
+  .stage-macro-row .m-name { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 500; }
+  .stage-macro-row .m-price { font-size: 14px; font-weight: 600; text-align: right; min-width: 90px; }
+  .stage-macro-row .m-chg { font-size: 12px; text-align: right; min-width: 64px; }
+  .stage-macro-row .m-chg.up { color: var(--green-strong); }
+  .stage-macro-row .m-chg.down { color: var(--red-strong); }
+  .stage-macro-row .m-flag { font-size: 10px; color: var(--amber-strong); }
+ 
   @media (max-width: 640px) {
     body { padding: 16px 12px 56px; }
     header { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -206,7 +242,7 @@
 </style>
 </head>
 <body>
-
+ 
 <header>
   <div class="brand">
     <div class="mark">V</div>
@@ -224,15 +260,16 @@
     <button class="btn" onclick="openSettings()">設定</button>
   </div>
 </header>
-
+ 
 <div class="master-banner" id="master-banner">🌙 通知マスタースイッチOFF中：個別アラート・急変動検知ともに通知されません</div>
-
+ 
 <div class="tabs">
   <button class="tab-btn active" data-tab="events" onclick="switchTab('events')">イベント</button>
   <button class="tab-btn" data-tab="alerts" onclick="switchTab('alerts')">アラート</button>
   <button class="tab-btn" data-tab="auto" onclick="switchTab('auto')">急変動検知</button>
+  <button class="tab-btn" data-tab="stage" onclick="switchTab('stage')">Stage</button>
 </div>
-
+ 
 <!-- ============ TAB: イベント ============ -->
 <div class="tab-panel active" id="tab-events">
   <section>
@@ -251,7 +288,7 @@
     </div>
   </section>
 </div>
-
+ 
 <!-- ============ TAB: アラート ============ -->
 <div class="tab-panel" id="tab-alerts">
   <section>
@@ -276,7 +313,7 @@
     </div>
   </section>
 </div>
-
+ 
 <!-- ============ TAB: 急変動検知 ============ -->
 <div class="tab-panel" id="tab-auto">
   <section>
@@ -291,13 +328,47 @@
     <div class="item-list" id="auto-list"><div class="loading">読み込み中...</div></div>
   </section>
 </div>
-
+ 
+<!-- ============ TAB: Stage ============ -->
+<div class="tab-panel" id="tab-stage">
+  <section>
+    <div class="sec-title">
+      <div class="sec-title-left"><h2>ステージ分析</h2></div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn small" id="stage-jp-btn" onclick="setStageMarket('jp')">日本</button>
+        <button class="btn small" id="stage-us-btn" onclick="setStageMarket('us')">米国</button>
+      </div>
+    </div>
+    <div id="stage-freshness" class="stage-fresh"></div>
+  </section>
+ 
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>マクロ / 指数</h2></div></div>
+    <div class="item-list" id="stage-macro"><div class="loading">読み込み中...</div></div>
+  </section>
+ 
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>警戒銘柄</h2></div></div>
+    <div class="item-list" id="stage-warnings"></div>
+  </section>
+ 
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>真の押し目候補</h2></div></div>
+    <div class="item-list" id="stage-dips"></div>
+  </section>
+ 
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>拡張度マップ</h2></div></div>
+    <div class="item-list" id="stage-map"></div>
+  </section>
+</div>
+ 
 <footer>
   バックエンド: 15分ごと自動評価 / Discord通知 &nbsp;·&nbsp; VANTAGE PWA
 </footer>
-
+ 
 <div class="net-pill" id="net-pill">⚠ オフライン — 表示は最後の取得内容です</div>
-
+ 
 <div class="modal-overlay" id="settings-modal">
   <div class="modal">
     <h3>設定</h3>
@@ -318,39 +389,40 @@
     <div class="modal-actions"><button class="btn" onclick="closeSettings()">閉じる</button></div>
   </div>
 </div>
-
+ 
 <script>
 const API_BASE = window.location.hostname === 'localhost'
   ? 'http://localhost:8787'
   : 'https://cockpit-backend.miyab.workers.dev';
-
+ 
 let state = {
   events: [], alerts: [], auto: null,
   master: true,
   editMode: { events: false, alerts: false }
 };
-
+ 
 function updateClock() {
   document.getElementById('clock').textContent = new Date().toLocaleString('ja-JP', {
     month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
   });
 }
 setInterval(updateClock, 1000); updateClock();
-
+ 
 // オフライン表示
 function updateNet() { document.getElementById('net-pill').classList.toggle('show', !navigator.onLine); }
 window.addEventListener('online', updateNet);
 window.addEventListener('offline', updateNet);
 updateNet();
-
+ 
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
   if (tab === 'events') loadEvents();
   if (tab === 'alerts') loadAlerts();
   if (tab === 'auto') loadAuto();
+  if (tab === 'stage') { renderStageMarketBtns(); loadStage(); }
 }
-
+ 
 // ====== Master switch ======
 async function loadMaster() {
   try {
@@ -382,10 +454,114 @@ async function toggleMaster() {
     renderMaster();
   } catch (err) {
     alert('マスタースイッチ切替失敗: ' + err.message);
-    await loadMaster();
+    await // ====== Stage ======
+let stageMarket = 'jp';
+function setStageMarket(m) { stageMarket = m; renderStageMarketBtns(); loadStage(); }
+function renderStageMarketBtns() {
+  document.getElementById('stage-jp-btn').classList.toggle('active', stageMarket === 'jp');
+  document.getElementById('stage-us-btn').classList.toggle('active', stageMarket === 'us');
+}
+async function loadStage() {
+  const fresh = document.getElementById('stage-freshness');
+  document.getElementById('stage-macro').innerHTML = '<div class="loading">読み込み中...</div>';
+  document.getElementById('stage-warnings').innerHTML = '';
+  document.getElementById('stage-dips').innerHTML = '';
+  document.getElementById('stage-map').innerHTML = '';
+  try {
+    const res = await fetch(API_BASE + '/api/stage?market=' + stageMarket);
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    if (!data.ready) {
+      fresh.innerHTML = '<span class="dot partial"></span>まだ集計されていません（Cron待ち）';
+      document.getElementById('stage-macro').innerHTML = '<div class="empty-state">データなし。次回のCron実行後に表示されます。</div>';
+      return;
+    }
+    renderStageFresh(data);
+    renderStageMacro(data.macro);
+    renderStageWarnings(data.warnings);
+    renderStageDips(data.true_dip_candidates, data.vol_partial);
+    renderStageMap(data.stocks);
+  } catch (err) {
+    fresh.innerHTML = '';
+    document.getElementById('stage-macro').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
   }
 }
-
+function renderStageFresh(d) {
+  const fresh = document.getElementById('stage-freshness');
+  const dotCls = d.vol_partial ? 'partial' : 'ok';
+  let upd = '';
+  if (d.updated_at) {
+    const t = new Date(d.updated_at);
+    upd = '更新 ' + t.toLocaleString('ja-JP', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+  fresh.innerHTML = '<span class="dot ' + dotCls + '"></span>' + escapeHtml(d.freshness || '') +
+    '<span class="updated">' + upd + '</span>';
+}
+function fmtPrice(p, market) {
+  if (p == null) return '—';
+  return market === 'jp' ? '¥' + Number(p).toLocaleString('ja-JP') : '$' + Number(p).toFixed(2);
+}
+function judgeClass(j) {
+  if (j.startsWith('⚠') || j.startsWith('❌')) return j.startsWith('❌') ? 'bad' : 'warn';
+  if (j.startsWith('✓')) return 'good';
+  return 'mid';
+}
+function extClass(e) { return e >= 6 ? 'ext-hi' : e >= 4 ? 'ext-mid' : ''; }
+function renderStageMacro(macro) {
+  const el = document.getElementById('stage-macro');
+  if (!macro || Object.keys(macro).length === 0) { el.innerHTML = '<div class="empty-state">指数データなし</div>'; return; }
+  let html = '';
+  for (const [name, m] of Object.entries(macro)) {
+    if (!m) continue;
+    const chgCls = m.change_pct >= 0 ? 'up' : 'down';
+    const chgSign = m.change_pct >= 0 ? '+' : '';
+    html += '<div class="stage-macro-row">' +
+      '<div class="m-name">' + escapeHtml(name) + (m.shooting_star ? ' <span class="m-flag">上髭</span>' : '') + '</div>' +
+      '<div class="m-price num">' + Number(m.price).toLocaleString('ja-JP', {maximumFractionDigits: 2}) + '</div>' +
+      '<div class="m-chg ' + chgCls + ' num">' + chgSign + m.change_pct + '%</div>' +
+    '</div>';
+  }
+  el.innerHTML = html;
+}
+function stageStockRow(s, market) {
+  const chgCls = s.change_pct >= 0 ? 'up' : 'down';
+  const chgSign = s.change_pct >= 0 ? '+' : '';
+  return '<div class="stage-row">' +
+    '<div><span class="s-name">' + escapeHtml(s.name) + '</span><span class="s-code">' + escapeHtml(s.symbol) + '</span>' +
+    '<div class="s-judge ' + judgeClass(s.judgment) + '">' + escapeHtml(s.judgment) + '</div></div>' +
+    '<div class="s-right"><div class="s-price num">' + fmtPrice(s.price, market) + '</div>' +
+    '<div class="s-chg ' + chgCls + ' num">' + chgSign + s.change_pct + '%</div></div>' +
+    '<div class="s-metrics">' +
+      '<span>拡張 <b class="' + extClass(s.ext_score) + '">' + s.ext_score + '</b></span>' +
+      '<span>25MA <b>' + (s.div25 >= 0 ? '+' : '') + s.div25 + '%</b></span>' +
+      '<span>ATH <b>' + s.ath_dist + '%</b></span>' +
+      '<span>RSI <b>' + (s.rsi != null ? s.rsi : '—') + '</b></span>' +
+      '<span>出来高 <b>' + s.vol_ratio + 'x</b></span>' +
+      '<span>' + escapeHtml(s.stage) + '</span>' +
+    '</div>' +
+  '</div>';
+}
+function renderStageWarnings(list) {
+  const el = document.getElementById('stage-warnings');
+  if (!list || list.length === 0) { el.innerHTML = '<div class="empty-state">警戒銘柄なし</div>'; return; }
+  el.innerHTML = list.map(s => stageStockRow(s, stageMarket)).join('');
+}
+function renderStageDips(list, volPartial) {
+  const el = document.getElementById('stage-dips');
+  if (volPartial) { el.innerHTML = '<div class="empty-state">場中（暫定値）のため非表示。確定値で判定されます。</div>'; return; }
+  if (!list || list.length === 0) { el.innerHTML = '<div class="empty-state">該当なし — 地合い的に押し目の信頼性が低いことを示唆</div>'; return; }
+  el.innerHTML = list.map(s => stageStockRow(s, stageMarket)).join('');
+}
+function renderStageMap(list) {
+  const el = document.getElementById('stage-map');
+  if (!list || list.length === 0) { el.innerHTML = '<div class="empty-state">データなし</div>'; return; }
+  el.innerHTML = list.map(s => stageStockRow(s, stageMarket)).join('');
+}
+ 
+loadMaster();
+  }
+}
+ 
 // ====== Events ======
 async function loadEvents() {
   try {
@@ -485,7 +661,7 @@ function copyAnalysisPrompt(btn) {
     const orig = btn.textContent; btn.textContent = 'コピー済'; setTimeout(() => btn.textContent = orig, 1500);
   }).catch(() => alert('コピー失敗'));
 }
-
+ 
 // ====== Alerts ======
 async function loadAlerts() {
   try {
@@ -583,7 +759,7 @@ async function testDiscord() {
     alert(data.ok ? 'Discordにテスト通知を送信しました。' : '失敗: ' + (data.error || '不明'));
   } catch (err) { alert('失敗: ' + err.message); }
 }
-
+ 
 // ====== Auto ======
 async function loadAuto() {
   try {
@@ -623,7 +799,7 @@ async function toggleAutoTarget(symbol) {
   await fetch(API_BASE + '/api/auto-config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle_target', symbol }) });
   await loadAuto();
 }
-
+ 
 function toggleEditMode(section) {
   state.editMode[section] = !state.editMode[section];
   const btnId = section === 'events' ? 'ev-edit-btn' : 'al-edit-btn';
@@ -632,27 +808,28 @@ function toggleEditMode(section) {
   btn.classList.toggle('primary', state.editMode[section]);
   if (section === 'events') renderEvents(); else renderAlerts();
 }
-
+ 
 function openSettings() {
   document.getElementById('settings-api').textContent = API_BASE;
   document.getElementById('settings-modal').classList.add('open');
 }
 function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
 document.getElementById('settings-modal').addEventListener('click', e => { if (e.target.id === 'settings-modal') closeSettings(); });
-
+ 
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-
+ 
 // ====== Service Worker 登録（TWA/PWAの必須要件） ======
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW登録失敗', err));
   });
 }
-
+ 
 loadMaster();
 loadEvents();
 </script>
 </body>
 </html>
+ 
