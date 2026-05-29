@@ -701,50 +701,53 @@ async function loadReentry() {
     const res = await fetch(API_BASE + '/api/reentry?market=' + stageMarket);
     if (!res.ok) throw new Error('API ' + res.status);
     const d = await res.json();
-    if (!d.ready || !d.watch || d.watch.length === 0) { el.innerHTML = '<div class="empty-state">監視銘柄なし</div>'; return; }
-    renderReentry(d.watch);
+    if (!d.ready) { el.innerHTML = '<div class="empty-state">まだ集計されていません</div>'; return; }
+    renderReentry(d);
   } catch (err) {
     el.innerHTML = '<div class="err">取得失敗: ' + escapeHtml(err.message) + '</div>';
   }
 }
-function renderReentry(watch) {
+function renderReentry(d) {
   const el = document.getElementById('stage-reentry');
-  el.innerHTML = watch.map(w => {
-    if (!w.found) {
-      return '<div class="re-card"><div class="re-head"><span class="re-name">' + escapeHtml(w.name) + '</span>' +
-        '<span class="re-code">' + escapeHtml(w.symbol) + '</span>' +
-        '<span class="re-progress watching">データなし</span></div></div>';
-    }
-    const manualWait = w.ready && w.manual_total > 0;
-    const cardCls = w.ready ? (manualWait ? 'manual-wait' : 'ready') : '';
-    let statusCls, statusTxt;
-    if (w.ready && !manualWait) { statusCls = 'ready'; statusTxt = '再エントリー可能'; }
-    else if (manualWait) { statusCls = 'manual-wait'; statusTxt = '手動確認待ち'; }
-    else { statusCls = 'watching'; statusTxt = '監視中'; }
-    const progCls = (w.ready && !manualWait) ? 'ready' : 'watching';
-    const condHtml = w.conditions.map(c => {
-      const ic = c.status === 'met' ? '○' : c.status === 'manual' ? '手' : '×';
-      return '<div class="re-cond ' + c.status + '"><span class="ic">' + ic + '</span><span class="lbl">' + escapeHtml(c.label) + '</span></div>';
-    }).join('');
+  if (d.vol_partial) {
+    el.innerHTML = '<div class="empty-state">場中（暫定値）のため、適格判定は確定値（引け後）に行われます。</div>';
+    return;
+  }
+  const hb = d.high_beta || [];
+  const df = d.defensive || [];
+  const near = d.near || [];
+
+  const card = (w, tag) => {
     const chgCls = w.change_pct >= 0 ? 'up' : 'down';
     const chgSign = w.change_pct >= 0 ? '+' : '';
-    return '<div class="re-card ' + cardCls + '">' +
+    const condHtml = w.conditions.map(c =>
+      '<div class="re-cond ' + (c.ok ? 'met' : 'unmet') + '"><span class="ic">' + (c.ok ? '○' : '×') + '</span><span class="lbl">' + escapeHtml(c.label) + '</span></div>'
+    ).join('');
+    return '<div class="re-card' + (tag === 'hb' ? ' ready' : '') + '">' +
       '<div class="re-head">' +
         '<span class="re-name">' + escapeHtml(w.name) + '</span>' +
         '<span class="re-code">' + escapeHtml(w.symbol) + '</span>' +
-        '<span class="re-status ' + statusCls + '">' + statusTxt + '</span>' +
-        '<span class="re-progress ' + progCls + '">' + w.met + '/' + w.auto_total + '</span>' +
+        '<span class="re-progress ' + (w.unmet === 0 ? 'ready' : 'watching') + '">' + w.met + '/' + w.total + '</span>' +
       '</div>' +
       '<div class="re-metrics">' +
-        '<span>' + fmtPrice(w.price, stageMarket) + ' <span class="' + (w.change_pct>=0?'':'') + '">' + chgSign + w.change_pct + '%</span></span>' +
+        '<span>' + fmtPrice(w.price, stageMarket) + ' ' + chgSign + w.change_pct + '%</span>' +
         '<span>拡張 <b>' + w.ext_score + '</b></span>' +
-        '<span>25MA <b>' + (w.div25>=0?'+':'') + w.div25 + '%</b></span>' +
-        '<span>RSI <b>' + (w.rsi!=null?w.rsi:'—') + '</b></span>' +
+        '<span>25MA <b>' + (w.div25 >= 0 ? '+' : '') + w.div25 + '%</b></span>' +
+        '<span>RSI <b>' + (w.rsi != null ? w.rsi : '—') + '</b></span>' +
         '<span>' + escapeHtml(w.stage) + '</span>' +
       '</div>' +
       '<div class="re-conds">' + condHtml + '</div>' +
     '</div>';
-  }).join('');
+  };
+
+  let html = '';
+  html += '<div class="re-group-title">🔥 高ベータ枠（動意あり・攻めの候補）<span class="re-count">' + hb.length + '</span></div>';
+  html += hb.length ? hb.map(w => card(w, 'hb')).join('') : '<div class="empty-state">該当なし</div>';
+  html += '<div class="re-group-title">🛡 ディフェンシブ枠（資金の逃避先）<span class="re-count">' + df.length + '</span></div>';
+  html += df.length ? df.map(w => card(w, 'df')).join('') : '<div class="empty-state">該当なし</div>';
+  html += '<div class="re-group-title">あと一歩（1条件のみ未達）<span class="re-count">' + near.length + '</span></div>';
+  html += near.length ? near.map(w => card(w, 'near')).join('') : '<div class="empty-state">該当なし</div>';
+  el.innerHTML = html;
 }
 
 // ====== 銘柄編集 ======
