@@ -2,13 +2,13 @@
  * 役割:
  *   1) PWA / TWA の「インストール可能」要件を満たす（fetchハンドラ必須）
  *   2) アプリの外枠（HTML/CSS/アイコン）をキャッシュしてオフラインでも起動できる
- * 重要な設計判断:
- *   - /api/ への通信は絶対にキャッシュしない（株価・状態は常に最新が必要）
- *     → ネットワーク優先。古い価格を掴ませない＝「データ事故ゼロ」の哲学に一致
- *   - アプリの殻（app shell）だけキャッシュ優先で即起動
+ * 設計判断:
+ *   - /api/ は絶対キャッシュしない（常に最新）
+ *   - HTMLナビゲーションは network-first（最新の画面を必ず取りに行く。
+ *     取れない時だけキャッシュにフォールバック）→ GitHub更新が即アプリに反映される
+ *   - 静的アセット（アイコン等）は cache-first（変わらないので高速起動優先）
  */
-
-const CACHE_VERSION = 'vantage-v1';
+const CACHE_VERSION = 'vantage-v2';
 const APP_SHELL = [
   './',
   './index.html',
@@ -23,7 +23,7 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_VERSION)
       .then((cache) => cache.addAll(APP_SHELL))
       .then(() => self.skipWaiting())
-      .catch(() => self.skipWaiting()) // アイコン未配置でも止めない
+      .catch(() => self.skipWaiting())
   );
 });
 
@@ -39,22 +39,37 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
-
-  // GET以外は素通し
   if (req.method !== 'GET') return;
 
-  // --- API通信: 必ずネットワーク優先（キャッシュしない） ---
+  // --- API: 必ずネットワーク優先（キャッシュしない） ---
   if (url.pathname.startsWith('/api/') || url.href.includes('/api/')) {
     event.respondWith(fetch(req).catch(() => Response.error()));
     return;
   }
 
-  // --- app shell: キャッシュ優先、無ければ取得してキャッシュ ---
+  // --- HTMLナビゲーション: network-first（最新の画面を取りに行く） ---
+  const isHTML = req.mode === 'navigate' ||
+                 (req.headers.get('accept') || '').includes('text/html');
+  if (isHTML) {
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.status === 200 && url.origin === self.location.origin) {
+          const copy = res.clone();
+          caches.open(CACHE_VERSION).then((c) => c.put(req, copy));
+        }
+        return res;
+      }).catch(() =>
+        caches.match(req).then((cached) => cached || caches.match('./index.html'))
+      )
+    );
+    return;
+  }
+
+  // --- その他の静的アセット: cache-first（高速起動） ---
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
       return fetch(req).then((res) => {
-        // 同一オリジンの正常レスポンスのみキャッシュ
         if (res && res.status === 200 && url.origin === self.location.origin) {
           const copy = res.clone();
           caches.open(CACHE_VERSION).then((c) => c.put(req, copy));
@@ -65,7 +80,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-/* === Phase 3で Push通知を実装する際、ここに push / notificationclick を追加する ===
+/* === Push通知（Phase 3後半で有効化）===
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
   event.waitUntil(
