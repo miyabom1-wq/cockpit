@@ -1,0 +1,2736 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1C2230">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Vantage">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Vantage</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  :root {
+    /* --- 明るめグレー基調パレット（色=意味は維持） --- */
+    --bg: #e9ebef;
+    --bg-grain: #e3e6ea;
+    --surface: #f7f8fa;
+    --surface-2: #eef0f3;
+    --surface-3: #e3e6ea;
+    --border: #d4d8df;
+    --border-strong: #b8bfc9;
+    --text: #1a1f29;
+    --text-2: #5a6473;
+    --text-3: #79828f;
+    --accent: #2f6fe0;
+    --accent-dim: #dde7fa;
+    --green: #178a5d; --green-dim: #def3e9; --green-strong: #157a51;
+    --red: #d83048; --red-dim: #fbe2e6; --red-strong: #b81f36;
+    --amber: #c47e0a; --amber-dim: #faecd2; --amber-strong: #9a6206;
+    --blue: #2f6fe0; --blue-dim: #dde7fa;
+    --purple: #8a3fe0; --purple-dim: #ece0fb;
+    --yellow: #b8950f; --yellow-dim: #f6efce;
+    --radius: 8px; --radius-lg: 14px;
+    --mono: "SF Mono", "JetBrains Mono", "Cascadia Code", "Roboto Mono", ui-monospace, Menlo, monospace;
+    --shadow-sm: 0 1px 2px rgba(20,30,50,0.06);
+    --shadow-lg: 0 12px 40px rgba(20,30,50,0.14);
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(47,111,224,0.05), transparent 60%),
+      radial-gradient(900px 500px at -10% 10%, rgba(26,158,106,0.04), transparent 55%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-size: 15px; line-height: 1.55;
+    padding: 20px 16px 64px; max-width: 980px; margin: 0 auto;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased; font-feature-settings: "palt";
+  }
+  .num { font-variant-numeric: tabular-nums; font-family: var(--mono); }
+
+  /* ---------- header ---------- */
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  header .brand { display: flex; align-items: center; gap: 11px; }
+  header .mark { width: 30px; height: 30px; border-radius: 8px; background: #1C2230; display: grid; place-items: center; font-weight: 800; font-size: 17px; color: #C7D0DE; box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 2px 8px rgba(20,30,50,0.18); }
+  header .title { font-size: 22px; font-weight: 700; letter-spacing: 0.06em; }
+  header .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  header .clock { font-size: 12px; color: var(--text-3); font-family: var(--mono); letter-spacing: 0.02em; }
+  .master-wrap { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 7px; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); transition: all .2s; }
+  .master-wrap.off { background: var(--red-dim); border-color: rgba(242,73,92,0.4); }
+  .master-wrap .master-label { font-size: 12px; color: var(--text-2); font-weight: 600; letter-spacing: 0.02em; }
+  .master-wrap.off .master-label { color: var(--red-strong); }
+  .btn { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: inherit; transition: all .15s; font-weight: 500; }
+  .btn:hover { color: var(--text); background: var(--surface-3); border-color: #3d4d66; }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { background: #5c98ff; }
+  .btn.danger { color: var(--red); border-color: rgba(242,73,92,0.3); }
+  .btn.small { padding: 5px 11px; font-size: 12px; }
+  .btn.loading { opacity: 0.5; pointer-events: none; }
+
+  /* ---------- tabs ---------- */
+  .tabs { display: flex; gap: 2px; margin-bottom: 22px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: transparent; border: none; color: var(--text-2); padding: 12px 18px; cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; border-bottom: 2px solid transparent; white-space: nowrap; transition: color .15s; position: relative; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); }
+  .tab-btn.active::after { content:''; position:absolute; left:14px; right:14px; bottom:-1px; height:2px; background: var(--accent); border-radius:2px 2px 0 0; }
+  .tab-panel { display: none; animation: fade .25s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fade { from { opacity:0; transform: translateY(4px);} to { opacity:1; transform:none;} }
+
+  section { margin-bottom: 26px; }
+  .sec-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+  .sec-title-left { display: flex; align-items: baseline; gap: 8px; }
+  .sec-title h2 { font-size: 11px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.12em; }
+
+  .item-list { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+  .item-row { display: grid; gap: 12px; align-items: center; padding: 15px 18px; border-bottom: 1px solid var(--border); transition: background .12s; }
+  .item-row:last-child { border-bottom: none; }
+  .item-row:hover { background: var(--surface-2); }
+
+  /* events */
+  .item-row.event { grid-template-columns: 1fr auto auto auto; }
+  .item-row.event.imminent { background: var(--amber-dim); border-left: 3px solid var(--amber); }
+  .item-row.event.past { opacity: 0.45; }
+  .item-row.event.past.pinned { opacity: 1; background: var(--surface-2); border-left: 3px solid var(--border-strong); }
+  .item-row.event .pin-btn { background: transparent; border: none; cursor: pointer; padding: 4px 6px; font-size: 15px; opacity: 0.25; transition: opacity .15s; line-height: 1; }
+  .item-row.event .pin-btn:hover { opacity: 0.7; }
+  .item-row.event .pin-btn.on { opacity: 1; }
+  .item-row.event .ev-name { font-size: 14px; font-weight: 500; }
+  .item-row.event .ev-time { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-top: 3px; }
+  .item-row.event .ev-countdown { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; font-family: var(--mono); min-width: 84px; text-align: right; color: var(--text); }
+  .item-row.event.imminent .ev-countdown { color: var(--amber-strong); }
+  .item-row.event.past .ev-countdown { font-size: 14px; color: var(--text-3); }
+
+  /* alerts */
+  .item-row.alert { grid-template-columns: 1fr auto 100px auto auto; }
+  .item-row.alert.fired { background: var(--red-dim); border-left: 3px solid var(--red); }
+  .item-row.alert.disabled { opacity: 0.4; }
+  .item-row.alert.no-data { background: var(--amber-dim); }
+  .item-row.alert .al-cond { font-size: 14px; font-weight: 500; font-family: var(--mono); }
+  .item-row.alert .al-current { font-family: var(--mono); font-size: 13px; color: var(--text-2); font-weight: 500; }
+  .item-row.alert .al-current.met { color: var(--green-strong); }
+  .item-row.alert .al-current.fail { color: var(--amber-strong); font-size: 11px; }
+  .item-row.alert .al-state { font-size: 10px; padding: 4px 10px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; }
+  .item-row.alert .al-state.waiting { background: var(--surface-3); color: var(--text-2); }
+  .item-row.alert .al-state.fired { background: var(--red); color: #fff; }
+  .item-row.alert .al-state.disabled { background: var(--surface-3); color: var(--text-3); }
+  .item-row.alert .al-state.nodata { background: var(--amber-dim); color: var(--amber-strong); }
+  .item-row.alert .al-toggle { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 500; }
+  .item-row.alert .al-toggle:hover { color: var(--text); }
+
+  /* auto */
+  .item-row.auto { grid-template-columns: 92px 1fr auto auto; gap: 12px; }
+  .item-row.auto.disabled { opacity: 0.4; }
+  .item-row.auto.no-data .auto-val { color: var(--amber-strong); font-size: 12px; }
+  .item-row.auto .cat-tag { font-size: 9px; padding: 4px 8px; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; font-weight: 700; }
+  .item-row.auto .cat-tag.index     { background: var(--blue-dim); color: var(--accent); }
+  .item-row.auto .cat-tag.macro     { background: var(--amber-dim); color: var(--amber-strong); }
+  .item-row.auto .cat-tag.fx        { background: var(--surface-3); color: var(--text-2); }
+  .item-row.auto .cat-tag.crypto    { background: var(--purple-dim); color: var(--purple); }
+  .item-row.auto .cat-tag.commodity { background: var(--yellow-dim); color: var(--yellow); }
+  .item-row.auto .auto-name { font-size: 14px; font-weight: 500; }
+  .item-row.auto .auto-sub  { font-size: 11px; color: var(--text-3); margin-top: 3px; font-family: var(--mono); }
+  .item-row.auto .auto-val { font-family: var(--mono); font-size: 14px; text-align: right; font-weight: 600; }
+  .item-row.auto .auto-chg { font-size: 11px; margin-top: 2px; font-family: var(--mono); }
+  .item-row.auto .auto-chg.up { color: var(--green-strong); }
+  .item-row.auto .auto-chg.down { color: var(--red-strong); }
+  .item-row.auto .auto-toggle { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+  .item-row.auto .auto-toggle:hover { color: var(--text); }
+
+  .item-row .del-btn { background: transparent; border: none; color: var(--text-3); cursor: pointer; padding: 4px 8px; font-size: 18px; line-height: 1; }
+  .item-row .del-btn:hover { color: var(--red); }
+  .item-row .del-btn.hidden { display: none; }
+
+  .empty-state { padding: 36px 20px; text-align: center; color: var(--text-3); font-size: 13px; }
+  .empty-state .icon { font-size: 30px; margin-bottom: 8px; opacity: 0.4; }
+
+  .add-form { display: grid; gap: 8px; padding: 16px 18px; background: var(--surface-2); border-top: 1px solid var(--border); }
+  .add-form.event { grid-template-columns: 1.5fr 1.5fr auto; }
+  .add-form.alert { grid-template-columns: 1.2fr 1.2fr 90px 100px auto; }
+  .add-form input, .add-form select { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 9px 12px; border-radius: 7px; font-family: inherit; font-size: 13px; }
+  .add-form input::placeholder { color: var(--text-3); }
+  .add-form input:focus, .add-form select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .add-form input.loading { background: var(--surface-2); }
+  .add-form-help { padding: 10px 18px; font-size: 11px; color: var(--text-3); background: var(--surface-2); border-top: 1px solid var(--border); line-height: 1.6; }
+  .add-form-help code { font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; color: var(--text-2); border: 1px solid var(--border); }
+
+  .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .info-box strong { color: var(--text); }
+  .info-box code { font-family: var(--mono); background: var(--bg); padding: 2px 6px; border-radius: 4px; color: var(--text-2); border: 1px solid var(--border); }
+
+  .master-banner { display: none; background: var(--red-dim); border: 1px solid rgba(242,73,92,0.4); color: var(--red-strong); padding: 10px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 500; margin-bottom: 16px; }
+  .master-banner.show { display: block; }
+
+  .toggle-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+  .toggle-switch input { display: none; }
+  .toggle-switch .track { width: 38px; height: 22px; background: var(--surface-3); border-radius: 11px; position: relative; transition: background .2s; }
+  .toggle-switch .track::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: #cfd6e0; border-radius: 50%; transition: all .2s; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+  .toggle-switch input:checked + .track { background: var(--green); }
+  .toggle-switch input:checked + .track::after { left: 18px; background: #fff; }
+
+  .err { background: var(--red-dim); color: var(--red-strong); padding: 12px 16px; border-radius: var(--radius); font-size: 13px; }
+  .loading { color: var(--text-3); font-size: 13px; text-align: center; padding: 24px; font-style: italic; }
+
+  /* offline pill */
+  .net-pill { display:none; position: fixed; left:50%; bottom: 18px; transform: translateX(-50%); background: var(--amber-dim); color: var(--amber-strong); border:1px solid rgba(240,160,32,0.4); padding: 7px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; z-index: 90; box-shadow: var(--shadow-lg); }
+  .net-pill.show { display:block; }
+
+  footer { text-align: center; font-size: 11px; color: var(--text-3); padding-top: 20px; border-top: 1px solid var(--border); margin-top: 20px; letter-spacing: 0.02em; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 24px; max-width: 480px; width: 100%; box-shadow: var(--shadow-lg); max-height: calc(100vh - 32px); overflow-y: auto; }
+  .modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+  .modal p { font-size: 13px; color: var(--text-2); margin-bottom: 12px; }
+  .modal .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .modal .row:last-child { border-bottom: none; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+  /* ---------- stage ---------- */
+  .stage-fresh { font-size: 12px; font-family: var(--mono); color: var(--text-2); padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stage-fresh .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .stage-fresh .dot.ok { background: var(--green); box-shadow: 0 0 8px rgba(46,189,133,0.5); }
+  .stage-fresh .dot.partial { background: var(--amber); box-shadow: 0 0 8px rgba(240,160,32,0.5); }
+  .stage-fresh .updated { color: var(--text-3); margin-left: auto; }
+  /* セクション単体に添える鮮度バッジ（Stageバーの軽量版） */
+  .sec-fresh { font-size: 11px; font-family: var(--mono); color: var(--text-2); padding: 6px 10px; margin-bottom: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .sec-fresh .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .sec-fresh .dot.ok { background: var(--green); box-shadow: 0 0 6px rgba(46,189,133,0.5); }
+  .sec-fresh .dot.partial { background: var(--amber); box-shadow: 0 0 6px rgba(240,160,32,0.5); }
+  .sec-fresh .updated { color: var(--text-3); margin-left: auto; }
+  #stage-jp-btn.active, #stage-us-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .stage-row { display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+  .stage-row:last-child { border-bottom: none; }
+  .stage-row:hover { background: var(--surface-2); }
+  .stage-row .s-name { font-size: 14px; font-weight: 600; }
+  .stage-row .s-code { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-left: 6px; font-weight: 400; }
+  .stage-row .s-judge { font-size: 11px; margin-top: 3px; }
+  .stage-row .s-judge.warn { color: var(--amber-strong); }
+  .stage-row .s-judge.bad { color: var(--red-strong); }
+  .stage-row .s-judge.good { color: var(--green-strong); }
+  .stage-row .s-judge.mid { color: var(--text-2); }
+  .stage-row .s-right { text-align: right; font-family: var(--mono); }
+  .stage-row .s-price { font-size: 14px; font-weight: 600; }
+  .stage-row .s-chg { font-size: 11px; margin-top: 2px; }
+  .stage-row .s-chg.up { color: var(--green-strong); }
+  .stage-row .s-chg.down { color: var(--red-strong); }
+  .stage-row .s-metrics { grid-column: 1 / -1; display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--text-3); padding-top: 2px; }
+  .stage-row .s-metrics b { color: var(--text-2); font-weight: 600; }
+  .stage-row .s-metrics .ext-hi { color: var(--red-strong); }
+  .stage-row .s-metrics .ext-mid { color: var(--amber-strong); }
+  .stage-row .s-metrics b.snap-warn { color: var(--red-strong); }
+  .stage-row .s-metrics b.snap-amber { color: var(--amber-strong); }
+  .stage-macro-row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); font-family: var(--mono); }
+  .stage-macro-row:last-child { border-bottom: none; }
+  .stage-macro-row .m-name { font-family: -apple-system, sans-serif; font-size: 13px; font-weight: 500; }
+  .stage-macro-row .m-price { font-size: 14px; font-weight: 600; text-align: right; min-width: 90px; }
+  .stage-macro-row .m-chg { font-size: 12px; text-align: right; min-width: 64px; }
+  .stage-macro-row .m-chg.up { color: var(--green-strong); }
+  .stage-macro-row .m-chg.down { color: var(--red-strong); }
+  .stage-macro-row.clickable { cursor: pointer; }
+  .stage-macro-row.clickable:active { background: rgba(255,255,255,0.03); }
+  .stage-macro-row .m-tv { font-size: 11px; opacity: 0.5; margin-left: 4px; }
+  .stage-macro-row .m-flag { font-size: 10px; color: var(--amber-strong); }
+  .stage-macro-row .m-stale { font-size: 10px; color: var(--text-3); border: 1px solid var(--border-strong); border-radius: 4px; padding: 0 4px; }
+  /* 場中・暫定マーカー */
+  .px-badge { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 5px; white-space: nowrap; }
+  .px-badge.intraday { background: var(--amber-dim); color: var(--amber-strong); }
+  .px-badge.prev { background: var(--surface-3); color: var(--text-3); }
+  .s-badge-wrap { margin-top: 3px; }
+  .prov-tag { font-size: 9px; font-weight: 700; color: var(--amber-strong); background: var(--amber-dim); border-radius: 4px; padding: 0 4px; margin-left: 4px; letter-spacing: 0.03em; }
+  .s-metrics b.pending, .re-pend-tag { color: var(--text-3); font-weight: 400; font-style: italic; }
+  .re-pend-tag { font-size: 9px; margin-left: 4px; border: 1px solid var(--border); border-radius: 3px; padding: 0 3px; }
+  .re-cond.pending .ic { color: var(--text-3); }
+  .re-cond.pending { opacity: 0.7; }
+  .re-cond.prov .ic { opacity: 0.6; }
+  .re-cond.prov .lbl { opacity: 0.8; }
+  .chg-suspect { margin-left: 3px; font-size: 10px; color: var(--amber-strong); cursor: help; }
+  .stale-tag { display: inline-block; font-size: 10px; font-weight: 700; color: #d23f3f; background: rgba(210,63,63,0.1); border-radius: 4px; padding: 1px 6px; margin-left: 6px; cursor: help; }
+  .dip-provisional-note { font-size: 11px; line-height: 1.55; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: var(--radius); padding: 9px 12px; margin: 0 14px 10px; }
+  /* 初動検出（地合い非従属） */
+  .shodo-box { margin: 0 14px 14px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .shodo-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+  .shodo-turn { font-size: 11px; line-height: 1.55; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: var(--radius); padding: 8px 10px; margin-bottom: 8px; }
+  .shodo-sub { font-size: 11px; font-weight: 600; margin: 8px 0 5px; }
+  .shodo-sub.confirmed { color: var(--green); }
+  .shodo-sub.watch { color: var(--text-2); }
+  .shodo-card { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 7px 10px; margin-bottom: 5px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; }
+  .shodo-card.confirmed { border-left: 3px solid var(--green); }
+  .shodo-card.watch { border-left: 3px solid var(--border); }
+  .shodo-card .sd-name { font-weight: 700; }
+  .shodo-card .sd-code { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .shodo-card .sd-m { font-family: var(--mono); font-size: 11px; color: var(--text-2); }
+  .shodo-card .sd-chart { margin-left: auto; }
+  .wick-tag { font-size: 10px; font-weight: 700; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: 4px; padding: 1px 6px; }
+  .rank-fresh-banner { display: flex; align-items: center; gap: 8px; padding: 8px 14px; margin-bottom: 6px; }
+  .rank-fresh-banner .rfb-note { font-size: 11px; color: var(--text-3); line-height: 1.4; }
+
+  /* notrade badge */
+  .notrade { border-radius: var(--radius-lg); padding: 18px 20px; border: 1px solid var(--border); background: var(--surface); }
+  .notrade.strong { background: var(--red-dim); border-color: rgba(242,73,92,0.5); }
+  .notrade.recommend { background: var(--amber-dim); border-color: rgba(240,160,32,0.45); }
+  .notrade.normal { background: var(--green-dim); border-color: rgba(46,189,133,0.4); }
+  .notrade .nt-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .notrade .nt-icon { font-size: 26px; line-height: 1; }
+  .notrade .nt-title { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
+  .notrade.strong .nt-title { color: var(--red-strong); }
+  .notrade.recommend .nt-title { color: var(--amber-strong); }
+  .notrade.normal .nt-title { color: var(--green-strong); }
+  .notrade .nt-meta { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-left: auto; }
+  .notrade .nt-signals { margin-top: 14px; display: grid; gap: 8px; }
+  .notrade .nt-sig { display: flex; align-items: baseline; gap: 10px; padding: 9px 12px; background: var(--surface-2); border-radius: var(--radius); border-left: 3px solid var(--border-strong); }
+  .notrade .nt-sig.hot { border-left-color: var(--red); }
+  .notrade .nt-sig.warn { border-left-color: var(--amber); }
+  .notrade .nt-sig-label { font-size: 13px; font-weight: 600; min-width: fit-content; }
+  .notrade .nt-sig.hot .nt-sig-label { color: var(--red-strong); }
+  .notrade .nt-sig.warn .nt-sig-label { color: var(--amber-strong); }
+  .notrade .nt-sig-detail { font-size: 12px; color: var(--text-2); font-family: var(--mono); }
+  .notrade .nt-summary { margin-top: 12px; display: flex; gap: 16px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--text-3); padding-top: 12px; border-top: 1px solid var(--border); }
+  .notrade .nt-summary b { color: var(--text-2); }
+  .notrade .nt-none { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+  .notrade .nt-popnote { font-size: 11px; color: var(--text-3); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); line-height: 1.5; }
+
+  /* S1 規律ガード */
+  .s-chart-btn { background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2); border-radius: 6px; font-size: 13px; line-height: 1; padding: 5px 8px; cursor: pointer; flex-shrink: 0; }
+  .s-chart-btn:hover { color: var(--text); background: var(--surface-3); }
+  .stage-row .s-right { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
+  .stage-row .s-right > .s-price-wrap { text-align: right; }
+  .re-head .s-chart-btn { margin-left: 4px; }
+  .guard-verdict { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 16px; }
+  .guard-partial { background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.4); border-radius: var(--radius); padding: 10px 13px; font-size: 12px; color: var(--amber-strong); margin-bottom: 14px; line-height: 1.5; }
+  .guard-verdict .gv-icon { font-size: 30px; line-height: 1; }
+  .guard-verdict .gv-title { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
+  .guard-verdict .gv-sub { font-size: 12px; color: var(--text-3); font-family: var(--mono); margin-top: 2px; }
+  .guard-verdict.ok { background: var(--green-dim); border-color: rgba(46,189,133,0.45); }
+  .guard-verdict.ok .gv-title { color: var(--green-strong); }
+  .guard-verdict.caution { background: var(--amber-dim); border-color: rgba(240,160,32,0.45); }
+  .guard-verdict.caution .gv-title { color: var(--amber-strong); }
+  .guard-verdict.violation { background: var(--red-dim); border-color: rgba(242,73,92,0.5); }
+  .guard-verdict.violation .gv-title { color: var(--red-strong); }
+  .guard-checks { display: grid; gap: 6px; margin-bottom: 16px; }
+  .guard-check { display: flex; align-items: baseline; gap: 10px; padding: 9px 12px; background: var(--surface-2); border-radius: var(--radius); border-left: 3px solid var(--border-strong); font-size: 13px; }
+  .guard-check.pass { border-left-color: var(--green); }
+  .guard-check.fail { border-left-color: var(--red); }
+  .guard-check.unknown { border-left-color: var(--border-strong); opacity: 0.7; }
+  .guard-check .gc-ic { font-family: var(--mono); width: 16px; flex-shrink: 0; text-align: center; }
+  .guard-check.pass .gc-ic { color: var(--green-strong); }
+  .guard-check.fail .gc-ic { color: var(--red-strong); }
+  .guard-check .gc-label { font-weight: 600; color: var(--text); }
+  .guard-check .gc-detail { color: var(--text-3); font-family: var(--mono); font-size: 11px; margin-left: auto; }
+  .guard-section-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; margin: 4px 0 8px; }
+  .guard-state-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; flex-wrap: wrap; }
+  .guard-state-row .gs-label { font-size: 13px; color: var(--text-2); }
+  .guard-stepper { display: inline-flex; align-items: center; gap: 0; border: 1px solid var(--border-strong); border-radius: 7px; overflow: hidden; }
+  .guard-stepper button { background: var(--surface-2); border: none; color: var(--text); width: 32px; height: 30px; font-size: 16px; cursor: pointer; font-family: var(--mono); }
+  .guard-stepper button:hover { background: var(--surface-3); }
+  .guard-stepper .gs-num { min-width: 34px; text-align: center; font-family: var(--mono); font-size: 14px; font-weight: 600; }
+  .guard-sizing { display: grid; gap: 6px; font-size: 12px; font-family: var(--mono); color: var(--text-2); background: var(--surface-2); border-radius: var(--radius); padding: 12px 14px; margin-top: 12px; }
+  .guard-sizing b { color: var(--text); }
+  .guard-sizing .gz-stop { color: var(--red-strong); }
+  .guard-sizing .gz-warn { color: var(--amber-strong); }
+
+  /* S4 判断ジャーナル */
+  .journal-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+  .journal-stats .jstat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; text-align: center; }
+  .journal-stats .jstat .js-num { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); }
+  .journal-stats .jstat .js-lbl { font-size: 10px; color: var(--text-3); margin-top: 2px; letter-spacing: 0.03em; }
+  /* 再現性ダッシュボード */
+  .repro-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; position: relative; cursor: pointer; padding-bottom: 22px; }
+  .repro-summary .jstat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; text-align: center; }
+  .repro-summary .jstat .js-num { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--text); }
+  .repro-summary .jstat .js-num .js-unit { font-size: 12px; margin-left: 1px; color: var(--text-3); }
+  .repro-summary .jstat .js-lbl { font-size: 10px; color: var(--text-3); margin-top: 2px; letter-spacing: 0.03em; }
+  .repro-summary .jstat.good .js-num { color: #2e9e5b; }
+  .repro-summary .jstat.mid  .js-num { color: #c47e0a; }
+  .repro-summary .jstat.bad  .js-num { color: #d23f3f; }
+  .repro-caret { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; font-size: 11px; color: var(--text-3); }
+  .repro-detail { margin-top: 4px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+  .repro-empty, .repro-detail .repro-empty { font-size: 12px; color: var(--text-3); line-height: 1.6; }
+  .repro-block { margin-bottom: 16px; }
+  .repro-block:last-child { margin-bottom: 0; }
+  .repro-h { font-size: 12px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; }
+  .repro-bar { height: 8px; background: var(--surface-3); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+  .repro-bar-fill { height: 100%; background: var(--accent); transition: width 0.3s; }
+  .repro-bar-fill.good { background: #2e9e5b; }
+  .repro-bar-fill.mid  { background: #c47e0a; }
+  .repro-bar-fill.bad  { background: #d23f3f; }
+  .repro-note { font-size: 11px; color: var(--text-3); line-height: 1.55; margin-top: 4px; }
+  .repro-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .repro-row:last-of-type { border-bottom: none; }
+  .repro-row span:first-child { color: var(--text-2); }
+  .repro-row-n { font-family: var(--mono); font-weight: 700; color: var(--text); }
+  .repro-row-n.warn { color: #c47e0a; }
+  .repro-row-n.bad  { color: #d23f3f; }
+  .jcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 13px 16px; margin-bottom: 10px; }
+  .jcard.due { border-color: rgba(196,126,10,0.5); }
+  .jcard-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .jcard-head .jc-side { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; letter-spacing: 0.05em; }
+  .jcard-head .jc-side.entry { background: var(--accent-dim); color: var(--accent); }
+  .jcard-head .jc-side.exit { background: var(--surface-3); color: var(--text-2); }
+  .jcard-head .jc-name { font-weight: 600; font-size: 14px; }
+  .jcard-head .jc-code { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .jcard-head .jc-date { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .jcard .jc-px { font-family: var(--mono); font-size: 12px; color: var(--text-2); margin-top: 4px; }
+  .jcard .jc-reason { font-size: 13px; color: var(--text); margin-top: 8px; line-height: 1.5; }
+  .jcard .jc-snap { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 9px; font-family: var(--mono); font-size: 11px; color: var(--text-2); }
+  .jcard .jc-snap b { color: var(--text); }
+  .jcard .jc-snap .snap-warn { color: var(--red-strong); }
+  .jcard .jc-due { margin-top: 9px; padding: 7px 10px; background: var(--amber-dim); border-radius: var(--radius); font-size: 12px; color: var(--amber-strong); display: flex; align-items: center; gap: 8px; }
+  .jcard .jc-reviews { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; }
+  .jcard .jc-review { font-size: 12px; color: var(--text-2); padding: 3px 0; }
+  .jcard .jc-review .jr-at { font-family: var(--mono); font-size: 10px; color: var(--text-3); margin-right: 6px; }
+  .jcard .jc-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .jf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .jf-grid label, .jf-full { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-2); }
+  .jf-full { margin-bottom: 12px; }
+  .jf-scenario { background: var(--surface-2); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 12px; }
+  .jf-sc-title { font-size: 11px; color: var(--text-3); margin-bottom: 8px; font-weight: 700; }
+  .jf-sc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .jf-sc-row .jf-sc-lbl { font-size: 11px; font-weight: 600; width: 44px; flex-shrink: 0; }
+  .jf-sc-row .jf-sc-lbl.bull { color: var(--green-strong); }
+  .jf-sc-row .jf-sc-lbl.base { color: var(--text-2); }
+  .jf-sc-row .jf-sc-lbl.bear { color: var(--red-strong); }
+  .jf-sc-row input[type=number] { width: 60px; flex-shrink: 0; }
+  .jf-sc-row input[type=text] { flex: 1; }
+
+  /* 保有ポジション */
+  .pos-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 12px; }
+  .pos-summary-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 14px; margin-bottom: 12px; }
+  .pos-sub-line { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+  .pos-sub-line + .pos-sub-line { border-top: 1px solid var(--border); }
+  .pos-sub-mkt { font-size: 12px; color: var(--text-3); }
+  .pos-mkt-head { font-size: 13px; font-weight: 700; color: var(--text-2); margin: 14px 4px 8px; display: flex; align-items: center; gap: 8px; }
+  .pos-mkt-head:first-child { margin-top: 2px; }
+  .pos-mkt-ct { font-family: var(--mono); font-size: 11px; color: var(--text-3); background: rgba(255,255,255,0.05); border-radius: 8px; padding: 1px 8px; }
+  .pos-sum-label { font-size: 12px; color: var(--text-3); }
+  .pos-sum-val { font-family: var(--mono); font-size: 20px; font-weight: 700; }
+  .pos-sum-val.up { color: var(--up, #3fb950); }
+  .pos-sum-val.down { color: var(--down, #f85149); }
+  .pos-sum-count { margin-left: auto; font-size: 12px; color: var(--text-3); }
+  .pos-sum-note { font-size: 11px; color: var(--text-3); }
+  .pos-cooldown { font-size: 12px; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 12px; }
+  .pos-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; }
+  .pos-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .pos-name { font-weight: 600; color: var(--text); }
+  .pos-code { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .pos-days { font-size: 10px; color: var(--text-3); background: rgba(255,255,255,0.04); border-radius: 3px; padding: 1px 6px; }
+  .pos-head .s-chart-btn { margin-left: auto; }
+  .pos-del { background: transparent; border: none; color: var(--text-3); cursor: pointer; font-size: 14px; padding: 2px 6px; }
+  .pos-del:hover { color: var(--red-strong); }
+  .pos-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-size: 12px; color: var(--text-2); }
+  .pos-cur { color: var(--text-2); }
+  .pos-chg.up, .pos-pl.up { color: var(--up, #3fb950); }
+  .pos-chg.down, .pos-pl.down { color: var(--down, #f85149); }
+  .pos-pl { font-family: var(--mono); font-weight: 700; margin-left: auto; }
+  .pos-pl.muted { color: var(--text-3); font-weight: 400; }
+  .pos-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pos-stage { font-size: 10px; color: var(--text-3); background: rgba(255,255,255,0.04); border-radius: 3px; padding: 2px 7px; }
+  .pos-warn { font-size: 10px; font-weight: 700; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: 4px; padding: 2px 7px; }
+  .pos-warn small { font-weight: 400; opacity: 0.85; }
+  .dip-tag { font-size: 10px; font-weight: 700; color: var(--green-strong, #3fb950); background: rgba(63,185,80,0.12); border: 1px solid rgba(63,185,80,0.3); border-radius: 4px; padding: 1px 6px; }
+
+  /* 決算（自動取得） */
+  .earn-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); margin-bottom: 6px; cursor: pointer; }
+  .earn-row:active { background: rgba(255,255,255,0.03); }
+  .earn-row.held { border-color: rgba(63,185,80,0.4); background: rgba(63,185,80,0.06); }
+  .earn-row.urgent { border-color: rgba(196,126,10,0.4); }
+  .earn-held { font-size: 10px; font-weight: 700; color: #3fb950; background: rgba(63,185,80,0.15); border-radius: 3px; padding: 1px 6px; flex-shrink: 0; }
+  .earn-name { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; }
+  .e-nm { font-weight: 600; color: var(--text); }
+  .e-cd { font-size: 11px; color: var(--text-3); font-family: var(--mono); }
+  .e-est { font-size: 10px; color: var(--text-3); background: rgba(255,255,255,0.05); border-radius: 3px; padding: 0 5px; }
+  .earn-when { text-align: right; flex-shrink: 0; }
+  .e-date { display: block; font-size: 11px; color: var(--text-3); }
+  .e-days { font-size: 13px; font-weight: 700; color: var(--text-2); }
+  .e-days.urgent { color: var(--amber-strong); }
+  .earn-more { margin-top: 6px; }
+  .earn-more summary { cursor: pointer; font-size: 12px; color: var(--text-3); padding: 6px 4px; user-select: none; }
+  .earn-asof { font-size: 10px; color: var(--text-3); text-align: right; margin-top: 8px; }
+
+  /* 売買履歴 */
+  .hist-stats-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; }
+  .hist-stat-grid { display: flex; gap: 8px; margin-bottom: 8px; }
+  .hs-cell { flex: 1; text-align: center; }
+  .hs-v { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); }
+  .hs-sep { color: var(--text-3); margin: 0 2px; font-size: 14px; }
+  .hs-k { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .hist-stat-line { display: flex; justify-content: space-between; font-size: 12px; padding: 4px 0; border-top: 1px solid var(--border); }
+  .hist-stat-line .up { color: var(--up, #3fb950); font-family: var(--mono); font-weight: 700; }
+  .hist-stat-line .down { color: var(--down, #f85149); font-family: var(--mono); font-weight: 700; }
+  .hist-insight { font-size: 11px; line-height: 1.55; color: var(--amber-strong); background: var(--amber-dim); border: 1px solid rgba(196,126,10,0.3); border-radius: var(--radius); padding: 8px 10px; margin-top: 8px; }
+  .hist-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; }
+  .hist-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .hist-win { font-size: 11px; font-weight: 700; color: #3fb950; background: rgba(63,185,80,0.15); border-radius: 3px; padding: 1px 7px; }
+  .hist-loss { font-size: 11px; font-weight: 700; color: var(--red-strong); background: rgba(248,81,73,0.12); border-radius: 3px; padding: 1px 7px; }
+  .hist-name { font-weight: 600; color: var(--text); }
+  .hist-code { font-size: 11px; color: var(--text-3); font-family: var(--mono); }
+  .hist-head .s-chart-btn { margin-left: auto; }
+  .hist-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; font-size: 12px; color: var(--text-2); }
+  .hist-pl { font-family: var(--mono); font-weight: 700; margin-left: auto; }
+  .hist-pl.up { color: var(--up, #3fb950); }
+  .hist-pl.down { color: var(--down, #f85149); }
+  .hist-pl.muted { color: var(--text-3); font-weight: 400; }
+  .hist-sub { font-size: 11px; color: var(--text-3); margin-top: 6px; }
+
+  /* 設定: push */
+  .setting-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
+  .setting-label { font-size: 14px; font-weight: 600; color: var(--text); }
+  .setting-desc { font-size: 11px; color: var(--text-3); line-height: 1.5; margin-top: 2px; }
+  .setting-row .btn { margin-left: auto; white-space: nowrap; }
+  .setting-row .btn.on { background: var(--green-dim, rgba(63,185,80,0.15)); border-color: rgba(63,185,80,0.4); color: var(--up, #3fb950); }
+  .setting-status { font-size: 12px; color: var(--text-2); min-height: 18px; padding: 4px 0; }
+
+  /* 銘柄サジェスト */
+  .sl-suggest { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 12px; }
+  .sl-suggest-head { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--text-2); }
+  #sl-suggest-body { margin-top: 8px; max-height: 260px; overflow-y: auto; }
+  .sl-sg-group { margin-top: 8px; }
+  .sl-sg-label { font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.05em; margin-bottom: 5px; }
+  .sl-sg-row { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--surface); border-radius: 6px; margin-bottom: 4px; font-size: 12px; }
+  .sl-sg-row .sg-rank { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 700; min-width: 28px; }
+  .sl-sg-row .sg-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sl-sg-row .sg-code { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .sl-sg-row .sg-val { font-family: var(--mono); font-size: 10px; color: var(--text-2); }
+  .sl-sg-row button { font-size: 11px; padding: 3px 9px; flex-shrink: 0; }
+  .sl-sg-updated { font-size: 10px; color: var(--text-3); margin-top: 6px; font-family: var(--mono); }
+
+  /* ランキング×Stage */
+  .rank-note { font-size: 11px; color: var(--text-3); margin-bottom: 10px; }
+  .rank-updated { font-size: 10px; color: var(--text-3); font-family: var(--mono); text-align: center; padding: 8px 0; }
+  /* 物色テーマサマリー */
+  .theme-summary { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; }
+  .theme-summary-title { font-size: 12px; font-weight: 700; color: var(--text-2); margin-bottom: 10px; }
+  .theme-row { margin-bottom: 10px; }
+  .theme-row:last-child { margin-bottom: 0; }
+  .theme-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+  .theme-head .theme-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .theme-head .theme-meta { font-size: 10px; font-family: var(--mono); color: var(--text-3); }
+  .theme-bar { height: 6px; background: var(--surface); border-radius: 3px; overflow: hidden; }
+  .theme-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+  .theme-syms { font-size: 10px; color: var(--text-3); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rank-row { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 13px; margin-bottom: 6px; cursor: pointer; }
+  .rank-row:active { background: var(--surface-2); }
+  .rk-head { display: flex; align-items: center; gap: 8px; }
+  .rk-head .rk-rank { font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--accent); min-width: 24px; }
+  .rk-head .rk-name { font-weight: 600; font-size: 14px; flex-shrink: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .rk-head .rk-code { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .rk-head .rk-chg { font-family: var(--mono); font-size: 12px; margin-left: auto; }
+  .rk-head .rk-chg.up { color: var(--green-strong); }
+  .rk-head .rk-chg.down { color: var(--red-strong); }
+  .rk-head .rk-act { flex-shrink: 0; }
+  .rk-head .rk-act .rk-reg { font-size: 10px; color: var(--text-3); }
+  .rk-head .rk-act button { padding: 3px 10px; font-size: 13px; line-height: 1; }
+  .rank-metrics { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 7px; font-family: var(--mono); font-size: 11px; color: var(--text-2); }
+  .rank-metrics .rk-stage { color: var(--text); font-weight: 600; }
+  .rank-metrics .snap-warn { color: var(--red-strong); font-weight: 600; }
+  .rank-metrics .snap-amber { color: var(--amber-strong); font-weight: 600; }
+  .rk-judge { font-size: 11px; margin-top: 5px; padding: 2px 8px; border-radius: 5px; display: inline-block; background: var(--surface-2); }
+  .rk-judge.good { color: var(--green-strong); }
+  .rk-judge.warn { color: var(--amber-strong); }
+  .rk-judge.bad { color: var(--red-strong); }
+  .rk-judge.mid { color: var(--text-2); }
+
+  /* reentry */
+  .re-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 10px; }
+  .re-card.ready { background: var(--green-dim); border-color: rgba(46,189,133,0.4); }
+  .re-card.manual-wait { background: var(--amber-dim); border-color: rgba(240,160,32,0.35); }
+  .re-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .re-name { font-size: 15px; font-weight: 700; }
+  .re-code { font-size: 11px; color: var(--text-3); font-family: var(--mono); }
+  .re-status { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 5px; letter-spacing: 0.04em; }
+  .re-status.ready { background: var(--green); color: #fff; }
+  .re-status.manual-wait { background: var(--amber); color: #1a1205; }
+  .re-status.watching { background: var(--surface-3); color: var(--text-2); }
+  .re-progress { font-family: var(--mono); font-size: 13px; font-weight: 600; margin-left: auto; }
+  .re-progress.ready { color: var(--green-strong); }
+  .re-progress.watching { color: var(--text-2); }
+  .re-metrics { font-family: var(--mono); font-size: 11px; color: var(--text-3); margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .re-metrics b { color: var(--text-2); }
+  .re-conds { margin-top: 10px; display: grid; gap: 5px; }
+  .re-cond { display: flex; align-items: baseline; gap: 8px; font-size: 12px; }
+  .re-cond .ic { font-family: var(--mono); width: 16px; flex-shrink: 0; text-align: center; }
+  .re-cond.met .ic { color: var(--green-strong); }
+  .re-cond.unmet .ic { color: var(--text-3); }
+  .re-cond.manual .ic { color: var(--amber-strong); }
+  .re-cond.met .lbl { color: var(--text); }
+  .re-cond.unmet .lbl { color: var(--text-3); }
+  .re-cond.manual .lbl { color: var(--text-2); }
+  .re-cond.manual .lbl::after { content: ' （手動確認）'; color: var(--amber-strong); font-size: 10px; }
+
+  /* stage segments (sub-tabs) */
+  .stage-seg { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin: 12px 0 4px; position: sticky; top: 0; z-index: 5; }
+  .stage-seg button { flex: 1; background: transparent; border: none; color: var(--text-2); font-family: inherit; font-size: 12px; font-weight: 600; padding: 9px 4px; border-radius: 7px; cursor: pointer; transition: all .15s; letter-spacing: 0.01em; white-space: nowrap; display: flex; flex-direction: column; align-items: center; gap: 2px; line-height: 1.2; }
+  .stage-seg button .seg-ct { font-family: var(--mono); font-size: 10px; color: var(--text-3); font-weight: 700; }
+  .stage-seg button:hover { color: var(--text); }
+  .stage-seg button.active { background: var(--accent); color: #fff; }
+  .stage-seg button.active .seg-ct { color: rgba(255,255,255,0.8); }
+  .stage-sub { display: none; }
+  .stage-sub.active { display: block; }
+  .stage-sub > section { margin-bottom: 16px; }
+  .stage-sub > section:last-child { margin-bottom: 0; }
+  /* density: tighter stage rows */
+  .stage-row { padding: 9px 14px; gap: 6px 12px; }
+  .stage-row .s-metrics { gap: 10px; padding-top: 0; }
+  .stage-macro-row { padding: 9px 14px; }
+  .re-card { padding: 10px 14px; margin-bottom: 8px; }
+  .re-conds { margin-top: 7px; gap: 4px; }
+  .re-group-title { margin: 14px 0 8px; }
+  .re-group-title:first-child { margin-top: 4px; }
+
+  /* モメンタム参考リスト（並べ替え可能テーブル） */
+  .mom-hint { margin: 0 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+  .mom-hint summary { cursor: pointer; padding: 8px 12px; font-size: 12px; color: var(--text-2); user-select: none; list-style: none; }
+  .mom-hint summary::-webkit-details-marker { display: none; }
+  .mom-hint summary::before { content: '▸ '; color: var(--text-3); }
+  .mom-hint[open] summary::before { content: '▾ '; }
+  .mom-hint summary:hover { color: var(--text); }
+  .mom-hint-body { padding: 4px 12px 12px; border-top: 1px solid var(--border); }
+  .mh-row { display: flex; gap: 8px; padding: 5px 0; font-size: 11px; line-height: 1.55; }
+  .mh-k { flex-shrink: 0; width: 44px; font-weight: 700; color: var(--text-2); }
+  .mh-v { color: var(--text-3); }
+  .mh-v b { color: var(--text-2); font-weight: 600; }
+  .mh-note { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px; line-height: 1.6; color: var(--text-2); }
+  .mom-wrap { margin: 0 8px 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mom-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .mom-th { text-align: right; padding: 6px 8px; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .mom-th:first-child { text-align: left; }
+  .mom-th.sortable { cursor: pointer; user-select: none; }
+  .mom-th.sortable:hover { color: var(--text); }
+  .mom-row { border-bottom: 1px solid var(--border); }
+  .mom-row:active { background: rgba(255,255,255,0.03); }
+  .mom-table td { padding: 7px 8px; vertical-align: middle; }
+  .mom-table td.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .mom-name { text-align: left; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 120px; }
+  .held-mark { color: #3fb950; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .mom-row.held { background: rgba(63,185,80,0.06); }
+  .mom-row.held:active { background: rgba(63,185,80,0.12); }
+  .m-nm { font-weight: 600; color: var(--text); }
+  .m-cd { font-size: 10px; color: var(--muted); }
+  .m-th { font-size: 10px; color: var(--muted); background: rgba(255,255,255,0.04); border-radius: 3px; padding: 0 5px; }
+  .m-stg { font-size: 10px; font-weight: 700; border-radius: 3px; padding: 0 5px; }
+  .m-stg.stg-S2 { color: #3fb950; background: rgba(63,185,80,0.12); }
+  .m-stg.stg-S3 { color: var(--amber-strong); background: var(--amber-dim); }
+  .m-stg.stg-S4 { color: var(--red-strong); background: rgba(248,81,73,0.12); }
+  .mom-score { font-weight: 700; color: var(--accent, #C7D0DE); }
+  .mom-table td.up { color: var(--up, #3fb950); }
+  .mom-table td.down { color: var(--down, #f85149); }
+
+  　/* stocklist editor */
+  .sl-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .sl-row:last-child { border-bottom: none; }
+  .sl-row .sl-name { font-size: 13px; font-weight: 500; }
+  .sl-row .sl-code { font-size: 11px; color: var(--text-3); font-family: var(--mono); margin-left: auto; }
+  .sl-row .sl-del { background: transparent; border: none; color: var(--text-3); cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; }
+  .sl-row .sl-del:hover { color: var(--red); }
+  #sl-msg.ok { color: var(--green-strong); }
+  #sl-msg.ng { color: var(--red-strong); }
+
+
+  /* ウォッチリスト */
+  .watch-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; }
+  .watch-card.held { background: rgba(63,185,80,0.06); border-color: rgba(63,185,80,0.28); }
+  .watch-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .watch-name { font-weight: 700; color: var(--text); }
+  .watch-code { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+  .watch-status { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 5px; background: var(--surface-3); color: var(--text-2); }
+  .watch-status.holding { background: var(--green-dim); color: var(--green-strong); }
+  .watch-status.waiting { background: var(--amber-dim); color: var(--amber-strong); }
+  .watch-status.skip { background: var(--red-dim); color: var(--red-strong); }
+  .watch-actions { margin-left: auto; display: flex; gap: 6px; }
+  .watch-meta { display: flex; flex-wrap: wrap; gap: 6px 12px; font-family: var(--mono); font-size: 11px; color: var(--text-2); margin-bottom: 8px; }
+  .watch-meta .up { color: var(--green-strong); }
+  .watch-meta .down { color: var(--red-strong); }
+  .watch-edit { display: grid; gap: 8px; grid-template-columns: 120px 1fr auto; align-items: start; }
+  .watch-edit select, .watch-edit textarea { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 10px; border-radius: 7px; font-family: inherit; font-size: 13px; }
+  .watch-edit textarea { min-height: 58px; resize: vertical; }
+  .watch-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 12px; display: none; }
+  .watch-form.open { display: grid; gap: 8px; grid-template-columns: 100px 1fr 1fr auto; align-items: center; }
+  .watch-form input, .watch-form select { background: var(--bg); border: 1px solid var(--border-strong); color: var(--text); padding: 8px 10px; border-radius: 7px; font-family: inherit; font-size: 13px; }
+  .watch-mode { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; margin-bottom: 12px; }
+  .watch-mode button { flex: 1; background: transparent; border: none; color: var(--text-2); font-family: inherit; font-size: 12px; font-weight: 700; padding: 9px 4px; border-radius: 7px; cursor: pointer; }
+  .watch-mode button.active { background: var(--accent); color: #fff; }
+  .sig-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 8px; }
+  .sig-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .sig-name { font-weight: 700; color: var(--text); }
+  .sig-code, .sig-date { font-family: var(--mono); font-size: 10px; color: var(--text-3); }
+  .sig-src { font-size: 10px; font-weight: 700; color: var(--accent); background: var(--accent-dim); border-radius: 4px; padding: 1px 6px; }
+  .sig-tags { margin-left: auto; display: flex; gap: 5px; flex-wrap: wrap; }
+  .sig-meta { display: flex; flex-wrap: wrap; gap: 5px 11px; font-family: var(--mono); font-size: 11px; color: var(--text-2); margin-top: 7px; }
+  .sig-reason { font-size: 11px; color: var(--text-3); margin-top: 6px; line-height: 1.45; }
+  .sig-actions { display: flex; gap: 6px; margin-top: 8px; justify-content: flex-end; }
+  .watch-mini.sig { background: var(--surface-3); color: var(--text-2); }
+
+
+  /* Phase12: 候補ボードをリスト密度に最適化 */
+  .candidate-note { font-size: 11px; color: var(--text-3); margin: 0 4px 10px; line-height: 1.45; }
+  .candidate-lane { margin: 0 0 8px 0; }
+  .candidate-lane > summary { position: sticky; top: 46px; z-index: 4; background: var(--bg); padding: 6px 2px; }
+  .cand-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; margin-bottom: 6px; cursor: pointer; }
+  .cand-card:active { background: var(--surface-2); }
+  .cand-head { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .cand-name { font-weight: 700; font-size: 13px; color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cand-code { font-family: var(--mono); font-size: 10px; color: var(--text-3); flex-shrink: 0; }
+  .cand-score { margin-left: auto; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text-2); }
+  .cand-meta { display: flex; flex-wrap: wrap; gap: 4px 9px; margin-top: 4px; font-family: var(--mono); font-size: 10px; color: var(--text-2); }
+  .cand-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+  .cand-tag { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 6px; background: var(--surface-3); color: var(--text-2); }
+  .cand-tag.good { background: var(--green-dim); color: var(--green-strong); }
+  .cand-tag.warn { background: var(--amber-dim); color: var(--amber-strong); }
+  .cand-tag.bad { background: var(--red-dim); color: var(--red-strong); }
+  .watch-mini { font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 6px; background: var(--blue-dim); color: var(--accent); }
+  .guard-context { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 12px; }
+  .guard-context-title { font-size: 11px; font-weight: 800; color: var(--text-3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+  .guard-context-main { font-size: 13px; line-height: 1.55; color: var(--text); }
+  .guard-context-sub { font-size: 12px; line-height: 1.5; color: var(--text-2); margin-top: 6px; }
+  .guard-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+  .guard-mini { background: var(--surface-2); border-left: 3px solid var(--border-strong); border-radius: var(--radius); padding: 8px 10px; font-size: 12px; }
+  .guard-mini.pass { border-left-color: var(--green); }
+  .guard-mini.fail { border-left-color: var(--red); }
+  .guard-mini.caution { border-left-color: var(--amber); }
+  .guard-mini-k { font-weight: 700; color: var(--text); }
+  .guard-mini-v { font-family: var(--mono); color: var(--text-3); font-size: 11px; margin-top: 2px; }
+
+  @media (max-width: 640px) {
+    .guard-mini-grid { grid-template-columns: 1fr; }
+    .cand-card { padding: 7px 9px; margin-bottom: 5px; }
+    .candidate-lane > summary { top: 0; }
+    body { padding: 16px 12px 56px; }
+    header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    header .actions { width: 100%; justify-content: space-between; }
+    .item-row.alert { grid-template-columns: 1fr auto; }
+    .item-row.alert .al-cond { grid-column: 1 / -1; }
+    .item-row.auto { grid-template-columns: auto 1fr auto; }
+    .item-row.auto .auto-toggle { grid-column: 1 / -1; justify-self: end; margin-top: 4px; }
+    .add-form.event, .add-form.alert { grid-template-columns: 1fr; }
+    .watch-edit { grid-template-columns: 1fr; }
+    .watch-form.open { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">V</div>
+    <div class="title">VANTAGE</div>
+  </div>
+  <div class="actions">
+    <span class="clock num" id="clock">—</span>
+    <button class="btn" onclick="openSettings()">設定</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="stage" onclick="switchTab('stage')">Stage</button>
+  <button class="tab-btn" data-tab="watch" onclick="switchTab('watch')">ウォッチ</button>
+  <button class="tab-btn" data-tab="events" onclick="switchTab('events')">イベント</button>
+</div>
+
+<!-- ============ TAB: イベント ============ -->
+<div class="tab-panel" id="tab-events">
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>マクロ・経済指標</h2></div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn small primary" onclick="copyAnalysisPrompt(this)">📋 現状をコピー</button>
+        <button class="btn small" onclick="clearCompletedEvents()">完了をクリア</button>
+        <button class="btn small" id="ev-edit-btn" onclick="toggleEditMode('events')">追加</button>
+      </div>
+    </div>
+    <div class="item-list" id="events-list"><div class="loading">読み込み中...</div></div>
+  </section>
+  <section>
+    <div class="sec-title"><div class="sec-title-left"><h2>決算（自動取得）</h2></div>
+      <button class="btn small" id="earn-refresh-btn" onclick="refreshEarnings()">更新</button>
+    </div>
+    <div id="earnings-list"><div class="loading">読み込み中...</div></div>
+  </section>
+  <section>
+    <div class="info-box">
+      マクロ（FOMC・雇用統計等）は手入力。<strong>決算は登録・保有銘柄から自動取得</strong>（1日1回更新、保有銘柄を優先表示）。
+    </div>
+  </section>
+</div>
+
+
+<!-- ============ TAB: ウォッチ ============ -->
+<div class="tab-panel" id="tab-watch">
+  <section>
+    <div class="watch-mode">
+      <button id="watch-mode-list" class="active" onclick="switchWatchMode('list')">ウォッチ</button>
+      <button id="watch-mode-signals" onclick="switchWatchMode('signals')">シグナル履歴</button>
+    </div>
+    <div id="watch-panel-list">
+      <div class="sec-title">
+        <div class="sec-title-left"><h2>ウォッチリスト</h2></div>
+        <button class="btn small primary" onclick="openWatchForm()">＋ 手動追加</button>
+      </div>
+      <div id="watch-list"><div class="loading">読み込み中...</div></div>
+    </div>
+    <div id="watch-panel-signals" style="display:none;">
+      <div class="sec-title">
+        <div class="sec-title-left"><h2>シグナル履歴</h2></div>
+        <button class="btn small" onclick="captureSignalsNow()">A/Bシグナルを保存</button>
+      </div>
+      <div id="signal-log-list"><div class="loading">読み込み中...</div></div>
+    </div>
+  </section>
+  <section>
+    <div class="info-box">
+      <strong>ウォッチ</strong>は自分が意思を持って追う銘柄です。<strong>シグナル履歴</strong>はStageが自動で検出した候補の棚卸しです。履歴から本当に追いたいものだけをウォッチへ移します。
+    </div>
+  </section>
+</div>
+
+<!-- ============ TAB: Stage ============ -->
+<div class="tab-panel active" id="tab-stage">
+  <section>
+    <div class="sec-title">
+      <div class="sec-title-left"><h2>ステージ分析</h2></div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn small" id="stage-jp-btn" onclick="setStageMarket('jp')">日本</button>
+        <button class="btn small" id="stage-us-btn" onclick="setStageMarket('us')">米国</button>
+        <button class="btn small" id="stage-edit-btn" onclick="openStockEditor()">銘柄編集</button>
+      </div>
+    </div>
+    <div id="stage-freshness" class="stage-fresh"></div>
+  </section>
+
+  <nav class="stage-seg" id="stage-seg">
+    <button data-seg="summary" onclick="setStageSeg('summary')">サマリー</button>
+    <button data-seg="reentry" onclick="setStageSeg('reentry')">候補ボード<span class="seg-ct" id="seg-ct-reentry"></span></button>
+    <button data-seg="map" onclick="setStageSeg('map')">ランキング<span class="seg-ct" id="seg-ct-map"></span></button>
+  </nav>
+
+  <!-- サマリー -->
+  <div class="stage-sub" id="sub-summary">
+    <section>
+      <div id="stage-notrade"></div>
+    </section>
+    <section>
+      <div class="sec-title"><div class="sec-title-left"><h2>マクロ / 指数</h2></div></div>
+      <div class="item-list" id="stage-macro"><div class="loading">読み込み中...</div></div>
+    </section>
+    <section id="summary-warn-section" style="display:none;">
+      <div class="sec-title"><div class="sec-title-left"><h2>⚠ 警戒銘柄</h2></div></div>
+      <div class="item-list" id="stage-warnings"></div>
+    </section>
+  </div>
+
+  <!-- 候補ボード -->
+  <div class="stage-sub" id="sub-reentry">
+    <section>
+      <div class="sec-title"><div class="sec-title-left"><h2>候補ボード</h2></div></div>
+      <div id="stage-reentry"></div>
+    </section>
+  </div>
+
+  <!-- ランキング -->
+  <div class="stage-sub" id="sub-map">
+    <section>
+      <div class="sec-title">
+        <div class="sec-title-left"><h2>売買代金ランキング × Stage</h2></div>
+        <button class="btn small" id="rank-refresh-btn" onclick="loadRankingEnriched(true)">更新</button>
+      </div>
+      <div class="rank-note">売買代金上位50銘柄に拡張度・ステージ・判定を添えています（投信・ETFは除外）。判断はチャートで。＋で登録すると警戒・候補ボード判定にも反映されます。</div>
+      <div id="rank-list"><div class="loading">読み込み中...</div></div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  VANTAGE PWA &nbsp;·&nbsp; 5分ごと自動更新
+</footer>
+
+<div class="net-pill" id="net-pill">⚠ オフライン — 表示は最後の取得内容です</div>
+
+<!-- S1 規律ガード モーダル -->
+<div class="modal-overlay" id="guard-modal">
+  <div class="modal" style="max-width:520px;">
+    <h3 id="guard-title">規律ガード</h3>
+    <p id="guard-symline" style="font-family:var(--mono);font-size:12px;"></p>
+    <div id="guard-body"><div class="loading" style="padding:20px;">判定中...</div></div>
+    <div class="modal-actions">
+      <button class="btn" id="guard-tv-btn" onclick="guardOpenChart()">📈 チャート</button>
+      <button class="btn" onclick="addWatchFromGuard()">＋観察</button>
+      <button class="btn" onclick="markHeldFromGuard()">保有</button>
+      <button class="btn" onclick="closeGuard()">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="stocklist-modal">
+  <div class="modal" style="max-width:520px;">
+    <h3>銘柄編集 <span id="sl-market-label" style="font-size:13px;color:var(--text-3);font-weight:400;"></span></h3>
+    <p>分析対象の銘柄を追加・削除します。変更は<strong>次の更新（節目のCron）から反映</strong>されます。</p>
+    <div class="add-form" style="grid-template-columns:1.2fr 1.4fr auto; padding:0 0 12px 0; background:none; border:none;">
+      <input type="text" id="sl-new-sym" placeholder="ティッカー" onblur="slAutoName()">
+      <input type="text" id="sl-new-name" placeholder="銘柄名（自動）">
+      <button class="btn primary small" onclick="slAdd()">追加</button>
+    </div>
+    <div id="sl-msg" style="font-size:12px;min-height:16px;margin-bottom:8px;"></div>
+    <div class="sl-suggest">
+      <div class="sl-suggest-head">
+        <span>📊 売買代金ランキングから提案</span>
+        <button class="btn small" id="sl-suggest-btn" onclick="loadSuggest()">提案を見る</button>
+      </div>
+      <div id="sl-suggest-body"></div>
+    </div>
+    <div id="sl-list" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);"></div>
+    <div class="modal-actions"><button class="btn" onclick="closeStockEditor()">閉じる</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <h3>設定</h3>
+    <p>指数通知とバックエンドの状態。</p>
+    <div class="setting-row">
+      <div>
+        <div class="setting-label">指数 regime 通知</div>
+        <div class="setting-desc">ドル円・VIX・SOX・米株指数・BTC・金/原油・米10年債の体制変化のみ通知（低頻度・1トリガー1日1回）。Android/Windowsで動作。</div>
+      </div>
+      <button class="btn small" id="push-toggle-btn" onclick="togglePush()">確認中…</button>
+    </div>
+    <div id="push-status" class="setting-status"></div>
+    <div class="row">
+      <div>
+        <div style="font-size: 13px; font-weight: 500;">通知テスト送信</div>
+        <div style="font-size: 11px; color: var(--text-3);">このデバイスに届くか確認</div>
+      </div>
+      <button class="btn small" onclick="testPush()">送信</button>
+    </div>
+    <div class="row">
+      <div>
+        <div style="font-size: 13px; font-weight: 500;">バックエンドURL</div>
+        <div style="font-size: 11px; color: var(--text-3); font-family: var(--mono);" id="settings-api">—</div>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn" onclick="closeSettings()">閉じる</button></div>
+  </div>
+</div>
+
+<script>
+const API_BASE = window.location.hostname === 'localhost'
+  ? 'http://localhost:8787'
+  : 'https://cockpit-backend.miyab.workers.dev';
+
+let state = {
+  events: [], alerts: [], auto: null,
+  master: true,
+  editMode: { events: false, alerts: false }
+};
+
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleString('ja-JP', {
+    month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+  });
+}
+setInterval(updateClock, 1000); updateClock();
+
+// オフライン表示
+function updateNet() { document.getElementById('net-pill').classList.toggle('show', !navigator.onLine); }
+window.addEventListener('online', updateNet);
+window.addEventListener('offline', updateNet);
+updateNet();
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab));
+  if (tab === 'events') { loadEvents(); loadEarnings(false); }
+  if (tab === 'stage') { renderStageMarketBtns(); loadStage(); }
+  if (tab === 'watch') { if (watchMode === 'signals') loadSignalLog(); else loadWatchlist(); }
+}
+
+// ====== Stage ======
+let stageMarket = 'jp';
+let stageSeg = 'summary';
+let stageCache = null;     // 直近の /api/stage レスポンス（規律ガードで再利用）
+let notradeCache = null;   // 直近の /api/notrade レスポンス
+let disciplineState = null; // 直近の discipline-state（ポジ数・クールダウン）
+let guardSymbol = null;    // ガードモーダルで判定中の銘柄シンボル
+// 規律ルール集 2.1 の銘柄レベル閾値
+const GUARD = { EXT: 7, RSI: 80, POS_MAX: 5 };
+function setStageSeg(seg) {
+  if (seg === 'warn') seg = 'summary';   // 旧セグメント廃止。stale値はサマリーへ
+  stageSeg = seg;
+  document.querySelectorAll('#stage-seg button').forEach(b => b.classList.toggle('active', b.dataset.seg === seg));
+  document.querySelectorAll('.stage-sub').forEach(p => p.classList.toggle('active', p.id === 'sub-' + seg));
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
+function setSegCount(seg, n) {
+  const el = document.getElementById('seg-ct-' + seg);
+  if (el) el.textContent = (n != null && n > 0) ? n : '';
+}
+function setStageMarket(m) { stageMarket = m; renderStageMarketBtns(); loadStage(); }
+function renderStageMarketBtns() {
+  document.getElementById('stage-jp-btn').classList.toggle('active', stageMarket === 'jp');
+  document.getElementById('stage-us-btn').classList.toggle('active', stageMarket === 'us');
+}
+async function loadStage() {
+  const fresh = document.getElementById('stage-freshness');
+  setStageSeg(stageSeg);
+  document.getElementById('stage-macro').innerHTML = '<div class="loading">読み込み中...</div>';
+  document.getElementById('stage-notrade').innerHTML = '';
+  document.getElementById('stage-reentry').innerHTML = '';
+  document.getElementById('stage-warnings').innerHTML = '';
+  try {
+    const res = await fetch(API_BASE + '/api/stage?market=' + stageMarket);
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    if (!data.ready) {
+      fresh.innerHTML = '<span class="dot partial"></span>まだ集計されていません（Cron待ち）';
+      document.getElementById('stage-macro').innerHTML = '<div class="empty-state">データなし。次回のCron実行後に表示されます。</div>';
+      return;
+    }
+    renderStageFresh(data);
+    stageCache = data;
+    loadNoTrade();
+    renderStageMacro(data.macro);
+    renderStageWarnings(data.warnings);
+    loadRankingEnriched(false);
+    loadReentry();
+  } catch (err) {
+    fresh.innerHTML = '';
+    document.getElementById('stage-macro').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+function renderStageFresh(d) {
+  const fresh = document.getElementById('stage-freshness');
+  const dotCls = d.vol_partial ? 'partial' : 'ok';
+  // 処理時刻ではなく「株価の時点」を表示（ディレイ吸収済み・現在時刻はヘッダーにある）。
+  const pt = d.price_time ? '<span class="updated">データ時点 ' + escapeHtml(d.price_time) + '</span>' : '';
+  fresh.innerHTML = '<span class="dot ' + dotCls + '"></span>' + escapeHtml(d.freshness || '') + pt;
+}
+// 各セクション共通の鮮度バッジ。freshness/vol_partial/price_time を持つAPIレスポンスから生成。
+// 表示するのは「株価の時点」であって処理時刻ではない。
+function freshnessBadge(d) {
+  if (!d || !d.freshness) return '';
+  const dotCls = d.vol_partial ? 'partial' : 'ok';
+  const pt = d.price_time ? '<span class="updated">データ時点 ' + escapeHtml(d.price_time) + '</span>' : '';
+  return '<div class="sec-fresh"><span class="dot ' + dotCls + '"></span>' + escapeHtml(d.freshness) + pt + '</div>';
+}
+function tvSymbol(yahooSym) {
+  // Yahooシンボル → TradingViewシンボル変換
+  if (yahooSym.endsWith('.T')) {
+    return 'TSE:' + yahooSym.slice(0, -2);  // 6981.T → TSE:6981
+  }
+  // 指数・為替・コモディティ・クリプトのマッピング
+  const MAP = {
+    '^N225': 'TVC:NI225', '^NKVI.OS': 'TVC:NI225',  // 日経VIは代替で日経
+    '^GSPC': 'SP:SPX', '^IXIC': 'NASDAQ:IXIC', '^DJI': 'DJ:DJI',
+    '^SOX': 'NASDAQ:SOX', '^VIX': 'TVC:VIX', '^TNX': 'TVC:TNX',
+    'JPY=X': 'FX_IDC:USDJPY', 'USDJPY=X': 'FX_IDC:USDJPY',
+    'CL=F': 'TVC:USOIL', 'GC=F': 'TVC:GOLD', 'SI=F': 'TVC:SILVER',
+    'BTC-USD': 'CRYPTO:BTCUSD', 'ETH-USD': 'CRYPTO:ETHUSD',
+  };
+  if (MAP[yahooSym]) return MAP[yahooSym];
+  return yahooSym;  // 米株はそのまま（NVDA等）
+}
+function openChart(yahooSym) {
+  const sym = tvSymbol(yahooSym);
+  const appUrl = 'tradingview://chart?symbol=' + encodeURIComponent(sym);
+  const webUrl = 'https://www.tradingview.com/chart/?symbol=' + encodeURIComponent(sym);
+  // まずアプリを試し、開かなければwebにフォールバック
+  const t = Date.now();
+  window.location.href = appUrl;
+  setTimeout(() => {
+    if (Date.now() - t < 1600) window.open(webUrl, '_blank');
+  }, 1200);
+}
+
+// ====== S1 規律ガード ======
+// stageキャッシュから銘柄データを引く
+function findStock(symbol) {
+  if (!stageCache || !stageCache.stocks) return null;
+  // stocks は配列 or {symbol:obj} の両対応
+  if (Array.isArray(stageCache.stocks)) {
+    return stageCache.stocks.find(s => s.symbol === symbol) || null;
+  }
+  return stageCache.stocks[symbol] || null;
+}
+// 規律ルール集2.1に基づく判定。データ欠損は unknown 扱いで壊さない
+function evalGuard(stock) {
+  const checks = [];
+  const add = (state, label, detail) => checks.push({ state, label, detail });
+
+  // --- 銘柄レベル ---
+  if (stock.ext_score != null) {
+    add(stock.ext_score >= GUARD.EXT ? 'fail' : 'pass', '拡張過大', '拡張度 ' + stock.ext_score + ' / 閾値 ' + GUARD.EXT);
+  } else add('unknown', '拡張過大', 'データなし');
+
+  if (stock.rsi != null) {
+    add(stock.rsi >= GUARD.RSI ? 'fail' : 'pass', 'RSI過熱', 'RSI ' + stock.rsi + ' / 閾値 ' + GUARD.RSI);
+  } else add('unknown', 'RSI過熱', 'データなし');
+
+  // 上髭陰線: candle.shooting_star（移植版でこの名前を想定。無ければ unknown）
+  const ss = stock.shooting_star != null ? stock.shooting_star
+           : (stock.candle && stock.candle.shooting_star != null ? stock.candle.shooting_star : null);
+  if (ss != null) add(ss ? 'fail' : 'pass', '直近上髭陰線', ss ? '検出' : 'なし');
+  else add('unknown', '直近上髭陰線', 'データなし');
+
+  // ATR傾向: ボラ拡大は単独では違反にしない。
+  // 過熱(拡張過大/RSI過熱)または上髭と複合のときだけ違反（モメンタムの健全なボラ拡大を許容）。
+  if (stock.atr_trend != null) {
+    const expanding = String(stock.atr_trend).indexOf('拡大') >= 0;
+    const overheated = (stock.ext_score != null && stock.ext_score >= GUARD.EXT)
+                    || (stock.rsi != null && stock.rsi >= GUARD.RSI)
+                    || (ss === true);
+    if (expanding && overheated) {
+      add('fail', 'ボラ拡大局面', String(stock.atr_trend) + '（過熱と複合）');
+    } else if (expanding) {
+      add('pass', 'ボラ拡大局面', String(stock.atr_trend) + '（単独・許容）');
+    } else {
+      add('pass', 'ボラ拡大局面', String(stock.atr_trend));
+    }
+  } else add('unknown', 'ボラ拡大局面', 'データなし');
+
+  // --- ポートフォリオレベル ---
+  const pos = disciplineState ? disciplineState.position_count : 0;
+  add(pos >= GUARD.POS_MAX ? 'fail' : 'pass', 'ポジション数上限', pos + ' / ' + GUARD.POS_MAX + '（集中投資の上限）');
+
+  // --- 規律状態（クールダウン） ---
+  if (disciplineState && disciplineState.cooldown_active) {
+    add('fail', 'クールダウン中', 'あと約 ' + disciplineState.cooldown_remaining_h + 'h（規律違反から48h）');
+  } else {
+    add('pass', 'クールダウン', '解除済み');
+  }
+
+  // --- マクロレジーム ---
+  const recLevel = notradeCache ? notradeCache.recLevel : null;
+  if (recLevel === 'strong') add('fail', '地合い', '強いノートレード推奨');
+  else if (recLevel === 'recommend') add('caution', '地合い', 'ノートレード推奨');
+  else if (recLevel === 'normal') add('pass', '地合い', '通常');
+  else add('unknown', '地合い', 'データなし');
+
+  // 総合判定: failが1つでもあれば violation、無くてmacroのcautionがあれば caution、それ以外 ok
+  const fails = checks.filter(c => c.state === 'fail');
+  const cautions = checks.filter(c => c.state === 'caution');
+  let verdict;
+  if (fails.length > 0) verdict = 'violation';
+  else if (cautions.length > 0) verdict = 'caution';
+  else verdict = 'ok';
+  return { verdict, checks, fails: fails.length, cautions: cautions.length };
+}
+
+function openGuard(symbol) {
+  guardSymbol = symbol;
+  const stock = findStock(symbol);
+  document.getElementById('guard-modal').classList.add('open');
+  document.getElementById('guard-title').textContent = '規律ガード';
+  document.getElementById('guard-symline').textContent =
+    (stock ? stock.name + '（' + symbol + '）' : symbol);
+  document.getElementById('guard-body').innerHTML = '<div class="loading" style="padding:20px;">判定中...</div>';
+  if (!stock) {
+    document.getElementById('guard-body').innerHTML =
+      '<div class="empty-state">この銘柄の分析データが見つかりません。Stageを再読込してください。</div>';
+    return;
+  }
+  // discipline-state を取得してから描画
+  loadDisciplineState().then(() => renderGuard(stock));
+}
+function closeGuard() { document.getElementById('guard-modal').classList.remove('open'); guardSymbol = null; }
+function guardOpenChart() { if (guardSymbol) openChart(guardSymbol); }
+// ガードモーダルからウォッチ追加・保有☑を行う
+async function addWatchFromGuard() {
+  const sym = guardSymbol;
+  if (!sym) return;
+  const stock = findStock(sym);
+  await addWatch(sym, stock && stock.name ? stock.name : sym, sym.endsWith('.T') ? 'jp' : 'us', 'guard');
+  closeGuard();
+  switchTab('watch');
+}
+async function markHeldFromGuard() {
+  const sym = guardSymbol;
+  if (!sym) return;
+  const stock = findStock(sym);
+  await toggleHeld(sym, stock && stock.name ? stock.name : sym, sym.endsWith('.T') ? 'jp' : 'us');
+  closeGuard();
+  loadReentry();
+}
+
+
+async function loadDisciplineState() {
+  try {
+    const res = await fetch(API_BASE + '/api/discipline-state');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    disciplineState = d.state || null;
+  } catch (err) {
+    disciplineState = null; // 取れなくても銘柄レベル判定は続行
+  }
+}
+
+function renderGuard(stock) {
+  const r = evalGuard(stock);
+  const cand = findCandidateInfo(stock.symbol) || stock;
+  const vIcon = r.verdict === 'ok' ? '🟢' : r.verdict === 'caution' ? '🟡' : '🔴';
+  const vTitle = r.verdict === 'ok' ? '確認可' : r.verdict === 'caution' ? '地合い注意' : '規律違反あり';
+  const vSub = r.verdict === 'violation'
+    ? r.fails + '件の警戒条件。見送りまたはサイズ抑制'
+    : r.verdict === 'caution' ? '銘柄条件は概ね良好。地合いを確認' : '主要な規律条件はクリア';
+
+  const partialWarn = (stageCache && stageCache.vol_partial)
+    ? '<div class="guard-partial">⚠ 場中の暫定値です。出来高・上ヒゲ・RSIは引け後に変わる可能性があります。</div>'
+    : '';
+
+  const context = (cand && (cand.entry_reason || cand.relative_text || cand.risk_reason || cand.entry_label))
+    ? '<div class="guard-context">' +
+        '<div class="guard-context-title">候補ボードの判定</div>' +
+        '<div class="guard-context-main">' + escapeHtml((cand.entry_lane ? cand.entry_lane + '. ' : '') + (cand.entry_label || cand.stage || stock.stage || '')) + '</div>' +
+        (cand.entry_reason ? '<div class="guard-context-sub">検出理由: ' + escapeHtml(cand.entry_reason) + '</div>' : '') +
+        (cand.relative_text ? '<div class="guard-context-sub">相対評価: ' + escapeHtml(cand.relative_text) + '</div>' : '') +
+        (cand.risk_reason ? '<div class="guard-context-sub" style="color:var(--amber-strong);">注意点: ' + escapeHtml(cand.risk_reason) + '</div>' : '') +
+      '</div>'
+    : '';
+
+  const keyChecks = r.checks.filter(c => ['拡張過大','RSI過熱','直近上髭陰線','地合い','クールダウン'].includes(c.label));
+  const renderMini = c => '<div class="guard-mini ' + c.state + '"><div class="guard-mini-k">' + escapeHtml(c.label) + '</div><div class="guard-mini-v">' + escapeHtml(c.detail) + '</div></div>';
+
+  let sizing = '';
+  if (stock.price != null) {
+    const stop7 = stock.price * 0.93;
+    const warn3 = stock.price * 0.97;
+    sizing = '<div class="guard-sizing">' +
+      '<div>参考ライン: <span class="gz-warn">−3% ' + fmtPrice(Math.round(warn3 * 100) / 100, stageMarket) + '</span> / <span class="gz-stop">−7% ' + fmtPrice(Math.round(stop7 * 100) / 100, stageMarket) + '</span></div>' +
+    '</div>';
+  }
+
+  const cd = (disciplineState && disciplineState.cooldown_active);
+  const cooldownControl = '<div class="guard-state-row">' +
+      '<span class="gs-label">規律違反クールダウン</span>' +
+      (cd
+        ? '<button class="btn small" onclick="guardClearViolation()">解除（あと' + disciplineState.cooldown_remaining_h + 'h）</button>'
+        : '<button class="btn small" onclick="guardRecordViolation()">違反を記録</button>') +
+    '</div>';
+
+  document.getElementById('guard-body').innerHTML =
+    partialWarn +
+    '<div class="guard-verdict ' + r.verdict + '">' +
+      '<span class="gv-icon">' + vIcon + '</span>' +
+      '<div><div class="gv-title">' + vTitle + '</div><div class="gv-sub">' + escapeHtml(vSub) + '</div></div>' +
+    '</div>' +
+    context +
+    '<div class="guard-section-label">確認ポイント</div>' +
+    '<div class="guard-mini-grid">' + keyChecks.map(renderMini).join('') + '</div>' +
+    sizing +
+    '<div class="guard-section-label">規律メモ</div>' + cooldownControl;
+}
+
+async function guardSetPos(delta) {
+  const cur = disciplineState ? disciplineState.position_count : 0;
+  const next = Math.max(0, Math.min(10, cur + delta));
+  await postDiscipline({ action: 'set_position', position_count: next });
+  const stock = findStock(guardSymbol);
+  if (stock) renderGuard(stock);
+}
+async function guardRecordViolation() {
+  await postDiscipline({ action: 'record_violation' });
+  const stock = findStock(guardSymbol);
+  if (stock) renderGuard(stock);
+}
+async function guardClearViolation() {
+  await postDiscipline({ action: 'clear_violation' });
+  const stock = findStock(guardSymbol);
+  if (stock) renderGuard(stock);
+}
+async function postDiscipline(body) {
+  try {
+    const res = await fetch(API_BASE + '/api/discipline-state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const d = await res.json();
+    if (d.state) disciplineState = d.state;
+  } catch (err) { /* 失敗時は現状維持 */ }
+}
+
+// ====== 保有☑キャッシュ（Stage上の☑表示用） ======
+let positionsCache = null;
+
+
+// ====== ウォッチ内モード（個別追跡 / 自動候補履歴） ======
+let watchMode = 'list';
+let signalLogCache = null;
+
+function switchWatchMode(mode) {
+  watchMode = mode === 'signals' ? 'signals' : 'list';
+  const isSig = watchMode === 'signals';
+  document.getElementById('watch-mode-list')?.classList.toggle('active', !isSig);
+  document.getElementById('watch-mode-signals')?.classList.toggle('active', isSig);
+  const listPanel = document.getElementById('watch-panel-list');
+  const sigPanel = document.getElementById('watch-panel-signals');
+  if (listPanel) listPanel.style.display = isSig ? 'none' : 'block';
+  if (sigPanel) sigPanel.style.display = isSig ? 'block' : 'none';
+  if (isSig) loadSignalLog();
+  else loadWatchlist();
+}
+
+async function loadSignalLog() {
+  const el = document.getElementById('signal-log-list');
+  if (!el) return;
+  el.innerHTML = '<div class="loading">読み込み中...</div>';
+  try {
+    await ensureWatchCache();
+    const res = await fetch(API_BASE + '/api/signal-log?limit=160');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    signalLogCache = d;
+    renderSignalLog(d.items || []);
+  } catch (err) {
+    el.innerHTML = '<div class="err">シグナル履歴取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function renderSignalLog(items) {
+  const el = document.getElementById('signal-log-list');
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">＋</div>まだA/Bシグナル履歴がありません。候補ボードのA.今日の主役 / B.反転初動だけを保存します。</div>';
+    return;
+  }
+  el.innerHTML = items.map(renderSignalCard).join('');
+}
+
+function renderSignalCard(x) {
+  const sym = String(x.symbol || '').toUpperCase();
+  const mkt = x.market || (sym.endsWith('.T') ? 'jp' : 'us');
+  const code = sym.endsWith('.T') ? sym.slice(0, -2) : sym;
+  const chgCls = x.change_pct >= 0 ? 'up' : 'down';
+  const chgSign = x.change_pct >= 0 ? '+' : '';
+  const date = x.date || (x.captured_at ? new Date(x.captured_at).toLocaleDateString('ja-JP') : '—');
+  const watched = !!x.watched || watchSymbolSet().has(sym);
+  const held = !!x.held || heldSymbolSet().has(sym);
+  const symA = escapeAttr(sym);
+  const nameA = escapeAttr(x.name || sym);
+  const reasonA = escapeAttr(x.reason || '');
+  return '<div class="sig-card" onclick="openChart(\'' + symA + '\')" style="cursor:pointer;">' +
+    '<div class="sig-head">' +
+      (held ? '<span class="held-mark" title="保有中">☑</span>' : '') +
+      '<span class="sig-name">' + escapeHtml(x.name || sym) + '</span>' +
+      '<span class="sig-code">' + escapeHtml(code) + '</span>' +
+      '<span class="sig-src">' + escapeHtml(x.source_label || '候補') + '</span>' +
+      '<span class="sig-date">' + escapeHtml(date) + '</span>' +
+      '<span class="sig-tags">' +
+        (watched ? '<span class="watch-mini sig">観察中</span>' : '') +
+        (x.stage_code ? '<span class="m-stg stg-' + escapeHtml(x.stage_code) + '">' + escapeHtml(x.stage_code) + '</span>' : '') +
+        (x.theme ? '<span class="m-th">' + escapeHtml(x.theme) + '</span>' : '') +
+      '</span>' +
+    '</div>' +
+    '<div class="sig-meta">' +
+      '<span>現値 ' + (x.price != null ? fmtPrice(x.price, mkt) : '—') + '</span>' +
+      '<span>前日比 <span class="' + chgCls + '">' + (x.change_pct != null ? chgSign + x.change_pct + '%' : '—') + '</span></span>' +
+      (x.div25 != null ? '<span>25MA ' + (x.div25 >= 0 ? '+' : '') + x.div25 + '%</span>' : '') +
+      (x.vol_ratio != null ? '<span>出来高 ' + x.vol_ratio + '倍</span>' : '') +
+      (x.rsi != null ? '<span>RSI ' + x.rsi + '</span>' : '') +
+      (x.momentum != null ? '<span>勢い ' + x.momentum + '</span>' : '') +
+    '</div>' +
+    (x.reason ? '<div class="sig-reason">' + escapeHtml(x.reason) + '</div>' : '') +
+    '<div class="sig-actions" onclick="event.stopPropagation();">' +
+      (watched ? '<button class="btn small" disabled>観察中</button>' : '<button class="btn small primary" onclick="addSignalToWatch(\'' + symA + '\',\'' + nameA + '\',\'' + mkt + '\',\'' + reasonA + '\')">＋観察</button>') +
+      '<button class="btn small" onclick="openChart(\'' + symA + '\')">📈</button>' +
+    '</div>' +
+  '</div>';
+}
+
+async function addSignalToWatch(symbol, name, market, reason) {
+  try {
+    const d = await addWatch(symbol, name, market, 'signal');
+    if (reason && d && d.item && d.item.id) {
+      await fetch(API_BASE + '/api/watchlist', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', id: d.item.id, memo: '自動候補: ' + reason })
+      }).catch(() => null);
+    }
+    watchCache = null;
+    await ensureWatchCache();
+    await loadSignalLog();
+  } catch (err) { alert('ウォッチ追加失敗: ' + err.message); }
+}
+
+async function captureSignalsNow() {
+  try {
+    const res = await fetch(API_BASE + '/api/signal-log', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'capture', market: stageMarket, source: 'manual' })
+    });
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'capture failed');
+    alert('A/Bシグナルを保存しました: ' + (d.captured || 0) + '件');
+    loadSignalLog();
+  } catch (err) { alert('保存失敗: ' + err.message); }
+}
+
+// ====== ウォッチリスト ======
+let watchCache = null;
+
+function openWatchForm() {
+  let f = document.getElementById('watch-form');
+  if (!f) return;
+  f.classList.toggle('open');
+  document.getElementById('wf-market').value = stageMarket === 'us' ? 'us' : 'jp';
+}
+
+async function ensureWatchCache() {
+  if (watchCache && Array.isArray(watchCache.items)) return watchCache;
+  try {
+    const res = await fetch(API_BASE + '/api/watchlist');
+    if (res.ok) { watchCache = await res.json(); return watchCache; }
+  } catch {}
+  return watchCache || { items: [] };
+}
+
+async function loadWatchlist() {
+  const el = document.getElementById('watch-list');
+  if (!el) return;
+  el.innerHTML = '<div class="loading">読み込み中...</div>';
+  try {
+    const res = await fetch(API_BASE + '/api/watchlist');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    watchCache = d;
+    renderWatchlist(d.items || []);
+  } catch (err) {
+    el.innerHTML = '<div class="err">ウォッチリスト取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function watchStatusLabel(s) {
+  return s === 'waiting' ? '押し待ち' : s === 'continue' ? '監視継続' : s === 'holding' ? '保有中' : s === 'skip' ? '見送り' : '候補';
+}
+function watchStatusClass(s) {
+  return s === 'holding' ? 'holding' : s === 'waiting' ? 'waiting' : s === 'skip' ? 'skip' : '';
+}
+
+function renderWatchlist(items) {
+  const el = document.getElementById('watch-list');
+  if (!el) return;
+  let html = '<div class="watch-form" id="watch-form">' +
+    '<select id="wf-market" onchange="wfAutoName()"><option value="jp">日本株</option><option value="us">米国株</option></select>' +
+    '<input id="wf-symbol" placeholder="日本株は4桁 / 米国はMU" onblur="wfAutoName()">' +
+    '<input id="wf-name" placeholder="銘柄名（自動）" readonly>' +
+    '<button class="btn primary small" onclick="addWatchManual()">追加</button>' +
+  '</div>';
+  if (!items.length) {
+    html += '<div class="empty-state"><div class="icon">＋</div>銘柄詳細の「＋観察」または手動追加で、後から追いたい候補を保存できます。</div>';
+    el.innerHTML = html;
+    return;
+  }
+  html += items.map(renderWatchCard).join('');
+  el.innerHTML = html;
+}
+
+function renderWatchCard(w) {
+  const mkt = w.market || (String(w.symbol).endsWith('.T') ? 'jp' : 'us');
+  const code = String(w.symbol || '').endsWith('.T') ? String(w.symbol).slice(0, -2) : String(w.symbol || '');
+  const s = w.stage_data || {};
+  const held = !!w.held;
+  const status = w.status || (held ? 'holding' : 'candidate');
+  const chgCls = s.change_pct >= 0 ? 'up' : 'down';
+  const chgSign = s.change_pct >= 0 ? '+' : '';
+  const added = w.added_at ? new Date(w.added_at).toLocaleDateString('ja-JP', { month:'numeric', day:'numeric' }) : '—';
+  const stage = s.stage ? escapeHtml(s.stage) : (w.stage_registered ? 'Stage登録銘柄・解析待ち' : 'ウォッチ内判定待ち');
+  const stageSrc = w.stage_source === 'watch' ? 'ウォッチ判定' : (w.stage_source === 'stage' ? 'Stage判定' : '');
+  const refreshed = w.stage_refreshed_at ? new Date(w.stage_refreshed_at).toLocaleString('ja-JP', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+  const price = s.price != null ? fmtPrice(s.price, mkt) : '—';
+  const chg = s.change_pct != null ? '<span class="' + chgCls + '">' + chgSign + s.change_pct + '%</span>' : '—';
+  return '<div class="watch-card' + (held ? ' held' : '') + '">' +
+    '<div class="watch-head">' +
+      (held ? '<span class="held-mark" title="保有中">☑</span>' : '') +
+      '<span class="watch-name">' + escapeHtml(w.name || w.symbol) + '</span>' +
+      '<span class="watch-code">' + escapeHtml(code) + '</span>' +
+      '<span class="watch-status ' + watchStatusClass(status) + '">' + watchStatusLabel(status) + '</span>' +
+      '<span class="watch-actions">' +
+        '<button class="s-chart-btn" title="チャート" onclick="openChart(\'' + escapeAttr(w.symbol) + '\')">📈</button>' +
+        '<button class="s-chart-btn" title="この銘柄だけ参考Stageを再判定" onclick="refreshWatchStage(\'' + escapeAttr(w.id) + '\')">再判定</button>' +
+        (held
+          ? '<button class="s-chart-btn" title="もう一度押すと保有☑を解除" onclick="toggleHeld(\'' + escapeAttr(w.symbol) + '\',\'' + escapeAttr(w.name || w.symbol) + '\',\'' + mkt + '\')">保有中✓</button>'
+          : '<button class="s-chart-btn" title="保有☑にする" onclick="toggleHeld(\'' + escapeAttr(w.symbol) + '\',\'' + escapeAttr(w.name || w.symbol) + '\',\'' + mkt + '\')">保有</button>') +
+        '<button class="pos-del" title="削除" onclick="deleteWatch(\'' + escapeAttr(w.id) + '\',\'' + escapeAttr(w.name || w.symbol) + '\')">✕</button>' +
+      '</span>' +
+    '</div>' +
+    '<div class="watch-meta">' +
+      '<span>追加 ' + added + '</span>' +
+      '<span>' + stage + '</span>' +
+      (stageSrc ? '<span>' + stageSrc + (refreshed ? ' ' + refreshed : '') + '</span>' : '') +
+      (!s.stage && w.stage_refresh_note ? '<span>解析注記 ' + escapeHtml(w.stage_refresh_note) + '</span>' : '') +
+      '<span>現値 ' + price + '</span>' +
+      '<span>前日比 ' + chg + '</span>' +
+      (s.div25 != null ? '<span>25MA ' + (s.div25 >= 0 ? '+' : '') + s.div25 + '%</span>' : '') +
+      (s.rsi != null ? '<span>RSI ' + s.rsi + '</span>' : '') +
+    '</div>' +
+    '<div class="watch-edit">' +
+      '<select id="ws-' + escapeAttr(w.id) + '">' +
+        '<option value="candidate"' + (status === 'candidate' ? ' selected' : '') + '>候補</option>' +
+        '<option value="waiting"' + (status === 'waiting' ? ' selected' : '') + '>押し待ち</option>' +
+        '<option value="continue"' + (status === 'continue' ? ' selected' : '') + '>監視継続</option>' +
+        '<option value="holding"' + (status === 'holding' ? ' selected' : '') + '>保有中</option>' +
+        '<option value="skip"' + (status === 'skip' ? ' selected' : '') + '>見送り</option>' +
+      '</select>' +
+      '<textarea id="wm-' + escapeAttr(w.id) + '" placeholder="条件・押し目水準・決算前後の方針など">' + escapeHtml(w.memo || '') + '</textarea>' +
+      '<button class="btn small" onclick="saveWatch(\'' + escapeAttr(w.id) + '\')">保存</button>' +
+    '</div>' +
+  '</div>';
+}
+
+function normalizeWatchInput(symbol, market) {
+  let s = String(symbol || '').trim().toUpperCase();
+  if (!s) return '';
+  if (market === 'jp') {
+    if (/^\d{4}$/.test(s)) s += '.T';
+  }
+  return s;
+}
+
+async function lookupWatchSymbol() {
+  const symbolEl = document.getElementById('wf-symbol');
+  const nameEl = document.getElementById('wf-name');
+  const marketEl = document.getElementById('wf-market');
+  if (!symbolEl || !nameEl || !marketEl) return null;
+  const market = marketEl.value;
+  const symbol = normalizeWatchInput(symbolEl.value, market);
+  if (!symbol) { nameEl.value = ''; return null; }
+  symbolEl.value = market === 'jp' && symbol.endsWith('.T') ? symbol.slice(0, -2) : symbol;
+  nameEl.value = '確認中...';
+  try {
+    // Yahooの英語名をそのまま使わず、Stage/登録銘柄側の表記を優先して解決する。
+    const res = await fetch(API_BASE + '/api/watchlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'resolve_name', symbol, market })
+    });
+    if (!res.ok) throw new Error('not found');
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'not found');
+    nameEl.value = d.name || d.symbol || symbol;
+    return {
+      symbol: d.symbol || symbol,
+      name: d.name || d.symbol || symbol,
+      market: d.market || market
+    };
+  } catch (err) {
+    nameEl.value = '';
+    return null;
+  }
+}
+
+async function wfAutoName() {
+  await lookupWatchSymbol();
+}
+
+async function addWatchManual() {
+  const market = document.getElementById('wf-market').value;
+  const raw = document.getElementById('wf-symbol').value.trim();
+  if (!raw) return alert('銘柄コードを入力してください。');
+  const info = await lookupWatchSymbol();
+  if (!info) {
+    const normalized = normalizeWatchInput(raw, market);
+    return alert('銘柄を確認できませんでした: ' + normalized + '\n日本株は4桁、米国株はティッカーで入力してください。');
+  }
+  await addWatch(info.symbol, info.name, info.market, 'manual');
+  document.getElementById('wf-symbol').value = '';
+  document.getElementById('wf-name').value = '';
+  loadWatchlist();
+}
+
+async function addWatch(symbol, name, market, source) {
+  const body = { action: 'add', symbol, name, market, source: source || 'stage' };
+  const res = await fetch(API_BASE + '/api/watchlist', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  });
+  const d = await res.json();
+  if (!d.ok) throw new Error(d.error || 'watch add failed');
+  return d;
+}
+
+async function addWatchFromStage(symbol, name, market, source) {
+  try {
+    const d = await addWatch(symbol, name, market, source || 'stage');
+    watchCache = null;
+    const note = d.stage_refreshed ? ' ウォッチ内の参考判定も更新しました。' : '';
+    alert((name || symbol) + (d.duplicate ? ' はすでに観察中です。' : ' をウォッチに追加しました。') + note);
+  } catch (err) { alert('ウォッチ追加失敗: ' + err.message); }
+}
+
+function watchSymbolSet() {
+  const items = watchCache && Array.isArray(watchCache.items) ? watchCache.items : [];
+  return new Set(items.map(w => String(w.symbol || '').toUpperCase()));
+}
+
+async function saveWatch(id) {
+  const memo = document.getElementById('wm-' + id).value;
+  const status = document.getElementById('ws-' + id).value;
+  try {
+    const res = await fetch(API_BASE + '/api/watchlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'update', id, memo, status })
+    });
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    loadWatchlist();
+  } catch (err) { alert('保存失敗: ' + err.message); }
+}
+
+async function deleteWatch(id, name) {
+  if (!confirm((name || 'この銘柄') + ' をウォッチから削除しますか？')) return;
+  try {
+    const res = await fetch(API_BASE + '/api/watchlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    loadWatchlist();
+  } catch (err) { alert('削除失敗: ' + err.message); }
+}
+
+async function refreshWatchStage(id) {
+  try {
+    const res = await fetch(API_BASE + '/api/watchlist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'refresh_stage', id })
+    });
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    watchCache = null;
+    await loadWatchlist();
+  } catch (err) {
+    alert('再判定失敗: ' + err.message);
+    loadWatchlist();
+  }
+}
+
+async function heldExists(symbol) {
+  const cur = await fetch(API_BASE + '/api/positions').catch(() => null);
+  if (!cur || !cur.ok) return false;
+  const cd = await cur.json();
+  return (cd.positions || []).some(p => String(p.symbol).toUpperCase() === String(symbol).toUpperCase());
+}
+
+async function toggleHeld(symbol, name, market) {
+  try {
+    if (await heldExists(symbol)) {
+      const res = await fetch(API_BASE + '/api/positions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'remove_position', symbol })
+      });
+      const d = await res.json();
+      if (!d.ok) throw new Error(d.error || 'failed');
+      positionsCache = null;
+      alert((name || symbol) + ' の保有☑を解除しました。');
+    } else {
+      const res = await fetch(API_BASE + '/api/positions', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add_position', symbol, name, market, avg_price: 1, qty: 1 })
+      });
+      const d = await res.json();
+      if (!d.ok) throw new Error(d.error || 'failed');
+      positionsCache = null;
+      alert((name || symbol) + ' を保有☑にしました。');
+    }
+    if (document.getElementById('tab-watch')?.classList.contains('active')) loadWatchlist();
+  } catch (err) {
+    alert('保有☑の更新失敗: ' + err.message);
+  }
+}
+
+async function markHeld(symbol, name, market) {
+  await toggleHeld(symbol, name, market);
+}
+
+async function removeHeld(symbol, name) {
+  await toggleHeld(symbol, name, String(symbol).endsWith('.T') ? 'jp' : 'us');
+}
+
+// ====== 指数push（subscribe / unsubscribe / test） ======
+function urlB64ToUint8(b64) {
+  const pad = '='.repeat((4 - b64.length % 4) % 4);
+  const base64 = (b64 + pad).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  const out = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+  return out;
+}
+
+async function getPushSubscription() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return null;
+  const reg = await navigator.serviceWorker.ready;
+  return reg.pushManager.getSubscription();
+}
+
+async function refreshPushStatus() {
+  const btn = document.getElementById('push-toggle-btn');
+  const stat = document.getElementById('push-status');
+  if (!btn) return;
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    btn.textContent = '非対応';
+    btn.disabled = true;
+    stat.textContent = 'この環境はpush通知に対応していません。';
+    return;
+  }
+  try {
+    const sub = await getPushSubscription();
+    if (sub) { btn.textContent = '通知オフにする'; btn.classList.add('on'); stat.textContent = '✅ 指数通知オン'; }
+    else { btn.textContent = '通知をオンにする'; btn.classList.remove('on'); stat.textContent = '通知はオフです。'; }
+    btn.disabled = false;
+  } catch (e) {
+    btn.textContent = '通知をオンにする'; stat.textContent = '';
+    btn.disabled = false;
+  }
+}
+
+async function togglePush() {
+  const btn = document.getElementById('push-toggle-btn');
+  const stat = document.getElementById('push-status');
+  btn.disabled = true;
+  try {
+    const existing = await getPushSubscription();
+    if (existing) {
+      // 解除
+      await fetch(API_BASE + '/api/push/unsubscribe', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ endpoint: existing.endpoint }),
+      });
+      await existing.unsubscribe();
+      stat.textContent = '通知をオフにしました。';
+    } else {
+      // 許可 → 購読
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { stat.textContent = '通知が許可されませんでした。'; await refreshPushStatus(); return; }
+      const keyRes = await fetch(API_BASE + '/api/push/key');
+      const { key } = await keyRes.json();
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlB64ToUint8(key),
+      });
+      await fetch(API_BASE + '/api/push/subscribe', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription: sub.toJSON() }),
+      });
+      stat.textContent = '✅ 指数通知をオンにしました。';
+    }
+  } catch (e) {
+    stat.textContent = 'エラー: ' + (e && e.message || e);
+  } finally {
+    await refreshPushStatus();
+  }
+}
+
+async function testPush() {
+  try {
+    const res = await fetch(API_BASE + '/api/push/test');
+    const d = await res.json();
+    alert('送信: ' + (d.sent || 0) + '件 / 失効削除: ' + (d.removed || 0) + '件');
+  } catch (e) { alert('テスト送信失敗: ' + e.message); }
+}
+
+function fmtPrice(p, market) {
+  if (p == null) return '—';
+  return market === 'jp' ? '¥' + Number(p).toLocaleString('ja-JP') : '$' + Number(p).toFixed(2);
+}
+// 価格の時点バッジ。state: 'confirmed' | 'intraday' | 'prev_close'
+function priceBadge(state, timeLabel) {
+  if (state === 'intraday') return '<span class="px-badge intraday">🟡 場中' + (timeLabel ? ' ' + escapeHtml(timeLabel) : '') + '</span>';
+  if (state === 'prev_close') return '<span class="px-badge prev">⚪ 前営業日</span>';
+  return '';
+}
+// stageレスポンスの vol_partial / freshness から銘柄価格の時点 state を導出
+function stagePriceState() {
+  if (!stageCache) return 'confirmed';
+  return stageCache.vol_partial ? 'intraday' : 'confirmed';
+}
+function judgeClass(j) {
+  if (j.startsWith('⚠') || j.startsWith('❌')) return j.startsWith('❌') ? 'bad' : 'warn';
+  if (j.startsWith('✓')) return 'good';
+  return 'mid';
+}
+function extClass(e) { return e >= 6 ? 'ext-hi' : e >= 4 ? 'ext-mid' : ''; }
+function renderStageMacro(macro) {
+  const el = document.getElementById('stage-macro');
+  if (!macro || Object.keys(macro).length === 0) { el.innerHTML = '<div class="empty-state">指数データなし</div>'; return; }
+  // 日本株を日本時間の日中(おおむね9-15時)に見ているか。米国指数は前日値の可能性。
+  const nowH = new Date().getHours();
+  const jpDaytime = (stageMarket === 'jp') && (nowH >= 9 && nowH < 18);
+  let html = '';
+  for (const [name, m] of Object.entries(macro)) {
+    if (!m) continue;
+    const chgCls = m.change_pct >= 0 ? 'up' : 'down';
+    const chgSign = m.change_pct >= 0 ? '+' : '';
+    // jpLive=false(米国時間のみの指数)を日本日中に見ている → 前日値の注記
+    const staleFlag = (jpDaytime && m.jpLive === false) ? ' <span class="m-stale">前日値</span>' : '';
+    const clickable = m.symbol ? ' clickable" onclick="openChart(\'' + m.symbol + '\')"' : '"';
+    html += '<div class="stage-macro-row' + clickable + '>' +
+      '<div class="m-name">' + escapeHtml(name) + (m.shooting_star ? ' <span class="m-flag">上髭</span>' : '') + staleFlag + '</div>' +
+      '<div class="m-price num">' + Number(m.price).toLocaleString('ja-JP', {maximumFractionDigits: 2}) + '</div>' +
+      '<div class="m-chg ' + chgCls + ' num">' + chgSign + m.change_pct + '%' + (m.symbol ? ' <span class="m-tv">📈</span>' : '') + '</div>' +
+    '</div>';
+  }
+  el.innerHTML = html;
+}
+function stageStockRow(s, market, opts) {
+  opts = opts || {};
+  const partial = !!opts.partial; // 場中（暫定値）
+  const chgCls = s.change_pct >= 0 ? 'up' : 'down';
+  const chgSign = s.change_pct >= 0 ? '+' : '';
+  const badge = partial ? priceBadge('intraday', opts.timeLabel) : '';
+  // 寄り→現在の差分（あれば）
+  const o2n = (s.open_to_now_pct != null)
+    ? '<span>寄→現 <b class="' + (s.open_to_now_pct >= 0 ? '' : 'snap-warn') + '">' + (s.open_to_now_pct >= 0 ? '+' : '') + s.open_to_now_pct + '%</b></span>'
+    : '';
+  // 出来高・上髭は場中は確定しないので伏せる
+  const volMetric = partial
+    ? '<span>出来高 <b class="pending">引け後</b></span>'
+    : '<span>出来高 <b>' + s.vol_ratio + 'x</b></span>';
+  return '<div class="stage-row" style="cursor:pointer;" onclick="openGuard(\'' + s.symbol + '\')">' +
+    '<div><span class="s-name">' + escapeHtml(s.name) + '</span><span class="s-code">' + escapeHtml(s.symbol) + '</span>' +
+    (s.stale ? '<span class="stale-tag" title="この銘柄だけデータ取得に失敗し、' + (s.days_behind || '数') + '営業日前の古い値が残っています">⚠️古いデータ</span>' : '') +
+    '<div class="s-judge ' + judgeClass(s.judgment) + '">' + escapeHtml(s.judgment) + (partial ? ' <span class="prov-tag">暫定</span>' : '') + '</div></div>' +
+    '<div class="s-right">' +
+      '<div class="s-price-wrap"><div class="s-price num">' + fmtPrice(s.price, market) + '</div>' +
+      '<div class="s-chg ' + chgCls + ' num">' + chgSign + s.change_pct + '%' + (s.change_suspect ? '<span class="chg-suspect" title="前日終値データに欠損の可能性。前日比が不正確かもしれません">⚠</span>' : '') + '</div>' + (badge ? '<div class="s-badge-wrap">' + badge + '</div>' : '') + '</div>' +
+      '<button class="s-chart-btn" title="TradingViewで開く" onclick="event.stopPropagation();openChart(\'' + s.symbol + '\')">📈</button>' +
+    '</div>' +
+    '<div class="s-metrics">' +
+      '<span>拡張 <b class="' + extClass(s.ext_score) + '">' + s.ext_score + '</b></span>' +
+      '<span>25MA <b' + (s.div25 >= 30 ? ' class="snap-warn"' : (s.div25 >= 20 ? ' class="snap-amber"' : '')) + '>' + (s.div25 >= 0 ? '+' : '') + s.div25 + '%</b></span>' +
+      '<span>ATH <b>' + s.ath_dist + '%</b></span>' +
+      '<span>RSI <b>' + (s.rsi != null ? s.rsi : '—') + '</b></span>' +
+      o2n +
+      volMetric +
+      '<span>' + escapeHtml(s.stage) + '</span>' +
+    '</div>' +
+  '</div>';
+}
+function renderStageWarnings(list) {
+  const el = document.getElementById('stage-warnings');
+  const sec = document.getElementById('summary-warn-section');
+  if (!list || list.length === 0) {
+    el.innerHTML = '';
+    if (sec) sec.style.display = 'none';   // 警戒ゼロ件なら丸ごと隠す
+    return;
+  }
+  if (sec) sec.style.display = '';
+  const partial = !!(stageCache && stageCache.vol_partial);
+  el.innerHTML = list.map(s => stageStockRow(s, stageMarket, { partial })).join('');
+}
+// ====== ランキング × Stage（売買代金順＋指標） ======
+async function loadRankingEnriched(forceRefresh) {
+  const el = document.getElementById('rank-list');
+  const btn = document.getElementById('rank-refresh-btn');
+  if (forceRefresh && btn) { btn.textContent = '取得中...'; btn.disabled = true; }
+  if (!el.innerHTML.trim() || forceRefresh) el.innerHTML = '<div class="loading">読み込み中...</div>';
+  try {
+    const url = API_BASE + '/api/ranking-enriched?market=' + stageMarket + (forceRefresh ? '&refresh=1' : '');
+    const res = await fetch(url);
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    await ensureWatchCache();
+    renderRankingEnriched(d);
+    setSegCount('map', d.count || 0);
+  } catch (err) {
+    el.innerHTML = '<div class="empty-state">ランキングを取得できませんでした（未集計 or バックエンド未配置）。「更新」で再取得できます。</div>';
+  } finally {
+    if (btn) { btn.textContent = '更新'; btn.disabled = false; }
+  }
+}
+function renderRankingEnriched(d) {
+  const el = document.getElementById('rank-list');
+  if (!d.items || !d.items.length) { el.innerHTML = '<div class="empty-state">データなし</div>'; return; }
+  let html = '';
+  // 価格の時点バナー: enrich(Stage評価)がいつ走ったか＝価格がいつの値か。
+  // ランキングは寄り後Cronでしか更新されないので、後場などは前回値のまま。誠実にラベル表示。
+  html += rankFreshBanner(d);
+  // 物色テーマサマリー（売買代金で資金集中を可視化）
+  if (d.themes && d.themes.length) {
+    const top = d.themes.slice(0, 6);
+    const maxv = top[0].value_sum || 1;
+    html += '<div class="theme-summary"><div class="theme-summary-title">今日の物色テーマ（売買代金）</div>';
+    html += top.map(t => {
+      const pct = Math.round((t.value_sum / maxv) * 100);
+      const oku = t.value_sum >= 1e12 ? (t.value_sum/1e12).toFixed(1)+'兆' : Math.round(t.value_sum/1e8)+'億';
+      const hot = t.avg_ext != null && t.avg_ext >= 6 ? ' 🔥' : '';
+      return '<div class="theme-row">' +
+        '<div class="theme-head"><span class="theme-name">' + escapeHtml(t.theme) + hot + '</span>' +
+        '<span class="theme-meta">' + t.count + '銘柄 ' + oku + (t.avg_ext != null ? ' 拡張' + t.avg_ext : '') + '</span></div>' +
+        '<div class="theme-bar"><div class="theme-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="theme-syms">' + escapeHtml(t.symbols.join('・')) + '</div>' +
+      '</div>';
+    }).join('');
+    html += '</div>';
+  }
+  html += d.items.map(it => rankRow(it)).join('');
+  if (d.updated_at) {
+    const dt = new Date(d.updated_at);
+    html += '<div class="rank-updated">Stage評価: ' + (dt.getMonth() + 1) + '/' + dt.getDate() + ' ' + dt.toTimeString().slice(0, 5) + '</div>';
+  }
+  el.innerHTML = html;
+}
+function rankFreshBanner(d) {
+  // updated_at(=enrich実行時刻) と現在JSTから、価格がどの時点かを推定
+  const upd = d.updated_at ? new Date(d.updated_at) : null;
+  if (!upd) return '';
+  const nowJ = new Date(Date.now() + (new Date().getTimezoneOffset() + 540) * 60000); // JST
+  const updJ = new Date(upd.getTime() + (upd.getTimezoneOffset() + 540) * 60000);
+  const sameDay = nowJ.toDateString() === updJ.toDateString();
+  const updHM = updJ.getHours().toString().padStart(2,'0') + ':' + updJ.getMinutes().toString().padStart(2,'0');
+  let badge, note;
+  if (!sameDay) {
+    badge = priceBadge('prev_close');
+    note = '前営業日のStage評価時点の価格です。寄り後（約9:15）に最新化されます。';
+  } else if (stageMarket === 'jp') {
+    const h = nowJ.getHours(), m = nowJ.getMinutes(), t = h*60+m;
+    if (t >= 9*60 && t < 15*60+30) {
+      badge = priceBadge('intraday', updHM + '頃');
+      note = '場中。価格は直近のStage評価（' + updHM + '頃）時点で、最新の現在値とはずれます。';
+    } else {
+      badge = priceBadge('confirmed');
+      note = '本日の評価時点（' + updHM + '）の価格です。';
+    }
+  } else {
+    badge = priceBadge('intraday', updHM + '頃');
+    note = '直近のStage評価（' + updHM + '頃）時点の価格です。';
+  }
+  return '<div class="rank-fresh-banner">' + badge + '<span class="rfb-note">' + escapeHtml(note) + '</span></div>';
+}
+function rankRow(it) {
+  const chg = it.change_pct != null ? (it.change_pct >= 0 ? '+' : '') + it.change_pct + '%' : '';
+  const chgCls = (it.change_pct >= 0) ? 'up' : 'down';
+  // 指標バッジ
+  let metrics = '';
+  if (it.analyzed) {
+    const ext = it.ext_score != null ? '拡張' + it.ext_score : '';
+    const extCls = it.ext_score >= 6 ? 'snap-warn' : '';
+    const rsi = it.rsi != null ? 'RSI' + it.rsi : '';
+    const rsiCls = it.rsi >= 80 ? 'snap-warn' : '';
+    // 25MA乖離: 過熱の序列が見える主指標。+20%超は赤(トリム検討域)
+    const dv = it.div25 != null ? (it.div25 >= 0 ? '+' : '') + it.div25 + '%' : '';
+    const dvCls = it.div25 >= 30 ? 'snap-warn' : (it.div25 >= 20 ? 'snap-amber' : '');
+    const intraday = !!(stageCache && stageCache.vol_partial) && stageMarket === 'jp';
+    metrics = '<div class="rank-metrics">' +
+      (it.stage ? '<span class="rk-stage">' + escapeHtml(it.stage) + '</span>' : '') +
+      (ext ? '<span class="' + extCls + '">' + ext + '</span>' : '') +
+      (dv ? '<span class="' + dvCls + '">25MA' + dv + '</span>' : '') +
+      (rsi ? '<span class="' + rsiCls + '">' + rsi + '</span>' : '') +
+      (it.shooting_star && !intraday ? '<span class="snap-warn">上髭</span>' : '') +
+      '</div>' +
+      (it.judgment ? '<div class="rk-judge ' + judgeClass(it.judgment) + '">' + escapeHtml(it.judgment) + (intraday ? ' <span class="prov-tag">暫定</span>' : '') + '</div>' : '');
+  } else {
+    metrics = '<div class="rank-metrics"><span style="color:var(--text-3)">未分析</span></div>';
+  }
+  const addBtn = it.registered
+    ? '<span class="rk-reg">登録済</span>'
+    : '<button class="btn primary small" title="分析対象に追加" onclick="event.stopPropagation();suggestAdd(\'' + it.symbol + '\',\'' + escapeAttr(it.name) + '\')">＋</button>';
+  const watchedTag = watchSymbolSet().has(String(it.symbol).toUpperCase()) ? '<span class="watch-mini">観察中</span>' : '';
+  return '<div class="rank-row" onclick="openChart(\'' + it.symbol + '\')">' +
+    '<div class="rk-head">' +
+      '<span class="rk-rank">' + it.rank + '</span>' +
+      '<span class="rk-name">' + escapeHtml(it.name) + '</span>' +
+      '<span class="rk-code">' + escapeHtml(it.symbol) + '</span>' + watchedTag +
+      (chg ? '<span class="rk-chg ' + chgCls + '">' + chg + '</span>' : '') +
+      '<span class="rk-act">' + addBtn + '</span>' +
+    '</div>' +
+    metrics +
+  '</div>';
+}
+
+async function loadNoTrade() {
+  const el = document.getElementById('stage-notrade');
+  try {
+    const res = await fetch(API_BASE + '/api/notrade?market=' + stageMarket);
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    notradeCache = d;
+    if (!d.ready) { el.innerHTML = ''; return; }
+    renderNoTrade(d);
+  } catch (err) {
+    el.innerHTML = '';
+  }
+}
+function renderNoTrade(d) {
+  const el = document.getElementById('stage-notrade');
+  const icon = d.recLevel === 'strong' ? '🛑' : d.recLevel === 'recommend' ? '⚠️' : '✅';
+  let sigHtml = '';
+  if (d.signals && d.signals.length) {
+    sigHtml = '<div class="nt-signals">' + d.signals.map(s =>
+      '<div class="nt-sig ' + (s.level === 'hot' ? 'hot' : 'warn') + '">' +
+        '<span class="nt-sig-label">' + escapeHtml(s.label) + '</span>' +
+        '<span class="nt-sig-detail">' + escapeHtml(s.detail) + '</span>' +
+      '</div>'
+    ).join('') + '</div>';
+  } else {
+    sigHtml = '<div class="nt-none">警戒シグナルは検出されていません。</div>';
+  }
+  const s = d.summary || {};
+  const nkviHtml = (s.nkvi != null) ? '<span>日経VI <b>' + s.nkvi + '</b></span>' : '';
+  const summaryHtml = '<div class="nt-summary">' +
+    '<span>拡張過大 <b>' + (s.extreme_pct != null ? s.extreme_pct + '%' : '—') + '</b></span>' +
+    '<span>RSI過熱 <b>' + (s.rsi_hot != null ? s.rsi_hot + '銘柄' : '—') + '</b></span>' +
+    '<span>上髭 <b>' + (s.shooting_stars != null ? s.shooting_stars + '銘柄' : '—') + '</b></span>' +
+    '<span>健全な押し目 <b>' + (s.healthy_dips != null ? s.healthy_dips + '銘柄' : '—') + '</b></span>' +
+    nkviHtml +
+  '</div>';
+  const popNote = d.population_note ? '<div class="nt-popnote">' + escapeHtml(d.population_note) + '</div>' : '';
+  el.innerHTML = freshnessBadge(d) +
+    '<div class="notrade ' + d.recLevel + '">' +
+    '<div class="nt-head">' +
+      '<span class="nt-icon">' + icon + '</span>' +
+      '<span class="nt-title">' + escapeHtml(d.recommendation) + '</span>' +
+      '<span class="nt-meta">hot ' + d.hot_count + ' / 全' + d.signal_count + 'シグナル</span>' +
+    '</div>' +
+    sigHtml + summaryHtml + popNote +
+  '</div>';
+}
+
+// 並べ替え状態（モメンタムリスト）。キーと昇降順を保持。
+let momentumSort = { key: 'momentum', dir: 'desc' };
+
+async function loadReentry() {
+  const el = document.getElementById('stage-reentry');
+  try {
+    // モメンタムリスト・初動検出（shodo）・保有ポジションを並行取得。
+    // 保有銘柄は候補ボードに☑マークを出すために使う。
+    const [mres, rres, pres] = await Promise.all([
+      fetch(API_BASE + '/api/momentum?market=' + stageMarket),
+      fetch(API_BASE + '/api/reentry?market=' + stageMarket).catch(() => null),
+      fetch(API_BASE + '/api/positions').catch(() => null),
+      ensureWatchCache().catch(() => null),
+    ]);
+    if (!mres.ok) throw new Error('API ' + mres.status);
+    const d = await mres.json();
+    if (!d.ready) { el.innerHTML = '<div class="empty-state">まだ集計されていません</div>'; return; }
+    let shodo = null;
+    try { if (rres && rres.ok) { const rd = await rres.json(); shodo = rd.shodo || null; } } catch {}
+    try { if (pres && pres.ok) { positionsCache = await pres.json(); } } catch {}
+    momentumCache = d;
+    renderMomentum(d, shodo);
+  } catch (err) {
+    el.innerHTML = '<div class="err">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+// 現在の保有銘柄シンボルの集合を返す（候補ボードの☑判定用）。
+// ポジション側は大文字保存・モメンタム側は登録リストのまま、のため大文字化して突合。
+function heldSymbolSet() {
+  const set = new Set();
+  const ps = positionsCache && positionsCache.positions;
+  if (Array.isArray(ps)) ps.forEach(p => { if (p.symbol) set.add(String(p.symbol).toUpperCase()); });
+  return set;
+}
+
+let momentumCache = null;
+
+// 並べ替えキー変更（列ヘッダのクリックから）。同キー再クリックで昇降反転。
+function sortMomentum(key) {
+  if (momentumSort.key === key) momentumSort.dir = (momentumSort.dir === 'desc' ? 'asc' : 'desc');
+  else momentumSort = { key, dir: 'desc' };
+  if (momentumCache) renderMomentum(momentumCache, momentumCache._shodo || null);
+}
+
+function renderMomentum(d, shodo) {
+  d._shodo = shodo; // 再描画時に保持
+  const el = document.getElementById('stage-reentry');
+  let html = '';
+  html += freshnessBadge(d);
+  if (d.note) html += '<div class="dip-provisional-note">🟡 ' + escapeHtml(d.note) + '</div>';
+
+  // 初動検出は候補ボードの補助情報として残す。ただし「逆行高」は市場/テーマ文脈が曖昧だったため、ここでは参考欄扱い。
+  if (shodo && (shodo.turn_bonus || (shodo.confirmed||[]).length || (shodo.rs_today||[]).length)) {
+    const lvName = lv => lv==='strong' ? '強いノートレード' : lv==='recommend' ? 'ノートレード' : '通常';
+    const volTxt = s => '出来高' + (s.vol_ratio != null ? s.vol_ratio : '—') + '倍' + (s.vol_ratio_norm != null ? '(正規化' + s.vol_ratio_norm + '倍)' : '');
+    const miniCard = (s, kind) => {
+      const sign = s.change_pct >= 0 ? '+' : '';
+      return '<div class="shodo-card ' + kind + '" style="cursor:pointer;" onclick="openChart(\'' + s.symbol + '\')">' +
+        '<span class="sd-name">' + escapeHtml(s.name) + '</span>' +
+        '<span class="sd-code">' + escapeHtml(s.symbol) + '</span>' +
+        '<span class="sd-m">' + sign + s.change_pct + '% / ' + volTxt(s) + ' / 25MA' + (s.div25 >= 0 ? '+' : '') + s.div25 + '%</span>' +
+        '<span class="sd-chart">📈</span></div>';
+    };
+    const ixTxt = shodo.index_chg != null ? '（指数' + (shodo.index_chg >= 0 ? '+' : '') + shodo.index_chg + '%）' : '';
+    html += '<details class="shodo-box"><summary class="shodo-title" style="cursor:pointer;">🔭 初動検出（補助）' + ixTxt + (shodo.provisional ? '<span class="prov-tag">暫定</span>' : '') + '</summary>';
+    if (shodo.turn_bonus) html += '<div class="shodo-turn">⚡ 地合い転換: ' + lvName(shodo.prev_level) + ' → ' + lvName(shodo.today_level) + '。候補ボードA/Bを優先確認。</div>';
+    if ((shodo.confirmed||[]).length) {
+      html += '<div class="shodo-sub confirmed">🚀 初動確認（前回シグナル→継続）</div>';
+      html += shodo.confirmed.map(s => miniCard(s, 'confirmed')).join('');
+    }
+    if ((shodo.rs_today||[]).length) {
+      html += '<div class="shodo-sub watch">📶 相対強度上位・初動候補（候補ボードと合わせて確認）</div>';
+      html += shodo.rs_today.map(s => miniCard(s, 'watch')).join('');
+    }
+    html += '</details>';
+  }
+
+  html += renderCandidateBoard(d);
+  el.innerHTML = html;
+  const boardCount = Array.isArray(d.board) ? d.board.reduce((n, l) => n + ((l.rows || []).length), 0) : (d.rows || []).length;
+  setSegCount('reentry', boardCount);
+}
+
+function renderCandidateBoard(d) {
+  const board = Array.isArray(d.board) ? d.board : null;
+  if (!board || !board.length) return '<div class="empty-state">候補ボードのデータなし</div>';
+  const held = heldSymbolSet();
+  const watched = watchSymbolSet();
+  let html = '<div class="candidate-note">候補ボードは「見る順番」を決める一覧です。詳しい検出理由・注意点は銘柄タップ後の規律ガードに集約しました。</div>';
+  for (const lane of board) {
+    const rows = lane.rows || [];
+    const collapsed = (lane.key === 'C' || lane.key === 'D' || lane.key === 'E') ? '' : ' open';
+    html += '<details class="candidate-lane"' + collapsed + '>' +
+      '<summary class="re-group-title" style="cursor:pointer;list-style:none;">' + escapeHtml(lane.icon || '') + ' ' + escapeHtml(lane.key) + '. ' + escapeHtml(lane.label) + '<span class="re-count">' + rows.length + '</span></summary>';
+    if (!rows.length) {
+      html += '<div class="empty-state" style="padding:14px;">該当なし</div>';
+    } else {
+      const limit = lane.key === 'E' ? 8 : 16;
+      html += rows.slice(0, limit).map(r => candidateCard(r, held, watched)).join('');
+      if (rows.length > limit) html += '<div class="empty-state" style="padding:10px;">他' + (rows.length - limit) + '件</div>';
+    }
+    html += '</details>';
+  }
+  return html;
+}
+
+function candidateCard(r, held, watched) {
+  const sym = String(r.symbol || '').toUpperCase();
+  const isHeld = held.has(sym), isWatched = watched.has(sym);
+  const chgCls = r.change_pct >= 0 ? 'up' : 'down';
+  const chgSign = r.change_pct >= 0 ? '+' : '';
+  const laneClass = r.entry_lane === 'E' ? 'bad' : r.entry_lane === 'A' || r.entry_lane === 'B' ? 'good' : 'mid';
+  const priceMkt = r.symbol.endsWith('.T') ? 'jp' : 'us';
+  const compactTags = [];
+  if (r.entry_label) compactTags.push('<span class="cand-tag ' + laneClass + '">' + escapeHtml(r.entry_label) + '</span>');
+  if (r.relative_label && r.relative_label !== '通常') compactTags.push('<span class="cand-tag good">' + escapeHtml(r.relative_label) + '</span>');
+  if (r.setup_label) compactTags.push('<span class="cand-tag good">' + escapeHtml(r.setup_label) + '</span>');
+  if (r.wick_warn) compactTags.push('<span class="cand-tag warn">上ヒゲ</span>');
+  if (r.surge_warn) compactTags.push('<span class="cand-tag warn">急騰</span>');
+  if (r.entry_lane === 'E' && r.risk_reason) compactTags.push('<span class="cand-tag bad">警戒</span>');
+  return '<div class="cand-card" onclick="openGuard(\'' + escapeAttr(r.symbol) + '\')">' +
+    '<div class="cand-head">' +
+      (isHeld ? '<span class="held-mark" title="保有中">☑</span>' : '') +
+      '<span class="cand-name">' + escapeHtml(r.name) + '</span>' +
+      '<span class="cand-code">' + escapeHtml(r.symbol) + '</span>' +
+      (isWatched ? '<span class="watch-mini">観察中</span>' : '') +
+      '<span class="re-status ' + laneClass + '">' + escapeHtml(r.entry_lane || '') + '</span>' +
+      '<span class="cand-score">' + (r.entry_score != null ? Math.round(r.entry_score) : '') + '</span>' +
+      '<button class="s-chart-btn" title="TradingViewで開く" onclick="event.stopPropagation();openChart(\'' + escapeAttr(r.symbol) + '\')">📈</button>' +
+    '</div>' +
+    '<div class="cand-meta">' +
+      '<span class="' + chgCls + '">' + chgSign + r.change_pct + '%</span>' +
+      '<span>' + fmtPrice(r.price, priceMkt) + '</span>' +
+      '<span>出来高' + (r.vol_ratio != null ? r.vol_ratio + 'x' : '—') + '</span>' +
+      '<span>25MA' + (r.div25 != null ? (r.div25 >= 0 ? '+' : '') + r.div25 + '%' : '—') + '</span>' +
+      '<span>RSI' + (r.rsi != null ? r.rsi : '—') + '</span>' +
+      '<span>拡張' + (r.ext_score != null ? r.ext_score : '—') + '</span>' +
+    '</div>' +
+    (compactTags.length ? '<div class="cand-tags">' + compactTags.join('') + '</div>' : '') +
+  '</div>';
+}
+
+function findCandidateInfo(symbol) {
+  const sym = String(symbol || '').toUpperCase();
+  if (!momentumCache) return null;
+  if (Array.isArray(momentumCache.board)) {
+    for (const lane of momentumCache.board) {
+      for (const r of (lane.rows || [])) {
+        if (String(r.symbol || '').toUpperCase() === sym) return r;
+      }
+    }
+  }
+  if (Array.isArray(momentumCache.rows)) {
+    return momentumCache.rows.find(r => String(r.symbol || '').toUpperCase() === sym) || null;
+  }
+  return null;
+}
+
+function openStockEditor() {
+  document.getElementById('sl-market-label').textContent = '（' + (stageMarket === 'us' ? '米国' : '日本') + '）';
+  document.getElementById('sl-msg').textContent = '';
+  document.getElementById('sl-msg').className = '';
+  document.getElementById('sl-new-sym').value = '';
+  document.getElementById('sl-new-name').value = '';
+  document.getElementById('stocklist-modal').classList.add('open');
+  loadStockList();
+}
+function closeStockEditor() {
+  document.getElementById('stocklist-modal').classList.remove('open');
+}
+async function loadStockList() {
+  const el = document.getElementById('sl-list');
+  el.innerHTML = '<div class="loading" style="padding:16px;">読み込み中...</div>';
+  try {
+    const res = await fetch(API_BASE + '/api/stocklist?market=' + stageMarket);
+    const d = await res.json();
+    if (!d.list) { el.innerHTML = '<div class="empty-state">取得失敗</div>'; return; }
+    renderStockList(d);
+  } catch (err) {
+    el.innerHTML = '<div class="err">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+function renderStockList(d) {
+  const el = document.getElementById('sl-list');
+  document.getElementById('sl-market-label').textContent = '（' + (d.market === 'us' ? '米国' : '日本') + ' ' + d.count + '/' + d.max + '）';
+  if (!d.list.length) { el.innerHTML = '<div class="empty-state">銘柄なし</div>'; return; }
+  el.innerHTML = d.list.map(it =>
+    '<div class="sl-row">' +
+      '<span class="sl-name">' + escapeHtml(it.name) + '</span>' +
+      '<span class="sl-code">' + escapeHtml(it.symbol) + '</span>' +
+      '<button class="sl-del" onclick="slDelete(\'' + it.symbol + '\')" title="削除">×</button>' +
+    '</div>'
+  ).join('');
+}
+async function slAutoName() {
+  let sym = document.getElementById('sl-new-sym').value.trim().toUpperCase();
+  if (!sym) return;
+  if (stageMarket === 'jp' && /^\d{4}$/.test(sym)) { sym += '.T'; document.getElementById('sl-new-sym').value = sym; }
+  const nameInput = document.getElementById('sl-new-name');
+  nameInput.placeholder = '検索中...';
+  try {
+    const res = await fetch(API_BASE + '/api/lookup?symbol=' + encodeURIComponent(sym));
+    if (res.ok) { const d = await res.json(); if (d.name) nameInput.value = d.name; }
+    else nameInput.placeholder = '見つからない（手動可）';
+  } catch { nameInput.placeholder = '手動入力'; }
+}
+function slMsg(text, ok) {
+  const m = document.getElementById('sl-msg');
+  m.textContent = text;
+  m.className = ok ? 'ok' : 'ng';
+}
+async function slAdd() {
+  let sym = document.getElementById('sl-new-sym').value.trim().toUpperCase();
+  const name = document.getElementById('sl-new-name').value.trim();
+  if (!sym) { slMsg('ティッカーを入力してください', false); return; }
+  if (stageMarket === 'jp' && /^\d{4}$/.test(sym)) sym += '.T';
+  slMsg('追加中...', true);
+  try {
+    const res = await fetch(API_BASE + '/api/stocklist?market=' + stageMarket, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', symbol: sym, name: name || undefined })
+    });
+    const d = await res.json();
+    if (d.ok) {
+      slMsg('追加しました: ' + d.added.name + '（次の更新で分析されます）', true);
+      document.getElementById('sl-new-sym').value = '';
+      document.getElementById('sl-new-name').value = '';
+      if (d.list) renderStockList({ market: stageMarket, count: d.list.length, max: 80, list: d.list });
+    } else {
+      slMsg(d.error || '追加失敗', false);
+      if (d.list) renderStockList({ market: stageMarket, count: d.list.length, max: 80, list: d.list });
+    }
+  } catch (err) { slMsg('追加失敗: ' + err.message, false); }
+}
+async function slDelete(symbol) {
+  if (!confirm(symbol + ' を削除しますか？')) return;
+  try {
+    const res = await fetch(API_BASE + '/api/stocklist?market=' + stageMarket, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', symbol })
+    });
+    const d = await res.json();
+    if (d.ok) {
+      slMsg('削除しました（次の更新で反映）', true);
+      if (d.list) renderStockList({ market: stageMarket, count: d.list.length, max: 80, list: d.list });
+    } else slMsg(d.error || '削除失敗', false);
+  } catch (err) { slMsg('削除失敗: ' + err.message, false); }
+}
+
+// ====== 銘柄サジェスト（売買代金ランキング）======
+function fmtTurnover(v, market) {
+  if (v == null) return '—';
+  if (market === 'jp') {
+    if (v >= 1e8) return (v / 1e8).toFixed(0) + '億';
+    return Number(v).toLocaleString('ja-JP');
+  }
+  // 米国は「千ドル」値を保持しているので百万ドル単位で表示
+  if (v >= 1e6) return '$' + (v / 1e6).toFixed(0) + 'M';
+  return '$' + Number(v).toLocaleString('en-US');
+}
+async function loadSuggest() {
+  const btn = document.getElementById('sl-suggest-btn');
+  const body = document.getElementById('sl-suggest-body');
+  const orig = btn.textContent;
+  btn.textContent = '取得中...'; btn.disabled = true;
+  body.innerHTML = '';
+  try {
+    const res = await fetch(API_BASE + '/api/stage-suggest?market=' + stageMarket);
+    const d = await res.json();
+    if (!d.ok) throw new Error(d.error || 'failed');
+    renderSuggest(d);
+  } catch (err) {
+    body.innerHTML = '<div class="sl-sg-updated">提案を取得できませんでした（ランキング未取得 or バックエンド未配置）。手動追加をご利用ください。</div>';
+  } finally {
+    btn.textContent = orig; btn.disabled = false;
+  }
+}
+function renderSuggest(d) {
+  const body = document.getElementById('sl-suggest-body');
+  let html = '';
+  if (d.new_candidates && d.new_candidates.length) {
+    html += '<div class="sl-sg-group"><div class="sl-sg-label">新規候補（上位' + d.thresholds.new_within + '位の未登録）</div>';
+    html += d.new_candidates.map(c =>
+      '<div class="sl-sg-row" id="sg-' + cssEsc(c.symbol) + '">' +
+        '<span class="sg-rank">' + c.rank + '位</span>' +
+        '<span class="sg-name">' + escapeHtml(c.name) + '</span>' +
+        '<span class="sg-val">' + fmtTurnover(c.value, d.market) + '</span>' +
+        '<button class="btn primary small" onclick="suggestAdd(\'' + c.symbol + '\',\'' + escapeAttr(c.name) + '\')">追加</button>' +
+      '</div>').join('');
+    html += '</div>';
+  } else {
+    html += '<div class="sl-sg-updated">新規候補なし（上位はすべて登録済み）。</div>';
+  }
+  if (d.drop_candidates && d.drop_candidates.length) {
+    html += '<div class="sl-sg-group"><div class="sl-sg-label">勢い喪失（' + d.thresholds.drop_beyond + '位圏外・上ほど順位が高い＝まだ勢いあり）</div>';
+    html += d.drop_candidates.map(c =>
+      '<div class="sl-sg-row" id="sg-' + cssEsc(c.symbol) + '">' +
+        '<span class="sg-rank">' + (c.rank ? c.rank + '位' : '圏外') + '</span>' +
+        '<span class="sg-name">' + escapeHtml(c.name || c.symbol) + '</span>' +
+        '<span class="sg-code">' + escapeHtml(c.symbol) + '</span>' +
+        '<button class="btn small" onclick="slDelete(\'' + c.symbol + '\')">外す</button>' +
+      '</div>').join('');
+    html += '</div>';
+  }
+  if (d.updated_at) {
+    const dt = new Date(d.updated_at);
+    html += '<div class="sl-sg-updated">ランキング更新: ' + (dt.getMonth() + 1) + '/' + dt.getDate() + ' ' + dt.toTimeString().slice(0, 5) + '</div>';
+  }
+  body.innerHTML = html;
+}
+function cssEsc(s) { return String(s).replace(/[^a-zA-Z0-9]/g, '_'); }
+function escapeAttr(s) { return String(s).replace(/'/g, '').replace(/"/g, ''); }
+
+async function suggestAdd(symbol, name) {
+  try {
+    const res = await fetch(API_BASE + '/api/stocklist?market=' + stageMarket, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', symbol, name: name || undefined }),
+    });
+    const d = await res.json();
+    if (d.ok) {
+      // モーダル内のサジェスト行があれば消す
+      const row = document.getElementById('sg-' + cssEsc(symbol));
+      if (row) row.remove();
+      slMsg('追加しました: ' + (d.added ? d.added.name : symbol) + '（次の更新で分析）', true);
+      if (d.list) renderStockList({ market: stageMarket, count: d.list.length, max: 80, list: d.list });
+      // ランキング行から追加した場合は、その行の＋ボタンを「登録済」に置換
+      const rkRows = document.querySelectorAll('#rank-list .rank-row');
+      rkRows.forEach(r => {
+        const codeEl = r.querySelector('.rk-code');
+        if (codeEl && codeEl.textContent === symbol) {
+          const act = r.querySelector('.rk-act');
+          if (act) act.innerHTML = '<span class="rk-reg">登録済</span>';
+        }
+      });
+    } else {
+      slMsg(d.error || '追加失敗', false);
+      if (d.error) alert(d.error); // モーダル外でも見えるように
+    }
+  } catch (err) { slMsg('追加失敗: ' + err.message, false); }
+}
+
+// ====== Events ======
+// ====== 決算（自動取得） ======
+async function loadEarnings(force) {
+  const el = document.getElementById('earnings-list');
+  if (force) el.innerHTML = '<div class="loading">取得中...</div>';
+  try {
+    const res = await fetch(API_BASE + '/api/events?with_earnings=1' + (force ? '&force=1' : ''));
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    renderEarnings(d.earnings || [], d.earnings_refreshed_at);
+  } catch (err) {
+    el.innerHTML = '<div class="err" style="margin:14px;">決算取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+function refreshEarnings() { loadEarnings(true); }
+
+function renderEarnings(list, refreshedAt) {
+  const el = document.getElementById('earnings-list');
+  if (!list || list.length === 0) {
+    el.innerHTML = '<div class="empty-state">直近の決算予定なし（または未取得）。「更新」で取得します。</div>';
+    return;
+  }
+  const now = Date.now();
+  const DAY = 86400000;
+  // 過去7日より前は除外（決算済みは消す）。近い順。
+  const items = list
+    .map(e => ({ ...e, ts: new Date(e.time).getTime() }))
+    .filter(e => e.ts > now - 7 * DAY)
+    .sort((a, b) => a.ts - b.ts);
+
+  const near = items.filter(e => e.ts <= now + 14 * DAY); // 14日以内は常時表示
+  const far = items.filter(e => e.ts > now + 14 * DAY);   // それ以降は折りたたみ
+
+  const card = e => {
+    const days = Math.round((e.ts - now) / DAY);
+    const when = days < 0 ? Math.abs(days) + '日前' : days === 0 ? '本日' : 'あと' + days + '日';
+    const dateStr = new Date(e.ts).toLocaleDateString('ja-JP', { month: 'numeric', day: 'numeric' });
+    const code = e.symbol.endsWith('.T') ? e.symbol.slice(0, -2) : e.symbol;
+    const urgent = days >= 0 && days <= 3;
+    return '<div class="earn-row' + (e.held ? ' held' : '') + (urgent ? ' urgent' : '') + '" onclick="openChart(\'' + e.symbol + '\')">' +
+      (e.held ? '<span class="earn-held">保有</span>' : '') +
+      '<div class="earn-name"><span class="e-nm">' + escapeHtml(e.name) + '</span><span class="e-cd">' + escapeHtml(code) + '</span>' + (e.estimate ? '<span class="e-est">予想</span>' : '') + '</div>' +
+      '<div class="earn-when"><span class="e-date">' + dateStr + '</span><span class="e-days' + (urgent ? ' urgent' : '') + '">' + when + '</span></div>' +
+    '</div>';
+  };
+
+  let html = '';
+  html += near.length ? near.map(card).join('') : '<div class="empty-state">14日以内の決算なし</div>';
+  if (far.length) {
+    html += '<details class="earn-more"><summary>さらに先の決算（' + far.length + '件）</summary><div>' + far.map(card).join('') + '</div></details>';
+  }
+  if (refreshedAt) {
+    html += '<div class="earn-asof">最終更新: ' + new Date(refreshedAt).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// ====== 売買履歴 ======
+async function loadHistory() {
+  const el = document.getElementById('history-list');
+  const stEl = document.getElementById('history-stats');
+  el.innerHTML = '<div class="loading">読み込み中...</div>';
+  try {
+    const res = await fetch(API_BASE + '/api/history');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const d = await res.json();
+    renderHistory(d);
+  } catch (err) {
+    stEl.innerHTML = '';
+    el.innerHTML = '<div class="err">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+
+function renderHistory(d) {
+  const stEl = document.getElementById('history-stats');
+  const el = document.getElementById('history-list');
+  const recs = d.records || [];
+
+  if (recs.length === 0) {
+    stEl.innerHTML = '';
+    el.innerHTML = '<div class="empty-state">まだ決済履歴がありません。ポジションを決済すると自動で記録されます。</div>';
+    return;
+  }
+
+  // 集計
+  const plLine = (label, sub) => {
+    if (!sub) return '';
+    const cls = sub.pl >= 0 ? 'up' : 'down';
+    const sign = sub.pl >= 0 ? '+' : '';
+    const amt = label === '日本'
+      ? '¥' + sign + Math.round(sub.pl).toLocaleString()
+      : '$' + sign + sub.pl.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return '<div class="hist-stat-line"><span>' + label + '株 損益（' + sub.count + '件）</span><span class="' + cls + '">' + amt + '</span></div>';
+  };
+  let st = '<div class="hist-stats-box">';
+  st += '<div class="hist-stat-grid">';
+  st += '<div class="hs-cell"><div class="hs-v">' + (d.win_rate != null ? d.win_rate + '%' : '—') + '</div><div class="hs-k">勝率</div></div>';
+  st += '<div class="hs-cell"><div class="hs-v">' + d.win_count + '<span class="hs-sep">/</span>' + d.loss_count + '</div><div class="hs-k">勝 / 負</div></div>';
+  st += '<div class="hs-cell"><div class="hs-v">' + (d.avg_held_days != null ? d.avg_held_days + '日' : '—') + '</div><div class="hs-k">平均保有</div></div>';
+  st += '</div>';
+  st += plLine('日本', d.pl_jp) + plLine('米国', d.pl_us);
+  if (d.hot_exit_count > 0) {
+    st += '<div class="hist-insight">⚠ 拡張度6+で決済した取引: ' + d.hot_exit_count + '件・勝率' + (d.hot_exit_win_rate != null ? d.hot_exit_win_rate + '%' : '—') + '（過熱圏まで引っ張る傾向の自己チェック）</div>';
+  }
+  st += '</div>';
+  stEl.innerHTML = st;
+
+  // 履歴カード
+  el.innerHTML = recs.map(r => {
+    const mkt = r.market || (r.symbol.endsWith('.T') ? 'jp' : 'us');
+    const code = r.symbol.endsWith('.T') ? r.symbol.slice(0, -2) : r.symbol;
+    const closed = new Date(r.closed_at).toLocaleDateString('ja-JP', { year: 'numeric', month: 'numeric', day: 'numeric' });
+    let plHtml = '<span class="hist-pl muted">損益不明</span>';
+    if (r.pl != null) {
+      const cls = r.pl >= 0 ? 'up' : 'down';
+      const sign = r.pl >= 0 ? '+' : '';
+      const amt = mkt === 'jp' ? '¥' + sign + Math.round(r.pl).toLocaleString() : '$' + sign + r.pl.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      plHtml = '<span class="hist-pl ' + cls + '">' + amt + (r.pl_pct != null ? ' (' + sign + r.pl_pct + '%)' : '') + '</span>';
+    }
+    const winBadge = r.win === true ? '<span class="hist-win">勝</span>' : r.win === false ? '<span class="hist-loss">負</span>' : '';
+    const exitInfo = [];
+    if (r.exit_stage) exitInfo.push('決済時:' + r.exit_stage);
+    if (r.exit_ext_score != null) exitInfo.push('拡張' + r.exit_ext_score);
+    if (r.exit_rsi != null) exitInfo.push('RSI' + r.exit_rsi);
+    return '<div class="hist-card">' +
+      '<div class="hist-head">' + winBadge +
+        '<span class="hist-name">' + escapeHtml(r.name) + '</span>' +
+        '<span class="hist-code">' + escapeHtml(code) + '</span>' +
+        '<button class="s-chart-btn" onclick="event.stopPropagation();openChart(\'' + r.symbol + '\')">📈</button>' +
+        '<button class="pos-del" title="記録を削除" onclick="deleteHistoryRec(\'' + r.id + '\')">✕</button>' +
+      '</div>' +
+      '<div class="hist-meta">' +
+        '<span>取得 ' + fmtPrice(r.avg_price, mkt) + ' → 決済 ' + (r.exit_price != null ? fmtPrice(r.exit_price, mkt) : '—') + ' ×' + r.qty + '</span>' +
+        plHtml +
+      '</div>' +
+      '<div class="hist-sub">' + closed + (r.held_days != null ? ' ｜保有' + r.held_days + '日' : '') + (exitInfo.length ? ' ｜' + exitInfo.join(' ') : '') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function deleteHistoryRec(id) {
+  if (!confirm('この決済記録を削除しますか？')) return;
+  try {
+    const res = await fetch(API_BASE + '/api/history', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'delete', id }),
+    });
+    if (res.ok) loadHistory();
+  } catch (err) { alert('削除失敗: ' + err.message); }
+}
+
+async function loadEvents() {
+  try {
+    const res = await fetch(API_BASE + '/api/events');
+    if (!res.ok) throw new Error('API ' + res.status);
+    const data = await res.json();
+    state.events = data.events || [];
+    renderEvents();
+  } catch (err) {
+    document.getElementById('events-list').innerHTML = '<div class="err" style="margin:14px;">取得失敗: ' + escapeHtml(err.message) + '</div>';
+  }
+}
+function renderEvents() {
+  const list = document.getElementById('events-list');
+  const editing = state.editMode.events;
+  const now = new Date();
+  const sorted = [...state.events].sort((a, b) => new Date(a.time) - new Date(b.time));
+  let html = '';
+  if (sorted.length === 0 && !editing) {
+    html = '<div class="empty-state"><div class="icon">📅</div>イベント未登録。「追加」から登録してください。</div>';
+  } else {
+    sorted.forEach(ev => {
+      const target = new Date(ev.time);
+      const diffMs = target - now;
+      const past = diffMs < 0;
+      const totalMin = Math.abs(Math.round(diffMs / 60000));
+      const days = Math.floor(totalMin / 1440);
+      const remH = Math.floor((totalMin % 1440) / 60);
+      const remM = totalMin % 60;
+      let countdown = past ? '完了' : (days > 0 ? days + 'd ' + remH + 'h' : (totalMin >= 60 ? Math.floor(totalMin/60) + 'h ' + remM + 'm' : remM + 'm'));
+      const imminent = !past && diffMs < 24 * 3600000;
+      const dateStr = target.toLocaleString('ja-JP', { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      html += '<div class="item-row event' + (past ? ' past' : '') + (imminent ? ' imminent' : '') + (ev.pinned ? ' pinned' : '') + '">' +
+        '<div><div class="ev-name">' + escapeHtml(ev.name) + '</div>' +
+        '<div class="ev-time">' + dateStr + '</div></div>' +
+        '<div class="ev-countdown num">' + countdown + '</div>' +
+        '<button class="pin-btn ' + (ev.pinned ? 'on' : '') + '" onclick="togglePin(\'' + ev.id + '\')" title="分析用に固定（クリアで消えない）">📌</button>' +
+        '<button class="del-btn ' + (editing ? '' : 'hidden') + '" onclick="delEvent(\'' + ev.id + '\')">×</button>' +
+      '</div>';
+    });
+  }
+  if (editing) {
+    html += '<div class="add-form event">' +
+      '<input type="text" id="new-ev-name" placeholder="イベント名">' +
+      '<input type="datetime-local" id="new-ev-time">' +
+      '<button class="btn primary small" onclick="addEvent()">追加</button>' +
+    '</div>';
+  }
+  list.innerHTML = html;
+}
+async function addEvent() {
+  const name = document.getElementById('new-ev-name').value.trim();
+  const time = document.getElementById('new-ev-time').value;
+  if (!name || !time) { alert('イベント名と日時を入力'); return; }
+  try {
+    const res = await fetch(API_BASE + '/api/events', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'add', name, time })
+    });
+    if (!res.ok) throw new Error('API ' + res.status);
+    await loadEvents();
+  } catch (err) { alert('追加失敗: ' + err.message); }
+}
+async function delEvent(id) {
+  if (!confirm('削除？')) return;
+  try {
+    await fetch(API_BASE + '/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'delete', id }) });
+    await loadEvents();
+  } catch (err) { alert('削除失敗: ' + err.message); }
+}
+async function togglePin(id) {
+  try {
+    await fetch(API_BASE + '/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'toggle_pin', id }) });
+    await loadEvents();
+  } catch (err) { alert('固定切替失敗: ' + err.message); }
+}
+async function clearCompletedEvents() {
+  if (!confirm('完了イベント（📌固定を除く）をクリアしますか？')) return;
+  try {
+    await fetch(API_BASE + '/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'clear_completed' }) });
+    await loadEvents();
+  } catch (err) { alert('クリア失敗: ' + err.message); }
+}
+async function copyAnalysisPrompt(btn) {
+  const orig = btn.textContent;
+  btn.textContent = '収集中...'; btn.disabled = true;
+  const now = new Date();
+  const stamp = now.toLocaleString('ja-JP', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+  const out = [];
+
+  out.push('# VANTAGE スナップショット（' + stamp + ' 取得）');
+  out.push('VANTAGE（モメンタム投資の判断支援アプリ）が保持する客観データです。');
+  out.push('投資方針: テーマに資金集中する銘柄を3〜5本・1〜4週保有で取る順張り。');
+  out.push('過熱した急騰当日の飛びつきは避け、上昇トレンド中の押し目・再加速の初動を狙う。');
+  out.push('このデータを出発点に、候補ボードA/Bの妥当性をモメンタムのセオリーで評価してほしい。');
+
+  const mname = mk => mk === 'jp' ? '日本' : '米国';
+  const fmt = (v, d=2) => (v==null ? '-' : Number(v).toLocaleString('ja-JP',{maximumFractionDigits:d}));
+  const sign = v => (v==null ? '' : (v>=0?'+':'') + v);
+
+  for (const mk of ['jp', 'us']) {
+    let stage = null, momentum = null, notrade = null, shodoSrc = null;
+    try { stage    = await (await fetch(API_BASE + '/api/stage?market='    + mk)).json(); } catch {}
+    try { momentum = await (await fetch(API_BASE + '/api/momentum?market=' + mk)).json(); } catch {}
+    try { notrade  = await (await fetch(API_BASE + '/api/notrade?market='  + mk)).json(); } catch {}
+    try { shodoSrc = await (await fetch(API_BASE + '/api/reentry?market='  + mk)).json(); } catch {}
+    if (!stage || !stage.ready) continue;
+
+    out.push('\n\n====================');
+    out.push('## ' + mname(mk) + '市場');
+    out.push('データ鮮度: ' + (stage.freshness || '-') + (stage.price_time ? '（株価時点: ' + stage.price_time + '）' : '') + (stage.vol_partial ? '（場中・暫定値。出来高/上髭/陽線は引け後に確定）' : '（確定値）'));
+
+    // 1. 地合い / S2ノートレード判定
+    if (notrade && notrade.ready) {
+      const lvl = notrade.recLevel==='strong' ? '強いノートレード推奨'
+                : notrade.recLevel==='recommend' ? 'ノートレード推奨' : '通常（過度な警戒なし）';
+      out.push('\n### 地合い判定: ' + lvl + '（hot ' + (notrade.hot_count||0) + '件 / シグナル計 ' + (notrade.signal_count||0) + '件）');
+      (notrade.signals || []).forEach(s => {
+        out.push('- [' + (s.level==='hot'?'警戒':'注意') + '] ' + (s.label||'') + (s.detail ? '：' + s.detail : ''));
+      });
+      const sm = notrade.summary || {};
+      out.push('- 統計: 拡張度6+が' + (sm.extreme_pct ?? '-') + '% / RSI75+が' + (sm.rsi_hot ?? '-') + '銘柄 / 上髭' + (sm.shooting_stars ?? '-') + '銘柄 / 健全な押し目' + (sm.healthy_dips ?? '-') + '銘柄' + (sm.nkvi!=null ? ' / 日経VI ' + sm.nkvi : ''));
+    }
+
+    // 2. マクロ指数
+    if (stage.macro && Object.keys(stage.macro).length) {
+      out.push('\n### マクロ/指数');
+      Object.entries(stage.macro).filter(([,m])=>m).forEach(([n,m]) => {
+        out.push('- ' + n + ': ' + fmt(m.price) + '（' + sign(m.change_pct) + '%）' + (m.rsi!=null?' RSI'+m.rsi:'') + (m.shooting_star?' ⚠上髭':''));
+      });
+    }
+
+    // 3. 候補ボード（A/B優先）
+    if (momentum && momentum.ready && (momentum.rows||[]).length) {
+      const line = e => '  - ' + e.name + '(' + e.symbol + ') ' + fmt(e.price) + ' ' + sign(e.change_pct) + '% '
+        + '｜勢い' + (e.momentum ?? '-') + ' / 拡張' + (e.ext_score ?? '-') + ' / 25日線乖離' + sign(e.div25) + '% / RSI' + (e.rsi ?? '-') + ' / 出来高' + (e.vol_ratio ?? '-') + '倍'
+        + (e.ext_score != null && e.ext_score < 3 ? ' ｜押し目圏' : '')
+        + (e.theme ? ' ｜テーマ:' + e.theme : '')
+        + (e.wick_warn ? ' ⚠上ヒゲ' : '') + (e.surge_warn ? ' ⚠急騰追随' : '');
+      out.push('\n### 候補ボード（A/B優先・A=今日の主役/B=反転初動）' + (momentum.vol_partial ? '（場中・暫定）' : '') + ' 計' + momentum.count + '件');
+      (momentum.rows || []).slice(0, 12).forEach(e => out.push(line(e)));
+      if ((momentum.rows||[]).length > 12) out.push('  （他' + ((momentum.rows.length)-12) + '件は拡張度等で並べ替えて確認）');
+
+      // 初動検出（地合い非従属。reentryのshodoを流用）
+      const sh = shodoSrc && shodoSrc.shodo;
+      if (sh && (sh.turn_bonus || (sh.confirmed||[]).length || (sh.rs_today||[]).length)) {
+        const lvName = lv => lv==='strong' ? '強いノートレード' : lv==='recommend' ? 'ノートレード' : '通常';
+        const sline = s => '  - ' + s.name + '(' + s.symbol + ') ' + sign(s.change_pct) + '% / 出来高' + (s.vol_ratio ?? '-') + '倍' + (s.vol_ratio_norm != null ? '(正規化' + s.vol_ratio_norm + '倍)' : '') + ' / 25日線乖離' + sign(s.div25) + '% / RSI' + (s.rsi ?? '-');
+        out.push('\n### 初動検出（地合い非従属）' + (sh.provisional ? '（場中・暫定）' : ''));
+        if (sh.turn_bonus) out.push('⚡ 地合い転換初日: ' + lvName(sh.prev_level) + ' → ' + lvName(sh.today_level) + '（最優先の監視窓）');
+        if ((sh.confirmed||[]).length) {
+          out.push('▼初動確認（前営業日逆行高→当日も継続。エントリー検討の号砲）: ' + sh.confirmed.length + '件');
+          sh.confirmed.forEach(s => out.push(sline(s)));
+        }
+        if ((sh.rs_today||[]).length) {
+          const rsLabel = sh.mode === 'rs'
+            ? '▼転換日・相対強度上位（過熱除外済み・指数' + (sh.index_chg!=null ? sign(sh.index_chg)+'%' : '-') + 'を上回る。今日は入らず明日の継続を見る）: '
+            : '▼逆行高・初動候補（全面安での逆行。今日は入らず明日の継続を見る）: ';
+          out.push(rsLabel + sh.rs_today.length + '件');
+          sh.rs_today.forEach(s => out.push(sline(s)));
+        }
+      }
+    }
+
+    // 4. 警戒銘柄（⚠判定のみ・簡潔に）
+    const warns = (stage.warnings || []);
+    if (warns.length) {
+      out.push('\n### ⚠ 警戒銘柄（' + warns.length + '件）');
+      warns.forEach(s => out.push('  - ' + s.name + '(' + s.symbol + ') ' + sign(s.change_pct) + '% ｜' + (s.stage||'-') + ' 拡張' + (s.ext_score ?? '-') + ' RSI' + (s.rsi ?? '-') + ' ｜' + (s.judgment||'-')));
+    }
+  }
+
+  // 6. 規律状態＋保有ポジション
+  try {
+    const ds = await (await fetch(API_BASE + '/api/discipline-state')).json();
+    if (ds && ds.state) {
+      const s = ds.state;
+      const cd = s.cooldown_active ? ('クールダウン中（あと約' + s.cooldown_remaining_h + 'h）') : 'クールダウンなし';
+      out.push('\n\n====================');
+      out.push('## 規律状態');
+      out.push('- 保有☑: ' + s.position_count + '本 / ' + cd);
+      const ps = (s.positions || []);
+      if (ps.length) {
+        for (const p of ps) out.push('  - ' + p.name + '(' + p.symbol + ')');
+      }
+    }
+  } catch {}
+
+  // 7. 今後のイベント
+  try {
+    const evs = [...(state.events || [])].sort((a,b)=> new Date(a.time) - new Date(b.time));
+    const upcoming = evs.filter(ev => new Date(ev.time) - now > 0).slice(0, 8);
+    if (upcoming.length) {
+      out.push('\n## 今後のイベント');
+      upcoming.forEach(ev => {
+        const ds = new Date(ev.time).toLocaleString('ja-JP', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
+        out.push('- ' + ev.name + '（' + ds + '）');
+      });
+    }
+  } catch {}
+
+  const text = out.join('\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'コピー済（' + text.length + '字）';
+  } catch (e) {
+    btn.textContent = 'コピー失敗';
+  }
+  btn.disabled = false;
+  setTimeout(() => { btn.textContent = orig; }, 2200);
+}
+
+function toggleEditMode(section) {
+  state.editMode[section] = !state.editMode[section];
+  const btn = document.getElementById('ev-edit-btn');
+  if (!btn) return;
+  btn.textContent = state.editMode[section] ? '完了' : '追加';
+  btn.classList.toggle('primary', state.editMode[section]);
+  renderEvents();
+}
+
+function openSettings() {
+  document.getElementById('settings-api').textContent = API_BASE;
+  document.getElementById('settings-modal').classList.add('open');
+  refreshPushStatus();
+}
+function closeSettings() { document.getElementById('settings-modal').classList.remove('open'); }
+document.getElementById('settings-modal').addEventListener('click', e => { if (e.target.id === 'settings-modal') closeSettings(); });
+document.getElementById('stocklist-modal').addEventListener('click', e => { if (e.target.id === 'stocklist-modal') closeStockEditor(); });
+document.getElementById('guard-modal').addEventListener('click', e => { if (e.target.id === 'guard-modal') closeGuard(); });
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// ====== Service Worker 登録（TWA/PWAの必須要件） ======
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js?v=20260706-signal-log').then(reg => {
+      // 更新版Service Workerを積極的に取得。古いHTMLが残る事故を減らす。
+      reg.update().catch(() => {});
+      if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }).catch(err => console.warn('SW登録失敗', err));
+  });
+}
+
+renderStageMarketBtns();
+loadStage();
+</script>
+</body>
+</html>
