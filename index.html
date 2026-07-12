@@ -72,6 +72,12 @@ details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-
 .selective-head{display:flex;align-items:center;gap:9px}.selective-title{font:750 14px "Inter","Noto Sans JP",sans-serif}.selective-sub{font-size:10px;color:var(--muted);line-height:1.65;margin-top:3px}.selective-empty{margin-top:10px;padding:11px;border-radius:12px;background:#f2f5f9;color:var(--muted);font-size:11px;line-height:1.65}
 .selective-card{margin-top:10px;padding:11px 12px;border:1px solid #dde6f2;border-radius:13px;background:#fff}.selective-card-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.selective-mark{font-size:9px;font-weight:800;letter-spacing:.04em;color:#fff;background:linear-gradient(135deg,#235ed6,#6a88e8);border-radius:999px;padding:3px 7px}.selective-rule{font-size:10px;color:var(--muted);line-height:1.55;margin-top:6px}.selective-stats{display:flex;gap:5px 11px;flex-wrap:wrap;margin-top:6px;font:10px var(--mono);color:var(--muted)}
 .rule-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rule-card{padding:13px;border:1px solid #dde4ee;border-radius:15px;background:#fff;box-shadow:0 3px 14px rgba(31,45,65,.04)}.rule-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.rule-name{font-weight:750;font-size:12px}.rule-conditions{margin-top:8px;font-size:11px;line-height:1.7;color:var(--text)}.rule-split{margin-top:9px;padding-top:8px;border-top:1px solid #edf0f4;display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.rule-split>div{background:#f5f7fa;border-radius:9px;padding:7px 5px;text-align:center}.rule-split .k{font-size:8px;color:var(--faint)}.rule-split .v{font:700 11px var(--mono);margin-top:2px}.strict-badge{font-size:9px;font-weight:800;color:#245cca;background:#eaf1ff;border:1px solid #cfddfb;border-radius:999px;padding:2px 7px}
+
+.market-main{font-weight:800}.market-lead{font-size:12px;opacity:.82}
+.focus-strip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.focus-chip{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:12px;color:var(--muted)}.focus-chip b{color:var(--ink);font-size:14px}
+.radar-panel{border:1px solid #cdd9ef;background:linear-gradient(180deg,#f8fbff,#fff);border-radius:16px;margin:12px 0;overflow:hidden}.radar-head{display:flex;align-items:center;gap:9px;padding:13px}.radar-mark{font-size:10px;font-weight:900;letter-spacing:.12em;color:#355f9d;background:#eaf1ff;border-radius:999px;padding:5px 8px}.radar-title{font-weight:800}.radar-sub{font-size:11px;color:var(--muted);margin-top:2px}.radar-empty{padding:0 13px 13px;color:var(--muted);font-size:12px}.radar-row{margin:0 8px 8px;padding:10px;border:1px solid #e1e8f4;border-radius:12px;background:#fff;cursor:pointer}.tier-badge{font-size:10px;font-weight:800;padding:3px 6px;border-radius:999px;background:#edf3ff;color:#355f9d}
+.close-check{font-weight:700}
+
 @media(max-width:640px){.rule-grid{grid-template-columns:1fr}.rule-split{gap:4px}}
 
 .event-time{font:11px var(--mono);color:var(--muted)}.event-count{font:700 13px var(--mono)}.empty{padding:24px;text-align:center;color:var(--muted);font-size:12px}.loading{padding:22px;text-align:center;color:var(--muted);font-style:italic}
@@ -158,8 +164,8 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 <main>
 <section id="tab-stage" class="panel active">
   <div class="toolbar market">
-    <button id="m-jp" class="active" onclick="setMarket('jp')">日本</button>
-    <button id="m-us" onclick="setMarket('us')">米国</button>
+    <button id="m-jp" class="active market-main" onclick="setMarket('jp')">日本株メイン</button>
+    <button id="m-us" class="market-lead" onclick="setMarket('us')">海外リード</button>
     <span class="fresh" id="stage-fresh">取得中…</span>
   </div>
   <div class="segment grow">
@@ -291,7 +297,8 @@ async function loadStage(){
    api('/api/backtest').catch(()=>state.backtest),
   ]);
   state.stage[m]=st;state.notrade[m]=nt;state.momentum[m]=mom;state.positions=pos;state.events=ev;if(bt)state.backtest=bt;
-  $('stage-fresh').textContent=(st.freshness||'')+(st.price_time?' · '+st.price_time:'')+(st.vol_partial?' · 暫定':'');
+  const cv=st.close_verification||null;
+  $('stage-fresh').textContent=(st.freshness||'')+(st.price_time?' · '+st.price_time:'')+(st.vol_partial?' · 暫定':'')+(cv&&String(st.freshness||'').includes('大引け')?' · 終値確認'+(cv.verified||0)+'/'+(cv.total||0):'');
   renderSummary(m);renderBoard(m);
  }catch(e){$('stage-fresh').textContent='取得失敗';$('stage-summary').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
@@ -318,7 +325,11 @@ function renderSummary(m){
  const recKind=mm.kind==='bad'?'bad':mm.kind==='warn'?'warn':'good';
  const recIcon=icon(recKind==='bad'?'stop':recKind==='warn'?'alert':'check',20);
  const recTitle=recKind==='bad'?'新規エントリーは見送り':recKind==='warn'?'選別して確認':'通常監視';
- let html=`<div class="notrade ${recKind}"><div class="notrade-head"><span class="notrade-icon">${recIcon}</span><span class="notrade-title">${recTitle}</span><span class="notrade-sub">市場 ${ms.label} / モメンタム ${mm.label}</span></div>`+
+ let html='';
+ const fc=st.focus_counts||{};
+ if(m==='jp')html+=`<div class="focus-strip"><div class="focus-chip">コア <b>${fc.core??0}</b><br>場中フル分析</div><div class="focus-chip">レーダー <b>${fc.radar??0}</b><br>次の主役探索</div></div>`;
+ else html+=`<div class="focus-strip"><div class="focus-chip">海外リード <b>${fc.lead??0}</b><br>日本株への先行指標</div>${(fc.archive||0)>0?`<div class="focus-chip">保管 <b>${fc.archive}</b><br>自動分析外</div>`:''}</div>`;
+ html+=`<div class="notrade ${recKind}"><div class="notrade-head"><span class="notrade-icon">${recIcon}</span><span class="notrade-title">${recTitle}</span><span class="notrade-sub">市場 ${ms.label} / モメンタム ${mm.label}</span></div>`+
   `<div class="summary-chips"><span>拡張過大 <b>${hot.extreme_pct??'—'}%</b></span><span>RSI過熱 <b>${hot.rsi_hot??'—'}件</b></span><span>健全な押し目 <b>${hot.healthy_dips??'—'}件</b></span><span>上ヒゲ <b>${hot.shooting_stars??'—'}件</b></span></div>`;
  if(nt?.signals?.length)html+=`<div class="warnline">${nt.signals.slice(0,3).map(x=>esc(x.label)+'：'+esc(x.detail)).join('<br>')}</div>`;
  html+='</div>';
@@ -368,19 +379,29 @@ function selectiveSection(m,mom,held,watched){
  if(state.backtest?.status!=='complete'&&!sel?.confirmed?.length)h+='<div class="selective-empty">新しい厳選エンジンを再集計中です。全登録銘柄が完了するまでは、厳選判定を出しません。</div>';
  else if(!(sel?.confirmed||[]).length)h+='<div class="selective-empty">未使用期間60%・期待値・PF・中央値を同時に満たす条件はまだありません。無理に候補を出さない状態です。</div>';
  else if(!all.length)h+='<div class="selective-empty">本日は厳選条件に一致するA/Bがありません。通常候補は下のボードで確認できます。</div>';
- else for(const x of all){const r=x.r,rule=x.rule;h+=`<div class="selective-card" onclick="openCandidate('${attr(r.symbol)}')"><div class="selective-card-head"><span class="badge ${r.entry_lane}">${r.entry_lane}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span><span class="strict-badge">厳選条件一致</span></div><div class="selective-rule">${esc((rule.labels||[]).join('・'))}</div><div class="selective-stats"><span>最終試験 勝率 ${num(rule.test?.win_rate,1)}%</span><span>期待値 ${pct(rule.test?.expectancy)}</span><span>PF ${num(rule.test?.profit_factor)}</span><span>n=${rule.test?.trades||0}</span><span>翌日高値突破待ち</span></div></div>`;}
+ else for(const x of all){const r=x.r,rule=x.rule;h+=`<div class="selective-card" onclick="openCandidate('${attr(r.symbol)}')"><div class="selective-card-head"><span class="badge ${r.entry_lane}">${r.entry_lane}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span>${r.focus_tier==='radar'?'<span class="tier-badge">レーダー浮上</span>':''}<span class="strict-badge">厳選条件一致</span></div><div class="selective-rule">${esc((rule.labels||[]).join('・'))}</div><div class="selective-stats"><span>最終試験 勝率 ${num(rule.test?.win_rate,1)}%</span><span>期待値 ${pct(rule.test?.expectancy)}</span><span>PF ${num(rule.test?.profit_factor)}</span><span>n=${rule.test?.trades||0}</span><span>翌日高値突破待ち</span></div></div>`;}
+ return h+'</div>';
+}
+function radarSection(m,mom,held,watched){
+ if(m!=='jp')return'';
+ const rows=(mom.rows||[]).filter(r=>r.focus_tier==='radar'&&['A','B','C'].includes(r.entry_lane)).sort((a,b)=>(b.entry_score||0)-(a.entry_score||0));
+ let h='<div class="radar-panel"><div class="radar-head"><span class="radar-mark">RADAR</span><div class="grow1"><div class="radar-title">レーダー浮上</div><div class="radar-sub">後半80銘柄からA/B/Cへ浮上した次期コア候補。通常ボードとは分離して表示します。</div></div><span class="count">'+rows.length+'件</span></div>';
+ if(!rows.length)return h+'<div class="radar-empty">現在は浮上銘柄なし</div></div>';
+ for(const r of rows.slice(0,20))h+=`<div class="radar-row" onclick="openCandidate('${attr(r.symbol)}')"><div class="candidate-head"><span class="badge ${r.entry_lane}">${r.entry_lane}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span>${selectiveRulesFor(r,'jp').length?'<span class="strict-badge">厳選</span>':''}</div><div class="meta"><span class="${cls(r.change_pct)}">${pct(r.change_pct)}</span><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>5日RS ${pct(r.rs5)}</span><span>25MA ${pct(r.div25)}</span></div></div>`;
+ if(rows.length>20)h+=`<div class="radar-empty">上位20件を表示 / 全${rows.length}件</div>`;
  return h+'</div>';
 }
 function renderBoard(m){
  const mom=state.momentum[m];if(!mom?.ready){$('stage-board').innerHTML='<div class="empty">候補なし</div>';return}
  const held=heldSet(),watched=watchSet();
- let html=selectiveSection(m,mom,held,watched)+'<div class="note">通常ボードは観察用です。A/Bを優先し、CはS2内の押し目を広めに残します。売買検討の厳選は上のバックテスト厳選候補で別に行います。</div>';
+ let html=selectiveSection(m,mom,held,watched);
+ if(m==='jp')html+=radarSection(m,mom,held,watched)+'<div class="note">日本コア80は場中フル分析、レーダー80は次の主役探索です。コアのA/Bを優先し、Cは押し目監視として広めに残します。</div>';
+ else html+='<div class="note">海外リードは日本株への影響確認用です。米国個別株を同じ濃さで売買判断する画面ではありません。</div>';
  for(const lane of mom.board||[]){
-  const rows=lane.rows||[];
+  const rows=(lane.rows||[]).filter(r=>m!=='jp'||r.focus_tier!=='radar');
   const open=lane.key==='A'||lane.key==='B'?' open':'';
   html+=`<details class="lane lane-${lane.key}"${open}><summary><span class="lane-symbol">${laneIcon(lane.key)}</span><span class="lane-title">${lane.key}. ${esc(lane.label)}</span><span class="count">${rows.length}件</span></summary>`;
-  if(!rows.length)html+='<div class="empty">該当なし</div>';
-  else html+=rows.map(r=>candidateHtml(r,held,watched)).join('');
+  if(!rows.length)html+='<div class="empty">該当なし</div>';else html+=rows.map(r=>candidateHtml(r,held,watched)).join('');
   html+='</details>';
  }
  $('stage-board').innerHTML=html;
@@ -389,7 +410,7 @@ function candidateHtml(r,held,watched){
  const sym=String(r.symbol).toUpperCase(),isHeld=held.has(sym),isWatch=watched.has(sym),strict=selectiveRulesFor(r,marketOf(sym));
  return `<div class="candidate" onclick="openCandidate('${attr(sym)}')"><div class="candidate-head">`+
   `${isHeld?'<span class="held-mark">☑</span>':''}<span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(sym))}</span>`+
-  `${isWatch?'<span class="watch-mini">観察中</span>':''}${strict.length?'<span class="strict-badge">厳選</span>':''}<span class="badge ${r.entry_lane}">${r.entry_lane}</span>`+
+  `${isWatch?'<span class="watch-mini">観察中</span>':''}${r.focus_tier==='radar'?'<span class="tier-badge">レーダー</span>':''}${strict.length?'<span class="strict-badge">厳選</span>':''}<span class="badge ${r.entry_lane}">${r.entry_lane}</span>`+
   `<button class="chart-btn" title="チャート" onclick="event.stopPropagation();openChart('${attr(sym)}')">${icon('chart',16)}</button></div>`+
   `<div class="meta"><span class="${cls(r.change_pct)}">${pct(r.change_pct)}</span><span>${num(r.price,marketOf(sym)==='jp'?0:2)}</span><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span>${r.rs5!=null?`<span>5日RS ${pct(r.rs5)}</span>`:''}</div>`+
   `<div class="tags">${r.setup_label?`<span class="badge B">${esc(r.setup_label)}</span>`:''}<span class="badge">${esc(r.long_stage||r.stage||'')}</span>${r.relative_label&&r.relative_label!=='通常'?`<span class="badge">${esc(r.relative_label)}</span>`:''}</div></div>`;
@@ -527,8 +548,8 @@ function renderBacktest(){
  if(research.length)html+=`<details class="card"><summary class="row"><div class="name grow1">検証中の条件</div><span class="count">${research.length}件</span></summary><div class="pad"><div class="rule-grid">${research.map(r=>ruleCard(r,true)).join('')}</div></div></details>`;
  html+='<div class="section-title">基礎ルール別の成績</div><div class="bt-grid">';
  for(const key of ['A','B','C_A','C_B']){
-  const x=d.strategies?.[key]||{},m=x.metrics||{},r=x.recent_metrics||{},v=btVerdict(m,r);
-  html+=`<div class="bt-card"><div class="bt-card-head"><span class="badge ${key==='A'||key==='C_A'?'A':'B'}">${key.replace('_','→')}</span><span class="bt-card-title">${esc(x.label||key)}</span><span class="bt-verdict ${v.kind}">${v.label}</span></div><div class="bt-main">${btMetric(m.win_rate,'勝率')}${btMetric(m.expectancy,'期待値')}${btMetric(m.profit_factor,'PF','num')}</div><div class="bt-detail"><span>取引 n=${m.trades||0}</span><span>シグナル ${m.signals||0}</span><span>トリガー率 ${pct(m.trigger_rate)}</span><span>順序不明除外 ${m.ambiguous||0}</span><span>中央値 ${pct(m.median_return)}</span><span>平均利益 ${pct(m.avg_win)}</span><span>平均損失 ${pct(m.avg_loss)}</span><span>MAE中央値 ${pct(m.mae_median)}</span><span>MFE中央値 ${pct(m.mfe_median)}</span><span>平均保有 ${m.avg_hold??'—'}日</span><span>直近1年 ${pct(r.expectancy)}</span><span>取引列下振れ ${pct(m.trade_sequence_drawdown)}</span></div></div>`;
+  const x=d.strategies?.[key]||{},all=x.metrics||{},m=x.market_metrics?.jp||all,r=x.market_recent_metrics?.jp||x.recent_metrics||{},us=x.market_metrics?.us||{},v=btVerdict(m,r);
+  html+=`<div class="bt-card"><div class="bt-card-head"><span class="badge ${key==='A'||key==='C_A'?'A':'B'}">${key.replace('_','→')}</span><span class="bt-card-title">日本 ${esc(x.label||key)}</span><span class="bt-verdict ${v.kind}">${v.label}</span></div><div class="bt-main">${btMetric(m.win_rate,'勝率')}${btMetric(m.expectancy,'期待値')}${btMetric(m.profit_factor,'PF','num')}</div><div class="bt-detail"><span>日本取引 n=${m.trades||0}</span><span>シグナル ${m.signals||0}</span><span>トリガー率 ${pct(m.trigger_rate)}</span><span>中央値 ${pct(m.median_return)}</span><span>平均利益 ${pct(m.avg_win)}</span><span>平均損失 ${pct(m.avg_loss)}</span><span>MAE中央値 ${pct(m.mae_median)}</span><span>MFE中央値 ${pct(m.mfe_median)}</span><span>直近1年 ${pct(r.expectancy)}</span></div>${(us.trades||0)?`<details><summary class="muted">海外リード参考：勝率 ${pct(us.win_rate)} / 期待値 ${pct(us.expectancy)} / PF ${num(us.profit_factor)} / n=${us.trades}</summary></details>`:''}</div>`;
  }
  html+='</div>';
  const assumptions=d.assumptions||{};
@@ -620,20 +641,23 @@ function openSettings(){
 function saveWriteKey(){localStorage.setItem('vantage_write_key',$('write-key').value.trim());toast('保存しました')}
 async function recalcStage(){
  if(!confirm((state.market==='jp'?'日本':'米国')+'を再計算します。数十秒かかります。'))return;
- try{for(let i=1;i<=4;i++){toast('再計算 '+i+'/4');await api('/api/stage-run?batch='+state.market+i,{write:true})}await api('/api/ranking-enriched?market='+state.market+'&refresh=1',{write:true});toast('完了');closeModal();loadStage()}catch(e){toast(e.message)}
+ const parts=state.market==='jp'?8:2;
+ try{for(let i=1;i<=parts;i++){toast('再計算 '+i+'/'+parts);await api('/api/stage-run?batch='+state.market+i,{write:true})}await api('/api/ranking-enriched?market='+state.market+'&refresh=1',{write:true});toast('完了');closeModal();loadStage()}catch(e){toast(e.message)}
 }
 async function openStockEditor(){
  try{const d=await api('/api/stocklist?market='+state.market);$('modal-title').textContent='銘柄編集 '+d.count+'/'+d.max;
- $('modal-body').innerHTML=`<div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map(x=>`<div class="row"><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span></div><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`).join('')}</div>`;}catch(e){toast(e.message)}
+ const tierLabel=x=>x.focus_tier==='core'?'コア':x.focus_tier==='radar'?'レーダー':x.focus_tier==='lead'?'リード':'保管';
+ $('modal-body').innerHTML=`<div class="note">日本は先頭80銘柄がコア、81〜160銘柄がレーダー。米国は先頭40銘柄だけを海外リードとして自動更新します。昇格すると境界の最後の銘柄が自動で下位枠へ移ります。</div><div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map((x,i)=>{const upper=x.focus_tier==='core'||x.focus_tier==='lead';const moveLabel=upper?(state.market==='jp'?'レーダーへ':'保管へ'):(state.market==='jp'?'コアへ':'リードへ');const act=upper?'demote':'promote';return `<div class="row"><span class="tier-badge">${tierLabel(x)}</span><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span></div><button class="small" onclick="moveStock('${attr(x.symbol)}','${act}')">${moveLabel}</button><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`}).join('')}</div>`;}catch(e){toast(e.message)}
 }
 async function addStock(){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'add',symbol:$('sl-symbol').value,name:$('sl-name').value}});openStockEditor()}catch(e){toast(e.message)}}
+async function moveStock(symbol,action){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action,symbol}});toast(action==='promote'?'上位枠へ移動':'下位枠へ移動');openStockEditor()}catch(e){toast(e.message)}}
 async function deleteStock(symbol){if(!confirm(symbol+'を削除しますか？'))return;try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'delete',symbol}});openStockEditor()}catch(e){toast(e.message)}}
 function b64ToBytes(s){const pad='='.repeat((4-s.length%4)%4),b=atob((s+pad).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...b].map(c=>c.charCodeAt(0)))}
 async function enablePush(){try{const perm=await Notification.requestPermission();if(perm!=='granted')throw new Error('通知が許可されていません');const reg=await navigator.serviceWorker.ready;const k=await api('/api/push/key');let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(k.key)});await api('/api/push/subscribe',{method:'POST',body:{subscription:sub.toJSON()}});toast('通知を有効化')}catch(e){toast(e.message)}}
 async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
 
 function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=selective-backtest-v30').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-focus-close-verify-v31').then(r=>r.update()).catch(()=>{}));
 loadStage();
 </script>
 </body>
