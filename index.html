@@ -374,7 +374,7 @@ function selectiveSection(m,mom,held,watched){
 function renderBoard(m){
  const mom=state.momentum[m];if(!mom?.ready){$('stage-board').innerHTML='<div class="empty">候補なし</div>';return}
  const held=heldSet(),watched=watchSet();
- let html=selectiveSection(m,mom,held,watched)+'<div class="note">件数上限は設けず、各レーンの条件に該当した銘柄を表示します。A/Bを優先し、CはS2内の健全な浅い押しだけを抽出します。</div>';
+ let html=selectiveSection(m,mom,held,watched)+'<div class="note">通常ボードは観察用です。A/Bを優先し、CはS2内の押し目を広めに残します。売買検討の厳選は上のバックテスト厳選候補で別に行います。</div>';
  for(const lane of mom.board||[]){
   const rows=lane.rows||[];
   const open=lane.key==='A'||lane.key==='B'?' open':'';
@@ -633,7 +633,7 @@ async function enablePush(){try{const perm=await Notification.requestPermission(
 async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
 
 function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=selective-backtest-v29').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=selective-backtest-v30').then(r=>r.update()).catch(()=>{}));
 loadStage();
 </script>
 </body>

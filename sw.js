@@ -1,4 +1,4 @@
-const CACHE='vantage-selective-backtest-20260712-v29';
+const CACHE='vantage-selective-backtest-20260713-v30';
 const SHELL=['./manifest.json','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./icon-badge.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',e=>{
