@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#19202b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>VANTAGE</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+button,input,select,textarea{font:inherit}
+:root{
+ --bg:#e9ebef;--surface:#f7f8fa;--surface2:#eef0f3;--surface3:#e3e6ea;
+ --line:#d4d8df;--lineStrong:#b8bfc9;--text:#1a1f29;--muted:#5a6473;--faint:#79828f;
+ --blue:#2f6fe0;--blueBg:#dde7fa;--green:#178a5d;--greenBg:#def3e9;
+ --red:#d83048;--redBg:#fbe2e6;--amber:#c47e0a;--amberBg:#faecd2;
+ --purple:#8a3fe0;--purpleBg:#ece0fb;--r:8px;--rLg:14px;
+ --mono:"SF Mono","JetBrains Mono","Cascadia Code","Roboto Mono",ui-monospace,Menlo,monospace;
+ --shadow:0 1px 2px rgba(20,30,50,.06);--shadowLg:0 12px 40px rgba(20,30,50,.14)
+}
+body{
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;
+ background:radial-gradient(1200px 600px at 80% -10%,rgba(47,111,224,.05),transparent 60%),radial-gradient(900px 500px at -10% 10%,rgba(23,138,93,.04),transparent 55%),var(--bg);
+ background-attachment:fixed;color:var(--text);font-size:15px;line-height:1.55;
+ padding:20px 16px 68px;max-width:980px;margin:0 auto;-webkit-font-smoothing:antialiased
+}
+button{border:1px solid var(--lineStrong);background:var(--surface2);color:var(--muted);border-radius:7px;padding:7px 13px;cursor:pointer;font-weight:500;transition:.15s}
+button:hover{color:var(--text);background:var(--surface3)}button:active{transform:translateY(1px)}
+button.primary{background:var(--blue);border-color:var(--blue);color:#fff}button.danger{color:var(--red)}button:disabled{opacity:.45;cursor:default}.small{font-size:12px;padding:5px 10px}
+header{display:flex;align-items:center;gap:11px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.brand-wrap{display:flex;align-items:center;gap:11px}.brand-mark{width:30px;height:30px;border-radius:8px;background:#1c2230;display:grid;place-items:center;font-weight:800;font-size:17px;color:#c7d0de;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 2px 8px rgba(20,30,50,.18)}
+.brand{font-size:22px;font-weight:700;letter-spacing:.06em}.header-spacer{flex:1}.clock{font:12px var(--mono);color:var(--faint)}.iconbtn{width:auto;height:34px;padding:0 12px;font-size:13px}
+.tabs{display:flex;gap:2px;margin-bottom:22px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none;position:static;background:transparent;padding:0}.tabs::-webkit-scrollbar{display:none}
+.tabs button{position:relative;background:transparent;border:none;color:var(--muted);padding:12px 18px;border-radius:0;font-size:14px;font-weight:500;white-space:nowrap}
+.tabs button.active{color:var(--text);background:transparent;box-shadow:none}.tabs button.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--blue);border-radius:2px 2px 0 0}
+.panel{display:none;animation:fade .2s ease}.panel.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:9px 0 12px}.market{margin-top:0}.market button.active{background:#1c2230;color:#fff;border-color:#1c2230}
+.fresh{font:11px var(--mono);color:var(--muted);margin-left:auto;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:7px}
+.segment{display:flex;gap:4px;background:var(--surface);padding:4px;border:1px solid var(--line);border-radius:10px;margin:12px 0 4px;position:sticky;top:0;z-index:12;box-shadow:var(--shadow)}
+.segment.grow{width:100%}.segment button{flex:1;border:none;background:transparent;color:var(--muted);font-size:12px;font-weight:600;padding:9px 4px;border-radius:7px}.segment button.active{background:var(--blue);color:#fff}
+.section-title{font-size:11px;letter-spacing:.11em;color:var(--faint);font-weight:700;text-transform:uppercase;margin:16px 3px 8px}
+.card,.item-list{background:var(--surface);border:1px solid var(--line);border-radius:var(--rLg);box-shadow:var(--shadow);margin:8px 0;overflow:hidden}.pad{padding:14px 16px}
+.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.state-box{padding:14px 16px;border-radius:var(--rLg);border:1px solid var(--line);background:var(--surface)}.state-box .k{font-size:11px;color:var(--muted);font-weight:600}.state-box .v{font-size:18px;font-weight:700;margin-top:2px}.state-box.good{background:var(--greenBg);border-color:rgba(23,138,93,.3)}.state-box.warn{background:var(--amberBg);border-color:rgba(196,126,10,.3)}.state-box.bad{background:var(--redBg);border-color:rgba(216,48,72,.3)}
+.notrade{border-radius:var(--rLg);padding:17px 19px;border:1px solid var(--line);background:var(--surface);margin:8px 0}.notrade.good{background:var(--greenBg);border-color:rgba(23,138,93,.35)}.notrade.warn{background:var(--amberBg);border-color:rgba(196,126,10,.38)}.notrade.bad{background:var(--redBg);border-color:rgba(216,48,72,.38)}.notrade-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.notrade-icon{font-size:25px}.notrade-title{font-size:17px;font-weight:700}.notrade-sub{font-size:11px;color:var(--muted);margin-left:auto}
+.summary-chips{display:flex;gap:9px 14px;flex-wrap:wrap;font:11px var(--mono);color:var(--muted);margin-top:12px;padding-top:11px;border-top:1px solid rgba(90,100,115,.18)}
+.macro-list{margin-top:0}.macro-row{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);cursor:pointer}.macro-row:last-child{border-bottom:none}.macro-row:active{background:var(--surface2)}.macro-name{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;font-size:13px;font-weight:500}.macro-sub{font-size:10px;color:var(--faint);margin-top:2px}.macro-price{font-size:13px;font-weight:600;text-align:right;min-width:78px}.macro-chg{font-size:12px;text-align:right;min-width:56px}
+.event-next{display:flex;align-items:center;gap:12px}.event-next .event-ic{font-size:20px}.event-next .event-name{font-weight:600}.event-next .event-time{font:11px var(--mono);color:var(--faint);margin-top:2px}
+.up{color:var(--green)}.down{color:var(--red)}.muted{color:var(--muted)}.num{font-family:var(--mono)}
+.row{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:none}.name{font-weight:700;min-width:0}.code{font:10px var(--mono);color:var(--faint)}.grow1{flex:1;min-width:0}.right{text-align:right}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--surface3);color:var(--muted);white-space:nowrap}.badge.A,.badge.B{background:var(--greenBg);color:var(--green)}.badge.C{background:var(--blueBg);color:#2f5fad}.badge.E{background:var(--redBg);color:var(--red)}.badge.held{background:var(--greenBg);color:var(--green)}
+details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}
+.lane{margin:8px 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--rLg);overflow:hidden;box-shadow:var(--shadow)}.lane>summary{display:flex;align-items:center;gap:7px;padding:11px 13px;font-weight:700;background:var(--surface)}.lane[open]>summary{border-bottom:1px solid var(--line)}.count{margin-left:auto;font:11px var(--mono);color:var(--muted)}
+.candidate{padding:9px 12px;border-top:1px solid var(--line);cursor:pointer}.lane[open] .candidate:first-of-type{border-top:none}.candidate:active,.compact-row:active{background:var(--surface2)}.candidate-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.candidate .name{font-size:14px}.held-mark{color:var(--green);font-weight:700}.watch-mini{font-size:9px;font-weight:700;background:var(--blueBg);color:var(--blue);border-radius:4px;padding:1px 5px}.chart-btn{margin-left:auto;width:30px;height:28px;padding:0;font-size:13px}.meta{display:flex;gap:5px 12px;flex-wrap:wrap;font:11px var(--mono);color:var(--muted);margin-top:5px}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.detail-block{padding:10px 0;border-top:1px solid var(--line);font-size:12px}.detail-label{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:3px}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.rank-row,.compact-row{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 13px;margin:6px 0;cursor:pointer}.rank-row:active,.compact-row:active{background:var(--surface2)}.rank-head,.compact-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.rank-no{font:700 11px var(--mono);color:var(--blue);width:24px}
+.note{font-size:11px;line-height:1.55;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:var(--r);padding:9px 12px;margin:8px 0}.warnline{color:var(--amber);font-size:11px;line-height:1.55;margin:7px 0}
+.watch-detail,.signal-detail{padding:2px 10px 10px}.watch-detail summary,.signal-detail summary{font-size:11px;color:var(--blue);padding-top:5px}.formgrid{display:grid;grid-template-columns:110px 1fr;gap:8px;margin-top:8px}.formgrid input,.formgrid select,.formgrid textarea,.fullinput,#watch-sort{width:100%;border:1px solid var(--lineStrong);border-radius:7px;background:#fff;padding:8px 10px;color:var(--text)}.formgrid textarea{min-height:74px;resize:vertical}.formgrid .span2{grid-column:1/-1}
+.signal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px;text-align:center}.stat .v{font:700 16px var(--mono)}.stat .k{font-size:9px;color:var(--muted)}.outcomes{display:flex;gap:5px;flex-wrap:wrap}.outcome{font:10px var(--mono);background:var(--surface2);padding:3px 6px;border-radius:5px}
+.event-time{font:11px var(--mono);color:var(--muted)}.event-count{font:700 13px var(--mono)}.empty{padding:24px;text-align:center;color:var(--muted);font-size:12px}.loading{padding:22px;text-align:center;color:var(--muted);font-style:italic}
+.modal-bg{position:fixed;inset:0;background:rgba(15,22,33,.55);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}.modal-bg.open{display:flex}.modal{width:min(620px,100%);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:1px solid var(--lineStrong);border-radius:var(--rLg);padding:20px;box-shadow:var(--shadowLg)}.modal-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}.modal-title{font-weight:700;font-size:17px}.modal-head .close{margin-left:auto}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#17202c;color:#fff;padding:8px 13px;border-radius:999px;font-size:12px;display:none;z-index:200}.toast.show{display:block}.offline{position:fixed;top:6px;left:50%;transform:translateX(-50%);background:var(--amberBg);color:var(--amber);font-size:11px;padding:4px 9px;border-radius:999px;display:none;z-index:300}.offline.show{display:block}.hidden{display:none!important}
+footer{text-align:center;font-size:11px;color:var(--faint);padding-top:20px;border-top:1px solid var(--line);margin-top:24px}
+@media(max-width:640px){
+ body{padding:16px 12px 58px}header{margin-bottom:10px;padding-bottom:11px}.brand{font-size:20px}.clock{display:none}.iconbtn{padding:0 10px}
+ .tabs{margin-bottom:16px}.tabs button{flex:1;padding:10px 8px}.segment{top:0}.fresh{width:100%;margin-left:0}.state-grid{grid-template-columns:1fr 1fr}.state-box{padding:12px}.state-box .v{font-size:16px}
+ .candidate{padding:8px 10px}.meta{gap:5px 8px}.formgrid{grid-template-columns:1fr}.formgrid .span2{grid-column:auto}.actions button{flex:1}.macro-row{grid-template-columns:1fr auto auto;padding:9px 11px;gap:8px}.macro-price{min-width:64px}.macro-chg{min-width:48px}
+ .modal-bg{align-items:flex-end;padding:0}.modal{border-radius:18px 18px 0 0;max-height:88vh;padding:16px 12px calc(16px + env(safe-area-inset-bottom))}
+}
+
+/* ===== refined interface ===== */
+:root{
+ --bg:#f1f3f6;--surface:#ffffff;--surface2:#f7f8fa;--surface3:#eef1f5;
+ --line:#e2e6ec;--lineStrong:#cfd5de;--text:#161c27;--muted:#596474;--faint:#8992a0;
+ --blue:#3267d6;--blueBg:#e9f0ff;--green:#167a54;--greenBg:#e8f5ef;
+ --red:#c9364c;--redBg:#fdecef;--amber:#a96a08;--amberBg:#fff3df;
+ --purple:#7651c7;--purpleBg:#f0ebff;--r:12px;--rLg:18px;
+ --shadow:0 1px 2px rgba(18,27,44,.04),0 8px 24px rgba(18,27,44,.055);
+ --shadowLg:0 18px 50px rgba(18,27,44,.16)
+}
+body{
+ font-family:"Inter","Noto Sans JP","SF Pro Text","Segoe UI Variable","Segoe UI",sans-serif;
+ background:radial-gradient(900px 430px at 88% -8%,rgba(50,103,214,.08),transparent 58%),linear-gradient(180deg,#f5f6f8 0%,var(--bg) 44%);
+ font-weight:500;letter-spacing:-.012em;padding-top:16px
+}
+button,input,select,textarea{font-family:inherit}
+button{border-color:var(--line);background:#fff;color:#455163;border-radius:10px;padding:8px 13px;font-weight:600;box-shadow:0 1px 1px rgba(18,27,44,.025)}
+button:hover{background:var(--surface2);border-color:var(--lineStrong)}button.primary{background:#1d2736;border-color:#1d2736;color:#fff}button.primary:hover{background:#111925}
+.ui-icon{width:1em;height:1em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn-label{display:inline-flex;align-items:center;gap:7px}
+header{min-height:46px;margin-bottom:14px;padding:0 2px 14px;border-bottom:0}
+.brand-wrap{gap:10px}.brand-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#283447,#111823);color:#fff;box-shadow:0 7px 18px rgba(17,24,35,.22);font-size:0}
+.brand-mark svg{width:22px;height:22px}.brand{font-size:20px;font-weight:700;letter-spacing:.095em}.clock{font-size:11px;color:var(--faint)}.iconbtn{height:36px;padding:0 11px;background:transparent;box-shadow:none}
+.tabs{gap:4px;margin-bottom:18px;padding:4px;background:rgba(255,255,255,.78);backdrop-filter:blur(12px);border:1px solid rgba(214,220,229,.92);border-radius:14px;box-shadow:0 8px 24px rgba(18,27,44,.045)}
+.tabs button{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 13px;border-radius:10px;font-size:13px;font-weight:600;color:#687384}
+.tabs button.active{background:#1d2736;color:#fff;box-shadow:0 5px 12px rgba(29,39,54,.18)}.tabs button.active::after{display:none}.tab-icon{width:16px;height:16px}
+.toolbar{margin:8px 0 11px}.market{gap:5px}.market button{border-radius:999px;padding:6px 14px;background:transparent;box-shadow:none}.market button.active{background:#1d2736;border-color:#1d2736}.fresh{border:0;background:transparent;padding:5px 0;color:#778292}
+.segment{gap:3px;background:#e9edf2;border:0;border-radius:12px;padding:4px;box-shadow:none;position:static}.segment button{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:9px;color:#667180}.segment button.active{background:#fff;color:#182130;box-shadow:0 2px 8px rgba(18,27,44,.08)}
+.section-title{font-size:12px;letter-spacing:.01em;text-transform:none;margin:19px 4px 9px;color:#535f70;font-weight:700}
+.card,.item-list,.lane{border:1px solid rgba(222,227,234,.95);border-radius:var(--rLg);box-shadow:var(--shadow);background:rgba(255,255,255,.96)}
+.state-grid{gap:10px}.state-box{border:0;border-radius:16px;padding:15px 16px;box-shadow:inset 0 0 0 1px rgba(30,45,70,.055)}.state-box .k{font-size:11px;font-weight:600}.state-box .v{font-size:18px;letter-spacing:-.03em}
+.notrade{border:0;border-radius:18px;padding:18px 19px;box-shadow:var(--shadow)}.notrade-head{gap:11px}.notrade-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:rgba(255,255,255,.58)}.notrade-title{font-size:16px}.notrade-sub{font-weight:500}.summary-chips{font-family:"Inter","Noto Sans JP",sans-serif;font-size:11px}
+.macro-list{overflow:hidden}.macro-row{padding:12px 15px;border-color:#edf0f4;transition:background .14s}.macro-row:hover{background:#fafbfd}.macro-name{font-family:"Inter","Noto Sans JP",sans-serif;font-size:13px;font-weight:600}.macro-price,.macro-chg{font-family:"Inter",var(--mono);font-variant-numeric:tabular-nums}
+.event-next{padding:15px 16px}.event-ic{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--blueBg);color:var(--blue)}
+.badge{border-radius:999px;padding:3px 8px;font-size:9px;letter-spacing:.015em}.badge.A{background:#e8f5ef;color:#167a54}.badge.B{background:#eef0ff;color:#5c4fc2}.badge.C{background:#edf3ff;color:#315fae}.badge.D{background:#f0f2f5;color:#667180}.badge.E{background:#fdecef;color:#c9364c}
+.lane{margin:10px 0;overflow:hidden}.lane>summary{padding:13px 15px;background:#fff;border:0}.lane[open]>summary{border-bottom:1px solid #edf0f4}.lane-symbol{width:29px;height:29px;display:grid;place-items:center;border-radius:9px;background:#f2f4f7;color:#667180}.lane-A .lane-symbol{background:var(--greenBg);color:var(--green)}.lane-B .lane-symbol{background:var(--purpleBg);color:var(--purple)}.lane-C .lane-symbol{background:var(--blueBg);color:var(--blue)}.lane-E .lane-symbol{background:var(--redBg);color:var(--red)}.lane-title{font-size:13px}.count{padding:3px 8px;border-radius:999px;background:#f1f3f6;font-size:10px}
+.candidate{margin:8px 9px;padding:11px 12px;border:1px solid #e8ebf0!important;border-radius:13px;background:#fbfcfd;box-shadow:0 1px 1px rgba(18,27,44,.02);transition:transform .12s,background .12s,border-color .12s}.candidate:hover{background:#fff;border-color:#d9dee7!important}.candidate:active{transform:scale(.995)}.candidate-head{gap:8px}.candidate .name{font-size:13px;letter-spacing:-.01em}.code{font-size:10px}.chart-btn{width:31px;height:31px;border:0;background:#f0f3f7;color:#556173;border-radius:9px;box-shadow:none}.chart-btn:hover{background:#e7ebf1}.meta{font-family:"Inter",var(--mono);font-size:10px;gap:5px 11px}.tags{margin-top:7px}
+.rank-row,.compact-row{border:1px solid #e4e8ee;border-radius:14px;padding:11px 13px;margin:7px 0;box-shadow:0 2px 8px rgba(18,27,44,.025)}
+.note{background:#f7f9fc;border-color:#e4e9f1;border-radius:13px;color:#647083}.detail-block{font-weight:500}.detail-label{letter-spacing:.04em}
+.formgrid input,.formgrid select,.formgrid textarea,.fullinput,#watch-sort{border-color:#d9dee7;border-radius:10px;background:#fff;padding:9px 11px;outline:none}.formgrid input:focus,.formgrid select:focus,.formgrid textarea:focus,.fullinput:focus,#watch-sort:focus{border-color:#7897d8;box-shadow:0 0 0 3px rgba(50,103,214,.1)}
+.modal-bg{background:rgba(11,17,27,.48);backdrop-filter:blur(7px)}.modal{border:0;border-radius:22px;padding:20px;box-shadow:var(--shadowLg)}.modal-title{font-size:16px}.close{border:0;background:#f1f3f6;width:34px;height:34px;padding:0;border-radius:10px;font-size:0}
+.toast{border:0;background:#182130;color:#fff;border-radius:12px;box-shadow:0 14px 36px rgba(18,27,44,.22)}
+footer{border:0;color:#98a0ac;letter-spacing:.04em}
+@media(max-width:640px){
+ body{padding:12px 11px calc(70px + env(safe-area-inset-bottom))}
+ header{flex-wrap:nowrap}.brand-mark{width:34px;height:34px}.brand{font-size:18px}.clock{display:none}.iconbtn{margin-left:auto}
+ .tabs{margin-bottom:14px}.tabs button{padding:9px 8px;font-size:12px}.tab-icon{width:15px;height:15px}
+ .segment{position:sticky;top:6px;z-index:12;box-shadow:0 6px 16px rgba(18,27,44,.07)}
+ .candidate{margin:7px;padding:10px}.candidate .name{font-size:13px}.meta{gap:5px 9px}
+ .state-grid{grid-template-columns:1fr 1fr}.state-box{padding:13px}.state-box .v{font-size:16px}
+ .actions button{flex:0 1 auto}.modal{border-radius:22px 22px 0 0}
+}
+
+</style>
+
+</head>
+<body>
+<div class="offline" id="offline">オフライン</div>
+<header>
+  <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7.5 8.5 16 24 24.5 8.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M11.5 8.5 16 16.7l4.5-8.2" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".45"/></svg></div><div class="brand">VANTAGE</div></div>
+  <div class="header-spacer"></div><div class="clock" id="clock"></div>
+  <button class="iconbtn" onclick="openSettings()" aria-label="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button>
+</header>
+<nav class="tabs">
+  <button class="active" data-tab="stage" onclick="switchTab('stage')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M3 12h4l2.4-6 4.1 12 2.4-6H21"/></svg><span>Stage</span></button>
+  <button data-tab="watch" onclick="switchTab('watch')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg><span>ウォッチ</span></button>
+  <button data-tab="events" onclick="switchTab('events')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/></svg><span>イベント</span></button>
+</nav>
+
+<main>
+<section id="tab-stage" class="panel active">
+  <div class="toolbar market">
+    <button id="m-jp" class="active" onclick="setMarket('jp')">日本</button>
+    <button id="m-us" onclick="setMarket('us')">米国</button>
+    <span class="fresh" id="stage-fresh">取得中…</span>
+  </div>
+  <div class="segment grow">
+    <button class="active" data-stage-view="summary" onclick="setStageView('summary')"><svg class="ui-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>サマリー</span></button>
+    <button data-stage-view="board" onclick="setStageView('board')"><svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg><span>候補ボード</span></button>
+    <button data-stage-view="ranking" onclick="setStageView('ranking')"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg><span>ランキング</span></button>
+  </div>
+  <div id="stage-summary"></div>
+  <div id="stage-board" class="hidden"></div>
+  <div id="stage-ranking" class="hidden"></div>
+</section>
+
+<section id="tab-watch" class="panel">
+  <div class="segment grow">
+    <button class="active" data-watch-view="list" onclick="setWatchView('list')">ウォッチ</button>
+    <button data-watch-view="signals" onclick="setWatchView('signals')">シグナル検証</button>
+  </div>
+  <div id="watch-list-view">
+    <div class="toolbar">
+      <select id="watch-sort" onchange="setWatchSort(this.value)">
+        <option value="board">候補ボード順</option>
+        <option value="added">追加日順</option>
+        <option value="market">市場別</option>
+      </select>
+      <button class="primary small" onclick="openAddWatch()">＋追加</button>
+    </div>
+    <div id="watch-list"></div>
+  </div>
+  <div id="signals-view" class="hidden"><div id="signal-list"></div></div>
+</section>
+
+<section id="tab-events" class="panel">
+  <div class="toolbar">
+    <button class="primary" onclick="copyAI(this)"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span>AI分析用コピー</span></span></button>
+    <button onclick="openEventForm()"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>追加</span></span></button>
+    <button class="small" onclick="clearPastEvents()"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M4 7h16M6 7v13h12V7M3 4h18v3H3zM10 11h4"/></svg><span>過去分を整理</span></span></button>
+  </div>
+  <div id="event-list"></div>
+</section>
+</main>
+<footer>VANTAGE · モメンタム投資判断支援</footer>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="modal-title"></div><button class="close" onclick="closeModal()" aria-label="閉じる"><svg class="ui-icon" viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></svg></button></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const API_BASE=location.hostname==='localhost'?'http://localhost:8787':'https://cockpit-backend.miyab.workers.dev';
+const state={
+ tab:'stage',market:'jp',stageView:'summary',watchView:'list',
+ stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
+ ranking:{jp:null,us:null},watch:null,signals:null,events:null,positions:null,
+ watchSort:localStorage.getItem('vantage_watch_sort')||'board'
+};
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const attr=v=>esc(v).replace(/`/g,'&#96;');
+const ICON_PATHS={
+ chart:'<path d="M4 19V5M4 19h16"/><path d="m7 15 4-4 3 2 5-6"/>',
+ check:'<path d="M7.5 12.5 10.5 15.5 17 8.5"/><path d="M12 3 4.5 6v5.5c0 4.4 3.1 7.7 7.5 9.5 4.4-1.8 7.5-5.1 7.5-9.5V6L12 3Z"/>',
+ alert:'<path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 16.5h.01"/>',
+ stop:'<path d="M8 3h8l5 5v8l-5 5H8l-5-5V8l5-5Z"/><path d="M12 8v5M12 16h.01"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+ flame:'<path d="M12 22c4.2 0 7-2.8 7-6.8 0-4.7-3.7-7.6-6.2-10.7-.5 2.7-2 4.4-3.8 5.9-.4-1.2-.5-2.4-.2-3.7C6.1 8.8 5 11.5 5 14.5 5 18.8 7.8 22 12 22Z"/>',
+ rocket:'<path d="M14 4c2.8-2.1 5.4-1.9 7-1-1.1 3.8-3.5 7-7 9.2L9.8 8c1.2-1.6 2.6-2.9 4.2-4Z"/><path d="m9.8 8-4.5.6-2.3 2.3 4.9.8M14 12.2l-.6 4.5-2.3 2.3-.8-4.9M8.5 15.5 5 19"/><circle cx="15.5" cy="7.5" r="1.5"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ eye:'<path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/>',
+ warning:'<path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 16.5h.01"/>',
+ pin:'<path d="m14 4 6 6-3 1-4 4-1 5-2-2-4-4-2-2 5-1 4-4 1-3Z"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/>',
+ chevron:'<path d="m9 18 6-6-6-6"/>',
+ held:'<path d="M5 12.5 9.5 17 19 7.5"/>',
+};
+function icon(name,size=16,extra=''){return `<svg class="ui-icon ${extra}" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">${ICON_PATHS[name]||''}</svg>`}
+function laneIcon(key){return icon(key==='A'?'flame':key==='B'?'rocket':key==='C'?'clock':key==='E'?'warning':'eye',15)}
+
+const num=(v,d=2)=>v==null||Number.isNaN(Number(v))?'—':Number(v).toLocaleString('ja-JP',{maximumFractionDigits:d});
+const pct=v=>v==null||Number.isNaN(Number(v))?'—':(Number(v)>=0?'+':'')+Number(v).toFixed(1)+'%';
+const cls=v=>Number(v)>=0?'up':'down';
+const code=s=>String(s||'').replace(/\.T$/,'');
+const marketOf=s=>String(s||'').endsWith('.T')?'jp':'us';
+const dateText=v=>{if(!v)return'—';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function writeHeaders(){const h={'Content-Type':'application/json'};const k=localStorage.getItem('vantage_write_key');if(k)h['X-Vantage-Key']=k;return h}
+async function api(path,opt={}){
+ const options={...opt};if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
+ if(options.write||options.method&&options.method!=='GET'){options.headers={...writeHeaders(),...(options.headers||{})};delete options.write}
+ const r=await fetch(API_BASE+path,options);let d=null;try{d=await r.json()}catch{}
+ if(!r.ok)throw new Error(d?.error||('API '+r.status));return d;
+}
+function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
+function updateClock(){$('clock').textContent=new Date().toLocaleString('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})}
+setInterval(updateClock,30000);updateClock();
+function net(){ $('offline').classList.toggle('show',!navigator.onLine)}addEventListener('online',net);addEventListener('offline',net);net();
+
+function switchTab(tab){
+ state.tab=tab;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
+ if(tab==='stage')loadStage();
+ if(tab==='watch')state.watchView==='signals'?loadSignals():loadWatch();
+ if(tab==='events')loadEvents();
+ scrollTo({top:0});
+}
+function setMarket(m){
+ state.market=m;$('m-jp').classList.toggle('active',m==='jp');$('m-us').classList.toggle('active',m==='us');loadStage();
+}
+function setStageView(v){
+ state.stageView=v;document.querySelectorAll('[data-stage-view]').forEach(b=>b.classList.toggle('active',b.dataset.stageView===v));
+ $('stage-summary').classList.toggle('hidden',v!=='summary');$('stage-board').classList.toggle('hidden',v!=='board');$('stage-ranking').classList.toggle('hidden',v!=='ranking');
+ if(v==='ranking')loadRanking();
+}
+function setWatchView(v){
+ state.watchView=v;document.querySelectorAll('[data-watch-view]').forEach(b=>b.classList.toggle('active',b.dataset.watchView===v));
+ $('watch-list-view').classList.toggle('hidden',v!=='list');$('signals-view').classList.toggle('hidden',v!=='signals');
+ v==='signals'?loadSignals():loadWatch();
+}
+
+async function loadStage(){
+ const m=state.market;$('stage-fresh').textContent='取得中…';
+ try{
+  const [st,nt,mom,pos,ev]=await Promise.all([
+   api('/api/stage?market='+m),api('/api/notrade?market='+m),api('/api/momentum?market='+m),
+   api('/api/positions').catch(()=>({positions:[]})),api('/api/events').catch(()=>({events:[]})),
+  ]);
+  state.stage[m]=st;state.notrade[m]=nt;state.momentum[m]=mom;state.positions=pos;state.events=ev;
+  $('stage-fresh').textContent=(st.freshness||'')+(st.price_time?' · '+st.price_time:'')+(st.vol_partial?' · 暫定':'');
+  renderSummary(m);renderBoard(m);
+ }catch(e){$('stage-fresh').textContent='取得失敗';$('stage-summary').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function marketState(st,m){
+ const macro=st?.macro||{};const ix=m==='jp'?macro['日経平均']:macro['S&P500'];
+ const d=ix?.change_pct??0,r5=ix?.ret5??0;
+ if(d>0&&r5>0)return{label:'上向き',kind:'good'};
+ if(d<-1||r5<-2)return{label:'弱い',kind:'bad'};
+ return{label:'中立',kind:'warn'};
+}
+function momentumState(nt){
+ if(nt?.recLevel==='strong')return{label:'過熱・回避',kind:'bad'};
+ if(nt?.recLevel==='recommend')return{label:'選別',kind:'warn'};
+ return{label:'通常',kind:'good'};
+}
+function nextEvent(){
+ const now=Date.now(),list=(state.events?.events||[]).filter(e=>new Date(e.time)>now).sort((a,b)=>new Date(a.time)-new Date(b.time));
+ return list[0]||null;
+}
+function renderSummary(m){
+ const st=state.stage[m],nt=state.notrade[m];if(!st)return;
+ const ms=marketState(st,m),mm=momentumState(nt),macro=st.macro||{},ev=nextEvent();
+ const hot=nt?.summary||{};
+ const recKind=mm.kind==='bad'?'bad':mm.kind==='warn'?'warn':'good';
+ const recIcon=icon(recKind==='bad'?'stop':recKind==='warn'?'alert':'check',20);
+ const recTitle=recKind==='bad'?'新規エントリーは見送り':recKind==='warn'?'選別して確認':'通常監視';
+ let html=`<div class="notrade ${recKind}"><div class="notrade-head"><span class="notrade-icon">${recIcon}</span><span class="notrade-title">${recTitle}</span><span class="notrade-sub">市場 ${ms.label} / モメンタム ${mm.label}</span></div>`+
+  `<div class="summary-chips"><span>拡張過大 <b>${hot.extreme_pct??'—'}%</b></span><span>RSI過熱 <b>${hot.rsi_hot??'—'}件</b></span><span>健全な押し目 <b>${hot.healthy_dips??'—'}件</b></span><span>上ヒゲ <b>${hot.shooting_stars??'—'}件</b></span></div>`;
+ if(nt?.signals?.length)html+=`<div class="warnline">${nt.signals.slice(0,3).map(x=>esc(x.label)+'：'+esc(x.detail)).join('<br>')}</div>`;
+ html+='</div>';
+ html+='<div class="section-title">地合い</div><div class="state-grid">'+
+  `<div class="state-box ${ms.kind}"><div class="k">市場地合い</div><div class="v">${ms.label}</div></div>`+
+  `<div class="state-box ${mm.kind}"><div class="k">モメンタム地合い</div><div class="v">${mm.label}</div></div></div>`;
+ if(ev)html+=`<div class="section-title">次の重要日程</div><div class="card pad event-next"><div class="event-ic">${icon('calendar',18)}</div><div class="grow1"><div class="event-name">${esc(ev.name)}</div><div class="event-time">${dateText(ev.time)}</div></div></div>`;
+ html+='<div class="section-title">マクロ / 指数</div><div class="item-list macro-list">'+
+  Object.entries(macro).filter(([,v])=>v).map(([k,v])=>`<div class="macro-row" onclick="openMacroChart('${attr(k)}')"><div><div class="macro-name">${esc(k)}</div><div class="macro-sub">${v.ret5!=null?'5日 '+pct(v.ret5):''}</div></div><div class="macro-price">${num(v.price)}</div><div class="macro-chg ${cls(v.change_pct)}">${pct(v.change_pct)}</div></div>`).join('')+
+  '</div>';
+ $('stage-summary').innerHTML=html;
+}
+function openMacroChart(name){
+ const map={'日経平均':'TVC:NI225','日経VI':'TVC:JNIV','韓国KOSPI':'KRX:KOSPI','韓国KOSDAQ':'KRX:KOSDAQ','SOX':'NASDAQ:SOX','S&P500':'SP:SPX','Nasdaq':'NASDAQ:IXIC','Dow':'DJ:DJI','VIX':'TVC:VIX','ドル円':'FX:USDJPY','米10年債':'TVC:US10Y','WTI原油':'TVC:USOIL','金':'TVC:GOLD','銀':'TVC:SILVER','BTC':'COINBASE:BTCUSD','ETH':'COINBASE:ETHUSD'};
+ if(map[name])open('https://www.tradingview.com/chart/?symbol='+encodeURIComponent(map[name]),'_blank','noopener');
+}
+function mini(k,v){return `<div class="mini"><div class="k">${k}</div><div class="v">${v?num(v.price):'—'}</div><div class="k ${v?cls(v.change_pct):''}">${v?pct(v.change_pct):''}</div></div>`}
+function heldSet(){return new Set((state.positions?.positions||[]).map(p=>String(p.symbol).toUpperCase()))}
+function watchSet(){return new Set((state.watch?.items||[]).map(w=>String(w.symbol).toUpperCase()))}
+function renderBoard(m){
+ const mom=state.momentum[m];if(!mom?.ready){$('stage-board').innerHTML='<div class="empty">候補なし</div>';return}
+ const held=heldSet(),watched=watchSet();
+ let html='<div class="note">件数上限は設けず、各レーンの条件に該当した銘柄を表示します。A/Bを優先し、CはS2内の健全な浅い押しだけを抽出します。</div>';
+ for(const lane of mom.board||[]){
+  const rows=lane.rows||[];
+  const open=lane.key==='A'||lane.key==='B'?' open':'';
+  html+=`<details class="lane lane-${lane.key}"${open}><summary><span class="lane-symbol">${laneIcon(lane.key)}</span><span class="lane-title">${lane.key}. ${esc(lane.label)}</span><span class="count">${rows.length}件</span></summary>`;
+  if(!rows.length)html+='<div class="empty">該当なし</div>';
+  else html+=rows.map(r=>candidateHtml(r,held,watched)).join('');
+  html+='</details>';
+ }
+ $('stage-board').innerHTML=html;
+}
+function candidateHtml(r,held,watched){
+ const sym=String(r.symbol).toUpperCase(),isHeld=held.has(sym),isWatch=watched.has(sym);
+ return `<div class="candidate" onclick="openCandidate('${attr(sym)}')"><div class="candidate-head">`+
+  `${isHeld?'<span class="held-mark">☑</span>':''}<span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(sym))}</span>`+
+  `${isWatch?'<span class="watch-mini">観察中</span>':''}<span class="badge ${r.entry_lane}">${r.entry_lane}</span>`+
+  `<button class="chart-btn" title="チャート" onclick="event.stopPropagation();openChart('${attr(sym)}')">${icon('chart',16)}</button></div>`+
+  `<div class="meta"><span class="${cls(r.change_pct)}">${pct(r.change_pct)}</span><span>${num(r.price,marketOf(sym)==='jp'?0:2)}</span><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span>${r.rs5!=null?`<span>5日RS ${pct(r.rs5)}</span>`:''}</div>`+
+  `<div class="tags">${r.setup_label?`<span class="badge B">${esc(r.setup_label)}</span>`:''}<span class="badge">${esc(r.long_stage||r.stage||'')}</span>${r.relative_label&&r.relative_label!=='通常'?`<span class="badge">${esc(r.relative_label)}</span>`:''}</div></div>`;
+}
+function findCandidate(sym){
+ for(const m of ['jp','us'])for(const lane of state.momentum[m]?.board||[])for(const r of lane.rows||[])if(String(r.symbol).toUpperCase()===String(sym).toUpperCase())return r;
+ return null;
+}
+async function ensureWatch(){if(!state.watch)state.watch=await api('/api/watchlist').catch(()=>({items:[]}));}
+async function openCandidate(sym){
+ await ensureWatch();const r=findCandidate(sym);if(!r)return;
+ const isWatch=watchSet().has(sym),isHeld=heldSet().has(sym);
+ $('modal-title').textContent=r.name+' '+code(sym);
+ $('modal-body').innerHTML=`<div class="card pad"><div class="meta"><span class="badge ${r.entry_lane}">${r.entry_lane} ${esc(r.entry_label)}</span><span>${esc(r.long_stage||r.stage||'')}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}</div>`+
+  block('検出理由',(r.entry_reason||[]).join(' / '))+block('相対評価',r.relative_text)+block('注意点',(r.risk_reason||[]).join(' / '))+
+  `<div class="actions"><button onclick="openChart('${attr(sym)}')"><span class="btn-label">${icon('chart',15)}<span>チャート</span></span></button><button class="primary" ${isWatch?'disabled':''} onclick="addWatchFromCandidate('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isWatch?'観察中':'ウォッチへ'}</button><button onclick="toggleHeld('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isHeld?'保有解除':'保有☑'}</button></div></div>`;
+ openModal();
+}
+function block(k,v){return v?`<div class="detail-block"><div class="detail-label">${k}</div>${esc(v)}</div>`:''}
+function openChart(sym){const tv=String(sym).endsWith('.T')?'TSE:'+code(sym):sym;open('https://www.tradingview.com/chart/?symbol='+encodeURIComponent(tv),'_blank','noopener')}
+
+async function loadRanking(force=false){
+ const m=state.market;$('stage-ranking').innerHTML='<div class="loading">取得中…</div>';
+ try{const d=await api('/api/ranking-enriched?market='+m+(force?'&refresh=1':''),force?{write:true}:{});
+ state.ranking[m]=d;renderRanking(d,m)}catch(e){$('stage-ranking').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function renderRanking(d,m){
+ const stageDate=String(state.stage[m]?.updated_at||'').slice(0,10),rankDate=String(d.updated_at||'').slice(0,10);
+ let html='<div class="toolbar"><button class="small" onclick="loadRanking(true)">更新</button></div>';
+ if(stageDate&&rankDate&&stageDate!==rankDate)html+='<div class="warnline">ランキングの更新日がStageと一致していません。更新してください。</div>';
+ html+=(d.items||[]).slice(0,50).map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span><span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span><span class="${cls(it.change_pct)} num">${pct(it.change_pct)}</span>${it.registered?'<span class="badge">登録済</span>':`<button class="small primary" onclick="event.stopPropagation();registerStock('${attr(it.symbol)}','${attr(it.name)}','${m}')">＋</button>`}</div><div class="meta"><span>${esc(it.stage||'未分析')}</span>${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}${it.rsi!=null?`<span>RSI ${it.rsi}</span>`:''}</div></div>`).join('');
+ html+=`<div class="note">更新 ${dateText(d.updated_at)}</div>`;$('stage-ranking').innerHTML=html;
+}
+async function registerStock(sym,name,m){try{await api('/api/stocklist?market='+m,{method:'POST',body:{action:'add',symbol:sym,name}});toast('登録しました');loadRanking()}catch(e){toast(e.message)}}
+
+async function loadWatch(){
+ $('watch-list').innerHTML='<div class="loading">取得中…</div>';
+ try{
+  const [w,jp,us,p]=await Promise.all([api('/api/watchlist'),api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/positions')]);
+  state.watch=w;state.momentum.jp=jp;state.momentum.us=us;state.positions=p;renderWatch();
+ }catch(e){$('watch-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function boardMap(){
+ const map=new Map();for(const m of ['jp','us'])for(const lane of state.momentum[m]?.board||[])for(const r of lane.rows||[])map.set(String(r.symbol).toUpperCase(),r);return map;
+}
+function setWatchSort(v){state.watchSort=v;localStorage.setItem('vantage_watch_sort',v);renderWatch()}
+function sortWatch(items){
+ const bm=boardMap(),rank={A:0,B:1,C:2,D:3,E:4};
+ return items.slice().sort((a,b)=>{
+  if(state.watchSort==='added')return new Date(b.added_at||0)-new Date(a.added_at||0);
+  if(state.watchSort==='market'){const d=String(a.market).localeCompare(String(b.market));if(d)return d}
+  const ar=rank[bm.get(String(a.symbol).toUpperCase())?.entry_lane]??9,br=rank[bm.get(String(b.symbol).toUpperCase())?.entry_lane]??9;
+  return ar-br||String(a.name).localeCompare(String(b.name),'ja');
+ });
+}
+function renderWatch(){
+ $('watch-sort').value=state.watchSort;const items=sortWatch(state.watch?.items||[]),bm=boardMap();
+ if(!items.length){$('watch-list').innerHTML='<div class="empty">ウォッチは空です</div>';return}
+ $('watch-list').innerHTML=items.map(w=>{
+  const r=bm.get(String(w.symbol).toUpperCase())||w.stage_data||{},lane=r.entry_lane||'—';
+  return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${lane}</span><span class="${cls(r.change_pct)} num">${pct(r.change_pct)}</span><span class="badge ${w.held?'held':''}">${w.held?'保有':'—'}</span></summary>`+
+   `<div class="watch-detail"><div class="meta"><span>${esc(r.long_stage||r.stage||'未判定')}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}<span>追加 ${dateText(w.added_at)}</span></div>`+
+   `<div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${w.status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${w.status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${w.status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="条件・押し目水準・決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
+   `<div class="actions"><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${w.market}')">${w.held?'保有解除':'保有☑'}</button><button onclick="refreshWatch('${attr(w.id)}')">再判定</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
+ }).join('');
+}
+async function saveWatch(id){try{await api('/api/watchlist',{method:'POST',body:{action:'update',id,status:$('ws-'+id).value,memo:$('wm-'+id).value}});toast('保存しました');loadWatch()}catch(e){toast(e.message)}}
+async function deleteWatch(id){if(!confirm('ウォッチから削除しますか？'))return;try{await api('/api/watchlist',{method:'POST',body:{action:'delete',id}});loadWatch()}catch(e){toast(e.message)}}
+async function refreshWatch(id){try{await api('/api/watchlist',{method:'POST',body:{action:'refresh_stage',id}});toast('再判定しました');loadWatch()}catch(e){toast(e.message)}}
+async function addWatchFromCandidate(symbol,name,market){try{await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'candidate'}});state.watch=null;toast('ウォッチへ追加');closeModal()}catch(e){toast(e.message)}}
+function openAddWatch(){
+ $('modal-title').textContent='ウォッチ追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="aw-market"><option value="jp">日本株</option><option value="us">米国株</option></select><input id="aw-symbol" placeholder="日本4桁 / 米国ティッカー"><div class="span2 actions"><button class="primary" onclick="addWatchManual()">追加</button></div></div>`;openModal();
+}
+async function addWatchManual(){const market=$('aw-market').value,symbol=$('aw-symbol').value.trim();try{const q=await api('/api/watchlist',{method:'POST',body:{action:'resolve_name',market,symbol}});await api('/api/watchlist',{method:'POST',body:{action:'add',market,symbol:q.symbol,name:q.name,source:'manual'}});toast('追加しました');closeModal();loadWatch()}catch(e){toast(e.message)}}
+async function toggleHeld(symbol,name,market){try{await api('/api/positions',{method:'POST',body:{action:'toggle_held',symbol,name,market}});state.positions=await api('/api/positions');toast('保有状態を更新');if(state.tab==='watch')loadWatch();else{renderBoard(state.market);closeModal()}}catch(e){toast(e.message)}}
+
+async function loadSignals(){
+ $('signal-list').innerHTML='<div class="loading">取得中…</div>';
+ try{const d=await api('/api/signal-log?limit=240');state.signals=d;await ensureWatch();state.positions=await api('/api/positions');renderSignals()}catch(e){$('signal-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function statFor(key,h='d5'){const s=(state.signals?.summary||[]).find(x=>x.key===key),v=s?.horizons?.[h];return v||null}
+function renderSignals(){
+ const d=state.signals||{},a=statFor('A'),b=statFor('B');
+ let html='<div class="section-title">実績（終了シグナル）</div><div class="signal-stats">'+statHtml('A 5日',a)+statHtml('B 5日',b)+statHtml('検証数',{median:d.completed_count,win_rate:null,n:d.completed_count})+'</div>';
+ const active=(d.items||[]).filter(x=>x.active),done=(d.items||[]).filter(x=>!x.active);
+ html+=signalSection('現在のシグナル',active,true)+signalSection('終了・検証中',done,false);
+ $('signal-list').innerHTML=html;
+}
+function statHtml(k,v){return `<div class="stat"><div class="v">${v?(v.win_rate==null?v.n:(pct(v.median))):'—'}</div><div class="k">${k}${v?.win_rate!=null?' / 勝率'+v.win_rate+'%':''}</div></div>`}
+function signalSection(title,items,active){
+ let h=`<div class="section-title">${title} ${items.length}件</div>`;if(!items.length)return h+'<div class="empty">該当なし</div>';
+ return h+items.map(x=>signalCard(x,active)).join('');
+}
+function signalCard(x,active){
+ const outcomes=Object.entries(x.outcomes||{}).map(([k,v])=>`<span class="outcome ${cls(v.return_pct)}">${k.replace('d','')}日 ${pct(v.return_pct)}</span>`).join('');
+ const watched=watchSet().has(String(x.symbol).toUpperCase());
+ return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="badge ${x.entry_lane}">${x.entry_lane}</span><span class="${cls(x.current_return)} num">${pct(x.current_return)}</span></summary>`+
+  `<div class="signal-detail"><div class="meta"><span>開始 ${x.start_date}</span><span>検出 ${x.times_seen||1}回</span><span>MFE ${pct(x.mfe)}</span><span>MAE ${pct(x.mae)}</span></div><div class="outcomes">${outcomes||'<span class="muted">結果集計中</span>'}</div>`+
+  block('検出理由',x.reason)+block('相対評価',x.relative_text)+block('注意点',x.risk_reason)+
+  `<div class="actions">${watched?'<button disabled>観察中</button>':`<button class="primary" onclick="signalToWatch('${attr(x.symbol)}','${attr(x.name)}','${x.market}','${attr(x.reason||'')}')">ウォッチへ</button>`}<button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="danger" onclick="deleteSignal('${attr(x.id)}')">削除</button></div></div></details>`;
+}
+async function signalToWatch(symbol,name,market,reason){try{await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'signal',memo:'シグナル: '+reason}});state.watch=null;toast('ウォッチへ追加');loadSignals()}catch(e){toast(e.message)}}
+async function deleteSignal(id){if(!confirm('このシグナル期間を削除しますか？'))return;try{await api('/api/signal-log',{method:'POST',body:{action:'delete',id}});loadSignals()}catch(e){toast(e.message)}}
+
+async function loadEvents(){
+ $('event-list').innerHTML='<div class="loading">取得中…</div>';
+ try{state.events=await api('/api/events');renderEvents()}catch(e){$('event-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function renderEvents(){
+ const now=Date.now(),events=(state.events?.events||[]).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
+ const future=events.filter(e=>new Date(e.time)>=now),past=events.filter(e=>new Date(e.time)<now);
+ let html='<div class="section-title">今後の重要日程</div><div class="card">'+(future.length?future.map(eventRow).join(''):'<div class="empty">登録なし</div>')+'</div>';
+ if(past.length)html+=`<details class="card"><summary class="row"><div class="name">過去分</div><span class="count">${past.length}件</span></summary>${past.map(eventRow).join('')}</details>`;
+ $('event-list').innerHTML=html;
+}
+function eventRow(e){
+ const diff=new Date(e.time)-Date.now(),days=Math.ceil(diff/86400000);
+ return `<div class="row"><button class="small" aria-label="固定" title="固定" onclick="togglePin('${attr(e.id)}')">${icon('pin',15,e.pinned?'up':'')}</button><div class="grow1"><div class="name">${esc(e.name)}</div><div class="event-time">${dateText(e.time)}</div></div><div class="event-count">${diff>=0?(days<=1?'24h以内':days+'日'):'完了'}</div><button class="small danger" aria-label="削除" title="削除" onclick="deleteEvent('${attr(e.id)}')">${icon('trash',15)}</button></div>`;
+}
+function openEventForm(){
+ $('modal-title').textContent='重要日程を追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="ev-cat"><option value="macro">マクロ</option><option value="centralbank">中銀</option><option value="earnings">決算</option><option value="material">個別材料</option><option value="other">その他</option></select><input id="ev-name" placeholder="イベント名"><input class="span2" id="ev-time" type="datetime-local"><div class="span2 actions"><button class="primary" onclick="addEvent()">追加</button></div></div>`;openModal();
+}
+async function addEvent(){try{await api('/api/events',{method:'POST',body:{action:'add',name:$('ev-name').value,time:new Date($('ev-time').value).toISOString(),category:$('ev-cat').value}});closeModal();loadEvents()}catch(e){toast(e.message)}}
+async function deleteEvent(id){if(!confirm('削除しますか？'))return;try{await api('/api/events',{method:'POST',body:{action:'delete',id}});loadEvents()}catch(e){toast(e.message)}}
+async function togglePin(id){try{await api('/api/events',{method:'POST',body:{action:'toggle_pin',id}});loadEvents()}catch(e){toast(e.message)}}
+async function clearPastEvents(){if(!confirm('過去の未固定イベントを削除しますか？'))return;try{const d=await api('/api/events',{method:'POST',body:{action:'clear_completed'}});toast(d.removed+'件整理');loadEvents()}catch(e){toast(e.message)}}
+
+async function copyAI(btn){
+ const old=btn.textContent;btn.disabled=true;btn.textContent='収集中…';
+ try{
+  const [jp,us,njp,nus,mjp,mus,w,sig,ev,pos]=await Promise.all([
+   api('/api/stage?market=jp'),api('/api/stage?market=us'),api('/api/notrade?market=jp'),api('/api/notrade?market=us'),
+   api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/watchlist'),api('/api/signal-log?limit=60'),api('/api/events'),api('/api/positions')
+  ]);
+  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・相対強度・出来高・短期セットアップを使った確認順の整理。'];
+  for(const [label,st,nt,mom] of [['日本',jp,njp,mjp],['米国',us,nus,mus]]){
+   const ms=marketState(st,label==='日本'?'jp':'us'),mm=momentumState(nt);
+   out.push(`\n## ${label}市場\n- 市場地合い: ${ms.label}\n- モメンタム地合い: ${mm.label}\n- データ: ${st.price_time||st.updated_at||'—'}`);
+   const mac=st.macro||{};for(const k of ['日経平均','S&P500','韓国KOSPI','韓国KOSDAQ','SOX','VIX','ドル円'])if(mac[k])out.push(`- ${k}: ${pct(mac[k].change_pct)} / 5日 ${pct(mac[k].ret5)}`);
+   for(const lane of mom.board||[]){
+    if(!['A','B','C'].includes(lane.key))continue;const limit=lane.key==='C'?3:lane.rows.length;
+    out.push(`\n### ${lane.key}. ${lane.label}`);
+    for(const r of (lane.rows||[]).slice(0,limit))out.push(`- ${r.name}(${r.symbol}) ${pct(r.change_pct)} / 出来高${num(r.effective_vol_ratio??r.vol_ratio)}x / 25MA${pct(r.div25)} / 5日RS${pct(r.rs5)} / 長期${r.long_stage||r.stage}${r.setup_label?' / '+r.setup_label:''}`);
+   }
+  }
+  out.push('\n## 保有☑');for(const p of pos.positions||[])out.push(`- ${p.name||p.symbol}(${p.symbol})`);
+  out.push('\n## ウォッチ');for(const x of (w.items||[]).slice(0,12))out.push(`- ${x.name}(${x.symbol}) / ${x.status||'tracking'}${x.memo?' / '+x.memo.slice(0,100):''}`);
+  out.push('\n## シグナル実績');for(const s of sig.summary||[]){const d5=s.horizons?.d5;if(d5)out.push(`- ${s.label}: 5日中央値${pct(d5.median)} / 勝率${d5.win_rate}% / n=${d5.n}`)}
+  out.push('\n## 7日以内の重要日程');const limit=Date.now()+7*86400000;for(const e of (ev.events||[]).filter(x=>new Date(x.time)>=Date.now()&&new Date(x.time)<=limit).sort((a,b)=>new Date(a.time)-new Date(b.time)))out.push(`- ${e.name}: ${dateText(e.time)}`);
+  out.push('\n## 依頼\nA/Bを中心に3〜5本へ絞り、エントリー候補・押し待ち・見送りを分けてください。長期Stageと短期セットアップを混同せず、相対強度・出来高・重要日程・保有との矛盾も指摘してください。');
+  await navigator.clipboard.writeText(out.join('\n'));toast('コピーしました');
+ }catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
+}
+
+function openSettings(){
+ $('modal-title').textContent='設定';
+ const key=localStorage.getItem('vantage_write_key')||'';
+ $('modal-body').innerHTML=`<div class="card pad"><div class="detail-label">書き込みキー（任意）</div><input class="fullinput" id="write-key" type="password" value="${attr(key)}" placeholder="Cloudflare WRITE_TOKENを設定した場合"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></div>`+
+ `<div class="card pad"><div class="name">Stage管理</div><div class="actions"><button onclick="recalcStage()">現在市場を再計算</button><button onclick="openStockEditor()">銘柄編集</button></div></div>`+
+ `<div class="card pad"><div class="name">指数通知</div><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト</button></div></div>`+
+ `<div class="note">バックエンド状態は /api/health で確認できます。</div>`;
+ openModal();
+}
+function saveWriteKey(){localStorage.setItem('vantage_write_key',$('write-key').value.trim());toast('保存しました')}
+async function recalcStage(){
+ if(!confirm((state.market==='jp'?'日本':'米国')+'を再計算します。数十秒かかります。'))return;
+ try{for(let i=1;i<=4;i++){toast('再計算 '+i+'/4');await api('/api/stage-run?batch='+state.market+i,{write:true})}await api('/api/ranking-enriched?market='+state.market+'&refresh=1',{write:true});toast('完了');closeModal();loadStage()}catch(e){toast(e.message)}
+}
+async function openStockEditor(){
+ try{const d=await api('/api/stocklist?market='+state.market);$('modal-title').textContent='銘柄編集 '+d.count+'/'+d.max;
+ $('modal-body').innerHTML=`<div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map(x=>`<div class="row"><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span></div><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`).join('')}</div>`;}catch(e){toast(e.message)}
+}
+async function addStock(){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'add',symbol:$('sl-symbol').value,name:$('sl-name').value}});openStockEditor()}catch(e){toast(e.message)}}
+async function deleteStock(symbol){if(!confirm(symbol+'を削除しますか？'))return;try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'delete',symbol}});openStockEditor()}catch(e){toast(e.message)}}
+function b64ToBytes(s){const pad='='.repeat((4-s.length%4)%4),b=atob((s+pad).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...b].map(c=>c.charCodeAt(0)))}
+async function enablePush(){try{const perm=await Notification.requestPermission();if(perm!=='granted')throw new Error('通知が許可されていません');const reg=await navigator.serviceWorker.ready;const k=await api('/api/push/key');let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64ToBytes(k.key)});await api('/api/push/subscribe',{method:'POST',body:{subscription:sub.toJSON()}});toast('通知を有効化')}catch(e){toast(e.message)}}
+async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
+
+function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=refined-ui-condition-board').then(r=>r.update()).catch(()=>{}));
+loadStage();
+</script>
+</body>
+</html>
