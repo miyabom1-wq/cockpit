@@ -129,6 +129,8 @@ header{min-height:46px;margin-bottom:14px;padding:0 2px 14px;border-bottom:0}
 .lane{margin:10px 0;overflow:hidden}.lane>summary{padding:13px 15px;background:#fff;border:0}.lane[open]>summary{border-bottom:1px solid #edf0f4}.lane-symbol{width:29px;height:29px;display:grid;place-items:center;border-radius:9px;background:#f2f4f7;color:#667180}.lane-A .lane-symbol{background:var(--greenBg);color:var(--green)}.lane-B .lane-symbol{background:var(--purpleBg);color:var(--purple)}.lane-C .lane-symbol{background:var(--blueBg);color:var(--blue)}.lane-E .lane-symbol{background:var(--redBg);color:var(--red)}.lane-title{font-size:13px}.count{padding:3px 8px;border-radius:999px;background:#f1f3f6;font-size:10px}
 .candidate{margin:8px 9px;padding:11px 12px;border:1px solid #e8ebf0!important;border-radius:13px;background:#fbfcfd;box-shadow:0 1px 1px rgba(18,27,44,.02);transition:transform .12s,background .12s,border-color .12s}.candidate:hover{background:#fff;border-color:#d9dee7!important}.candidate:active{transform:scale(.995)}.candidate-head{gap:8px}.candidate .name{font-size:13px;letter-spacing:-.01em}.code{font-size:10px}.chart-btn{width:31px;height:31px;border:0;background:#f0f3f7;color:#556173;border-radius:9px;box-shadow:none}.chart-btn:hover{background:#e7ebf1}.meta{font-family:"Inter",var(--mono);font-size:10px;gap:5px 11px}.tags{margin-top:7px}
 .rank-row,.compact-row{border:1px solid #e4e8ee;border-radius:14px;padding:11px 13px;margin:7px 0;box-shadow:0 2px 8px rgba(18,27,44,.025)}
+
+.explorer-hero{padding:16px;border:1px solid #dfe6f1;border-radius:17px;background:linear-gradient(135deg,#f7faff,#fff);margin:10px 0 14px}.explorer-head{display:flex;gap:12px;align-items:flex-start}.explorer-title{font-weight:800;font-size:15px}.explorer-sub{font-size:11px;color:var(--muted);line-height:1.65;margin-top:4px}.explorer-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}.explorer-stat{padding:9px;border:1px solid #e5eaf2;border-radius:11px;background:#fff}.explorer-stat .v{font:700 15px Inter,var(--mono)}.explorer-stat .k{font-size:9px;color:var(--muted);margin-top:2px}.explorer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.explorer-card{border:1px solid #e3e8f0;border-radius:15px;background:#fff;padding:12px;box-shadow:0 2px 9px rgba(18,27,44,.035)}.explorer-card.add{border-color:#bcd0f6;background:#fbfdff}.explorer-card-head{display:flex;align-items:center;gap:7px}.explorer-check{width:17px;height:17px;accent-color:#3267d6}.explorer-score{font:800 13px Inter,var(--mono);min-width:34px;text-align:right}.explorer-reasons{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}.reason-chip{font-size:9px;padding:4px 7px;border-radius:999px;background:#eef4ff;color:#315b9f}.caution-chip{font-size:9px;padding:4px 7px;border-radius:999px;background:#fff2e8;color:#9b571f}.explorer-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:9px}.explorer-metric{font:10px Inter,var(--mono);color:#5f6b7c}.explorer-metric b{display:block;font-size:12px;color:#1d2736;margin-bottom:2px}.rank-move{font:700 9px Inter,var(--mono);padding:3px 6px;border-radius:999px;background:#eef4ff;color:#315b9f}.rank-move.down{background:#f3f4f6;color:#7d8795}.discovery-empty{padding:22px;text-align:center;border:1px dashed #d8dee8;border-radius:14px;color:var(--muted)}
 .note{background:#f7f9fc;border-color:#e4e9f1;border-radius:13px;color:#647083}.detail-block{font-weight:500}.detail-label{letter-spacing:.04em}
 .formgrid input,.formgrid select,.formgrid textarea,.fullinput,#watch-sort{border-color:#d9dee7;border-radius:10px;background:#fff;padding:9px 11px;outline:none}.formgrid input:focus,.formgrid select:focus,.formgrid textarea:focus,.fullinput:focus,#watch-sort:focus{border-color:#7897d8;box-shadow:0 0 0 3px rgba(50,103,214,.1)}
 .modal-bg{background:rgba(11,17,27,.48);backdrop-filter:blur(7px)}.modal{border:0;border-radius:22px;padding:20px;box-shadow:var(--shadowLg)}.modal-title{font-size:16px}.close{border:0;background:#f1f3f6;width:34px;height:34px;padding:0;border-radius:10px;font-size:0}
@@ -142,6 +144,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
  .candidate{margin:7px;padding:10px}.candidate .name{font-size:13px}.meta{gap:5px 9px}
  .state-grid{grid-template-columns:1fr 1fr}.state-box{padding:13px}.state-box .v{font-size:16px}
  .actions button{flex:0 1 auto}.modal{border-radius:22px 22px 0 0}
+ .explorer-grid{grid-template-columns:1fr}.explorer-stats{grid-template-columns:1fr 1fr}.explorer-card{padding:11px}
 }
 
 @media(max-width:640px){.bt-grid{grid-template-columns:1fr}.bt-main{gap:5px}.bt-card{padding:13px}.bt-symbol{grid-template-columns:1fr auto auto}.bt-symbol .bt-n{display:none}}
@@ -172,10 +175,12 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
     <button class="active" data-stage-view="summary" onclick="setStageView('summary')"><svg class="ui-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>サマリー</span></button>
     <button data-stage-view="board" onclick="setStageView('board')"><svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg><span>候補ボード</span></button>
     <button data-stage-view="ranking" onclick="setStageView('ranking')"><svg class="ui-icon" viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7"/></svg><span>ランキング</span></button>
+    <button id="stage-discover-tab" data-stage-view="discover" onclick="setStageView('discover')"><svg class="ui-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5M11 7v8M7 11h8"/></svg><span>探索</span></button>
   </div>
   <div id="stage-summary"></div>
   <div id="stage-board" class="hidden"></div>
   <div id="stage-ranking" class="hidden"></div>
+  <div id="stage-discover" class="hidden"></div>
 </section>
 
 <section id="tab-watch" class="panel">
@@ -254,6 +259,8 @@ const cls=v=>Number(v)>=0?'up':'down';
 const code=s=>String(s||'').replace(/\.T$/,'');
 const marketOf=s=>String(s||'').endsWith('.T')?'jp':'us';
 const dateText=v=>{if(!v)return'—';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+const jstDateKey=v=>{const d=new Date(v||Date.now());return Number.isNaN(d.getTime())?'':new Date(d.getTime()+9*3600000).toISOString().slice(0,10);}
+const turnoverText=(v,m)=>v==null?'—':m==='jp'?(Number(v)/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1})+'億円':num(v,0);
 function writeHeaders(){const h={'Content-Type':'application/json'};const k=localStorage.getItem('vantage_write_key');if(k)h['X-Vantage-Key']=k;return h}
 async function api(path,opt={}){
  const options={...opt};if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
@@ -269,18 +276,21 @@ function net(){ $('offline').classList.toggle('show',!navigator.onLine)}addEvent
 function switchTab(tab){
  state.tab=tab;document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tab));
- if(tab==='stage')loadStage();
+ if(tab==='stage'){loadStage();if(state.stageView==='ranking')loadRanking();if(state.stageView==='discover')loadExplorer();}
  if(tab==='watch')state.watchView==='signals'?loadSignals():state.watchView==='backtest'?loadBacktest():loadWatch();
  if(tab==='events')loadEvents();
  scrollTo({top:0});
 }
 function setMarket(m){
- state.market=m;$('m-jp').classList.toggle('active',m==='jp');$('m-us').classList.toggle('active',m==='us');loadStage();
+ state.market=m;$('m-jp').classList.toggle('active',m==='jp');$('m-us').classList.toggle('active',m==='us');
+ $('stage-discover-tab').classList.toggle('hidden',m!=='jp');
+ if(m==='us'&&state.stageView==='discover'){setStageView('summary');return}loadStage();
 }
 function setStageView(v){
+ if(v==='discover'&&state.market!=='jp')v='summary';
  state.stageView=v;document.querySelectorAll('[data-stage-view]').forEach(b=>b.classList.toggle('active',b.dataset.stageView===v));
- $('stage-summary').classList.toggle('hidden',v!=='summary');$('stage-board').classList.toggle('hidden',v!=='board');$('stage-ranking').classList.toggle('hidden',v!=='ranking');
- if(v==='ranking')loadRanking();
+ $('stage-summary').classList.toggle('hidden',v!=='summary');$('stage-board').classList.toggle('hidden',v!=='board');$('stage-ranking').classList.toggle('hidden',v!=='ranking');$('stage-discover').classList.toggle('hidden',v!=='discover');
+ if(v==='ranking')loadRanking();if(v==='discover')loadExplorer();
 }
 function setWatchView(v){
  state.watchView=['list','signals','backtest'].includes(v)?v:'list';document.querySelectorAll('[data-watch-view]').forEach(b=>b.classList.toggle('active',b.dataset.watchView===state.watchView));
@@ -438,14 +448,50 @@ async function loadRanking(force=false){
  try{const d=await api('/api/ranking-enriched?market='+m+(force?'&refresh=1':''),force?{write:true}:{});
  state.ranking[m]=d;renderRanking(d,m)}catch(e){$('stage-ranking').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
+function rankMoveLabel(it){
+ if(it.new_entry)return'<span class="rank-move">NEW</span>';
+ if(it.rank_change==null)return'';
+ if(it.rank_change>0)return`<span class="rank-move">↑${it.rank_change}</span>`;
+ if(it.rank_change<0)return`<span class="rank-move down">↓${Math.abs(it.rank_change)}</span>`;
+ return'<span class="rank-move down">±0</span>';
+}
 function renderRanking(d,m){
- const stageDate=String(state.stage[m]?.updated_at||'').slice(0,10),rankDate=String(d.updated_at||'').slice(0,10);
- let html='<div class="toolbar"><button class="small" onclick="loadRanking(true)">更新</button></div>';
- if(stageDate&&rankDate&&stageDate!==rankDate)html+='<div class="warnline">ランキングの更新日がStageと一致していません。更新してください。</div>';
- html+=(d.items||[]).slice(0,50).map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span><span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span><span class="${cls(it.change_pct)} num">${pct(it.change_pct)}</span>${it.registered?'<span class="badge">登録済</span>':`<button class="small primary" onclick="event.stopPropagation();registerStock('${attr(it.symbol)}','${attr(it.name)}','${m}')">＋</button>`}</div><div class="meta"><span>${esc(it.stage||'未分析')}</span>${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}${it.rsi!=null?`<span>RSI ${it.rsi}</span>`:''}</div></div>`).join('');
- html+=`<div class="note">更新 ${dateText(d.updated_at)}</div>`;$('stage-ranking').innerHTML=html;
+ const st=state.stage[m]||{},stageTrade=st.close_verification?.trade_date||jstDateKey(st.updated_at),rankTrade=d.ranking_trade_date||jstDateKey(d.ranking_updated_at||d.updated_at);
+ let html='<div class="toolbar"><button class="small" onclick="loadRanking(true)">元ランキングを再取得</button>'+(m==='jp'?'<button class="small primary" onclick="setStageView(\'discover\')">追加候補を見る</button>':'')+'</div>';
+ if(stageTrade&&rankTrade&&stageTrade!==rankTrade)html+=`<div class="note">ランキング基準日 ${esc(rankTrade)} / Stage基準日 ${esc(stageTrade)}。場中や休場日は前営業日のランキングを参考表示します。再取得ボタンは元ランキング自体を更新します。</div>`;
+ html+=`<div class="note">売買代金上位${d.ranking_count||100}銘柄を取得し、画面には上位50を表示。順位変化は履歴${d.history_days||0}日分から計算します。</div>`;
+ html+=(d.items||[]).slice(0,50).map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span>${rankMoveLabel(it)}<span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span><span class="${cls(it.change_pct)} num">${pct(it.change_pct)}</span>${it.registered?'<span class="badge">登録済</span>':`<button class="small primary" onclick="event.stopPropagation();registerStock('${attr(it.symbol)}','${attr(it.name)}','${m}')">＋</button>`}</div><div class="meta"><span>売買代金 ${turnoverText(it.value,m)}</span><span>${esc(it.stage||'未分析')}</span>${it.vol_ratio!=null?`<span>出来高 ${num(it.vol_ratio)}x</span>`:''}${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}${it.ret5!=null?`<span>5日 ${pct(it.ret5)}</span>`:''}${it.rsi!=null?`<span>RSI ${it.rsi}</span>`:''}</div></div>`).join('');
+ html+=`<div class="note">ランキング取得 ${dateText(d.ranking_updated_at||d.updated_at)} / 指標分析 ${dateText(d.updated_at)}</div>`;$('stage-ranking').innerHTML=html;
 }
 async function registerStock(sym,name,m){try{await api('/api/stocklist?market='+m,{method:'POST',body:{action:'add',symbol:sym,name}});toast('登録しました');loadRanking()}catch(e){toast(e.message)}}
+
+async function loadExplorer(force=false){
+ if(state.market!=='jp'){setStageView('summary');return}
+ $('stage-discover').innerHTML='<div class="loading">日本株の探索候補を分析中…</div>';
+ try{const d=await api('/api/explorer?market=jp'+(force?'&refresh=1':''),force?{write:true}:{});state.explorer=d;renderExplorer(d)}catch(e){$('stage-discover').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+}
+function explorerCard(x){
+ const add=x.recommendation==='add',move=x.new_entry?'NEW':x.rank_change==null?'履歴待ち':x.rank_change>0?'↑'+x.rank_change:x.rank_change<0?'↓'+Math.abs(x.rank_change):'±0';
+ return `<div class="explorer-card ${add?'add':''}"><div class="explorer-card-head"><input class="explorer-check" type="checkbox" data-symbol="${attr(x.symbol)}" data-name="${attr(x.name)}" ${add?'checked':''}><span class="badge ${add?'A':'C'}">${add?'追加候補':'観察候補'}</span><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="rank-move">${esc(move)}</span><span class="explorer-score">${x.score}</span></div><div class="meta"><span>${esc(x.type)}</span><span>売買代金 ${x.rank}位</span><span>${esc(x.theme||'その他')}</span></div><div class="explorer-metrics"><div class="explorer-metric"><b>${num(x.vol_ratio)}x</b>出来高</div><div class="explorer-metric"><b>${pct(x.rs5)}</b>5日市場RS</div><div class="explorer-metric"><b>${pct(x.div25)}</b>25MA乖離</div><div class="explorer-metric"><b>${pct(x.ret20)}</b>20日</div><div class="explorer-metric"><b>${esc(x.stage_code||'—')}</b>Stage</div><div class="explorer-metric"><b>${x.rsi??'—'}</b>RSI</div></div><div class="explorer-reasons">${(x.reasons||[]).map(r=>`<span class="reason-chip">${esc(r)}</span>`).join('')}${(x.cautions||[]).map(r=>`<span class="caution-chip">${esc(r)}</span>`).join('')}</div><div class="actions"><button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="primary" onclick="addExplorerOne('${attr(x.symbol)}','${attr(x.name)}')">レーダーへ追加</button></div></div>`;
+}
+function renderExplorer(d){
+ let html=`<div class="explorer-hero"><div class="explorer-head"><div class="grow1"><div class="explorer-title">日本株・探索候補</div><div class="explorer-sub">売買代金上位300を裏側で確認し、未登録銘柄を順位変化・出来高・市場RS・Stage・25MA位置で分析します。追加は自動実行せず、選択した銘柄だけ承認します。</div></div><button class="small" onclick="loadExplorer(true)">市場データを再取得</button></div><div class="explorer-stats"><div class="explorer-stat"><div class="v">${d.registered_count||0}/160</div><div class="k">日本株登録</div></div><div class="explorer-stat"><div class="v">${d.radar_count||0}</div><div class="k">レーダー</div></div><div class="explorer-stat"><div class="v">${d.add_count||0}</div><div class="k">追加候補</div></div><div class="explorer-stat"><div class="v">${d.history_days||0}日</div><div class="k">順位履歴</div></div></div></div>`;
+ html+=`<div class="toolbar"><button class="primary" onclick="addSelectedExplorer()">選択をまとめて追加</button><span class="muted">空き ${d.remaining_slots??0}枠</span></div>`;
+ if(!(d.items||[]).length)html+='<div class="discovery-empty">現在は追加・観察基準を満たす未登録銘柄がありません。順位履歴が増えるほど変化を捉えやすくなります。</div>';
+ else html+='<div class="explorer-grid">'+d.items.map(explorerCard).join('')+'</div>';
+ if((d.skipped||[]).length)html+=`<details class="card"><summary class="row"><span class="name grow1">見送り上位</span><span class="count">${d.skipped.length}件</span></summary><div class="pad">${d.skipped.map(x=>`<div class="row"><span class="code">${esc(code(x.symbol))}</span><span class="name grow1">${esc(x.name)}</span><span>${x.score}点</span><span class="muted">${esc((x.cautions||[]).join('・')||'条件不足')}</span></div>`).join('')}</div></details>`;
+ html+=`<div class="note">基準日 ${esc(d.ranking_trade_date||'—')} / 生成 ${dateText(d.generated_at)}。最初は順位変化の履歴が少ないため、上位順位と日足指標の比重が高くなります。翌営業日からNEW・順位上昇の判定精度が上がります。</div>`;
+ $('stage-discover').innerHTML=html;
+}
+async function addExplorerOne(symbol,name){
+ try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items:[{symbol,name}]}});if(!(d.added||[]).length)throw new Error(d.skipped?.[0]?.reason||'追加できませんでした');toast('レーダーへ追加しました');loadExplorer()}catch(e){toast(e.message)}
+}
+async function addSelectedExplorer(){
+ const nodes=[...document.querySelectorAll('.explorer-check:checked')],items=nodes.map(n=>({symbol:n.dataset.symbol,name:n.dataset.name}));
+ if(!items.length){toast('追加する銘柄を選択してください');return}
+ if(!confirm(items.length+'銘柄を追加しますか？'))return;
+ try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items}});toast((d.added||[]).length+'銘柄を追加');loadExplorer()}catch(e){toast(e.message)}
+}
 
 async function loadWatch(){
  $('watch-list').innerHTML='<div class="loading">取得中…</div>';
@@ -657,7 +703,7 @@ async function enablePush(){try{const perm=await Notification.requestPermission(
 async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
 
 function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-focus-close-verify-v31').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-ranking-explorer-v32').then(r=>r.update()).catch(()=>{}));
 loadStage();
 </script>
 </body>
