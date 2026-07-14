@@ -463,7 +463,16 @@ function renderRanking(d,m){
  html+=(d.items||[]).slice(0,50).map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span>${rankMoveLabel(it)}<span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span><span class="${cls(it.change_pct)} num">${pct(it.change_pct)}</span>${it.registered?'<span class="badge">登録済</span>':`<button class="small primary" onclick="event.stopPropagation();registerStock('${attr(it.symbol)}','${attr(it.name)}','${m}')">＋</button>`}</div><div class="meta"><span>売買代金 ${turnoverText(it.value,m)}</span><span>${esc(it.stage||'未分析')}</span>${it.vol_ratio!=null?`<span>出来高 ${num(it.vol_ratio)}x</span>`:''}${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}${it.ret5!=null?`<span>5日 ${pct(it.ret5)}</span>`:''}${it.rsi!=null?`<span>RSI ${it.rsi}</span>`:''}</div></div>`).join('');
  html+=`<div class="note">ランキング取得 ${dateText(d.ranking_updated_at||d.updated_at)} / 指標分析 ${dateText(d.updated_at)}</div>`;$('stage-ranking').innerHTML=html;
 }
-async function registerStock(sym,name,m){try{await api('/api/stocklist?market='+m,{method:'POST',body:{action:'add',symbol:sym,name}});toast('登録しました');loadRanking()}catch(e){toast(e.message)}}
+async function registerStock(sym,name,m){
+ try{
+  const d=await api('/api/stocklist?market='+m,{method:'POST',body:{action:'add',symbol:sym,name}});
+  if(!d?.ok||!d?.added)throw new Error(d?.error||'追加できませんでした');
+  const item=(state.ranking[m]?.items||[]).find(x=>String(x.symbol).toUpperCase()===String(sym).toUpperCase());
+  if(item)item.registered=true;
+  if(state.ranking[m])renderRanking(state.ranking[m],m);
+  toast(m==='jp'?'レーダーへ追加しました':'登録しました');
+ }catch(e){toast(e.message)}
+}
 
 async function loadExplorer(force=false){
  if(state.market!=='jp'){setStageView('summary');return}
@@ -484,13 +493,13 @@ function renderExplorer(d){
  $('stage-discover').innerHTML=html;
 }
 async function addExplorerOne(symbol,name){
- try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items:[{symbol,name}]}});if(!(d.added||[]).length)throw new Error(d.skipped?.[0]?.reason||'追加できませんでした');toast('レーダーへ追加しました');loadExplorer()}catch(e){toast(e.message)}
+ try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items:[{symbol,name}]}});if(!d?.ok||!(d.added||[]).length)throw new Error(d?.error||d?.skipped?.[0]?.reason||'追加できませんでした');toast('レーダーへ追加しました');await loadExplorer()}catch(e){toast(e.message)}
 }
 async function addSelectedExplorer(){
  const nodes=[...document.querySelectorAll('.explorer-check:checked')],items=nodes.map(n=>({symbol:n.dataset.symbol,name:n.dataset.name}));
  if(!items.length){toast('追加する銘柄を選択してください');return}
  if(!confirm(items.length+'銘柄を追加しますか？'))return;
- try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items}});toast((d.added||[]).length+'銘柄を追加');loadExplorer()}catch(e){toast(e.message)}
+ try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items}});if(!d?.ok)throw new Error(d?.error||'追加できませんでした');toast((d.added||[]).length+'銘柄を追加'+((d.skipped||[]).length?' / 見送り'+d.skipped.length:'') );await loadExplorer()}catch(e){toast(e.message)}
 }
 
 async function loadWatch(){
@@ -703,7 +712,7 @@ async function enablePush(){try{const perm=await Notification.requestPermission(
 async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
 
 function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-ranking-explorer-v32').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-ranking-explorer-v32-1').then(r=>r.update()).catch(()=>{}));
 loadStage();
 </script>
 </body>
