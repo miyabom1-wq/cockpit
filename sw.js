@@ -1,4 +1,4 @@
-const CACHE='vantage-jp-ranking-explorer-20260714-v32-1';
+const CACHE='vantage-kv-write-guard-20260714-v32-2';
 const SHELL=['./manifest.json','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./icon-badge.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',e=>{

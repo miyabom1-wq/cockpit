@@ -593,7 +593,8 @@ function ruleCard(rule,research=false){
 }
 function renderBacktest(){
  const d=state.backtest||{},p=d.progress||{},total=p.total||0,done=p.done||0,rate=total?Math.min(100,done/total*100):0,status=d.status==='complete'?'完了':'自動集計中';
- let html=`<div class="bt-hero"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">通常監視は変えず、過去5年を時系列で学習60%・検証20%・最終試験20%に分け、再現した条件だけ厳選候補へ反映します。</div></div><span class="badge ${d.status==='complete'?'A':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>${done}/${total}銘柄</span><span>エラー ${p.errors||0}</span></div><div class="actions"><button class="small" onclick="advanceBacktest(this)">5銘柄進める</button></div></div>`;
+ const btButton=d.status==='complete'?'<button class="small" disabled>再集計待機中</button>':'<button class="small" onclick="advanceBacktest(this)">5銘柄進める</button>';
+ let html=`<div class="bt-hero"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">通常監視は変えず、過去5年を時系列で学習60%・検証20%・最終試験20%に分け、再現した条件だけ厳選候補へ反映します。完了後は登録変更または更新期限までKVへ書き込みません。</div></div><span class="badge ${d.status==='complete'?'A':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>${done}/${total}銘柄</span><span>エラー ${p.errors||0}</span></div><div class="actions">${btButton}</div></div>`;
  if(d.using_previous_complete)html+='<div class="note">再集計中のため、成績欄は前回完了分を表示しています。</div>';
  const sel=d.selective||{},confirmed=sel.confirmed||[],research=sel.research||[];
  html+='<div class="section-title">厳選条件（未使用期間60%以上）</div>';
@@ -616,7 +617,7 @@ function renderBacktest(){
 }
 async function advanceBacktest(btn){
  const old=btn.textContent;btn.disabled=true;btn.textContent='更新中…';
- try{await api('/api/backtest-run?count=5',{write:true});toast('最大5銘柄分を更新');state.backtest=null;await loadBacktest()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
+ try{const d=await api('/api/backtest-run?count=5',{write:true});toast(d.skipped?'再集計はまだ不要です':`最大${d.processed||0}銘柄分を更新`);state.backtest=null;await loadBacktest()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
 }
 
 async function openBacktestSymbol(market,symbol){
@@ -712,7 +713,7 @@ async function enablePush(){try{const perm=await Notification.requestPermission(
 async function testPush(){try{await api('/api/push/test',{write:true});toast('送信しました')}catch(e){toast(e.message)}}
 
 function openModal(){$('modal-bg').classList.add('open')}function closeModal(){$('modal-bg').classList.remove('open')}
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=jp-ranking-explorer-v32-1').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=kv-write-guard-v32-2').then(r=>r.update()).catch(()=>{}));
 loadStage();
 </script>
 </body>
