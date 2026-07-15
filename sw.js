@@ -1,4 +1,4 @@
-const CACHE='vantage-kv-write-guard-20260714-v32-2';
+const CACHE='vantage-ui-33-0-20260715';
 const SHELL=['./manifest.json','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./icon-badge.png','./apple-touch-icon.png'];
 
 self.addEventListener('install',e=>{
@@ -10,15 +10,9 @@ self.addEventListener('activate',e=>{
 self.addEventListener('fetch',e=>{
   const req=e.request,url=new URL(req.url);
   if(req.method!=='GET')return;
-  if(url.href.includes('/api/')){
-    e.respondWith(fetch(req,{cache:'no-store'}));
-    return;
-  }
+  if(url.href.includes('/api/')){e.respondWith(fetch(req,{cache:'no-store'}));return;}
   const html=req.mode==='navigate'||(req.headers.get('accept')||'').includes('text/html');
-  if(html){
-    e.respondWith(fetch(new Request(req,{cache:'reload'})).catch(()=>caches.match(req)));
-    return;
-  }
+  if(html){e.respondWith(fetch(new Request(req,{cache:'reload'})).catch(()=>caches.match(req)));return;}
   e.respondWith(caches.match(req).then(hit=>hit||fetch(req).then(res=>{
     if(res.ok&&url.origin===self.location.origin)caches.open(CACHE).then(c=>c.put(req,res.clone()));
     return res;
