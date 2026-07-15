@@ -10,145 +10,226 @@
 </style>
 </head>
 <body>
-<div class="boot" id="boot"><b>VANTAGE</b><small>UI 33.0 を読み込んでいます…</small></div>
+<div class="boot" id="boot"><b>VANTAGE</b><small>インターフェースを読み込んでいます…</small></div>
 
-<script type="text/plain" id="patch-css">
-/* VANTAGE UI 33.0 — Watch clarity */
+<script type="text/plain" id="vantage-patch-style">
 .watch-market-bar{display:flex;align-items:center;gap:8px;margin:10px 0 12px}.watch-market-switch{display:inline-flex;gap:3px;padding:3px;background:#e9edf2;border-radius:11px}.watch-market-switch button{border:0;background:transparent;box-shadow:none;padding:7px 14px;border-radius:8px;font-size:12px}.watch-market-switch button.active{background:#fff;color:#182130;box-shadow:0 2px 8px rgba(18,27,44,.08)}
 .watch-overview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:9px 0 13px}.watch-kpi{background:rgba(255,255,255,.96);border:1px solid #e2e7ee;border-radius:14px;padding:11px 12px;box-shadow:0 2px 9px rgba(18,27,44,.025)}.watch-kpi .v{font:700 17px "Inter",var(--mono);letter-spacing:-.03em}.watch-kpi .k{font-size:9px;color:var(--faint);margin-top:2px}.watch-kpi.priority .v{color:var(--green)}.watch-kpi.wait .v{color:var(--amber)}
-.watch-quote{display:flex;align-items:baseline;gap:7px;margin-left:auto;white-space:nowrap}.watch-quote b{font:700 13px "Inter",var(--mono);color:var(--text)}.watch-quote span{font:600 12px "Inter",var(--mono)}.watch-data-state,.watch-status,.signal-progress{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;white-space:nowrap}.watch-data-state{background:var(--surface3);color:var(--muted)}.watch-data-state.ready{background:var(--greenBg);color:var(--green)}.watch-data-state.wait{background:var(--amberBg);color:var(--amber)}.watch-status{background:#f1f3f6;color:#657080}.watch-status.waiting{background:var(--blueBg);color:#315fae}.watch-status.skip{background:var(--redBg);color:var(--red)}
-.signal-market-note{font-size:10px;color:var(--faint);margin-left:auto}.signal-hero{padding:15px 16px;background:linear-gradient(145deg,#fff,#f5f7fb);border:1px solid #dfe5ed;border-radius:17px;box-shadow:0 7px 24px rgba(31,45,65,.05);margin:10px 0 14px}.signal-hero-head{display:flex;align-items:flex-start;gap:10px}.signal-hero-title{font:700 14px "Inter","Noto Sans JP",sans-serif}.signal-hero-sub{font-size:10px;color:var(--muted);line-height:1.55;margin-top:3px}.signal-hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.signal-kpi{padding:11px 10px;background:#fff;border:1px solid #e3e8ef;border-radius:13px}.signal-kpi .v{font:700 17px "Inter",var(--mono);letter-spacing:-.03em}.signal-kpi .k{font-size:9px;color:var(--faint);margin-top:2px}.signal-kpi .sub{font-size:9px;color:var(--muted);margin-top:4px}.signal-kpi.good .v{color:var(--green)}.signal-kpi.wait .v{color:var(--amber)}.signal-progress{background:var(--surface3);color:var(--muted)}.signal-progress.done{background:var(--greenBg);color:var(--green)}.signal-progress.live{background:var(--blueBg);color:#315fae}.signal-progress.wait{background:var(--amberBg);color:var(--amber)}.outcome.wait{color:var(--muted);background:#f1f3f6}.refreshing{opacity:.55;pointer-events:none}.ui-build{font:700 9px "Inter",var(--mono);color:var(--faint);padding:3px 7px;border:1px solid var(--line);border-radius:999px;margin-left:6px}
-@media(max-width:640px){.watch-overview,.signal-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.watch-kpi,.signal-kpi{padding:10px 8px}.watch-kpi .v,.signal-kpi .v{font-size:15px}.watch-quote{width:100%;margin-left:0;justify-content:flex-end}.watch-market-bar{align-items:stretch}.watch-market-switch{flex:1}.watch-market-switch button{flex:1}.signal-market-note{display:none}.compact-head .watch-status{order:5}}
+.watch-guide,.signal-guide{background:#f7f9fc;border:1px solid #dce3ec;border-radius:13px;margin:8px 0 12px;overflow:hidden}.watch-guide>summary,.signal-guide>summary{padding:10px 13px;font-size:11px;font-weight:700;color:#435169}.guide-body{padding:0 13px 12px;font-size:10px;line-height:1.7;color:var(--muted)}.guide-body b{color:var(--text)}
+.watch-quote{display:flex;align-items:baseline;gap:7px;margin-left:auto;white-space:nowrap}.watch-quote b{font:700 14px "Inter",var(--mono);color:var(--text)}.watch-quote span{font:600 12px "Inter",var(--mono)}.watch-data-state{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;background:var(--surface3);color:var(--muted)}.watch-data-state.ready{background:var(--greenBg);color:var(--green)}.watch-data-state.partial{background:var(--blueBg);color:#315fae}.watch-data-state.wait{background:var(--amberBg);color:var(--amber)}.watch-status{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;background:#f1f3f6;color:#657080}.watch-status.waiting{background:var(--blueBg);color:#315fae}.watch-status.skip{background:var(--redBg);color:var(--red)}.watch-refresh-note{font-size:10px;color:var(--faint);margin-top:6px}
+.signal-market-note{font-size:10px;color:var(--faint);margin-left:auto}.signal-hero{padding:15px 16px;background:linear-gradient(145deg,#fff,#f5f7fb);border:1px solid #dfe5ed;border-radius:17px;box-shadow:0 7px 24px rgba(31,45,65,.05);margin:10px 0 14px}.signal-hero-head{display:flex;align-items:flex-start;gap:10px}.signal-hero-title{font:700 14px "Inter","Noto Sans JP",sans-serif}.signal-hero-sub{font-size:10px;color:var(--muted);line-height:1.55;margin-top:3px}.signal-hero-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.signal-kpi{padding:11px 10px;background:#fff;border:1px solid #e3e8ef;border-radius:13px}.signal-kpi .v{font:700 17px "Inter",var(--mono);letter-spacing:-.03em}.signal-kpi .k{font-size:9px;color:var(--faint);margin-top:2px}.signal-kpi .sub{font-size:9px;color:var(--muted);margin-top:4px}.signal-kpi.good .v{color:var(--green)}.signal-kpi.wait .v{color:var(--amber)}.signal-progress{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;background:var(--surface3);color:var(--muted)}.signal-progress.done{background:var(--greenBg);color:var(--green)}.signal-progress.live{background:var(--blueBg);color:#315fae}.signal-progress.wait{background:var(--amberBg);color:var(--amber)}.outcome.wait{color:var(--muted);background:#f1f3f6}.signal-baseline{font-size:10px;color:var(--faint);margin-top:6px}.refreshing{opacity:.55;pointer-events:none}
+@media(max-width:640px){.watch-overview,.signal-hero-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.watch-kpi,.signal-kpi{padding:10px 8px}.watch-kpi .v,.signal-kpi .v{font-size:15px}.watch-quote{width:100%;margin-left:0;justify-content:flex-end}.watch-market-bar{align-items:stretch}.watch-market-switch{flex:1}.watch-market-switch button{flex:1}.signal-market-note{display:none}}
 </script>
 
-<script type="text/plain" id="patch-watch-core">
-async function loadWatch(){
- $('watch-list').innerHTML='<div class="loading">取得中…</div>';
- try{
-  state.watchMarket=state.watchMarket||localStorage.getItem('vantage_watch_market')||'jp';
-  const [w,jp,us,p]=await Promise.all([api('/api/watchlist'),api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/positions')]);
-  state.watch=w;state.momentum.jp=jp;state.momentum.us=us;state.positions=p;renderWatch();
- }catch(e){$('watch-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
-}
-function boardMap(){
- const map=new Map();
- for(const m of ['jp','us'])for(const lane of state.momentum[m]?.board||[])for(const r of lane.rows||[])map.set(String(r.symbol).toUpperCase(),r);
- return map;
-}
-function setWatchMarket(m){state.watchMarket=m;localStorage.setItem('vantage_watch_market',m);renderWatch()}
-function watchStatusLabel(v){return v==='waiting'?'押し待ち':v==='skip'?'見送り':'追跡中'}
-function watchDataState(w,r){
- if(r?.price!=null)return{label:w.stage_source==='watch'?'手動更新':'更新済み',kind:'ready'};
- if(w.stage_refresh_note)return{label:'取得失敗',kind:'wait'};
- if(r?.stage||r?.long_stage)return{label:'価格待ち',kind:'wait'};
- return{label:'分析待ち',kind:'wait'};
-}
-function watchPriceText(r,m){if(r?.price==null)return'価格待ち';return m==='jp'?num(r.price,0)+'円':'$'+num(r.price,2)}
-</script>
+<script type="text/plain" id="vantage-patch-script">
+(function(){
+  if(window.__VANTAGE_WATCH_SIGNAL_V33__) return;
+  window.__VANTAGE_WATCH_SIGNAL_V33__ = true;
 
-<script type="text/plain" id="patch-watch-render">
-function renderWatch(){
- $('watch-sort').value=state.watchSort;
- const all=sortWatch(state.watch?.items||[]),bm=boardMap();
- const jpCount=all.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=all.length-jpCount;
- const current=state.watchMarket||'jp';
- const items=all.filter(w=>(w.market||marketOf(w.symbol))===current);
- const enriched=items.map(w=>({w,r:{...(w.stage_data||{}),...(bm.get(String(w.symbol).toUpperCase())||{})}}));
- const priority=enriched.filter(x=>['A','B'].includes(x.r.entry_lane)).length;
- const tracking=items.filter(w=>(w.status||'tracking')==='tracking').length;
- const waiting=enriched.filter(x=>x.r.price==null).length;
- let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${current==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本株 ${jpCount}</button><button class="${current==='us'?'active':''}" onclick="setWatchMarket('us')">米国株 ${usCount}</button></div><span class="fresh">価格・判定を一覧表示</span></div>`;
- html+=`<div class="watch-overview"><div class="watch-kpi priority"><div class="v">${priority}</div><div class="k">A・B候補</div></div><div class="watch-kpi"><div class="v">${tracking}</div><div class="k">追跡中</div></div><div class="watch-kpi ${waiting?'wait':''}"><div class="v">${waiting}</div><div class="k">データ待ち</div></div></div>`;
- if(!items.length){$('watch-list').innerHTML=html+'<div class="empty">この市場のウォッチは空です</div>';return}
- html+=enriched.map(({w,r})=>{
-  const m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'待機',ds=watchDataState(w,r),status=w.status||'tracking';
-  const chg=r.change_pct==null?'—':pct(r.change_pct),chgClass=r.change_pct==null?'muted':cls(r.change_pct);
-  const stageText=r.long_stage||r.stage||'判定データ待ち';
-  const refreshed=w.stage_refreshed_at?`<span>手動 ${dateText(w.stage_refreshed_at)}</span>`:'';
-  return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span></summary>`+
-   `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}${refreshed}<span>追加 ${dateText(w.added_at)}</span></div>`+
-   `${w.stage_refresh_note?`<div class="warnline">${esc(w.stage_refresh_note)}</div>`:''}`+
-   `<div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="条件・押し目水準・決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
-   `<div class="actions"><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button onclick="refreshWatch('${attr(w.id)}',this)">最新判定</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
- }).join('');
- $('watch-list').innerHTML=html;
-}
-</script>
+  const finite = v => v != null && Number.isFinite(Number(v));
+  const observedDays = x => {
+    if(Number.isFinite(Number(x?.observed_days))) return Math.max(0,Number(x.observed_days));
+    const dates=[...new Set((x?.points||[]).map(p=>p?.date).filter(Boolean))];
+    return Math.max(0,dates.length-1);
+  };
+  const mapLimit = async(items,limit,fn) => {
+    const out=new Array(items.length);let next=0;
+    async function worker(){while(next<items.length){const i=next++;out[i]=await fn(items[i],i)}}
+    await Promise.all(Array.from({length:Math.min(limit,items.length)},worker));
+    return out;
+  };
 
-<script type="text/plain" id="patch-refresh">
-async function refreshWatch(id,btn){
- const old=btn?.textContent||'最新判定';
- if(btn){btn.disabled=true;btn.classList.add('refreshing');btn.textContent='更新中…'}
- try{
-  const d=await api('/api/watchlist',{method:'POST',body:{action:'refresh_stage',id}});
-  if(!d?.ok)throw new Error(d?.error||'更新できませんでした');
-  await loadWatch();
-  toast(d.analysis_status==='ready'?'最新データで判定しました':d.note||'価格データを取得できませんでした');
- }catch(e){toast('更新失敗: '+e.message)}
- finally{if(btn&&document.body.contains(btn)){btn.disabled=false;btn.classList.remove('refreshing');btn.textContent=old}}
-}
-</script>
+  state.watchMarket = localStorage.getItem('vantage_watch_market') || 'jp';
+  state.signalMarket = localStorage.getItem('vantage_signal_market') || 'jp';
+  state.watchQuotes = {};
 
-<script type="text/plain" id="patch-signals">
-function setSignalMarket(m){state.signalMarket=m;localStorage.setItem('vantage_signal_market',m);renderSignals()}
-function signalMarketOf(x){return x.market||marketOf(x.symbol)}
-function horizonStat(items,lane,h='d5'){
- const vals=items.filter(x=>x.entry_lane===lane).map(x=>x.outcomes?.[h]?.return_pct).filter(v=>v!=null&&Number.isFinite(Number(v))).map(Number).sort((a,b)=>a-b);
- if(!vals.length)return{n:0,median:null,win_rate:null};
- const mid=Math.floor(vals.length/2),median=vals.length%2?vals[mid]:(vals[mid-1]+vals[mid])/2;
- return{n:vals.length,median,win_rate:Math.round(vals.filter(v=>v>0).length/vals.length*100)};
-}
-function signalKpi(label,s){
- const ready=s.n>0,kind=ready?(s.median>0?'good':''):'wait';
- return `<div class="signal-kpi ${kind}"><div class="v">${ready?pct(s.median):'—'}</div><div class="k">${label}・5日中央値</div><div class="sub">${ready?'勝率 '+s.win_rate+'% ・ 確定'+s.n+'件':'確定0件 ・ 蓄積中'}</div></div>`;
-}
-function renderSignals(){
- state.signalMarket=state.signalMarket||localStorage.getItem('vantage_signal_market')||'jp';
- const d=state.signals||{},all=d.items||[],m=state.signalMarket,items=all.filter(x=>signalMarketOf(x)===m);
- const active=items.filter(x=>x.active),done=items.filter(x=>!x.active),a=horizonStat(done,'A'),b=horizonStat(done,'B');
- const completed=done.filter(x=>x.outcomes?.d5?.return_pct!=null&&Number.isFinite(Number(x.outcomes.d5.return_pct))).length;
- let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${m==='jp'?'active':''}" onclick="setSignalMarket('jp')">日本株</button><button class="${m==='us'?'active':''}" onclick="setSignalMarket('us')">米国株</button></div><span class="signal-market-note">市場を分けて検証</span></div>`;
- html+=`<div class="signal-hero"><div class="signal-hero-head"><div class="grow1"><div class="signal-hero-title">シグナルの再現性</div><div class="signal-hero-sub">現在値ではなく、1・3・5営業日後の確定結果で評価します。30件未満は参考値です。</div></div><span class="badge ${completed>=30?'A':'C'}">${completed>=30?'評価可能':'蓄積中'}</span></div><div class="signal-hero-grid">${signalKpi('A',a)}${signalKpi('B',b)}<div class="signal-kpi ${completed<30?'wait':''}"><div class="v">${completed}</div><div class="k">5日確定件数</div><div class="sub">${completed>=30?'判断母数を確保':'目安30件まであと'+Math.max(0,30-completed)+'件'}</div></div></div></div>`;
- html+=signalSection('進行中',active,true)+signalSection('終了・検証中',done,false);
- $('signal-list').innerHTML=html;
-}
-function signalSection(title,items,active){
- let h=`<div class="section-title">${title} ${items.length}件</div>`;if(!items.length)return h+'<div class="empty">該当なし</div>';
- return h+items.map(x=>signalCard(x,active)).join('');
-}
-function signalCard(x,active){
- const o=x.outcomes||{},keys=['d1','d3','d5'];
- const outcomes=keys.filter(k=>o[k]?.return_pct!=null&&Number.isFinite(Number(o[k].return_pct))).map(k=>`<span class="outcome ${cls(o[k].return_pct)}">${k.replace('d','')}日 ${pct(o[k].return_pct)}</span>`).join('');
- const watched=watchSet().has(String(x.symbol).toUpperCase()),lane=x.entry_lane||'D';
- const progress=o.d5?'5日確定':o.d3?'5日結果待ち':o.d1?'3日結果待ち':active?'進行中':'1日結果待ち';
- const kind=o.d5?'done':active?'live':'wait';
- const current=active&&x.current_return!=null&&Number.isFinite(Number(x.current_return))?`<span class="${cls(x.current_return)} num">${pct(x.current_return)}</span>`:`<span class="signal-progress ${kind}">${progress}</span>`;
- return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="badge ${lane}">${esc(x.entry_lane||'待機')}</span>${current}</summary>`+
-  `<div class="signal-detail"><div class="meta"><span>${signalMarketOf(x)==='jp'?'日本株':'米国株'}</span><span>開始 ${x.start_date}</span><span>検出 ${x.times_seen||1}回</span><span>MFE ${pct(x.mfe)}</span><span>MAE ${pct(x.mae)}</span></div><div class="outcomes">${outcomes||`<span class="outcome wait">${progress}</span>`}</div>`+
-  block('検出理由',x.reason)+block('相対評価',x.relative_text)+block('注意点',x.risk_reason)+
-  `<div class="actions">${watched?'<button disabled>観察中</button>':`<button class="primary" onclick="signalToWatch('${attr(x.symbol)}','${attr(x.name)}','${signalMarketOf(x)}','${attr(x.reason||'')}')">ウォッチへ</button>`}<button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="danger" onclick="deleteSignal('${attr(x.id)}')">削除</button></div></div></details>`;
-}
+  window.boardMap = function(){
+    const map = new Map();
+    for(const m of ['jp','us']) {
+      for(const lane of state.momentum[m]?.board || []) {
+        for(const r of lane.rows || []) map.set(String(r.symbol).toUpperCase(), {...(map.get(String(r.symbol).toUpperCase())||{}),...r});
+      }
+      const stocks = state.stage[m]?.stocks || {};
+      if(Array.isArray(stocks)) {
+        for(const r of stocks) {
+          if(!r?.symbol) continue;
+          const k=String(r.symbol).toUpperCase();
+          map.set(k,{...(map.get(k)||{}),...r});
+        }
+      } else {
+        for(const [sym,r] of Object.entries(stocks)) {
+          const k=String(r?.symbol || sym).toUpperCase();
+          map.set(k,{...(map.get(k)||{}),...(r||{})});
+        }
+      }
+    }
+    for(const w of state.watch?.items || []) {
+      const k=String(w.symbol||'').toUpperCase();
+      if(w.stage_data) map.set(k,{...(map.get(k)||{}),...w.stage_data});
+    }
+    for(const [sym,r] of Object.entries(state.watchQuotes || {})) map.set(sym,{...(map.get(sym)||{}),...r});
+    return map;
+  };
+
+  window.loadWatch = async function(){
+    $('watch-list').innerHTML = '<div class="loading">価格と判定を取得中…</div>';
+    try {
+      const [w,jp,us,p,sjp,sus] = await Promise.all([
+        api('/api/watchlist'),
+        api('/api/momentum?market=jp'),
+        api('/api/momentum?market=us'),
+        api('/api/positions').catch(()=>({positions:[]})),
+        api('/api/stage?market=jp').catch(()=>state.stage.jp || {}),
+        api('/api/stage?market=us').catch(()=>state.stage.us || {})
+      ]);
+      state.watch=w;state.momentum.jp=jp;state.momentum.us=us;state.positions=p;state.stage.jp=sjp;state.stage.us=sus;state.watchQuotes={};
+
+      // 旧Workerでも価格が出るよう、価格欠落銘柄だけ個別照会する後方互換フォールバック。
+      const bm=boardMap();
+      const missing=(w.items||[]).filter(x=>!finite(bm.get(String(x.symbol).toUpperCase())?.price));
+      const quotes=await mapLimit(missing,6,async x=>{
+        try{
+          const q=await api('/api/lookup?symbol='+encodeURIComponent(x.symbol));
+          return finite(q?.price)?[String(x.symbol).toUpperCase(),{...q,symbol:x.symbol,quote_only:true}]:null;
+        }catch{return null}
+      });
+      for(const q of quotes)if(q)state.watchQuotes[q[0]]=q[1];
+      renderWatch();
+    } catch(e) {
+      $('watch-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>';
+    }
+  };
+
+  window.setWatchMarket = function(m){state.watchMarket=m;localStorage.setItem('vantage_watch_market',m);renderWatch()};
+  const watchStatusLabel = v => v==='waiting'?'押し待ち':v==='skip'?'見送り':'追跡中';
+  const watchDataState = r => {
+    const price=finite(r?.price),analysis=!!(r?.entry_lane||r?.long_stage||r?.stage||r?.stage_code);
+    if(price&&analysis)return{label:'価格・判定あり',kind:'ready'};
+    if(price)return{label:'価格のみ',kind:'partial'};
+    if(analysis)return{label:'判定のみ',kind:'partial'};
+    return{label:'データ待ち',kind:'wait'};
+  };
+  const watchPriceText=(r,m)=>!finite(r?.price)?'価格待ち':m==='jp'?num(r.price,0)+'円':'$'+num(r.price,2);
+  const watchTimeText=(r,w)=>{
+    if(r?.quote_fetched_at)return'価格更新 '+dateText(r.quote_fetched_at);
+    if(r?.quote_time)return'価格時点 '+dateText(Number(r.quote_time)*1000);
+    if(w?.stage_refreshed_at)return'再判定 '+dateText(w.stage_refreshed_at);
+    if(r?.bar_time)return'日足 '+dateText(Number(r.bar_time)*1000);
+    return'更新時刻不明';
+  };
+
+  window.renderWatch = function(){
+    if($('watch-sort'))$('watch-sort').value=state.watchSort;
+    const all=sortWatch(state.watch?.items||[]),bm=boardMap();
+    const jpCount=all.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=all.length-jpCount;
+    const items=all.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
+    const enriched=items.map(w=>({w,r:bm.get(String(w.symbol).toUpperCase())||w.stage_data||{}}));
+    const priority=enriched.filter(x=>['A','B'].includes(x.r.entry_lane)).length;
+    const ready=enriched.filter(x=>finite(x.r.price)).length;
+    const waiting=enriched.length-ready;
+    const fresh=state.stage[state.watchMarket]?.price_time||state.stage[state.watchMarket]?.freshness||'市場データ';
+
+    let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本株 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国株 ${usCount}</button></div><span class="fresh">${esc(fresh)}</span></div>`;
+    html+=`<div class="watch-overview"><div class="watch-kpi priority"><div class="v">${priority}</div><div class="k">現在A・B</div></div><div class="watch-kpi"><div class="v">${ready}</div><div class="k">価格取得済み</div></div><div class="watch-kpi ${waiting?'wait':''}"><div class="v">${waiting}</div><div class="k">価格待ち</div></div></div>`;
+    html+=`<details class="watch-guide"><summary>ウォッチの見方</summary><div class="guide-body"><b>追跡中／押し待ち／見送り</b>は自分で付ける管理状態です。A〜Eは現在の自動判定です。<br><b>価格・判定を更新</b>は、その銘柄だけ最新価格と日足判定を取り直します。保有☑とは別管理です。</div></details>`;
+    if(!items.length){$('watch-list').innerHTML=html+'<div class="empty">この市場のウォッチは空です</div>';return}
+
+    html+=enriched.map(({w,r})=>{
+      const m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'判定待ち',ds=watchDataState(r),status=w.status||'tracking';
+      const chg=finite(r.change_pct)?pct(r.change_pct):'—',chgClass=finite(r.change_pct)?cls(r.change_pct):'muted';
+      const stageText=r.long_stage||r.stage||r.stage_code||'Stage待ち';
+      const setup=r.setup_label?`<span>${esc(r.setup_label)}</span>`:'';
+      return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span></summary>`+
+        `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格は現在値または最新終値。判定は最新取得日足を使用。'}</div>`+
+        `<div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="条件・押し目水準・決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
+        `<div class="actions"><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
+    }).join('');
+    $('watch-list').innerHTML=html;
+  };
+
+  window.refreshWatch = async function(id,btn){
+    const original=btn?.textContent||'価格・判定を更新';
+    if(btn){btn.disabled=true;btn.classList.add('refreshing');btn.textContent='取得中…'}
+    try{
+      const d=await api('/api/watchlist',{method:'POST',body:{action:'refresh_stage',id}});
+      if(d?.ok===false)throw new Error(d.error||'更新できませんでした');
+      await loadWatch();
+      const w=(state.watch?.items||[]).find(x=>String(x.id)===String(id));
+      const r=w?(boardMap().get(String(w.symbol).toUpperCase())||w.stage_data||{}):{};
+      toast(finite(r.price)?`更新完了 ${watchPriceText(r,w.market||marketOf(w.symbol))} / ${r.entry_lane||'判定待ち'}`:'判定は更新しましたが価格取得待ちです');
+    }catch(e){toast('更新失敗: '+e.message);if(btn){btn.disabled=false;btn.classList.remove('refreshing');btn.textContent=original}}
+  };
+
+  window.setSignalMarket=function(m){state.signalMarket=m;localStorage.setItem('vantage_signal_market',m);renderSignals()};
+  const signalMarketOf=x=>x.market||marketOf(x.symbol);
+  const phaseOf=x=>x.phase||(x.active?'active':finite(x.outcomes?.d5?.return_pct)?'complete':'tracking');
+  const phaseLabel=x=>phaseOf(x)==='active'?'現在A/B':phaseOf(x)==='complete'?'5日結果確定':'条件終了・結果待ち';
+  const phaseKind=x=>phaseOf(x)==='active'?'live':phaseOf(x)==='complete'?'done':'wait';
+  const horizonStat=(items,lane,h='d5')=>{
+    const vals=items.filter(x=>x.entry_lane===lane).map(x=>x.outcomes?.[h]?.return_pct).filter(finite).map(Number).sort((a,b)=>a-b);
+    if(!vals.length)return{n:0,median:null,win_rate:null};const mid=Math.floor(vals.length/2),median=vals.length%2?vals[mid]:(vals[mid-1]+vals[mid])/2;
+    return{n:vals.length,median,win_rate:Math.round(vals.filter(v=>v>0).length/vals.length*100)};
+  };
+  const signalKpi=(label,s)=>{const ready=s.n>0,kind=ready?(s.median>0?'good':''):'wait';return`<div class="signal-kpi ${kind}"><div class="v">${ready?pct(s.median):'—'}</div><div class="k">${label}・5日中央値</div><div class="sub">${ready?'勝率 '+s.win_rate+'% ・ 確定'+s.n+'件':'5日結果なし・蓄積中'}</div></div>`};
+  const signalSectionNew=(title,items)=>{let h=`<div class="section-title">${title} ${items.length}件</div>`;return h+(items.length?items.map(signalCardNew).join(''):'<div class="empty">該当なし</div>')};
+
+  const signalCardNew=x=>{
+    const o=x.outcomes||{},keys=['d1','d3','d5'],days=observedDays(x),lane=x.entry_lane||'D';
+    const outcomes=keys.filter(k=>finite(o[k]?.return_pct)).map(k=>`<span class="outcome ${cls(o[k].return_pct)}">${k.replace('d','')}営業日後 ${pct(o[k].return_pct)}</span>`).join('');
+    const watched=watchSet().has(String(x.symbol).toUpperCase());
+    const phase=phaseLabel(x),kind=phaseKind(x);
+    const current=days>0&&finite(x.current_return)?`<span class="${cls(x.current_return)} num">現在 ${pct(x.current_return)}</span>`:`<span class="signal-progress ${kind}">${phase}</span>`;
+    const baseline=finite(x.start_price)?(signalMarketOf(x)==='jp'?num(x.start_price,0)+'円':'$'+num(x.start_price,2)):'—';
+    return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="badge ${lane}">${esc(lane)}</span>${current}</summary>`+
+      `<div class="signal-detail"><div class="meta"><span>${signalMarketOf(x)==='jp'?'日本株':'米国株'}</span><span class="signal-progress ${kind}">${phase}</span><span>開始 ${x.start_date}</span><span>観測 ${days}営業日</span><span>MFE ${finite(x.mfe)?pct(x.mfe):'—'}</span><span>MAE ${finite(x.mae)?pct(x.mae):'—'}</span></div>`+
+      `<div class="signal-baseline">基準：検出日の終値 ${baseline}。増減率はこの価格との比較です。</div><div class="outcomes">${outcomes||`<span class="outcome wait">翌営業日の終値待ち</span>`}</div>`+
+      `${phaseOf(x)==='tracking'?'<div class="note">「条件終了」はA/B判定から外れたという意味です。売却・失敗の意味ではなく、5営業日後まで結果を追跡します。</div>':''}`+
+      block('検出理由',x.reason)+block('相対評価',x.relative_text)+block('注意点',x.risk_reason)+
+      `<div class="actions">${watched?'<button disabled>観察中</button>':`<button class="primary" onclick="signalToWatch('${attr(x.symbol)}','${attr(x.name)}','${signalMarketOf(x)}','${attr(x.reason||'')}')">ウォッチへ</button>`}<button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="danger" onclick="deleteSignal('${attr(x.id)}')">削除</button></div></div></details>`;
+  };
+
+  window.loadSignals=async function(){
+    $('signal-list').innerHTML='<div class="loading">検証履歴を取得中…</div>';
+    try{
+      state.signals=await api('/api/signal-log?limit=300');
+      if(typeof ensureWatch==='function')await ensureWatch();
+      renderSignals();
+    }catch(e){$('signal-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+  };
+
+  window.refreshSignalValidation=async function(btn){
+    const old=btn?.textContent||'検証を更新';if(btn){btn.disabled=true;btn.textContent='更新中…'}
+    try{await api('/api/signal-log-capture?market='+state.signalMarket,{write:true});await loadSignals();toast('最新の確定データで検証を更新しました')}catch(e){toast('更新失敗: '+e.message)}finally{if(btn&&document.body.contains(btn)){btn.disabled=false;btn.textContent=old}}
+  };
+
+  window.renderSignals=function(){
+    const d=state.signals||{},all=d.items||[],m=state.signalMarket,items=all.filter(x=>signalMarketOf(x)===m);
+    const active=items.filter(x=>phaseOf(x)==='active'),tracking=items.filter(x=>phaseOf(x)==='tracking'),complete=items.filter(x=>phaseOf(x)==='complete');
+    const a=horizonStat(items,'A'),b=horizonStat(items,'B'),completed=items.filter(x=>finite(x.outcomes?.d5?.return_pct)).length;
+    const jpCount=all.filter(x=>signalMarketOf(x)==='jp').length,usCount=all.length-jpCount;
+    let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${m==='jp'?'active':''}" onclick="setSignalMarket('jp')">日本株 ${jpCount}</button><button class="${m==='us'?'active':''}" onclick="setSignalMarket('us')">米国株 ${usCount}</button></div><button class="small" onclick="refreshSignalValidation(this)">検証を更新</button></div>`;
+    html+=`<details class="signal-guide"><summary>シグナル検証の見方</summary><div class="guide-body"><b>現在A/B</b>＝今も候補条件に該当。<b>条件終了・結果待ち</b>＝A/Bから外れたが結果を追跡中。<b>5日結果確定</b>＝検出日の終値から5営業日後まで測定済み。<br>当日は基準価格と同じなので、誤解を避けて0.0%ではなく「翌営業日の終値待ち」と表示します。自動更新は各市場の引け後です。</div></details>`;
+    html+=`<div class="signal-hero"><div class="signal-hero-head"><div class="grow1"><div class="signal-hero-title">${m==='jp'?'日本株':'米国株'}シグナルの再現性</div><div class="signal-hero-sub">検出日の終値を基準に、1・3・5営業日後の終値を比較します。5日確定30件までは参考値です。</div></div><span class="badge ${completed>=30?'A':'C'}">${completed>=30?'評価可能':'蓄積中'}</span></div><div class="signal-hero-grid">${signalKpi('A',a)}${signalKpi('B',b)}<div class="signal-kpi ${completed<30?'wait':''}"><div class="v">${completed}</div><div class="k">5日確定件数</div><div class="sub">${completed>=30?'判断母数を確保':'目安30件まであと'+Math.max(0,30-completed)+'件'}</div></div></div></div>`;
+    html+=signalSectionNew('現在A/Bに該当',active)+signalSectionNew('条件終了・結果待ち',tracking)+signalSectionNew('5日結果確定',complete);
+    $('signal-list').innerHTML=html;
+  };
+})();
 </script>
 
 <script>
 (async()=>{
- const BASE='https://raw.githubusercontent.com/miyabom1-wq/cockpit/675a0a82d4419c3629b37f4fb1e6c8b81e722096/index.html?v=ui33';
- const text=id=>document.getElementById(id).textContent.trim()+'\n';
- const replace=(src,re,value,label)=>{if(!re.test(src))throw new Error(label+'の置換位置が見つかりません');return src.replace(re,value)};
- const response=await fetch(BASE,{cache:'no-store'});
- if(!response.ok)throw new Error('元のVANTAGEを取得できませんでした（'+response.status+'）');
- let html=await response.text();
- html=replace(html,/<\/style>/,text('patch-css')+'</style>','スタイル');
- html=replace(html,/async function loadWatch\(\)\{[\s\S]*?\n\}\nfunction boardMap\(\)\{[\s\S]*?\n\}\n(?=function setWatchSort)/,text('patch-watch-core'),'ウォッチ取得');
- html=replace(html,/function renderWatch\(\)\{[\s\S]*?\n\}\n(?=async function saveWatch)/,text('patch-watch-render'),'ウォッチ表示');
- html=replace(html,/async function refreshWatch\(id\)\{[^\n]*\}/,text('patch-refresh').trim(),'最新判定');
- html=replace(html,/function statFor\([\s\S]*?\n(?=async function signalToWatch)/,text('patch-signals'),'シグナル表示');
- html=html.replace('<div class="brand">VANTAGE</div>','<div class="brand">VANTAGE</div><span class="ui-build">UI 33.0</span>');
- html=html.replace('モメンタム投資判断支援</footer>','モメンタム投資判断支援 · UI 33.0</footer>');
- html=html.replace(/serviceWorker\.register\('\.\/sw\.js\?v=[^']+'\)/,"serviceWorker.register('./sw.js?v=ui-33-0')");
- document.open();document.write(html);document.close();
+  const baseUrl='https://raw.githubusercontent.com/miyabom1-wq/cockpit/675a0a82d4419c3629b37f4fb1e6c8b81e722096/index.html';
+  const response=await fetch(baseUrl,{cache:'no-store'});
+  if(!response.ok)throw new Error('元のVANTAGEを取得できませんでした（'+response.status+'）');
+  let html=await response.text();
+  const css=document.getElementById('vantage-patch-style').textContent;
+  const js=document.getElementById('vantage-patch-script').textContent;
+  html=html.replace('</head>','<style id="vantage-watch-signal-v33-style">'+css+'</style>\n</head>');
+  html=html.replace('</body>','<script id="vantage-watch-signal-v33">'+js+'<\/script>\n</body>');
+  document.open();document.write(html);document.close();
 })().catch(err=>{
- const b=document.getElementById('boot');b.className='error';b.innerHTML='<b>読み込みに失敗しました</b><small>'+String(err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</small>';
+  document.getElementById('boot').className='error';
+  document.getElementById('boot').innerHTML='<b>読み込みに失敗しました</b><small>'+String(err.message||err).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))+'</small>';
 });
 </script>
 </body>
