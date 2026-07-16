@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import { normalizeYahooDaily } from '../src/data/normalization.js';
+test('dividend-adjusted close is not applied to technical OHLC',()=>{const r={meta:{symbol:'X'},timestamp:[1000000000,1000086400],indicators:{quote:[{open:[100,101],high:[102,103],low:[99,100],close:[101,102],volume:[10,11]}],adjclose:[{adjclose:[90,91]}]},events:{dividends:{a:{date:1000000000,amount:10}}}};const n=normalizeYahooDaily(r);assert.equal(n.rows[0].close,101);assert.equal(n.rows[0].adj_close,90);});
+test('unadjusted split discontinuity is normalized for technical OHLC',()=>{const r={meta:{symbol:'X'},timestamp:[1000000000,1000086400],indicators:{quote:[{open:[100,50],high:[102,52],low:[98,49],close:[100,50],volume:[10,20]}],adjclose:[{adjclose:[50,50]}]},events:{splits:{a:{date:1000086400,numerator:2,denominator:1}}}};const n=normalizeYahooDaily(r);assert.equal(n.rows[0].close,50);assert.equal(n.rows[0].volume,20);});

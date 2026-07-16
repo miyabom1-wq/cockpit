@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import worker from '../src/index.js';import { MockKV } from './helpers.js';
+test('health exposes one deployment identity',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/health'),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.version,'v35.0.0');assert.equal(d.entrypoint,'src/index.js');assert.ok(d.build);assert.ok(d.schema);});
+test('stocklist API remains compatible and preserves focus tiers',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/stocklist?market=jp',{headers:{Origin:'https://miyabom1-wq.github.io'}}),env,{}),d=await res.json();assert.equal(d.ok,true);assert.ok(d.list.length>0);assert.equal(d.list[0].focus_tier,'core');});
+
+test('private read is rejected outside the official frontend when no token is configured',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/watchlist'),env,{});assert.equal(res.status,403);});
+
+test('first request migrates legacy signal data before schema is finalized',async()=>{const legacy={items:[{id:'old1',symbol:'1111.T',name:'旧',start_date:'2026-07-01',start_price:100,active:false}]},kv=new MockKV({'signal-log:v3':JSON.stringify(legacy)}),env={COCKPIT_KV:kv};const res=await worker.fetch(new Request('https://example.com/api/health'),env,{});assert.equal(res.status,200);assert.ok(kv.map.has('signal-log:v5'));assert.equal(kv.map.get('meta:schema'),'vantage-kv-v3');});
