@@ -1,4 +1,4 @@
-const CACHE='vantage-full-replacement-20260716-v35';
+const CACHE='vantage-role-restructure-20260717-v36';
 const SHELL=['./manifest.json','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./icon-badge.png','./apple-touch-icon.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).catch(()=>null).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
