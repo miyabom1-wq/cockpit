@@ -1,4 +1,4 @@
-    name: Deploy VANTAGE Pages
+name: Deploy VANTAGE Pages
 
 on:
   push:
