@@ -1,8 +1,8 @@
 {
   "name": "VANTAGE",
   "short_name": "VANTAGE",
-  "description": "世界横断でテーマのモメンタムを検知し、FRAMEへ個別判定を引き継ぐ投資判断支援。",
-  "start_url": "./?v=38",
+  "description": "世界横断のテーマ履歴・局面転換・モメンタム加速を検知し、FRAMEへ個別判定を引き継ぐ投資判断支援。",
+  "start_url": "./?v=39",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -28,5 +28,5 @@
       "purpose": "maskable"
     }
   ],
-  "id": "vantage-v38"
+  "id": "vantage-v39"
 }
