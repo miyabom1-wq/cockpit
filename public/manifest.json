@@ -1,17 +1,32 @@
 {
   "name": "VANTAGE",
   "short_name": "VANTAGE",
-  "description": "市場環境、テーマ資金フロー、モメンタム候補を検知する投資判断支援アプリ。",
-  "start_url": "./?v=36",
+  "description": "世界の市場・テーマ資金フローを日米均衡で検知し、日本株と米国株のモメンタム候補を管理する投資判断支援アプリ。",
+  "start_url": "./?v=37",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#102A32",
   "theme_color": "#102A32",
   "icons": [
-    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"icon-maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
-  "id": "vantage-v36"
+  "id": "vantage-v37"
 }
