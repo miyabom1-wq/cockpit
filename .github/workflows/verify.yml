@@ -32,6 +32,14 @@ jobs:
           cache: npm
           cache-dependency-path: worker/package-lock.json
 
+      - name: Normalize npm registry
+        run: |
+          sed -i 's#https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/#https://registry.npmjs.org/#g' package-lock.json
+          if grep -q 'packages.applied-caas-gateway1.internal.api.openai.org' package-lock.json; then
+            echo 'Internal npm registry URL still remains in package-lock.json.'
+            exit 1
+          fi
+
       - name: Install
         run: npm ci
 
