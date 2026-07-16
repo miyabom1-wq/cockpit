@@ -172,12 +172,15 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-card{margin:8px 0;background:var(--surface);border:1px solid var(--line);border-left:4px solid #aeb6c2;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}.theme-card.seed{border-left-color:#0f8b78}.theme-card.repair{border-left-color:#5c78d5}.theme-card.good{border-left-color:#17a66d}.theme-card.hot{border-left-color:#d39220}.theme-card.bad{border-left-color:#d83048}.theme-card>summary{display:block;padding:13px 14px}.theme-card-head{display:flex;align-items:flex-start;gap:10px}.theme-title{font-weight:750;font-size:14px}.theme-reason{font-size:10px;color:var(--muted);margin-top:2px}.theme-phase{font-size:9px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--surface3);color:var(--muted)}.theme-phase.seed{background:#dff3ef;color:#087664}.theme-phase.repair{background:#e5eafa;color:#4763bd}.theme-phase.good{background:var(--greenBg);color:var(--green)}.theme-phase.hot{background:var(--amberBg);color:var(--amber)}.theme-phase.bad{background:var(--redBg);color:var(--red)}.theme-kpis{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:9px;font:10px var(--mono);color:var(--muted)}.theme-detail{padding:0 14px 13px;border-top:1px solid var(--line)}.theme-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.theme-detail-grid>div{padding:8px;background:var(--surface2);border-radius:9px;text-align:center}.theme-detail-grid b{display:block;font:700 13px var(--mono)}.theme-detail-grid span{font-size:8px;color:var(--faint)}.theme-leader{display:flex;align-items:center;gap:7px;padding:8px 5px;border-bottom:1px solid var(--line);cursor:pointer}.theme-leader:last-of-type{border-bottom:0}.theme-leader:hover{background:var(--surface2)}
 @media(max-width:640px){.ui-version{display:none}.role-note{align-items:flex-start}.role-note span{line-height:1.5}.theme-hero{grid-template-columns:1fr;padding:15px}.theme-cycle{grid-template-columns:repeat(5,minmax(0,1fr))}.pulse-grid{grid-template-columns:repeat(2,1fr)}.theme-summary{gap:4px}.theme-summary>div{padding:8px 3px}.theme-detail-grid{grid-template-columns:repeat(2,1fr)}.theme-kpis{gap:5px 10px}}
 </style>
+<style id="vantage-frame-handoff-style">
+.frame-mini{width:30px;height:28px;padding:0;border-radius:8px;border:1px solid #b9d8d2;background:#e8f7f4;color:#087565;font:800 12px "Inter",sans-serif;display:grid;place-items:center;flex:none}.frame-mini:hover{background:#d9f1ec;color:#075d52}.frame-action{background:#162b43!important;border-color:#162b43!important;color:#fff!important}.handoff-note{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--muted);margin-top:8px}.handoff-note b{color:var(--blue)}
+</style>
 </head>
 <body>
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar</div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v37</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v38</div><div class="clock" id="clock"></div>
   <button class="iconbtn" onclick="openSettings()" aria-label="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button>
 </header>
 <nav class="tabs">
@@ -261,6 +264,7 @@ const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
  ranking:{jp:null,us:null},watch:null,signals:null,backtest:null,events:null,positions:null,
+ themeContext:{},globalRisk:null,
  watchSort:localStorage.getItem('vantage_watch_sort')||'board'
 };
 const $=id=>document.getElementById(id);
@@ -293,6 +297,30 @@ const marketOf=s=>String(s||'').endsWith('.T')?'jp':'us';
 const dateText=v=>{if(!v)return'—';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});}
 const jstDateKey=v=>{const d=new Date(v||Date.now());return Number.isNaN(d.getTime())?'':new Date(d.getTime()+9*3600000).toISOString().slice(0,10);}
 const turnoverText=(v,m)=>v==null?'—':m==='jp'?(Number(v)/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1})+'億円':num(v,0);
+const FRAME_URL='https://miyabom1-wq.github.io/frame/';
+function frameContextFor(r){
+ const sym=String(r?.symbol||'').toUpperCase(),cached=state.themeContext?.[sym];if(cached)return{theme:cached.theme,theme_phase:cached.phase,theme_code:cached.phase_code,propagation:cached.propagation,scope:cached.scope,risk:cached.risk};
+ const theme=themeName(r),jp=(state.momentum.jp?.rows||[]).filter(x=>themeName(x)===theme),us=(state.momentum.us?.rows||[]).filter(x=>themeName(x)===theme);
+ const phase=jp.length&&us.length?balancedThemePhase(jp,us):themePhase(jp.length?jp:us),scope=jp.length&&us.length?'global':jp.length?'jp':'us';
+ const risk=globalRiskState(state.stage.jp,state.stage.us);
+ return{theme,theme_phase:phase?.label||'未計算',theme_code:phase?.code||'',propagation:phase?.propagation||'判定待ち',scope,risk:risk?.label||'地合い判定待ち'};
+}
+function frameRow(sym,name='',market=''){
+ const key=String(sym||'').toUpperCase(),candidate=findCandidate(key);
+ if(candidate)return candidate;
+ const mapped=typeof window.boardMap==='function'?window.boardMap().get(key):null;
+ return mapped||{symbol:key,name:name||key,market:market||marketOf(key),entry_lane:'D'};
+}
+function openFrame(sym,name='',market='',source='candidate'){
+ const r=frameRow(sym,name,market),key=String(r.symbol||sym).toUpperCase(),m=market||r.market||marketOf(key),ctx=frameContextFor(r);
+ const held=typeof heldSet==='function'&&heldSet().has(key),mode=held?'hold':r.entry_lane==='C'?'pullback':'new';
+ const q=new URLSearchParams({source:'vantage',market:m,symbol:code(key),name:String(r.name||name||key),mode,theme:ctx.theme,theme_phase:ctx.theme_phase,theme_code:ctx.theme_code,propagation:ctx.propagation,lane:String(r.entry_lane||'D'),lane_label:String(r.entry_label||r.entry_quality||''),risk:ctx.risk,scope:ctx.scope,from:source});
+ for(const [k,val] of [['rs5',r.rs5],['rs20',r.rs20],['vol_ratio',r.effective_vol_ratio??r.vol_ratio]])if(val!=null&&Number.isFinite(Number(val)))q.set(k,String(Number(val)));
+ if(r.setup_label)q.set('setup',String(r.setup_label));
+ const trade=state.stage?.[m]?.trade_date;if(trade)q.set('trade_date',String(trade));
+ open(FRAME_URL+'?'+q.toString(),'_blank','noopener');
+}
+
 function writeHeaders(){const h={'Content-Type':'application/json'};const k=localStorage.getItem('vantage_write_key');if(k)h['X-Vantage-Key']=k;return h}
 async function api(path,opt={}){
  const options={...opt};if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
@@ -428,7 +456,7 @@ function macroPulse(name,x){if(!x)return'';return `<div class="pulse"><span>${es
 function themeCard(group){
  const p=group.phase,leaders=[...group.rows].sort((a,b)=>(Number(b.rs5)||-99)-(Number(a.rs5)||-99)).slice(0,6);
  const regional=`<div class="region-line"><span>伝播 <b>${esc(p.propagation)}</b></span><span>確度 <b>${esc(p.coverage)}</b></span>${p.jp?`<span>JP ${p.jp.n}銘柄 / RS5 ${pct(p.jp.rs5)}</span>`:''}${p.us?`<span>US ${p.us.n}銘柄 / RS5 ${pct(p.us.rs5)}</span>`:''}</div>`;
- return `<details class="theme-card ${p.kind}" ${['GERMINATION','RECOVERY'].includes(p.code)?'open':''}><summary><div class="theme-card-head"><div class="grow1"><div class="theme-title">${esc(group.name)}</div><div class="theme-reason">${esc(p.reason)}</div></div>${phaseBadge(p)}</div><div class="theme-kpis"><span>${p.jp&&p.us?'均衡':'地域'}RS5 <b class="${cls(p.rs5)}">${pct(p.rs5)}</b></span><span>${p.jp&&p.us?'均衡':'地域'}RS20 <b class="${cls(p.rs20)}">${pct(p.rs20)}</b></span><span>A/B <b>${p.a+p.b}/${p.n}</b></span><span>広がり <b>${num(p.breadth,0)}%</b></span></div>${regional}</summary><div class="theme-detail"><div class="theme-detail-grid"><div><b>${num(p.vol)}x</b><span>平均出来高比</span></div><div><b>${p.c}</b><span>押し目監視</span></div><div><b>${p.e}</b><span>警戒</span></div><div><b>${num(p.improving,0)}%</b><span>RS改善率</span></div></div><div class="section-title">先導銘柄</div>${leaders.map(r=>`<div class="theme-leader" onclick="openCandidate('${attr(r.symbol)}')"><span class="market-chip ${marketOf(r.symbol)}">${marketOf(r.symbol)==='jp'?'JP':'US'}</span><span class="badge ${r.entry_lane||'D'}">${esc(r.entry_lane||'D')}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span><span class="${cls(r.rs5)} num">RS ${pct(r.rs5)}</span></div>`).join('')}<div class="note">世界横断では日米の銘柄数をそのまま合算せず、地域ごとの比率・相対強度を同じ重みで統合します。具体的な打診・標準・追加水準はFRAMEで判定します。</div></div></details>`;
+ return `<details class="theme-card ${p.kind}" ${['GERMINATION','RECOVERY'].includes(p.code)?'open':''}><summary><div class="theme-card-head"><div class="grow1"><div class="theme-title">${esc(group.name)}</div><div class="theme-reason">${esc(p.reason)}</div></div>${phaseBadge(p)}</div><div class="theme-kpis"><span>${p.jp&&p.us?'均衡':'地域'}RS5 <b class="${cls(p.rs5)}">${pct(p.rs5)}</b></span><span>${p.jp&&p.us?'均衡':'地域'}RS20 <b class="${cls(p.rs20)}">${pct(p.rs20)}</b></span><span>A/B <b>${p.a+p.b}/${p.n}</b></span><span>広がり <b>${num(p.breadth,0)}%</b></span></div>${regional}</summary><div class="theme-detail"><div class="theme-detail-grid"><div><b>${num(p.vol)}x</b><span>平均出来高比</span></div><div><b>${p.c}</b><span>押し目監視</span></div><div><b>${p.e}</b><span>警戒</span></div><div><b>${num(p.improving,0)}%</b><span>RS改善率</span></div></div><div class="section-title">先導銘柄</div>${leaders.map(r=>`<div class="theme-leader" onclick="openCandidate('${attr(r.symbol)}')"><span class="market-chip ${marketOf(r.symbol)}">${marketOf(r.symbol)==='jp'?'JP':'US'}</span><span class="badge ${r.entry_lane||'D'}">${esc(r.entry_lane||'D')}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span><span class="${cls(r.rs5)} num">RS ${pct(r.rs5)}</span><button class="frame-mini" title="FRAMEで判定" onclick="event.stopPropagation();openFrame('${attr(r.symbol)}','${attr(r.name)}','${marketOf(r.symbol)}','theme')">F</button></div>`).join('')}<div class="note">世界横断では日米の銘柄数をそのまま合算せず、地域ごとの比率・相対強度を同じ重みで統合します。具体的な打診・標準・追加水準はFRAMEで判定します。</div></div></details>`;
 }
 async function ensureGlobalThemeData(){
  const need=!state.momentum.jp?.ready||!state.momentum.us?.ready||!state.stage.jp?.complete||!state.stage.us?.complete;
@@ -443,8 +471,11 @@ async function loadThemeRadar(){
  $('theme-radar').innerHTML='<div class="loading">市場横断でテーマの資金流入を集計中…</div>';
  try{
   await ensureGlobalThemeData();const scope=state.themeScope,stage=scope==='us'?state.stage.us:state.stage.jp;
-  const list=themeGroupsForScope(scope).sort((a,b)=>themePriority(a.phase.code)-themePriority(b.phase.code)||(b.phase.rs5??-99)-(a.phase.rs5??-99));
+  const globalList=themeGroupsForScope('global');
+  const list=(scope==='global'?globalList:themeGroupsForScope(scope)).sort((a,b)=>themePriority(a.phase.code)-themePriority(b.phase.code)||(b.phase.rs5??-99)-(a.phase.rs5??-99));
   const focus=list.filter(x=>['GERMINATION','RECOVERY','EXPANSION'].includes(x.phase.code)).slice(0,3),risk=globalRiskState(state.stage.jp,state.stage.us);
+  state.globalRisk=risk;state.themeContext={};
+  for(const g of globalList)for(const r of g.rows||[])state.themeContext[String(r.symbol).toUpperCase()]={theme:g.name,phase:g.phase.label,phase_code:g.phase.code,propagation:g.phase.propagation,scope:'global',risk:risk.label};
   const macro={...(state.stage.us?.macro||{}),...(state.stage.jp?.macro||{})};
   const fresh=`JP ${dateText(state.stage.jp?.price_time||state.stage.jp?.updated_at)} / US ${dateText(state.stage.us?.price_time||state.stage.us?.updated_at)}`;if($('theme-fresh'))$('theme-fresh').textContent=fresh;
   const scopeLabel=scope==='global'?'世界横断・日米均衡':scope==='jp'?'日本詳細':'米国詳細';
@@ -604,7 +635,7 @@ function candidateHtml(r,held,watched){
   `${isWatch?'<span class="watch-mini">観察中</span>':''}${r.focus_tier==='radar'?'<span class="tier-badge">レーダー</span>':''}${strict.length?'<span class="strict-badge">厳選</span>':''}<span class="badge ${r.entry_lane}">${esc(r.entry_quality||r.entry_lane)}</span>`+
   `<button class="chart-btn" title="チャート" onclick="event.stopPropagation();openChart('${attr(sym)}')">${icon('chart',16)}</button></div>`+
   `<div class="meta"><span class="${cls(r.change_pct)}">${pct(r.change_pct)}</span><span>${num(r.price,marketOf(sym)==='jp'?0:2)}</span><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span>${r.rs5!=null?`<span>5日RS ${pct(r.rs5)}</span>`:''}</div>`+
-  `<div class="tags">${r.setup_label?`<span class="badge B">${esc(r.setup_label)}</span>`:''}<span class="badge">${esc(r.long_stage||r.stage||'')}</span>${r.relative_label&&r.relative_label!=='通常'?`<span class="badge">${esc(r.relative_label)}</span>`:''}</div></div>`;
+  `<div class="tags">${r.setup_label?`<span class="badge B">${esc(r.setup_label)}</span>`:''}<span class="badge">${esc(r.long_stage||r.stage||'')}</span>${r.relative_label&&r.relative_label!=='通常'?`<span class="badge">${esc(r.relative_label)}</span>`:''}</div><div class="handoff-note"><b>VANTAGE</b><span>候補発見 → FRAMEで売買水準を判定</span><button class="frame-mini" title="FRAMEで判定" onclick="event.stopPropagation();openFrame('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}','board')">F</button></div></div>`;
 }
 function findCandidate(sym){
  for(const m of ['jp','us'])for(const lane of state.momentum[m]?.board||[])for(const r of lane.rows||[])if(String(r.symbol).toUpperCase()===String(sym).toUpperCase())return r;
@@ -629,7 +660,7 @@ async function openCandidate(sym){
  $('modal-body').innerHTML=`<div class="card pad"><div class="meta"><span class="badge ${r.entry_lane}">${r.entry_lane} ${esc(r.entry_label)}</span>${r.entry_quality&&r.entry_quality!==r.entry_lane?`<span class="strict-badge">${esc(r.entry_quality)}</span>`:''}<span>${esc(r.long_stage||r.stage||'')}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}${rule?'<span class="strict-badge">厳選条件一致</span>':''}</div>`+
   (rule?block('バックテスト厳選',`${(rule.labels||[]).join('・')} / 最終試験 勝率${num(rule.test?.win_rate,1)}%・期待値${pct(rule.test?.expectancy)}・PF${num(rule.test?.profit_factor)}・n=${rule.test?.trades||0}。実行条件は翌営業日のシグナル日高値突破。`):'')+
   auditCard(r.audit)+block('検出理由',(r.entry_reason||[]).join(' / '))+block('注意点',(r.risk_reason||[]).join(' / '))+
-  `<div class="actions"><button onclick="openChart('${attr(sym)}')"><span class="btn-label">${icon('chart',15)}<span>チャート</span></span></button><button class="primary" ${isWatch?'disabled':''} onclick="addWatchFromCandidate('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isWatch?'観察中':'ウォッチへ'}</button><button onclick="toggleHeld('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isHeld?'保有解除':'保有☑'}</button></div></div>`;
+  `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}','candidate')">FRAMEで判定</button><button onclick="openChart('${attr(sym)}')"><span class="btn-label">${icon('chart',15)}<span>チャート</span></span></button><button ${isWatch?'disabled':''} onclick="addWatchFromCandidate('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isWatch?'観察中':'ウォッチへ'}</button><button onclick="toggleHeld('${attr(sym)}','${attr(r.name)}','${marketOf(sym)}')">${isHeld?'保有解除':'保有☑'}</button></div></div>`;
  openModal();
 }
 function block(k,v){return v?`<div class="detail-block"><div class="detail-label">${k}</div>${esc(v)}</div>`:''}
@@ -979,7 +1010,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
       return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
         `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格は現在値または最新終値。判定は最新取得日足を使用。'}</div>`+
         `<div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="条件・押し目水準・決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
-        `<div class="actions"><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
+        `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
     }).join('');
     $('watch-list').innerHTML=html;
   };
@@ -1023,7 +1054,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
       `<div class="signal-baseline">基準：検出日の終値 ${baseline}。増減率はこの価格との比較です。</div><div class="outcomes">${outcomes||`<span class="outcome wait">翌営業日の終値待ち</span>`}</div>`+
       `${phaseOf(x)==='tracking'?'<div class="note">「条件終了」はA/B判定から外れたという意味です。売却・失敗の意味ではなく、5営業日後まで結果を追跡します。</div>':''}`+
       block('検出理由',x.reason)+block('相対評価',x.relative_text)+block('注意点',x.risk_reason)+
-      `<div class="actions">${watched?'<button disabled>観察中</button>':`<button class="primary" onclick="signalToWatch('${attr(x.symbol)}','${attr(x.name)}','${signalMarketOf(x)}','${attr(x.reason||'')}')">ウォッチへ</button>`}<button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="danger" onclick="deleteSignal('${attr(x.id)}')">削除</button></div></div></details>`;
+      `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(x.symbol)}','${attr(x.name)}','${signalMarketOf(x)}','signal')">FRAMEで判定</button>${watched?'<button disabled>観察中</button>':`<button onclick="signalToWatch('${attr(x.symbol)}','${attr(x.name)}','${signalMarketOf(x)}','${attr(x.reason||'')}')">ウォッチへ</button>`}<button onclick="openChart('${attr(x.symbol)}')">チャート</button><button class="danger" onclick="deleteSignal('${attr(x.id)}')">削除</button></div></div></details>`;
   };
 
   window.loadSignals=async function(){
@@ -1052,7 +1083,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
     $('signal-list').innerHTML=html;
   };
 
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=global-radar-v37').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=frame-handoff-v38').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 

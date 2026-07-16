@@ -1,8 +1,8 @@
 {
   "name": "VANTAGE",
   "short_name": "VANTAGE",
-  "description": "世界の市場・テーマ資金フローを日米均衡で検知し、日本株と米国株のモメンタム候補を管理する投資判断支援アプリ。",
-  "start_url": "./?v=37",
+  "description": "世界横断でテーマのモメンタムを検知し、FRAMEへ個別判定を引き継ぐ投資判断支援。",
+  "start_url": "./?v=38",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -28,5 +28,5 @@
       "purpose": "maskable"
     }
   ],
-  "id": "vantage-v37"
+  "id": "vantage-v38"
 }
