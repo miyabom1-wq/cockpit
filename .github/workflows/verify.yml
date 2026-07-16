@@ -1,4 +1,4 @@
-    name: Verify VANTAGE
+name: Verify VANTAGE
 
 on:
   push:
