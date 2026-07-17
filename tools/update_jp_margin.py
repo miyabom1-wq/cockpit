@@ -88,27 +88,112 @@ def iso_date(text: str) -> Optional[str]:
     return f"{y:04d}-{mo:02d}-{d:02d}"
 
 
-def discover_latest_pdf(page_url: str = WEEKLY_PAGE) -> LinkWithDate:
-    soup = BeautifulSoup(get(page_url), "html.parser")
+def href_date(href: str) -> Optional[str]:
+    """Extract YYYY-MM-DD from a dated JPX PDF filename when present."""
+    text = str(href or "")
+    m = re.search(r"(?<!\d)(20\d{2})[-_]?([01]\d)[-_]?([0-3]\d)(?!\d)", text)
+    if not m:
+        return None
+    y, mo, d = map(int, m.groups())
+    try:
+        return datetime(y, mo, d).date().isoformat()
+    except ValueError:
+        return None
+
+
+def _compact_text(node: object, limit: int = 1200) -> str:
+    try:
+        text = node.get_text(" ", strip=True)  # type: ignore[attr-defined]
+    except Exception:
+        text = str(node or "")
+    text = re.sub(r"\s+", " ", text).strip()
+    return text if len(text) <= limit else text[:limit]
+
+
+def nearby_link_contexts(a: object) -> list[str]:
+    """Return nearest text blocks first for icon-only JPX PDF links."""
+    out: list[str] = []
+
+    def add(value: object) -> None:
+        text = _compact_text(value)
+        if text and text not in out:
+            out.append(text)
+
+    add(a)
+    try:
+        for attr in ("title", "aria-label"):
+            value = a.get(attr)  # type: ignore[attr-defined]
+            if value:
+                add(value)
+        img = a.find("img")  # type: ignore[attr-defined]
+        if img:
+            add(img.get("alt", ""))
+    except Exception:
+        pass
+
+    node = a
+    for _ in range(7):
+        node = getattr(node, "parent", None)
+        if node is None:
+            break
+        add(node)
+        current = out[-1] if out else ""
+        if ("申込" in current or "application" in current.lower()) and iso_date(current):
+            break
+
+    try:
+        node = a
+        for _ in range(10):
+            node = node.find_previous()  # type: ignore[attr-defined]
+            if node is None:
+                break
+            add(node)
+    except Exception:
+        pass
+    return out
+
+
+def discover_pdf_from_html(html: str, page_url: str = WEEKLY_PAGE) -> LinkWithDate:
+    soup = BeautifulSoup(html, "html.parser")
     found: list[LinkWithDate] = []
+    fallback: list[LinkWithDate] = []
+    pdf_count = 0
     for a in soup.select("a[href]"):
-        href = a.get("href", "")
+        href = str(a.get("href", ""))
         if ".pdf" not in href.lower():
             continue
-        context = " ".join([
-            a.get_text(" ", strip=True),
-            a.parent.get_text(" ", strip=True) if a.parent else "",
-            a.find_previous(string=DATE_RE) or "",
-        ])
-        # Avoid selecting announcements that happen to contain a newer date.
-        if "申込" not in context and "application" not in context.lower():
+        pdf_count += 1
+        contexts = nearby_link_contexts(a)
+        selected_context = ""
+        selected_date: Optional[str] = None
+        for context in contexts:
+            date = iso_date(context)
+            if not date:
+                continue
+            lower = context.lower()
+            if "申込" in context or "application" in lower:
+                selected_context, selected_date = context, date
+                break
+        if selected_date:
+            found.append(LinkWithDate(selected_date, urljoin(page_url, href), selected_context))
             continue
-        d = iso_date(context)
-        if d:
-            found.append(LinkWithDate(d, urljoin(page_url, href), context.strip()))
-    if not found:
-        raise RuntimeError("JPX週次ページから申込日付きPDFリンクを検出できませんでした")
-    return max(found, key=lambda x: (x.date, x.url))
+
+        date = href_date(href)
+        combined = " ".join(contexts[:5])
+        if date and not re.search(r"変更|スケジュール|schedule|change|notice", combined, re.I):
+            fallback.append(LinkWithDate(date, urljoin(page_url, href), combined.strip() or href))
+
+    candidates = found or fallback
+    if not candidates:
+        raise RuntimeError(
+            "JPX週次ページから申込日付きPDFリンクを検出できませんでした "
+            f"(PDFリンク {pdf_count}件)"
+        )
+    return max(candidates, key=lambda x: (x.date, x.url))
+
+
+def discover_latest_pdf(page_url: str = WEEKLY_PAGE) -> LinkWithDate:
+    return discover_pdf_from_html(str(get(page_url)), page_url)
 
 
 def parse_number(v: str) -> Optional[float]:
@@ -462,6 +547,17 @@ def self_test() -> None:
     assert rec and rec["sell_balance"] == 1000 and rec["buy_change"] == 300
     rec2 = row_record(["7203", "0", "トヨタ自動車", "1,000 ▲100", "2,000 300"])
     assert rec2 and rec2["symbol"] == "7203.T" and rec2["buy_balance"] == 2000
+    if BeautifulSoup is not None:
+        html = """
+        <table>
+          <tr><td>2026年7月3日申込分</td><td><span><a href="/files/week_20260703.pdf"><img alt="PDF"></a></span></td></tr>
+          <tr><td>2026年7月10日申込分</td><td><span><a href="/files/week_20260710.pdf"><img alt="PDF"></a></span></td></tr>
+        </table>
+        <p>信用取引残高の公表情報の変更について（2026年7月15日） <a href="/files/notice_20260715.pdf">PDF</a></p>
+        """
+        link = discover_pdf_from_html(html, WEEKLY_PAGE)
+        assert link.date == "2026-07-10" and link.url.endswith("week_20260710.pdf")
+    assert href_date("/files/week_20260710.pdf") == "2026-07-10"
     print("JP margin updater self-test passed")
 
 
