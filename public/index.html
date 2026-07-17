@@ -240,6 +240,9 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 }
 </style>
 
+<style id="integrity-repair-v46">
+.risk-gate{margin:0 0 12px;padding:12px 14px;border:1px solid #efc6c9;border-left:5px solid #c2384f;border-radius:13px;background:#fff3f4;color:#78202e}.risk-gate b{display:block;margin-bottom:4px}.risk-gate span{font-size:11px;line-height:1.55}.risk-gate.caution{border-color:#ead6a9;border-left-color:#c88724;background:#fff9ed;color:#76500d}.env-block{display:inline-flex;padding:3px 7px;border-radius:999px;background:#fde3e7;color:#b12640;font-size:10px;font-weight:900}.candidate.env-blocked,.selective-card.env-blocked{box-shadow:inset 4px 0 #c2384f}.watch-current-line{margin-top:7px;padding:8px 10px;border-radius:9px;background:#f4f8fb;border:1px solid #dde7ee;font-size:11px}.watch-history-note{margin-top:7px;padding:8px 10px;border-radius:9px;background:#fff8e9;border:1px solid #eddcb6;color:#765817;font-size:10px;line-height:1.55}.event-symbols{font:10px ui-monospace,monospace;color:var(--muted);margin-top:3px}.coverage-warning{margin-top:8px;padding:9px 11px;border-radius:10px;background:#fff8e8;border:1px solid #ecdcb7;color:#755511;font-size:11px}.macro-basis{font-size:9px;color:var(--faint);margin-top:2px}.gate-note{font-size:10px;color:#a12a3c;font-weight:800}.data-separation{font-size:10px;color:var(--muted);margin-top:6px}
+</style>
 </head>
 
 
@@ -247,7 +250,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v45</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v46</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -398,6 +401,11 @@ function quoteHtml(r,m=marketOf(r?.symbol),compact=false){
  const valid=quoteFinite(r?.change_pct),ch=valid?pct(r.change_pct):'—',k=valid?cls(r.change_pct):'muted';
  return `<div class="quote-strip ${compact?'compact':''}"><b class="quote-price">${quotePriceText(r,m)}</b><span class="quote-change ${k}">${ch}</span><small>${esc(quoteTimeText(r,m))}</small></div>`;
 }
+function marketGate(m){return state.stage?.[m]?.risk_gate||state.momentum?.[m]?.risk_gate||state.notrade?.[m]?.risk_gate||{level:'normal',label:'通常',block_new_entries:false,reasons:[]}}
+function gateHtml(m){const g=marketGate(m);if(g.level==='normal')return'';return `<div class="risk-gate ${g.level==='caution'?'caution':''}"><b>${esc(g.label)}${g.block_new_entries?' · 新規A/B抑制':''}</b><span>${esc((g.reasons||[]).join(' / ')||'主要指数とボラティリティを再確認')}</span></div>`}
+function macroBasis(v){const parts=[];if(v?.date)parts.push('基準 '+dateOnly(v.date));if(v?.price_time)parts.push('価格時刻 '+dateText(v.price_time));return parts.join(' · ')}
+function snapshotPayload(r){if(!r)return null;const keys=['symbol','name','market','date','price','change_pct','price_time','entry_lane','entry_label','entry_quality','effective_vol_ratio','vol_ratio','div25','rs5','rs20','long_stage','stage','stage_code','setup_label','snapshot_id'],o={};for(const k of keys)if(r[k]!=null)o[k]=r[k];return Object.keys(o).length?o:null}
+function currentWatchData(w,bm){return bm.get(String(w?.symbol||'').toUpperCase())||w?.current_data||w?.stage_data||{}}
 
 const jstDateKey=v=>{const d=new Date(v||Date.now());return Number.isNaN(d.getTime())?'':new Date(d.getTime()+9*3600000).toISOString().slice(0,10);}
 const turnoverText=(v,m)=>v==null?'—':m==='jp'?(Number(v)/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1})+'億円':num(v,0);
@@ -565,6 +573,8 @@ function balancedThemePhase(jpRows,usRows){
 function themePriority(code){return({GERMINATION:0,RECOVERY:1,EXPANSION:2,OVERHEAT:3,BREAKDOWN:4,WAIT:5})[code]??9}
 function phaseBadge(x){return `<span class="theme-phase ${x.kind}">${esc(x.label)}</span>`}
 function globalRiskState(jpStage,usStage){
+ const gates=[jpStage?.risk_gate,usStage?.risk_gate].filter(Boolean),stress=gates.find(x=>x.level==='stress');
+ if(stress)return{label:'世界ストレス／価格発見',kind:'bad',score:stress.score??0,seen:gates.length,detail:'主要指数・SOX・KOSPI・VIXの急変を検出。新規A/Bは環境ゲートで抑制'};
  const macro={...(usStage?.macro||{}),...(jpStage?.macro||{})},keys=['S&P500','SOX','韓国KOSPI','日経平均'];let score=0,seen=0;
  for(const k of keys){const v=Number(macro[k]?.ret5);if(Number.isFinite(v)){seen++;score+=v>0?1:v<0?-1:0}}
  const vx=Number(macro['VIX']?.ret5);if(Number.isFinite(vx)){seen++;score+=vx<0?1:vx>0?-1:0}
@@ -620,7 +630,7 @@ async function loadThemeRadar(){
 }
 async function loadGlobalBoard(){
  $('stage-board').innerHTML='<div class="loading">日米候補を統合中…</div>';try{await ensureGlobalThemeData();if(!state.positions)state.positions=await api('/api/positions').catch(()=>({positions:[]}));if(!state.watch)state.watch=await api('/api/watchlist').catch(()=>({items:[]}));
- const held=heldSet(),watched=watchSet(),labels={A:'強い継続候補',B:'反転初動',C:'押し目監視',D:'監視継続',E:'警戒'};let html='<div class="global-board-head"><b>世界横断候補</b><p>日米を同じ順位に混ぜず、A〜Eの状態だけを共通軸として並べます。個別の売買水準はFRAMEで確認します。</p></div><div class="quote-disclaimer"><b>価格表示</b><span>取得時点の参考値です。場中は遅延があるため、各カードの取得時刻を確認してください。</span></div>';
+ const held=heldSet(),watched=watchSet(),labels={A:'強い継続候補',B:'反転初動',C:'押し目監視',D:'監視継続',E:'警戒'};let html='<div class="global-board-head"><b>世界横断候補</b><p>日米を同じ順位に混ぜず、A〜Eの状態だけを共通軸として並べます。個別の売買水準はFRAMEで確認します。</p></div>'+gateHtml('jp')+gateHtml('us')+'<div class="quote-disclaimer"><b>価格表示</b><span>取得時点の参考値です。場中は遅延があるため、各カードの価格時刻を確認してください。</span></div>';
  for(const key of ['A','B','C','D','E']){const rows=[...(state.momentum.jp?.board||[]).find(x=>x.key===key)?.rows||[],...(state.momentum.us?.board||[]).find(x=>x.key===key)?.rows||[]].sort((a,b)=>(b.rs_percentile??b.rs5??-99)-(a.rs_percentile??a.rs5??-99));const open=key==='A'||key==='B'?' open':'';html+=`<details class="lane lane-${key}"${open}><summary><span class="lane-symbol">${laneIcon(key)}</span><span class="lane-title">${key}. ${labels[key]}</span><span class="count">${rows.length}件</span></summary>${rows.length?rows.map(r=>candidateHtml(r,held,watched)).join(''):'<div class="empty">該当なし</div>'}</details>`}
  $('stage-board').innerHTML=html;}catch(e){$('stage-board').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
@@ -644,6 +654,7 @@ async function loadStage(){
  }catch(e){if($('stage-fresh'))$('stage-fresh').textContent='取得失敗';if($('theme-fresh'))$('theme-fresh').textContent='取得失敗';$('stage-summary').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
 function marketState(st,m){
+ const gate=st?.risk_gate||marketGate(m);if(gate?.level==='stress')return{label:gate.label||'ストレス／価格発見',kind:'bad'};if(gate?.level==='caution')return{label:'警戒・選別',kind:'warn'};
  const macro=st?.macro||{};const ix=m==='jp'?macro['日経平均']:macro['S&P500'];
  const d=ix?.change_pct??0,r5=ix?.ret5??0;
  if(d>0&&r5>0)return{label:'上向き',kind:'good'};
@@ -651,6 +662,7 @@ function marketState(st,m){
  return{label:'中立',kind:'warn'};
 }
 function momentumState(nt){
+ if(nt?.recLevel==='stress'||nt?.risk_gate?.block_new_entries)return{label:'新規A/B抑制',kind:'bad'};
  if(nt?.recLevel==='strong')return{label:'過熱・回避',kind:'bad'};
  if(nt?.recLevel==='recommend')return{label:'選別',kind:'warn'};
  return{label:'通常',kind:'good'};
@@ -665,8 +677,8 @@ function renderSummary(m){
  const hot=nt?.summary||{};
  const recKind=mm.kind==='bad'?'bad':mm.kind==='warn'?'warn':'good';
  const recIcon=icon(recKind==='bad'?'stop':recKind==='warn'?'alert':'check',20);
- const recTitle=recKind==='bad'?'新規エントリーは見送り':recKind==='warn'?'選別して確認':'通常監視';
- let html='';
+ const recTitle=nt?.recLevel==='stress'?'新規A/Bを抑制・価格発見を優先':recKind==='bad'?'新規エントリーは見送り':recKind==='warn'?'選別して確認':'通常監視';
+ let html=gateHtml(m);
  const fc=st.focus_counts||{};
  if(m==='jp')html+=`<div class="focus-strip"><div class="focus-chip">コア <b>${fc.core??0}</b><br>場中フル分析</div><div class="focus-chip">レーダー <b>${fc.radar??0}</b><br>次の主役探索</div></div>`;
  else html+=`<div class="focus-strip"><div class="focus-chip">海外リード <b>${fc.lead??0}</b><br>日本株への先行指標</div>${(fc.archive||0)>0?`<div class="focus-chip">保管 <b>${fc.archive}</b><br>自動分析外</div>`:''}</div>`;
@@ -679,7 +691,7 @@ function renderSummary(m){
   `<div class="state-box ${mm.kind}"><div class="k">モメンタム地合い</div><div class="v">${mm.label}</div></div></div>`;
  if(ev)html+=`<div class="section-title">次の重要日程</div><div class="card pad event-next"><div class="event-ic">${icon('calendar',18)}</div><div class="grow1"><div class="event-name">${esc(ev.name)}</div><div class="event-time">${dateText(ev.time)}</div></div></div>`;
  html+='<div class="section-title">マクロ / 指数</div><div class="item-list macro-list">'+
-  Object.entries(macro).filter(([,v])=>v).map(([k,v])=>`<div class="macro-row" onclick="openMacroChart('${attr(k)}')"><div><div class="macro-name">${esc(k)}</div><div class="macro-sub">${v.ret5!=null?'5日 '+pct(v.ret5):''}</div></div><div class="macro-price">${num(v.price)}</div><div class="macro-chg ${cls(v.change_pct)}">${pct(v.change_pct)}</div></div>`).join('')+
+  Object.entries(macro).filter(([,v])=>v).map(([k,v])=>`<div class="macro-row" onclick="openMacroChart('${attr(k)}')"><div><div class="macro-name">${esc(k)}</div><div class="macro-sub">${v.ret5!=null?'5日 '+pct(v.ret5):''}</div><div class="macro-basis">${esc(macroBasis(v))}</div></div><div class="macro-price">${num(v.price)}</div><div class="macro-chg ${cls(v.change_pct)}">${pct(v.change_pct)}</div></div>`).join('')+
   '</div>';
  $('stage-summary').innerHTML=html;
 }
@@ -709,6 +721,7 @@ function currentPredicate(id,f){
  }
 }
 function selectiveRulesFor(r,m){
+ if(marketGate(m).block_new_entries)return[];
  if(!['A','B'].includes(r.entry_lane))return[];const f=currentFeature(r,m);
  return(state.backtest?.selective?.confirmed||[]).filter(x=>x.market===m&&x.strategy===r.entry_lane&&(x.predicates||[]).every(id=>currentPredicate(id,f))).sort((a,b)=>(b.test?.expectancy??-99)-(a.test?.expectancy??-99));
 }
@@ -747,7 +760,7 @@ function boardAuditSummary(m,mom){
 function renderBoard(m){
  const mom=state.momentum[m];if(!mom?.ready){$('stage-board').innerHTML='<div class="empty">候補なし</div>';return}
  const held=heldSet(),watched=watchSet();
- let html=boardAuditSummary(m,mom)+selectiveSection(m,mom,held,watched);
+ let html=gateHtml(m)+boardAuditSummary(m,mom)+selectiveSection(m,mom,held,watched);
  if(m==='jp')html+=radarSection(m,mom,held,watched)+'<div class="note">日本コア80は場中フル分析、レーダー80は次の主役探索です。コアのA/Bを優先し、Cは押し目監視として広めに残します。</div>';
  else html+='<div class="note">米国候補は世界テーマの先行確認と、米国株を直接運用する場合の候補抽出に使います。売買水準はFRAMEで別判定します。</div>';
  for(const lane of mom.board||[]){
@@ -761,9 +774,10 @@ function renderBoard(m){
 }
 function candidateHtml(r,held,watched){
  const sym=String(r.symbol).toUpperCase(),isHeld=held.has(sym),isWatch=watched.has(sym),strict=selectiveRulesFor(r,marketOf(sym));
- return `<div class="candidate" onclick="openCandidate('${attr(sym)}')"><div class="candidate-head">`+
+ const blocked=r.entry_allowed===false&&['A','B'].includes(r.entry_lane);
+ return `<div class="candidate ${blocked?'env-blocked':''}" onclick="openCandidate('${attr(sym)}')"><div class="candidate-head">`+
   `${isHeld?'<span class="held-mark">☑</span>':''}<span class="market-chip ${marketOf(sym)}">${marketOf(sym)==='jp'?'JP':'US'}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(sym))}</span>`+
-  `${isWatch?'<span class="watch-mini">観察中</span>':''}${r.focus_tier==='radar'?'<span class="tier-badge">レーダー</span>':''}${strict.length?'<span class="strict-badge">厳選</span>':''}<span class="badge ${r.entry_lane}">${esc(r.entry_quality||r.entry_lane)}</span>`+
+  `${isWatch?'<span class="watch-mini">観察中</span>':''}${r.focus_tier==='radar'?'<span class="tier-badge">レーダー</span>':''}${strict.length?'<span class="strict-badge">厳選</span>':''}${blocked?'<span class="env-block">環境停止</span>':''}<span class="badge ${r.entry_lane}">${esc(r.entry_quality||r.entry_lane)}</span>`+
   `<button class="chart-btn" title="チャート" onclick="event.stopPropagation();openChart('${attr(sym)}')">${icon('chart',16)}</button></div>`+
   quoteHtml(r,marketOf(sym))+
   `<div class="meta"><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span>${r.rs5!=null?`<span>5日市場差 ${pct(r.rs5)}</span>`:''}</div>`+
@@ -869,14 +883,14 @@ function sortWatch(items){
 }
 async function saveWatch(id){try{await api('/api/watchlist',{method:'POST',body:{action:'update',id,status:$('ws-'+id).value,memo:$('wm-'+id).value}});toast('保存しました');loadWatch()}catch(e){toast(e.message)}}
 async function deleteWatch(id){if(!confirm('ウォッチから削除しますか？'))return;try{await api('/api/watchlist',{method:'POST',body:{action:'delete',id}});loadWatch()}catch(e){toast(e.message)}}
-async function addWatchFromCandidate(symbol,name,market){try{await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'candidate'}});state.watch=null;toast('ウォッチへ追加');closeModal()}catch(e){toast(e.message)}}
+async function addWatchFromCandidate(symbol,name,market){try{const r=findCandidate(symbol),snap=snapshotPayload(r);await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'candidate',signal_snapshot:snap,signal_at:r?.price_time||r?.updated_at||new Date().toISOString()}});state.watch=null;toast('ウォッチへ追加');closeModal()}catch(e){toast(e.message)}}
 function openAddWatch(){
  $('modal-title').textContent='ウォッチ追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="aw-market"><option value="jp">日本株</option><option value="us">米国株</option></select><input id="aw-symbol" placeholder="日本4桁 / 米国ティッカー"><div class="span2 actions"><button class="primary" onclick="addWatchManual()">追加</button></div></div>`;openModal();
 }
 async function addWatchManual(){const market=$('aw-market').value,symbol=$('aw-symbol').value.trim();try{const q=await api('/api/watchlist',{method:'POST',body:{action:'resolve_name',market,symbol}});await api('/api/watchlist',{method:'POST',body:{action:'add',market,symbol:q.symbol,name:q.name,source:'manual'}});toast('追加しました');closeModal();loadWatch()}catch(e){toast(e.message)}}
 async function toggleHeld(symbol,name,market){try{await api('/api/positions',{method:'POST',body:{action:'toggle_held',symbol,name,market}});state.positions=await api('/api/positions');toast('保有状態を更新');if(state.tab==='watch')loadWatch();else{renderBoard(state.market);closeModal()}}catch(e){toast(e.message)}}
 
-async function signalToWatch(symbol,name,market,reason){try{await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'signal',memo:'シグナル: '+reason}});state.watch=null;toast('ウォッチへ追加');loadSignals()}catch(e){toast(e.message)}}
+async function signalToWatch(symbol,name,market,reason){try{const r=findCandidate(symbol),snap=snapshotPayload(r);await api('/api/watchlist',{method:'POST',body:{action:'add',symbol,name,market,source:'signal',memo:'登録時シグナル: '+reason,signal_snapshot:snap,signal_at:r?.price_time||r?.updated_at||new Date().toISOString()}});state.watch=null;toast('ウォッチへ追加');loadSignals()}catch(e){toast(e.message)}}
 async function deleteSignal(id){if(!confirm('このシグナル期間を削除しますか？'))return;try{await api('/api/signal-log',{method:'POST',body:{action:'delete',id}});loadSignals()}catch(e){toast(e.message)}}
 
 
@@ -948,18 +962,18 @@ async function loadEvents(){
 function renderEvents(){
  const now=Date.now(),events=(state.events?.events||[]).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
  const future=events.filter(e=>new Date(e.time)>=now),past=events.filter(e=>new Date(e.time)<now);
- let html='<div class="section-title">今後の重要日程</div><div class="card">'+(future.length?future.map(eventRow).join(''):'<div class="empty">登録なし</div>')+'</div>';
+ let html='<div class="section-title">今後の重要日程</div><div class="coverage-warning"><b>手動登録ベース</b>：ここが空でも決算や材料がないことを意味しません。保有銘柄とA/B候補は証券会社・企業IRでも確認してください。</div><div class="card">'+(future.length?future.map(eventRow).join(''):'<div class="empty">手動登録なし</div>')+'</div>';
  if(past.length)html+=`<details class="card"><summary class="row"><div class="name">過去分</div><span class="count">${past.length}件</span></summary>${past.map(eventRow).join('')}</details>`;
  $('event-list').innerHTML=html;
 }
 function eventRow(e){
- const diff=new Date(e.time)-Date.now(),days=Math.ceil(diff/86400000);
- return `<div class="row"><button class="small" aria-label="固定" title="固定" onclick="togglePin('${attr(e.id)}')">${icon('pin',15,e.pinned?'up':'')}</button><div class="grow1"><div class="name">${esc(e.name)}</div><div class="event-time">${dateText(e.time)}</div></div><div class="event-count">${diff>=0?(days<=1?'24h以内':days+'日'):'完了'}</div><button class="small danger" aria-label="削除" title="削除" onclick="deleteEvent('${attr(e.id)}')">${icon('trash',15)}</button></div>`;
+ const diff=new Date(e.time)-Date.now(),days=Math.ceil(diff/86400000),symbols=(e.symbols||[]).map(code).join(' / ');
+ return `<div class="row"><button class="small" aria-label="固定" title="固定" onclick="togglePin('${attr(e.id)}')">${icon('pin',15,e.pinned?'up':'')}</button><div class="grow1"><div class="name">${esc(e.name)}</div><div class="event-time">${dateText(e.time)}</div>${symbols?`<div class="event-symbols">関連 ${esc(symbols)}</div>`:''}</div><div class="event-count">${diff>=0?(days<=1?'24h以内':days+'日'):'完了'}</div><button class="small danger" aria-label="削除" title="削除" onclick="deleteEvent('${attr(e.id)}')">${icon('trash',15)}</button></div>`;
 }
 function openEventForm(){
- $('modal-title').textContent='重要日程を追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="ev-cat"><option value="macro">マクロ</option><option value="centralbank">中銀</option><option value="earnings">決算</option><option value="material">個別材料</option><option value="other">その他</option></select><input id="ev-name" placeholder="イベント名"><input class="span2" id="ev-time" type="datetime-local"><div class="span2 actions"><button class="primary" onclick="addEvent()">追加</button></div></div>`;openModal();
+ $('modal-title').textContent='重要日程を追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="ev-cat"><option value="macro">マクロ</option><option value="centralbank">中銀</option><option value="earnings">決算</option><option value="material">個別材料</option><option value="other">その他</option></select><input id="ev-name" placeholder="イベント名"><input class="span2" id="ev-time" type="datetime-local"><input class="span2" id="ev-symbols" placeholder="関連銘柄（例 4063.T, NVDA）"><div class="span2 note">日程は手動登録です。関連銘柄を入れるとAIコピー時に未確認銘柄を判別できます。</div><div class="span2 actions"><button class="primary" onclick="addEvent()">追加</button></div></div>`;openModal();
 }
-async function addEvent(){try{await api('/api/events',{method:'POST',body:{action:'add',name:$('ev-name').value,time:new Date($('ev-time').value).toISOString(),category:$('ev-cat').value}});closeModal();loadEvents()}catch(e){toast(e.message)}}
+async function addEvent(){try{const symbols=$('ev-symbols').value.split(/[、,\s]+/).map(x=>x.trim()).filter(Boolean);await api('/api/events',{method:'POST',body:{action:'add',name:$('ev-name').value,time:new Date($('ev-time').value).toISOString(),category:$('ev-cat').value,symbols}});closeModal();loadEvents()}catch(e){toast(e.message)}}
 async function deleteEvent(id){if(!confirm('削除しますか？'))return;try{await api('/api/events',{method:'POST',body:{action:'delete',id}});loadEvents()}catch(e){toast(e.message)}}
 async function togglePin(id){try{await api('/api/events',{method:'POST',body:{action:'toggle_pin',id}});loadEvents()}catch(e){toast(e.message)}}
 async function clearPastEvents(){if(!confirm('過去の未固定イベントを削除しますか？'))return;try{const d=await api('/api/events',{method:'POST',body:{action:'clear_completed'}});toast(d.removed+'件整理');loadEvents()}catch(e){toast(e.message)}}
@@ -971,15 +985,16 @@ async function copyAI(btn){
    api('/api/stage?market=jp'),api('/api/stage?market=us'),api('/api/notrade?market=jp'),api('/api/notrade?market=us'),
    api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/watchlist'),api('/api/signal-log?limit=60'),api('/api/backtest'),api('/api/events'),api('/api/positions')
   ]);
-  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・市場差RS・出来高・短期セットアップを使った確認順の整理。'];
-  for(const [label,st,nt,mom] of [['日本',jp,njp,mjp],['米国',us,nus,mus]]){
-   const ms=marketState(st,label==='日本'?'jp':'us'),mm=momentumState(nt);
-   out.push(`\n## ${label}市場\n- 市場地合い: ${ms.label}\n- モメンタム地合い: ${mm.label}\n- データ: ${st.price_time||st.updated_at||'—'}`);
-   const mac=st.macro||{};for(const k of ['日経平均','S&P500','韓国KOSPI','韓国KOSDAQ','SOX','VIX','ドル円'])if(mac[k])out.push(`- ${k}: ${pct(mac[k].change_pct)} / 5日 ${pct(mac[k].ret5)}`);
+  state.stage.jp=jp;state.stage.us=us;state.notrade.jp=njp;state.notrade.us=nus;state.momentum.jp=mjp;state.momentum.us=mus;state.watch=w;state.positions=pos;state.events=ev;
+  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・市場差RS・出来高・短期セットアップを使った確認順の整理。','注意: ウォッチの登録時メモと現在データは分離して記載。重要日程は手動登録ベース。'];
+  for(const [label,m,st,nt,mom] of [['日本','jp',jp,njp,mjp],['米国','us',us,nus,mus]]){
+   const ms=marketState(st,m),mm=momentumState(nt),gate=st.risk_gate||mom.risk_gate||nt.risk_gate||{};
+   out.push(`\n## ${label}市場\n- 市場地合い: ${ms.label}\n- モメンタム地合い: ${mm.label}\n- リスクゲート: ${gate.label||'通常'} / 新規A・B抑制: ${gate.block_new_entries?'はい':'いいえ'}${(gate.reasons||[]).length?' / '+gate.reasons.join('、'):''}\n- データ: ${st.price_time||st.updated_at||'—'}`);
+   const mac=st.macro||{};for(const k of ['日経平均','S&P500','韓国KOSPI','韓国KOSDAQ','SOX','VIX','ドル円'])if(mac[k]){const basis=[mac[k].date?'基準 '+mac[k].date:'',mac[k].price_time?'価格時刻 '+mac[k].price_time:''].filter(Boolean).join(' / ');out.push(`- ${k}: ${pct(mac[k].change_pct)} / 5日 ${pct(mac[k].ret5)}${basis?' / '+basis:''}`)}
    for(const lane of mom.board||[]){
     if(!['A','B','C'].includes(lane.key))continue;const limit=lane.key==='C'?3:lane.rows.length;
-    out.push(`\n### ${lane.key}. ${lane.label}`);
-    for(const r of (lane.rows||[]).slice(0,limit))out.push(`- ${r.name}(${r.symbol}) ${pct(r.change_pct)} / 出来高${num(r.effective_vol_ratio??r.vol_ratio)}x / 25MA${pct(r.div25)} / 5日RS${pct(r.rs5)} / 長期${r.long_stage||r.stage}${r.setup_label?' / '+r.setup_label:''}`);
+    out.push(`\n### ${lane.key}. ${lane.label}${gate.block_new_entries&&['A','B'].includes(lane.key)?'（環境ゲートで新規抑制）':''}`);
+    for(const r of (lane.rows||[]).slice(0,limit))out.push(`- ${r.name}(${r.symbol}) ${pct(r.change_pct)} / 株価 ${marketOf(r.symbol)==='jp'?num(r.price,0)+'円':'$'+num(r.price,2)} / 価格時刻 ${r.price_time||r.date||'—'} / 出来高${num(r.effective_vol_ratio??r.vol_ratio)}x / 25MA${pct(r.div25)} / 5日市場差RS${pct(r.rs5)} / 日足レジーム${r.long_stage||r.stage||'—'}${r.setup_label?' / 短期セットアップ '+r.setup_label:''}${r.entry_allowed===false?' / 環境停止':''}`);
    }
   }
   out.push('\n## 世界横断テーマ段階（日米50:50・母数補正）');
@@ -987,13 +1002,26 @@ async function copyAI(btn){
   for(const r of mjp.rows||[])put(r,'jp');for(const r of mus.rows||[])put(r,'us');
   const ranked=[...globalGroups].map(([name,g])=>({name,phase:balancedThemePhase(g.jp,g.us)})).sort((a,b)=>themePriority(a.phase.code)-themePriority(b.phase.code)||(b.phase.rs5??-99)-(a.phase.rs5??-99)).slice(0,8);
   for(const x of ranked)out.push(`- ${x.name}: ${x.phase.label} / 市場差RS5 ${pct(x.phase.rs5)} / 市場差RS20 ${pct(x.phase.rs20)} / 伝播 ${x.phase.propagation} / 確度 ${x.phase.confidence||0}% / JP ${x.phase.jp?.n||0}・US ${x.phase.us?.n||0}`);
-  out.push('\n## 保有☑');for(const p of pos.positions||[])out.push(`- ${p.name||p.symbol}(${p.symbol})`);
-  out.push('\n## ウォッチ');for(const x of (w.items||[]).slice(0,12))out.push(`- ${x.name}(${x.symbol}) / ${x.status||'tracking'}${x.memo?' / '+x.memo.slice(0,100):''}`);
+  const heldSymbols=new Set((pos.positions||[]).map(p=>String(p.symbol).toUpperCase()));
+  out.push('\n## 保有☑');if(!(pos.positions||[]).length)out.push('- なし');for(const p of pos.positions||[])out.push(`- ${p.name||p.symbol}(${p.symbol})`);
+  out.push('\n## ウォッチ（現在データと登録時情報を分離）');
+  const stageMap=new Map();for(const st of [jp,us])for(const [sym,r] of Object.entries(st.stocks||{}))stageMap.set(String(r?.symbol||sym).toUpperCase(),r||{});
+  for(const x of (w.items||[]).slice(0,20)){
+   const cur=x.current_data||stageMap.get(String(x.symbol).toUpperCase())||x.stage_data||{},m=x.market||marketOf(x.symbol),management=watchStatusLabel(x.status),actualHeld=Boolean(x.held||heldSymbols.has(String(x.symbol).toUpperCase()));
+   out.push(`- ${x.name}(${x.symbol}) / 管理:${management} / 実保有:${actualHeld?'はい':'いいえ'} / 現在株価:${finite(cur.price)?(m==='jp'?num(cur.price,0)+'円':'$'+num(cur.price,2)):'—'} / 現在騰落率:${pct(cur.change_pct)} / 価格時刻:${cur.price_time||cur.date||'—'} / 現在出来高:${num(cur.effective_vol_ratio??cur.vol_ratio)}x / 現在25MA:${pct(cur.div25)} / 現在5日市場差RS:${pct(cur.rs5)} / 現在判定:${cur.entry_lane||'—'}・${cur.long_stage||cur.stage||cur.stage_code||'—'}`);
+   if(x.signal_snapshot)out.push(`  - 登録時スナップショット: ${x.signal_at||x.added_at||'—'} / 騰落率 ${pct(x.signal_snapshot.change_pct)} / 出来高 ${num(x.signal_snapshot.effective_vol_ratio??x.signal_snapshot.vol_ratio)}x / 25MA ${pct(x.signal_snapshot.div25)} / 市場差RS5 ${pct(x.signal_snapshot.rs5)} / 判定 ${x.signal_snapshot.entry_lane||'—'}`);
+   if(x.memo)out.push(`  - 登録時メモ（現在値ではない）: ${String(x.memo).slice(0,180)}`);
+   if(x.legacy_status)out.push(`  - 旧管理状態「${x.legacy_status}」は追跡中へ移行済み。実保有は保有☑のみを参照。`);
+  }
   out.push('\n## シグナル実績');for(const s of sig.summary||[]){const d5=s.horizons?.d5;if(d5)out.push(`- ${s.label}: 5日中央値${pct(d5.median)} / 勝率${d5.win_rate}% / n=${d5.n}`)}
   out.push('\n## 登録銘柄バックテスト');for(const [k,x] of Object.entries(bt.strategies||{})){const m=x.metrics||{};if(m.trades)out.push(`- ${x.label||k}: 勝率${m.win_rate}% / 期待値${pct(m.expectancy)} / PF${m.profit_factor} / n=${m.trades} / 直近1年${pct(x.recent_metrics?.expectancy)}`)}
   out.push('\n## 厳選バックテスト条件');for(const r of bt.selective?.confirmed||[])out.push(`- ${r.market==='jp'?'日本':'米国'} ${r.strategy.replace('_','→')}: ${(r.labels||[]).join(' + ')} / 最終試験 勝率${r.test?.win_rate}% / 期待値${pct(r.test?.expectancy)} / PF${r.test?.profit_factor} / n=${r.test?.trades}`);if(!(bt.selective?.confirmed||[]).length)out.push('- 確認済み厳選条件なし');
-  out.push('\n## 7日以内の重要日程');const limit=Date.now()+7*86400000;for(const e of (ev.events||[]).filter(x=>new Date(x.time)>=Date.now()&&new Date(x.time)<=limit).sort((a,b)=>new Date(a.time)-new Date(b.time)))out.push(`- ${e.name}: ${dateText(e.time)}`);
-  out.push('\n## 依頼\nA/Bを中心に3〜5本へ絞り、エントリー候補・押し待ち・見送りを分けてください。日足トレンドレジームと短期セットアップを混同せず、市場差RS・出来高・重要日程・保有との矛盾も指摘してください。');
+  out.push('\n## 7日以内の重要日程（手動登録ベース）');const limit=Date.now()+7*86400000,near=(ev.events||[]).filter(x=>new Date(x.time)>=Date.now()&&new Date(x.time)<=limit).sort((a,b)=>new Date(a.time)-new Date(b.time));
+  if(!near.length)out.push('- 手動登録なし。決算予定や重要材料がないことを意味しない。');
+  const covered=new Set();for(const e of near){for(const sym of e.symbols||[])covered.add(String(sym).toUpperCase());out.push(`- ${e.name}: ${dateText(e.time)}${(e.symbols||[]).length?' / 関連 '+e.symbols.map(code).join('・'):''}`)}
+  const prioritySymbols=new Set([...heldSymbols]);for(const mom of [mjp,mus])for(const lane of mom.board||[])if(['A','B'].includes(lane.key))for(const r of lane.rows||[])prioritySymbols.add(String(r.symbol).toUpperCase());
+  const uncovered=[...prioritySymbols].filter(sym=>!covered.has(sym));if(uncovered.length)out.push(`- 日程未確認（保有・A/B）: ${uncovered.map(code).join('、')}。企業IR・証券会社で別途確認必須。`);
+  out.push('\n## 依頼\nA/Bを中心に3〜5本へ絞り、エントリー候補・押し待ち・見送りを分けてください。環境ゲートで停止中のA/Bを新規候補に昇格させないでください。日足トレンドレジームと短期セットアップを混同せず、現在データと登録時メモを混同せず、市場差RS・出来高・重要日程・実保有との矛盾も指摘してください。');
   await navigator.clipboard.writeText(out.join('\n'));toast('コピーしました');
  }catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
 }
@@ -1113,8 +1141,8 @@ const finite = v => v != null && Number.isFinite(Number(v));
       }
     }
     for(const w of state.watch?.items || []) {
-      const k=String(w.symbol||'').toUpperCase();
-      if(w.stage_data) map.set(k,{...(map.get(k)||{}),...w.stage_data});
+      const k=String(w.symbol||'').toUpperCase(),cur=w.current_data||w.stage_data;
+      if(cur) map.set(k,{...(map.get(k)||{}),...cur});
     }
     for(const [sym,r] of Object.entries(state.watchQuotes || {})) map.set(sym,{...(map.get(sym)||{}),...r});
     return map;
@@ -1160,11 +1188,12 @@ const finite = v => v != null && Number.isFinite(Number(v));
   };
   const watchPriceText=(r,m)=>!finite(r?.price)?'価格待ち':m==='jp'?num(r.price,0)+'円':'$'+num(r.price,2);
   const watchTimeText=(r,w)=>{
-    if(r?.quote_fetched_at)return'価格更新 '+dateText(r.quote_fetched_at);
-    if(r?.quote_time)return'価格時点 '+dateText(Number(r.quote_time)*1000);
+    if(r?.price_time)return'価格時刻 '+dateText(r.price_time);
+    if(r?.quote_time)return'価格時刻 '+dateText(Number(r.quote_time)*1000);
+    if(r?.bar_time)return'日足時刻 '+dateText(Number(r.bar_time)*1000);
+    if(r?.quote_fetched_at)return'アプリ取得 '+dateText(r.quote_fetched_at);
     if(w?.stage_refreshed_at)return'再判定 '+dateText(w.stage_refreshed_at);
-    if(r?.bar_time)return'日足 '+dateText(Number(r.bar_time)*1000);
-    return'更新時刻不明';
+    return'価格時刻不明';
   };
 
   window.renderWatch = function(){
@@ -1172,7 +1201,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
     const all=sortWatch(state.watch?.items||[]),bm=boardMap();
     const jpCount=all.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=all.length-jpCount;
     const items=all.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
-    const enriched=items.map(w=>({w,r:bm.get(String(w.symbol).toUpperCase())||w.stage_data||{}}));
+    const enriched=items.map(w=>({w,r:currentWatchData(w,bm)}));
     const priority=enriched.filter(x=>['A','B'].includes(x.r.entry_lane)).length;
     const ready=enriched.filter(x=>finite(x.r.price)).length;
     const waiting=enriched.length-ready;
@@ -1189,8 +1218,9 @@ const finite = v => v != null && Number.isFinite(Number(v));
       const stageText=r.long_stage||r.stage||r.stage_code||'日足レジーム待ち';
       const setup=r.setup_label?`<span>${esc(r.setup_label)}</span>`:'';
       return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
-        `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格は現在値または最新終値。判定は最新取得日足を使用。'}</div>`+
-        `<div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="条件・押し目水準・決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
+        `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-current-line"><b>現在データ</b>　騰落率 ${finite(r.change_pct)?pct(r.change_pct):'—'} / 出来高 ${finite(r.effective_vol_ratio??r.vol_ratio)?num(r.effective_vol_ratio??r.vol_ratio)+'x':'—'} / 25MA ${pct(r.div25)} / 5日市場差RS ${pct(r.rs5)} / ${esc(watchTimeText(r,w))}</div><div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格と判定は現在データ欄を参照。場中価格は遅延する場合があります。'}</div>`+
+        `${w.signal_snapshot?`<div class="watch-history-note"><b>登録時スナップショット（現在値ではない）</b><br>${esc(dateText(w.signal_at||w.added_at))} / 騰落率 ${pct(w.signal_snapshot.change_pct)} / 出来高 ${num(w.signal_snapshot.effective_vol_ratio??w.signal_snapshot.vol_ratio)}x / 25MA ${pct(w.signal_snapshot.div25)} / 市場差RS5 ${pct(w.signal_snapshot.rs5)} / 判定 ${esc(w.signal_snapshot.entry_lane||'—')}</div>`:''}${w.legacy_status?`<div class="watch-history-note">旧状態「${esc(w.legacy_status)}」は管理用の追跡中へ移行済みです。実保有は保有☑だけを参照します。</div>`:''}`+
+        `<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
         `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
     }).join('');
     $('watch-list').innerHTML=html;
@@ -1204,7 +1234,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
       if(d?.ok===false)throw new Error(d.error||'更新できませんでした');
       await loadWatch();
       const w=(state.watch?.items||[]).find(x=>String(x.id)===String(id));
-      const r=w?(boardMap().get(String(w.symbol).toUpperCase())||w.stage_data||{}):{};
+      const r=w?currentWatchData(w,boardMap()):{};
       toast(finite(r.price)?`更新完了 ${watchPriceText(r,w.market||marketOf(w.symbol))} / ${r.entry_lane||'判定待ち'}`:'判定は更新しましたが価格取得待ちです');
     }catch(e){toast('更新失敗: '+e.message);if(btn){btn.disabled=false;btn.classList.remove('refreshing');btn.textContent=original}}
   };
@@ -1276,7 +1306,7 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=icons-v45').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=integrity-v46').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 

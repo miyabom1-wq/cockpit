@@ -1,6 +1,6 @@
 {
   "name": "vantage-backend",
-  "version": "42.0.0",
+  "version": "46.0.0",
   "private": true,
   "type": "module",
   "main": "src/index.js",

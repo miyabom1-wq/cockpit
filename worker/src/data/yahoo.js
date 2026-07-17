@@ -1,3 +1,4 @@
+import { providerSymbolMatches } from '../services/integrity.js';
 const CHART_BASES = [
   'https://query1.finance.yahoo.com/v8/finance/chart/',
   'https://query2.finance.yahoo.com/v8/finance/chart/'
@@ -25,6 +26,8 @@ export async function fetchYahooChart(symbol,{range='2y',interval='1d',cacheTtl=
 export async function lookupSymbol(symbol) {
   const result = await fetchYahooChart(symbol,{range:'5d',cacheTtl:60});
   const meta = result.meta || {};
+  const providerSymbol=String(meta.symbol||'').toUpperCase();
+  if(providerSymbol&&!providerSymbolMatches(symbol,providerSymbol))throw new Error(`銘柄コード不一致: requested ${symbol} / provider ${providerSymbol}`);
   const q = result.indicators?.quote?.[0] || {};
   const closes = (q.close || []).filter(Number.isFinite);
   const price = Number(meta.regularMarketPrice ?? closes.at(-1));

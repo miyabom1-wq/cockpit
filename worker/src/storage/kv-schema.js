@@ -4,6 +4,7 @@ export const KEYS = Object.freeze({
   events:'events:list',
   discipline:'discipline:state',
   watch:'watchlist:v1',
+  macroCurrent:'macro:current:v1',
   pushSubs:'push:subs',
   signalV5:'signal-log:v5',
   signalV3:'signal-log:v3',

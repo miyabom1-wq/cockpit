@@ -1,57 +1,24 @@
-# VANTAGE UI v45
+# VANTAGE v46 — データ整合性修復
 
-- ホーム画面アイコンを、V文字から市場レーダーを明示する専用デザインへ刷新。
-- 通常アイコンとmaskableアイコンを別ファイル化し、Androidの余白・キャッシュ問題を軽減。
-- v44までの株価・騰落率・価格時刻、日本語銘柄名、市場差RS表示をすべて同梱。
+## 修復内容
 
----
+- ウォッチの「登録時メモ・登録時スナップショット」と「現在の価格・騰落率・出来高・市場差RS・判定」を完全に分離。
+- AIコピーでは現在値を構造化して出力し、古いメモを現在の反転シグナルとして解釈できない形式へ変更。
+- ウォッチ内の旧 `holding` / `candidate` 状態を管理用の「追跡中」へ移行。実保有は「保有☑」だけを参照。
+- 日本・米国で重複するKOSPI、SOX、S&P500、VIXなどを共通の最新マクロスナップショットへ統一。
+- Yahooデータの返却銘柄コードを要求コードと照合し、東証銘柄とADRなどの別銘柄混線を拒否。
+- 日経平均、S&P500、SOX、KOSPI、VIXの急変を使うリスクゲートを追加。
+- ストレス／価格発見局面では、A・Bの基礎判定を記録として残しながら、新規エントリー候補としては環境停止にする。
+- 重要日程に関連銘柄を手動登録可能にし、AIコピーで保有・A/B銘柄の日程未確認を明示。
 
-# VANTAGE v43 Release Notes
+## 重要な制限
 
-## RS表示とアプリ識別
+決算日程の自動取得は実装していません。「重要日程が空」は予定がないことを意味せず、企業IRや証券会社での確認が必要です。
 
-- 「RS」を「市場差RS」へ改称し、株価や銘柄騰落率そのものではないことを画面内で説明
-- 日本株は日経平均、米国株はS&P500との差として表示
-- 世界横断テーマは地域別の市場差RSを日米50:50基準で合成
-- VANTAGEからFRAMEへ日本株の日本語銘柄名を優先して渡すよう改善
-- ヘッダーを深いネイビー・ティールのレーダー表現へ強化し、FRAMEとの識別性を向上
+## 維持されるもの
 
-## 分析ロジック
-
-候補判定、テーマ段階、ユニバース自動入れ替え、自動更新時刻はv42から変更していません。
-
----
-
-# VANTAGE v42 Release Notes
-
-## 最終UI・操作導線
-
-- 市場 → テーマ → FRAMEの基本フローを常時表示
-- ヘッダーに操作ガイドを追加
-- 設定画面にWorker、日本株、米国株、ユニバースの運用状態を集約
-- 更新時刻・基準日・確定状態を日本時間の短い表記に統一
-- snapshot IDとengine IDは折りたたみ式の技術情報へ移動
-- モーダルを明確な×、Esc、背景クリックで閉じられるように改善
-- キーボード操作、スマホ表示、空データ表示、通知を改善
-
-## 分析ロジック
-
-分析ロジックはv41から変更していません。
-
-- 日本：最大160、コア80＋レーダー最大80
-- 米国：登録上限80、先頭40を自動分析
-- 世界横断テーマ：日米50:50を基本とし、少数地域を中立補正
-- 登録ユニバース：週次・安全自動、保有・ウォッチ・固定・テーマ最低数を保護
-
-## 自動更新
-
-既存の市場更新、ランキング、探索、シグナル、バックテスト、18:20頃のユニバース提案更新は変更していません。
-
-
-## UI v44 — Price visibility
-
-- Candidate cards, theme leaders, ranking, explorer, watch, and candidate details show price, daily change, and acquisition time.
-- Intraday values are explicitly labeled as delayed reference values.
-- Visible market/theme/watch quote views refresh from the Worker every five minutes while the app is open.
-- Ranking enrichment now includes price and quote time without changing the ranking or candidate logic.
-- VANTAGE-to-FRAME handoff now also carries the displayed quote and its timestamp.
+- 保存済みウォッチ、保有、シグナル、バックテスト、ユニバース設定
+- テーマの日米50:50・母数補正
+- 自動更新スケジュール
+- FRAME連携
+- v45のアイコンとv44の株価・騰落率・価格時刻表示
