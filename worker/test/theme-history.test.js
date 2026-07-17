@@ -12,7 +12,7 @@ function stage(market,tradeDate,rows,macro={}){
   return{market,complete:true,kind:'confirmed',trade_date:tradeDate,snapshot_id:`${market}-${tradeDate}`,stocks:Object.fromEntries(rows.map(x=>[x.symbol,x])),macro};
 }
 
-test('world theme metrics give Japan and US equal regional weight',()=>{
+test('world theme metrics keep nominal regional balance and shrink small samples',()=>{
   const jp=stage('jp','2026-07-16',[
     row('285A.T','E',-8,-6,-5),row('8035.T','E',-6,-5,-4),row('6857.T','D',-4,-3,-2),row('6146.T','D',-2,-2,-1)
   ]);
@@ -23,7 +23,9 @@ test('world theme metrics give Japan and US equal regional weight',()=>{
   const memory=s.themes['メモリ・ストレージ'];
   assert.equal(memory.jp.n,1);
   assert.equal(memory.us.n,2);
-  assert.equal(memory.rs5,-0.5); // (-8 + average(8,6)) / 2
+  assert.equal(memory.rs5,0.73); // JP1 and US2 are shrunk toward neutral before the 50:50 average
+  assert.equal(memory.confidence,43);
+  assert.equal(memory.coverage,'日米・母数注意');
   assert.equal(memory.propagation,'米国先行・日本未追随');
 });
 
@@ -53,7 +55,8 @@ test('theme history reports phase transition and score acceleration',async()=>{
   const d=await getThemeHistory(env,30);
   const memory=d.current.themes['メモリ・ストレージ'];
   assert.equal(memory.code,'EXPANSION');
-  assert.equal(memory.transition,'修復→拡大');
+  assert.equal(memory.transition,'修復→拡大候補');
+  assert.equal(memory.provisional,true);
   assert.ok(memory.change.d1>0);
   assert.ok(d.alerts.some(x=>x.theme==='メモリ・ストレージ'&&x.type==='transition'));
 });

@@ -13,6 +13,7 @@ import { getBacktestDashboard, getBacktestSymbol, runBacktestStep } from '../ser
 import { getRanking, getEnrichedRanking, getExplorer } from '../services/ranking.js';
 import { addSub, removeSub, sendPushToAll, VAPID_PUBLIC_KEY_RAW } from '../services/push.js';
 import { getThemeHistory, captureThemeSnapshot } from '../services/theme-history.js';
+import { getUniverseDashboard, mutateUniverse } from '../services/universe-manager.js';
 
 export async function route(request,env){
   const url=new URL(request.url),p=url.pathname;
@@ -40,6 +41,7 @@ export async function route(request,env){
   if(p==='/api/explorer')return json(await getExplorer(env,url.searchParams.get('market')==='us'?'us':'jp',url.searchParams.get('refresh')==='1'),200,request);
   if(p==='/api/theme-history')return json(await getThemeHistory(env,url.searchParams.get('limit')),200,request);
   if(p==='/api/theme-history-capture')return json(await captureThemeSnapshot(env,'manual'),200,request);
+  if(p==='/api/universe')return request.method==='GET'?json(await getUniverseDashboard(env),200,request):json(await mutateUniverse(env,await request.json()),200,request);
   if(p==='/api/stage-suggest')return json({ok:true,new_candidates:[],drop_candidates:[],note:'探索タブへ統合'},200,request);
   if(p==='/api/push/key')return json({key:VAPID_PUBLIC_KEY_RAW},200,request);
   if(p==='/api/push/subscribe'){const body=await request.json();return json(await addSub(env,body.subscription||body),200,request);}

@@ -11,6 +11,7 @@ import { isTradingDay, isUsDst } from './data/calendar.js';
 import { jstDate } from './utils.js';
 import { KV_SCHEMA_VERSION } from './config.js';
 import { captureThemeSnapshot } from './services/theme-history.js';
+import { maybeAutoRotateUniverse } from './services/universe-manager.js';
 
 
 async function initializeStorage(env){
@@ -26,14 +27,15 @@ function scheduleNodes(now=new Date()){
   const add=(market,label,at,kind,tradeDate,parts,action='stage')=>{if(action==='stage'){for(let p=1;p<=parts;p++)nodes.push({key:`${label}:b${p}`,at,market,kind,tradeDate,parts,part:p});nodes.push({key:`${label}:enrich`,at,market,kind,tradeDate,parts,action:'enrich'});}else nodes.push({key:label,at,market,kind,tradeDate,parts,action});};
   const jpDate=date,jpObj=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()));
   if(isTradingDay('jp',jpObj)){
-    add('jp','jp_0930',570,'intraday',jpDate,4);add('jp','jp_1020',620,'intraday',jpDate,4);add('jp','jp_1200',720,'intraday',jpDate,marketParts('jp'));add('jp','jp_1420',860,'intraday',jpDate,4);add('jp','jp_1520',920,'intraday',jpDate,4);add('jp','jp_1610',970,'confirmed',jpDate,marketParts('jp'));add('jp','jp_1700_retry',1020,'confirmed',jpDate,marketParts('jp'));add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');
+    add('jp','jp_0930',570,'intraday',jpDate,4);add('jp','jp_1020',620,'intraday',jpDate,4);add('jp','jp_1200',720,'intraday',jpDate,marketParts('jp'));add('jp','jp_1420',860,'intraday',jpDate,4);add('jp','jp_1520',920,'intraday',jpDate,4);add('jp','jp_1610',970,'confirmed',jpDate,marketParts('jp'));add('jp','jp_1700_retry',1020,'confirmed',jpDate,marketParts('jp'));add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');add('jp','jp_1820_universe',1100,'confirmed',jpDate,1,'universe');
   }
   const usObj=minute<720?new Date(jpObj.getTime()-86400000):jpObj,usDate=usObj.toISOString().slice(0,10);if(isTradingDay('us',usObj)){if(isUsDst(now)){add('us','us_2240',1360,'intraday',usDate,marketParts('us'));add('us','us_0520',320,'confirmed',usDate,marketParts('us'));add('us','us_0605_retry',365,'confirmed',usDate,marketParts('us'));}else{add('us','us_2340',1420,'intraday',usDate,marketParts('us'));add('us','us_0620',380,'confirmed',usDate,marketParts('us'));add('us','us_0705_retry',425,'confirmed',usDate,marketParts('us'));}}
   return{minute,nodes};
 }
-async function scheduledStage(env){const{minute,nodes}=scheduleNodes();for(const n of nodes){if(minute<n.at||minute>=n.at+55)continue;const marker=`sched:v39:${n.key}:${n.tradeDate}`;if(await env.COCKPIT_KV.get(marker))continue;
+async function scheduledStage(env){const{minute,nodes}=scheduleNodes();for(const n of nodes){if(minute<n.at||minute>=n.at+55)continue;const marker=`sched:v41:${n.key}:${n.tradeDate}`;if(await env.COCKPIT_KV.get(marker))continue;
     try{
       if(n.action==='explorer')await buildExplorer(env,'jp',true);
+      else if(n.action==='universe')await maybeAutoRotateUniverse(env,'scheduled');
       else if(n.action==='enrich'){
         const retry=n.key.includes('_retry'),ready=retry?await currentCloseReady(env,n.market,n.tradeDate):await snapshotReady(env,n);
         if(!ready)throw new Error(`${n.market} snapshot not ready for enrich`);

@@ -39,9 +39,22 @@ function stats(rows=[]){
     improving
   };
 }
-function avgDefined(items,key){
-  const xs=items.map(x=>x?.[key]).filter(finite).map(Number);
-  return xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;
+function regionConfidence(n){
+  const x=Number(n)||0;
+  if(x>=5)return 1;if(x===4)return .9;if(x===3)return .8;if(x===2)return .55;if(x===1)return .3;return 0;
+}
+function shrinkMetric(value,confidence,neutral){
+  return finite(value)?neutral+confidence*(Number(value)-neutral):neutral;
+}
+function balancedMetric(jp,us,key,neutral=0){
+  if(jp&&us)return(shrinkMetric(jp[key],regionConfidence(jp.n),neutral)+shrinkMetric(us[key],regionConfidence(us.n),neutral))/2;
+  const one=jp||us;return one?shrinkMetric(one[key],regionConfidence(one.n),neutral):null;
+}
+function confidenceMeta(jp,us){
+  const jc=regionConfidence(jp?.n),uc=regionConfidence(us?.n),both=Boolean(jp&&us);
+  const confidence=both?(jc+uc)/2*100:Math.max(jc,uc)*55;
+  const coverage=both?(jp.n>=3&&us.n>=3?'日米確認':'日米・母数注意'):jp?'日本単独':'米国単独';
+  return{confidence:round(confidence,0),jp_confidence:round(jc*100,0),us_confidence:round(uc*100,0),coverage,nominal_weights:both?{jp:50,us:50}:jp?{jp:100,us:0}:{jp:0,us:100}};
 }
 function propagationLabel(jp,us){
   if(jp&&us){
@@ -61,17 +74,18 @@ function classify(m,regional={}){
   else if(abRate>=.35&&(rs5??0)>1&&(rs20??0)>=0&&breadth>=55){code='EXPANSION';label='拡大';kind='good';reason='A・B候補と上昇銘柄の広がりを確認';}
   else if((rs20??0)<0&&(rs5??0)>(rs20??0)+2&&bcRate>=.25){code='RECOVERY';label='修復';kind='repair';reason='中期劣後の中で短期相対強度が反転';}
   else if(b>=1&&(rs5??0)>0&&improving>=40){code='GERMINATION';label='発芽';kind='seed';reason='反転初動と短期相対強度の改善を確認';}
-  const jp=regional.jp||null,us=regional.us||null;
+  const jp=regional.jp||null,us=regional.us||null,meta=confidenceMeta(jp,us);
+  const provisional=meta.confidence<60&&['GERMINATION','EXPANSION'].includes(code);
+  if(provisional){label+='候補';reason+='。ただし地域またはテーマ母数が少ないため確認継続';}
   const score=round(
     (Number(rs5)||0)*1.8+(Number(rs20)||0)*.8+(breadth-50)*.08+(improving-50)*.04+
     abRate*18-eRate*20-(hot>35?(hot-35)*.12:0),1
   );
   return{
-    code,label,kind,reason,score,
+    code,label,kind,reason,score,provisional,
     n,a,b,c,e,rs5:round(rs5),rs20:round(rs20),vol:round(m?.vol),breadth:round(breadth,1),hot:round(hot,1),improving:round(improving,1),
     abRate:round(abRate,4),bcRate:round(bcRate,4),eRate:round(eRate,4),
-    jp:compactRegion(jp),us:compactRegion(us),
-    coverage:jp&&us?(n>=5?'日米確認':'日米・母数小'):'片市場のみ',
+    jp:compactRegion(jp),us:compactRegion(us),...meta,
     propagation:propagationLabel(jp,us)
   };
 }
@@ -83,7 +97,8 @@ function balanced(jpRows,usRows){
   const jp=stats(jpRows),us=stats(usRows),active=[jp,us].filter(Boolean);
   if(!active.length)return classify({n:0},{jp,us});
   const m={n:(jp?.n||0)+(us?.n||0),a:(jp?.a||0)+(us?.a||0),b:(jp?.b||0)+(us?.b||0),c:(jp?.c||0)+(us?.c||0),e:(jp?.e||0)+(us?.e||0)};
-  for(const k of ['aRate','bRate','cRate','eRate','abRate','bcRate','rs5','rs20','vol','breadth','hot','improving'])m[k]=avgDefined(active,k);
+  const neutral={aRate:0,bRate:0,cRate:0,eRate:0,abRate:0,bcRate:0,rs5:0,rs20:0,vol:1,breadth:50,hot:0,improving:50};
+  for(const k of Object.keys(neutral))m[k]=balancedMetric(jp,us,k,neutral[k]);
   return classify(m,{jp,us});
 }
 function stageRows(stage){return Object.values(stage?.stocks||{}).filter(x=>x&&x.symbol);}
@@ -170,5 +185,5 @@ export async function getThemeHistory(env,limit=30){
   const merged=[...history.filter(x=>x.date!==currentRaw.date),currentRaw].sort((a,b)=>a.date.localeCompare(b.date));
   const current=enrichCurrent(currentRaw,merged);
   const size=Math.max(1,Math.min(90,Number(limit)||30));
-  return{ok:true,current,alerts:alertsFrom(current),history:merged.slice(-size),history_days:merged.length,methodology:'実際の資金流入額ではなく、日米均衡の相対強度・参加銘柄の広がり・出来高・A〜E候補レーンを用いた代理指標'};
+  return{ok:true,current,alerts:alertsFrom(current),history:merged.slice(-size),history_days:merged.length,methodology:'実際の資金流入額ではなく、日米50:50を基準に、片側3銘柄未満を中立方向へ縮小補正した相対強度・広がり・出来高・A〜E候補レーンの代理指標'};
 }

@@ -15,6 +15,8 @@ export const KEYS = Object.freeze({
   rankingHistory:market=>`ranking:history:${market}`,
   explorer:market=>`explorer:${market}`,
   themeHistory:'theme:history:v1',
+  universeConfig:'universe:config:v1',
+  universeState:'universe:state:v1',
 });
 export async function ensureSchema(env,current=undefined){
   const raw=current===undefined?await env.COCKPIT_KV.get(KEYS.schema):current;
