@@ -34,7 +34,7 @@ def load_core():
     return module
 
 
-def discover_pdf_from_html(html: str, page_url: str, link_type):
+def discover_pdf_from_html(html: bytes | str, page_url: str, link_type):
     soup = BeautifulSoup(html, "html.parser")
     page_text = re.sub(r"\s+", " ", soup.get_text(" ", strip=True))
 
@@ -80,7 +80,7 @@ def self_test() -> None:
     <div>変更 <a href="/notice-2.pdf">PDF</a></div>
     """
     result = discover_pdf_from_html(
-        html,
+        html.encode("utf-8"),
         "https://www.jpx.co.jp/markets/statistics-equities/margin/05.html",
         SimpleNamespace,
     )
@@ -103,7 +103,7 @@ def main() -> int:
             timeout=60,
         )
         response.raise_for_status()
-        result = discover_pdf_from_html(response.text, page_url, core.LinkWithDate)
+        result = discover_pdf_from_html(response.content, page_url, core.LinkWithDate)
         print(
             f"JPX weekly PDF selected: {result.date} / {result.url}",
             file=sys.stderr,
