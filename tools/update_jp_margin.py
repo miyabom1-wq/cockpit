@@ -2,8 +2,8 @@
 """Build public/data/jp-margin.json from official JPX public pages.
 
 The updater deliberately runs outside the Worker because the all-issue weekly file is
-an ~80 page PDF.  It validates the extracted universe before replacing the previous
-JSON, so a layout change at JPX cannot silently publish an empty/corrupted dataset.
+an ~80 page PDF. It validates the extracted universe before replacing the previous
+JSON, so a JPX layout change cannot silently publish an empty/corrupted dataset.
 """
 from __future__ import annotations
 
@@ -18,9 +18,24 @@ from pathlib import Path
 from typing import Iterable, Optional
 from urllib.parse import urljoin
 
-import pdfplumber
-import requests
-from bs4 import BeautifulSoup
+# Third-party packages are required only for the real JPX download/parser run.
+# Keep imports optional so --self-test works on a clean Windows Python install.
+try:
+    import requests  # type: ignore
+except ImportError:
+    requests = None
+try:
+    import pdfplumber  # type: ignore
+except ImportError:
+    pdfplumber = None
+try:
+    from bs4 import BeautifulSoup  # type: ignore
+except ImportError:
+    BeautifulSoup = None
+try:
+    import fitz  # type: ignore  # Optional PyMuPDF fallback
+except ImportError:
+    fitz = None
 
 JST = timezone(timedelta(hours=9))
 WEEKLY_PAGE = "https://www.jpx.co.jp/markets/statistics-equities/margin/05.html"
@@ -28,10 +43,11 @@ DAILY_PAGE = "https://www.jpx.co.jp/markets/equities/margin-daily/index.html"
 SPECIAL_PAGE = "https://www.jpx.co.jp/markets/equities/margin-daily/01.html"
 RESTRICTION_PAGE = "https://www.jpx.co.jp/markets/equities/margin-reg/index.html"
 SCHEMA = "jp-margin-v1"
-UA = "Mozilla/5.0 (compatible; VANTAGE-JP-Margin/1.0; +https://miyabom1-wq.github.io/cockpit/)"
+UA = "Mozilla/5.0 (compatible; VANTAGE-JP-Margin/1.1; +https://miyabom1-wq.github.io/cockpit/)"
 DATE_RE = re.compile(r"(20\d{2})年\s*(\d{1,2})月\s*(\d{1,2})日|(?:20\d{2})[/-]\d{1,2}[/-]\d{1,2}")
-CODE_RE = re.compile(r"^(?:\d{4,5}|\d{3}[A-Z](?:0)?)$")
-NUM_RE = re.compile(r"^[▲△△-]?\(?[▲△-]?[\d,]+(?:\.\d+)?\)?$")
+CODE_CORE_RE = re.compile(r"(?:\d{4}|\d{3}[A-Z])", re.I)
+NUM_FIND_RE = re.compile(r"(?:▲|△|[-−－])?\s*\(?\s*[\d,]+(?:\.\d+)?\s*\)?")
+TEXT_RE = re.compile(r"[A-Za-zぁ-んァ-ヶ一-龠々]", re.I)
 
 
 @dataclass
@@ -41,7 +57,21 @@ class LinkWithDate:
     label: str
 
 
+def require_runtime_dependencies() -> None:
+    missing = []
+    if requests is None:
+        missing.append("requests")
+    if pdfplumber is None:
+        missing.append("pdfplumber")
+    if BeautifulSoup is None:
+        missing.append("beautifulsoup4")
+    if missing:
+        raise RuntimeError("実データ更新に必要なPythonパッケージがありません: " + ", ".join(missing))
+
+
 def get(url: str, *, binary: bool = False) -> bytes | str:
+    if requests is None:
+        raise RuntimeError("requests がありません")
     r = requests.get(url, headers={"User-Agent": UA, "Accept": "*/*"}, timeout=60)
     r.raise_for_status()
     return r.content if binary else r.text
@@ -70,20 +100,24 @@ def discover_latest_pdf(page_url: str = WEEKLY_PAGE) -> LinkWithDate:
             a.parent.get_text(" ", strip=True) if a.parent else "",
             a.find_previous(string=DATE_RE) or "",
         ])
+        # Avoid selecting announcements that happen to contain a newer date.
+        if "申込" not in context and "application" not in context.lower():
+            continue
         d = iso_date(context)
         if d:
             found.append(LinkWithDate(d, urljoin(page_url, href), context.strip()))
     if not found:
-        raise RuntimeError("JPX週次ページから日付付きPDFリンクを検出できませんでした")
+        raise RuntimeError("JPX週次ページから申込日付きPDFリンクを検出できませんでした")
     return max(found, key=lambda x: (x.date, x.url))
 
 
 def parse_number(v: str) -> Optional[float]:
     s = str(v or "").strip().replace(" ", "").replace(",", "")
-    if not s or s in {"-", "—", "―"}:
+    if not s or s in {"-", "−", "－", "—", "―"}:
         return None
-    neg = "▲" in s or "△" in s or (s.startswith("(") and s.endswith(")")) or s.startswith("-")
-    s = s.replace("▲", "").replace("△", "").replace("(", "").replace(")", "").replace("+", "")
+    neg = any(x in s for x in ("▲", "△")) or (s.startswith("(") and s.endswith(")")) or s.startswith(("-", "−", "－"))
+    for mark in ("▲", "△", "(", ")", "+", "-", "−", "－"):
+        s = s.replace(mark, "")
     try:
         n = float(s)
         return -n if neg else n
@@ -100,13 +134,52 @@ def normalize_code(token: str) -> Optional[str]:
     return None
 
 
-def choose_totals(nums: list[float]) -> Optional[tuple[int, int, int, int]]:
-    """Return sell balance/change and buy balance/change.
+def code_at(vals: list[str]) -> Optional[tuple[int, int, str]]:
+    """Return (start index, number of cells consumed, symbol).
 
-    JPX's weekly PDF contains totals plus general/standardized subcolumns.  Across
-    historical layouts the numeric group is either 4 (totals only), 6/8, or 12
-    values (total/general/standardized, each balance and weekly change).
+    JPX PDFs may emit the fifth market digit as a separate word (7203 0),
+    insert a hyphen (7203-0), or place a line break inside the code cell.
     """
+    for i, raw in enumerate(vals[:10]):
+        if i + 1 < len(vals):
+            joined = f"{raw}{vals[i + 1]}"
+            symbol = normalize_code(joined)
+            compact_next = re.sub(r"\s+", "", vals[i + 1])
+            if symbol and compact_next in {"0", "０"}:
+                return i, 2, symbol
+        direct = normalize_code(raw)
+        if direct:
+            return i, 1, direct
+        m = CODE_CORE_RE.search(str(raw).upper())
+        if m:
+            tail = str(raw)[m.start():]
+            symbol = normalize_code(tail)
+            if symbol:
+                return i, 1, symbol
+    return None
+
+
+def numeric_fragments(value: str) -> list[float]:
+    s = str(value or "").strip()
+    if not s:
+        return []
+    matches = list(NUM_FIND_RE.finditer(s))
+    if not matches:
+        return []
+    residue = NUM_FIND_RE.sub("", s)
+    # Numeric cells may include separators/newlines, but not company/market text.
+    if TEXT_RE.search(residue):
+        return []
+    out: list[float] = []
+    for m in matches:
+        n = parse_number(m.group(0))
+        if n is not None:
+            out.append(n)
+    return out
+
+
+def choose_totals(nums: list[float]) -> Optional[tuple[int, int, int, int]]:
+    """Return sell balance/change and buy balance/change."""
     if len(nums) >= 12:
         return int(nums[0]), int(nums[1]), int(nums[6]), int(nums[7])
     if len(nums) >= 8:
@@ -120,22 +193,19 @@ def choose_totals(nums: list[float]) -> Optional[tuple[int, int, int, int]]:
 
 def row_record(cells: Iterable[object]) -> Optional[dict]:
     vals = [re.sub(r"\s+", " ", str(x or "")).strip() for x in cells]
-    code_idx = next((i for i, x in enumerate(vals) if CODE_RE.fullmatch(x.replace(" ", ""))), None)
-    if code_idx is None:
+    found = code_at(vals)
+    if not found:
         return None
-    symbol = normalize_code(vals[code_idx])
-    if not symbol:
-        return None
+    code_idx, consumed, symbol = found
     name_tokens: list[str] = []
     number_values: list[float] = []
     started_numbers = False
-    for x in vals[code_idx + 1 :]:
-        compact = x.replace(" ", "")
-        n = parse_number(compact) if NUM_RE.fullmatch(compact) else None
-        if n is not None:
+    for x in vals[code_idx + consumed:]:
+        nums = numeric_fragments(x)
+        if nums:
             started_numbers = True
-            number_values.append(n)
-        elif not started_numbers and x and not re.search(r"市場|Market|区分|銘柄", x, re.I):
+            number_values.extend(nums)
+        elif not started_numbers and x and not re.search(r"市場|Market|区分|銘柄|コード", x, re.I):
             name_tokens.append(x)
     totals = choose_totals(number_values)
     if not totals:
@@ -143,7 +213,39 @@ def row_record(cells: Iterable[object]) -> Optional[dict]:
     sell, sell_chg, buy, buy_chg = totals
     if min(sell, buy) < 0 or max(sell, buy) > 10**11:
         return None
-    return {"symbol": symbol, "name": " ".join(name_tokens).strip() or symbol, "sell_balance": sell, "sell_change": sell_chg, "buy_balance": buy, "buy_change": buy_chg}
+    return {
+        "symbol": symbol,
+        "name": " ".join(name_tokens).strip() or symbol,
+        "sell_balance": sell,
+        "sell_change": sell_chg,
+        "buy_balance": buy,
+        "buy_change": buy_chg,
+    }
+
+
+def add_rows(records: dict[str, dict], rows: list[list[str]]) -> None:
+    for i, row in enumerate(rows):
+        candidates = [row]
+        if i + 1 < len(rows):
+            candidates.append(row + rows[i + 1])
+        for candidate in candidates:
+            rec = row_record(candidate)
+            if rec:
+                records[rec["symbol"]] = rec
+                break
+
+
+def group_words(words: list[dict], tolerance: float = 3.0) -> list[list[str]]:
+    ordered = sorted(words, key=lambda w: (float(w.get("top", 0)), float(w.get("x0", 0))))
+    groups: list[dict] = []
+    for word in ordered:
+        top = float(word.get("top", 0))
+        if not groups or abs(top - groups[-1]["top"]) > tolerance:
+            groups.append({"top": top, "words": [word]})
+        else:
+            groups[-1]["words"].append(word)
+            groups[-1]["top"] = (groups[-1]["top"] + top) / 2
+    return [[str(w.get("text", "")) for w in sorted(g["words"], key=lambda x: float(x.get("x0", 0)))] for g in groups]
 
 
 def parse_tables(pdf: pdfplumber.PDF) -> dict[str, dict]:
@@ -151,6 +253,7 @@ def parse_tables(pdf: pdfplumber.PDF) -> dict[str, dict]:
     settings = [
         {},
         {"vertical_strategy": "text", "horizontal_strategy": "text", "snap_tolerance": 3, "intersection_tolerance": 5},
+        {"vertical_strategy": "lines", "horizontal_strategy": "lines", "snap_tolerance": 4, "join_tolerance": 4},
     ]
     for page in pdf.pages:
         for st in settings:
@@ -163,47 +266,88 @@ def parse_tables(pdf: pdfplumber.PDF) -> dict[str, dict]:
                     rec = row_record(row or [])
                     if rec:
                         records[rec["symbol"]] = rec
-        if len(records) > 3600:
-            break
     return records
 
 
-def parse_text(pdf: pdfplumber.PDF) -> dict[str, dict]:
+def parse_pdfplumber_words(pdf: pdfplumber.PDF) -> dict[str, dict]:
     records: dict[str, dict] = {}
     for page in pdf.pages:
-        text = page.extract_text(x_tolerance=1.2, y_tolerance=2.5) or ""
-        lines = [re.sub(r"\s+", " ", x).strip() for x in text.splitlines() if x.strip()]
-        buffer: list[str] = []
-        segments: list[list[str]] = []
-        for line in lines:
-            tokens = line.split()
-            positions = [i for i, t in enumerate(tokens) if CODE_RE.fullmatch(t)]
-            if positions:
-                for pos in positions:
-                    if buffer:
-                        segments.append(buffer)
-                    buffer = tokens[pos:]
-            elif buffer:
-                buffer.extend(tokens)
-        if buffer:
-            segments.append(buffer)
-        for seg in segments:
-            rec = row_record(seg)
-            if rec:
-                records[rec["symbol"]] = rec
+        try:
+            words = page.extract_words(x_tolerance=2, y_tolerance=3, keep_blank_chars=False) or []
+        except Exception:
+            words = []
+        add_rows(records, group_words(words))
     return records
 
 
-def parse_weekly_pdf(pdf_bytes: bytes) -> dict[str, dict]:
+def parse_pdfplumber_text(pdf: pdfplumber.PDF) -> dict[str, dict]:
+    records: dict[str, dict] = {}
+    for page in pdf.pages:
+        text = page.extract_text(x_tolerance=2, y_tolerance=3, layout=True) or page.extract_text() or ""
+        rows = [re.split(r"\s+", line.strip()) for line in text.splitlines() if line.strip()]
+        add_rows(records, rows)
+    return records
+
+
+def parse_pymupdf(pdf_bytes: bytes) -> dict[str, dict]:
+    records: dict[str, dict] = {}
+    if fitz is None:
+        return records
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    try:
+        for page in doc:
+            rows: list[list[str]] = []
+            # block_no and line_no preserve visual rows more reliably than plain text.
+            words = page.get_text("words", sort=True) or []
+            grouped: dict[tuple[int, int], list[tuple]] = {}
+            for w in words:
+                grouped.setdefault((int(w[5]), int(w[6])), []).append(w)
+            for key in sorted(grouped, key=lambda k: (min(x[1] for x in grouped[k]), min(x[0] for x in grouped[k]))):
+                rows.append([str(x[4]) for x in sorted(grouped[key], key=lambda z: z[0])])
+            add_rows(records, rows)
+    finally:
+        doc.close()
+    return records
+
+
+def pdf_diagnostics(pdf_bytes: bytes) -> dict:
+    out = {"bytes": len(pdf_bytes), "pdfplumber_pages": 0, "first_page_chars": 0, "first_page_words": 0, "pymupdf_pages": 0, "pymupdf_first_page_chars": 0}
+    try:
+        with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+            out["pdfplumber_pages"] = len(pdf.pages)
+            if pdf.pages:
+                out["first_page_chars"] = len(pdf.pages[0].extract_text() or "")
+                out["first_page_words"] = len(pdf.pages[0].extract_words() or [])
+    except Exception as exc:
+        out["pdfplumber_error"] = str(exc)
+    try:
+        if fitz is None:
+            out["pymupdf_status"] = "not-installed"
+            return out
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        out["pymupdf_pages"] = len(doc)
+        if len(doc):
+            out["pymupdf_first_page_chars"] = len(doc[0].get_text("text") or "")
+        doc.close()
+    except Exception as exc:
+        out["pymupdf_error"] = str(exc)
+    return out
+
+
+def parse_weekly_pdf(pdf_bytes: bytes) -> tuple[dict[str, dict], dict]:
+    methods: dict[str, dict[str, dict]] = {}
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-        table_records = parse_tables(pdf)
-        if len(table_records) >= 1000:
-            return table_records
+        methods["pdfplumber_tables"] = parse_tables(pdf)
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-        text_records = parse_text(pdf)
-    if len(text_records) > len(table_records):
-        return text_records
-    return table_records
+        methods["pdfplumber_words"] = parse_pdfplumber_words(pdf)
+    with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+        methods["pdfplumber_text"] = parse_pdfplumber_text(pdf)
+    methods["pymupdf_words"] = parse_pymupdf(pdf_bytes)
+    counts = {name: len(rows) for name, rows in methods.items()}
+    best_name, records = max(methods.items(), key=lambda item: len(item[1]))
+    diag = {**pdf_diagnostics(pdf_bytes), "method_counts": counts, "selected_method": best_name, "selected_count": len(records)}
+    print("Parser diagnostics: " + json.dumps(diag, ensure_ascii=False), file=sys.stderr)
+    return records, diag
 
 
 def active_table(page_url: str, heading_pattern: str) -> list[dict]:
@@ -282,7 +426,6 @@ def build_dataset(records: dict[str, dict], link: LinkWithDate, previous: dict, 
             "flags": flags,
             "history": old_hist,
         }
-    # Preserve active flags even for a rare symbol absent from the weekly PDF.
     for source in (daily, special, restricted):
         for symbol, x in source.items():
             if symbol in items:
@@ -311,11 +454,25 @@ def self_test() -> None:
     assert normalize_code("72030") == "7203.T"
     assert normalize_code("285A0") == "285A.T"
     assert normalize_code("472A") == "472A.T"
+    assert code_at(["7203", "0", "トヨタ"]) == (0, 2, "7203.T")
+    assert code_at(["7203-0", "トヨタ"])[2] == "7203.T"
     assert choose_totals([10, -2, 20, 3]) == (10, -2, 20, 3)
     assert choose_totals([10, -2, 3, 1, 7, -3, 20, 4, 8, 1, 12, 3]) == (10, -2, 20, 4)
     rec = row_record(["72030", "トヨタ自動車", "1,000", "▲100", "2,000", "300"])
     assert rec and rec["sell_balance"] == 1000 and rec["buy_change"] == 300
+    rec2 = row_record(["7203", "0", "トヨタ自動車", "1,000 ▲100", "2,000 300"])
+    assert rec2 and rec2["symbol"] == "7203.T" and rec2["buy_balance"] == 2000
     print("JP margin updater self-test passed")
+
+
+def write_diagnostics(directory: Optional[str], *, link: LinkWithDate, pdf_bytes: bytes, diag: Optional[dict] = None) -> None:
+    if not directory:
+        return
+    root = Path(directory)
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "source.pdf").write_bytes(pdf_bytes)
+    payload = {"link": {"date": link.date, "url": link.url, "label": link.label}, "parser": diag or {}}
+    (root / "diagnostics.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -325,10 +482,12 @@ def main() -> int:
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--pdf", help="Use a local PDF fixture instead of downloading")
     ap.add_argument("--as-of", help="As-of date for --pdf")
+    ap.add_argument("--diagnostics-dir", help="Save source PDF and parser counts for failed Actions")
     args = ap.parse_args()
     if args.self_test:
         self_test()
         return 0
+    require_runtime_dependencies()
     out = Path(args.output)
     previous = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
     if args.pdf:
@@ -337,7 +496,8 @@ def main() -> int:
     else:
         link = discover_latest_pdf()
         pdf_bytes = get(link.url, binary=True)
-    records = parse_weekly_pdf(pdf_bytes)
+    records, diag = parse_weekly_pdf(pdf_bytes)
+    write_diagnostics(args.diagnostics_dir, link=link, pdf_bytes=pdf_bytes, diag=diag)
     data = build_dataset(records, link, previous, args.min_count)
     out.parent.mkdir(parents=True, exist_ok=True)
     tmp = out.with_suffix(out.suffix + ".tmp")

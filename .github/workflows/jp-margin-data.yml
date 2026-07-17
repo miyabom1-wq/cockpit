@@ -32,11 +32,19 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install parser dependencies
-        run: pip install --disable-pip-version-check requests beautifulsoup4 pdfplumber
+        run: pip install --disable-pip-version-check requests beautifulsoup4 pdfplumber pymupdf
       - name: Parser self-test
         run: python tools/update_jp_margin.py --self-test
       - name: Download and validate official JPX data
-        run: python tools/update_jp_margin.py --output public/data/jp-margin.json --min-count 1000
+        run: python tools/update_jp_margin.py --output public/data/jp-margin.json --min-count 1000 --diagnostics-dir margin-diagnostics
+      - name: Upload parser diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jp-margin-parser-diagnostics
+          path: margin-diagnostics
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Commit updated data
         run: |
           if git diff --quiet -- public/data/jp-margin.json; then
