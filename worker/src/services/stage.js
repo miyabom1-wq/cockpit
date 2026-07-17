@@ -10,6 +10,7 @@ import { getStockList, focusTier } from '../storage/stocklist.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { finite, parseJson, nowIso, stableHash, round, jstDate } from '../utils.js';
 import { mergeMacroSnapshots, evaluateRiskGate, providerSymbolMatches } from './integrity.js';
+import { enrichRowsWithMargin } from './margin-supply.js';
 
 const WORK_TTL=3*86400;
 const INDEX_CACHE_TTL=120;
@@ -86,7 +87,7 @@ function deriveContext(stocks,ranking,market){
 function applyRiskGate(rows,riskGate){for(const row of rows){row.market_gate=riskGate.level;row.entry_allowed=!(riskGate.block_new_entries&&['A','B'].includes(row.entry_lane));row.entry_block_reason=row.entry_allowed?null:riskGate.label;}}
 function buildMomentum(market,store){
   const labels={A:'強い継続候補',B:'反転初動',C:'押し目監視',D:'監視継続',E:'警戒'},rows=Object.values(store.stocks||{}),riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});applyRiskGate(rows,riskGate);
-  const board=Object.keys(labels).map(key=>({key,label:labels[key],rows:rows.filter(x=>x.entry_lane===key).sort((a,b)=>(b.rs_percentile??-1)-(a.rs_percentile??-1))}));
+  const board=Object.keys(labels).map(key=>({key,label:labels[key],rows:rows.filter(x=>x.entry_lane===key).sort((a,b)=>(b.entry_sort_score??b.rs_percentile??-1)-(a.entry_sort_score??a.rs_percentile??-1))}));
   return{ready:true,market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,trade_date:store.trade_date,complete:store.complete,risk_gate:riskGate,rows,board,analyzer_version:ENGINE_VERSION};
 }
 function buildNoTrade(market,store){
@@ -99,9 +100,9 @@ async function commitIfComplete(env,market,id,meta){
   const expected=meta.parts,parts=[];for(let i=1;i<=expected;i++){const raw=await env.COCKPIT_KV.get(stageWorkingKey(id,i));if(!raw)return{committed:false};parts.push(parseJson(raw,{stocks:[]}));}
   const stocks=parts.flatMap(x=>x.stocks||[]),partMacro=parts.find(x=>x.macro)?.macro||{},saved=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}}),macro=mergeMacroSnapshots(saved.items||{},partMacro),riskGate=evaluateRiskGate(market,macro);
   await canonicalMacro(env,macro);
-  const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);deriveContext(stocks,ranking,market);applyRiskGate(stocks,riskGate);
+  const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);deriveContext(stocks,ranking,market);if(market==='jp')await enrichRowsWithMargin(env,stocks);applyRiskGate(stocks,riskGate);
   const registered=await getStockList(env,market),validConfirmed=stocks.filter(x=>x.data_quality?.data_valid&&x.data_quality?.close_confirmed).length;
-  const store={schema:'stage-v46',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
+  const store={schema:'stage-v47',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
   const momentum=buildMomentum(market,store),notrade=buildNoTrade(market,store);
   await Promise.all([env.COCKPIT_KV.put(KEYS.stage(market),JSON.stringify(store)),env.COCKPIT_KV.put(KEYS.momentum(market),JSON.stringify(momentum)),env.COCKPIT_KV.put(KEYS.noTrade(market),JSON.stringify(notrade))]);
   return{committed:true,store,momentum,notrade};
@@ -123,14 +124,14 @@ export async function runStageBatch(env,batchKey,options={}){
 }
 export async function getStage(env,market){
   const m=market==='us'?'us':'jp',stage=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m)),{market:m,complete:false,stocks:{},macro:{},focus_counts:{}}),other=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m==='jp'?'us':'jp')),{macro:{}}),canonical=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}});
-  const macro=mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{}),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{};applyRiskGate(Object.values(stocks),riskGate);
+  const macro=mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{}),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{},rows=Object.values(stocks);if(m==='jp')await enrichRowsWithMargin(env,rows);applyRiskGate(rows,riskGate);
   return{...stage,market:m,macro,risk_gate:riskGate,stocks};
 }
 export async function getMomentum(env,market){
   const m=market==='us'?'us':'jp',stored=parseJson(await env.COCKPIT_KV.get(KEYS.momentum(m)),{ready:false,market:m,rows:[],board:[]}),stage=await getStage(env,m);
   if(!stored.ready)return{...stored,risk_gate:stage.risk_gate};
   const rows=(stored.rows||[]).map(x=>stage.stocks?.[x.symbol]||x);applyRiskGate(rows,stage.risk_gate);const bySymbol=new Map(rows.map(x=>[x.symbol,x]));
-  return{...stored,risk_gate:stage.risk_gate,rows,board:(stored.board||[]).map(l=>({...l,rows:(l.rows||[]).map(x=>bySymbol.get(x.symbol)||x)}))};
+  return{...stored,risk_gate:stage.risk_gate,rows,board:(stored.board||[]).map(l=>({...l,rows:(l.rows||[]).map(x=>bySymbol.get(x.symbol)||x).sort((a,b)=>(b.entry_sort_score??b.rs_percentile??-1)-(a.entry_sort_score??a.rs_percentile??-1))}))};
 }
 export async function getNoTrade(env,market){
   const m=market==='us'?'us':'jp',stored=parseJson(await env.COCKPIT_KV.get(KEYS.noTrade(m)),{market:m,recLevel:'normal',summary:{},signals:[]}),stage=await getStage(env,m),riskGate=stage.risk_gate;
@@ -142,7 +143,7 @@ export async function analyzeSymbolsNow(env,items,market,{label='WATCH',cacheTtl
   const m=market==='us'?'us':'jp',list=(items||[]).filter(x=>x?.symbol),date=expectedDateFor(m),kind=modeNow(m),id=snapshotId(m,date,kind,`${label}-${stableHash(list.map(x=>x.symbol).join('|')+Date.now())}`);
   if(!list.length)return{market:m,date,kind,snapshot_id:id,items:[]};
   const benchmark=await getBenchmark(env,m,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
-  const rows=await Promise.all(list.map((it,idx)=>analyzeOne(it.symbol,it.name||it.symbol,m,benchMap,secondaryBenchMap,{kind,tradeDate:date,snapshotId:id,focusTier:it.focus_tier||'watch',cacheTtl,sequence:idx})));
+  const rows=await Promise.all(list.map((it,idx)=>analyzeOne(it.symbol,it.name||it.symbol,m,benchMap,secondaryBenchMap,{kind,tradeDate:date,snapshotId:id,focusTier:it.focus_tier||'watch',cacheTtl,sequence:idx})));if(m==='jp')await enrichRowsWithMargin(env,rows);
   return{market:m,date,kind,snapshot_id:id,items:rows};
 }
 export async function analyzeSymbolNow(env,symbol,name,market){

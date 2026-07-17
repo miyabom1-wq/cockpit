@@ -1,0 +1,26 @@
+{
+  "schema": "jp-margin-v1",
+  "generated_at": null,
+  "weekly": {
+    "as_of": null,
+    "published_at": null,
+    "source_url": "https://www.jpx.co.jp/markets/statistics-equities/margin/05.html",
+    "count": 0,
+    "status": "awaiting-first-github-action"
+  },
+  "rules": {
+    "updated_at": null,
+    "daily_disclosure_source": "https://www.jpx.co.jp/markets/equities/margin-daily/index.html",
+    "special_notice_source": "https://www.jpx.co.jp/markets/equities/margin-daily/01.html",
+    "margin_restriction_source": "https://www.jpx.co.jp/markets/equities/margin-reg/index.html",
+    "daily_disclosure_count": 0,
+    "special_notice_count": 0,
+    "margin_restriction_count": 0
+  },
+  "source": {
+    "publisher": "Japan Exchange Group / Tokyo Stock Exchange",
+    "weekly_page": "https://www.jpx.co.jp/markets/statistics-equities/margin/05.html",
+    "note": "初回のGitHub Actions実行後に公式データへ更新されます。"
+  },
+  "items": {}
+}

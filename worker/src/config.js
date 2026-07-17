@@ -1,7 +1,7 @@
-export const APP_VERSION = 'v46.0.0';
-export const BUILD_ID = '20260717-integrity-repair';
+export const APP_VERSION = 'v47.0.0';
+export const BUILD_ID = '20260717-jp-margin-supply';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
-export const ENGINE_VERSION = 'engine-v46.0.0';
+export const ENGINE_VERSION = 'engine-v47.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v3-parity';
 export const DEPLOYED_AT = '2026-07-17T00:00:00.000Z';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';

@@ -5,6 +5,7 @@ export const KEYS = Object.freeze({
   discipline:'discipline:state',
   watch:'watchlist:v1',
   macroCurrent:'macro:current:v1',
+  marginSupply:'margin:supply:v1',
   pushSubs:'push:subs',
   signalV5:'signal-log:v5',
   signalV3:'signal-log:v3',

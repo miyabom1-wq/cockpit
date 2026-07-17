@@ -2,7 +2,7 @@
   "name": "VANTAGE — Market & Theme Radar",
   "short_name": "VANTAGE",
   "description": "世界市場とテーマのモメンタムを検知し、FRAMEへ候補を渡す分析レーダー",
-  "start_url": "./?v=46",
+  "start_url": "./?v=47",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",

@@ -14,10 +14,11 @@ import { getRanking, getEnrichedRanking, getExplorer } from '../services/ranking
 import { addSub, removeSub, sendPushToAll, VAPID_PUBLIC_KEY_RAW } from '../services/push.js';
 import { getThemeHistory, captureThemeSnapshot } from '../services/theme-history.js';
 import { getUniverseDashboard, mutateUniverse } from '../services/universe-manager.js';
+import { getMarginDashboard, MARGIN_DATA_SCHEMA } from '../services/margin-supply.js';
 
 export async function route(request,env){
   const url=new URL(request.url),p=url.pathname;
-  if(p==='/api/health')return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *'},200,request);
+  if(p==='/api/health')return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA},200,request);
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);
   if(p==='/api/export')return json(await exportUserData(env),200,request);
   if(p==='/api/events')return request.method==='GET'?json({events:await getEvents(env)},200,request):json(await mutateEvent(env,await request.json()),200,request);
@@ -42,6 +43,7 @@ export async function route(request,env){
   if(p==='/api/theme-history')return json(await getThemeHistory(env,url.searchParams.get('limit')),200,request);
   if(p==='/api/theme-history-capture')return json(await captureThemeSnapshot(env,'manual'),200,request);
   if(p==='/api/universe')return request.method==='GET'?json(await getUniverseDashboard(env),200,request):json(await mutateUniverse(env,await request.json()),200,request);
+  if(p==='/api/margin-supply')return json(await getMarginDashboard(env,{force:url.searchParams.get('refresh')==='1'}),200,request);
   if(p==='/api/stage-suggest')return json({ok:true,new_candidates:[],drop_candidates:[],note:'探索タブへ統合'},200,request);
   if(p==='/api/push/key')return json({key:VAPID_PUBLIC_KEY_RAW},200,request);
   if(p==='/api/push/subscribe'){const body=await request.json();return json(await addSub(env,body.subscription||body),200,request);}
