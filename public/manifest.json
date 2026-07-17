@@ -1,13 +1,13 @@
 {
-  "name": "VANTAGE",
+  "name": "VANTAGE — Market & Theme Radar",
   "short_name": "VANTAGE",
   "description": "世界市場とテーマのモメンタムを検知し、FRAMEへ候補を渡す分析レーダー",
-  "start_url": "./?v=42",
+  "start_url": "./?v=43",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#f3f6f9",
-  "theme_color": "#142235",
+  "background_color": "#eef5f5",
+  "theme_color": "#0d3840",
   "icons": [
     {
       "src": "icon-192.png",
@@ -28,5 +28,5 @@
       "purpose": "maskable"
     }
   ],
-  "id": "vantage-v42"
+  "id": "vantage-v43"
 }
