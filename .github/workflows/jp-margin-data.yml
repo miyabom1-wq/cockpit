@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - 'tools/update_jp_margin.py'
+      - 'tools/run_jp_margin_update.py'
       - 'public/data/jp-margin.json'
       - '.github/workflows/jp-margin-data.yml'
 
@@ -27,16 +28,23 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+
       - name: Install parser dependencies
         run: pip install --disable-pip-version-check requests beautifulsoup4 pdfplumber pymupdf
-      - name: Parser self-test
-        run: python tools/update_jp_margin.py --self-test
+
+      - name: Parser self-tests
+        run: |
+          python tools/update_jp_margin.py --self-test
+          python tools/run_jp_margin_update.py --entrypoint-self-test
+
       - name: Download and validate official JPX data
-        run: python tools/update_jp_margin.py --output public/data/jp-margin.json --min-count 1000 --diagnostics-dir margin-diagnostics
+        run: python tools/run_jp_margin_update.py --output public/data/jp-margin.json --min-count 1000 --diagnostics-dir margin-diagnostics
+
       - name: Upload parser diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@v6
@@ -45,6 +53,7 @@ jobs:
           path: margin-diagnostics
           if-no-files-found: ignore
           retention-days: 3
+
       - name: Commit updated data
         run: |
           if git diff --quiet -- public/data/jp-margin.json; then
@@ -55,4 +64,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/data/jp-margin.json
           git commit -m "Update official JP margin supply data"
+          git pull --rebase origin main
           git push
