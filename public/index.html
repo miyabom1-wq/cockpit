@@ -1043,20 +1043,49 @@ async function copyAI(btn){
 
 
 async function loadMarginSupply(force=false){
- const root=$('margin-list');if(!root)return;root.innerHTML='<div class="loading">公式信用需給データを確認中…</div>';
- try{
-  const [d,st]=await Promise.all([api('/api/margin-supply'+(force?'?refresh=1':''),force?{write:true}:{}),state.stage.jp?Promise.resolve(state.stage.jp):api('/api/stage?market=jp')]);state.margin=d;state.stage.jp=st;
-  const rows=Object.values(st.stocks||{}).filter(x=>x.market==='jp'),covered=rows.filter(x=>x.margin_supply?.available).length,warn=rows.filter(x=>Number(x.supply_score)<=-7||x.margin_add_blocked).sort((a,b)=>(a.supply_score??0)-(b.supply_score??0)),good=rows.filter(x=>Number(x.supply_score)>=4).sort((a,b)=>(b.supply_score??0)-(a.supply_score??0));
-  let html=`<div class="margin-hero"><h2>日本株・信用需給</h2><p>JPXの週次信用残と、日々公表・特別周知・信用規制を統合。価格・市場差RS・出来高の主判定は変えず、候補順位とポジション注意へ補助的に反映します。</p><div class="margin-kpis"><div class="margin-kpi"><b>${esc(d.weekly?.as_of||'待ち')}</b><span>週次基準日</span></div><div class="margin-kpi"><b>${d.weekly?.count||0}</b><span>公式収録銘柄</span></div><div class="margin-kpi"><b>${covered}/${rows.length}</b><span>登録銘柄カバー</span></div><div class="margin-kpi"><b>${warn.length}</b><span>需給悪化・警戒</span></div></div></div>`;
-  html+=`<div class="toolbar"><button class="primary small" onclick="loadMarginSupply(true)">公式データを再同期</button><span class="fresh">生成 ${dateText(d.generated_at)}</span></div>`;
-  if(d.cache_warning)html+=`<div class="note down">最新ファイルの取得に失敗したため保存済みデータを表示：${esc(d.cache_warning)}</div>`;
-  if(!d.weekly?.count)html+='<div class="note">初回の「Update JP Margin Supply Data」GitHub Actions完了後に、全銘柄の週次残高が表示されます。</div>';
-  html+='<div class="note"><b>重要：</b>日々公表銘柄は注意喚起で、増担保などの信用規制そのものではありません。残高は週次なので、必ず基準日を確認します。</div>';
-  const cards=(title,list,empty)=>`<div class="section-title">${title}</div>${list.length?list.slice(0,20).map(r=>`<div class="compact-row" onclick="openCandidate('${attr(r.symbol)}')"><div class="compact-head"><span class="code">${esc(code(r.symbol))}</span><span class="name grow1">${esc(r.name)}</span>${marginBadgeHtml(r)}</div>${marginSupplyHtml(r)}</div>`).join(''):`<div class="empty">${empty}</div>`}`;
-  html+=cards('登録銘柄・需給悪化／警戒',warn,'現在は該当なし');html+=cards('登録銘柄・需給改善／追い風',good,'現在は該当なし');
-  const flagged=d.flagged||[];html+=`<div class="section-title">市場全体の注意・規制銘柄</div><div class="card">${flagged.length?flagged.slice(0,40).map(x=>{const f=x.flags||{},tags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);return `<div class="flag-row"><span class="code">${esc(code(x.symbol))}</span><span class="name">${esc(x.name||x.symbol)}</span><span class="flag-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</span></div>`}).join(''):'<div class="empty">該当なし</div>'}</div>`;
-  html+=`<div class="note">週次残高：JPX「銘柄別信用取引週末残高」／注意・規制：JPXの日々公表・特別周知・信用取引規制ページ。発注前の最終確認は証券会社画面を使用してください。</div>`;root.innerHTML=html;
- }catch(e){root.innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+  const root=$('margin-list');if(!root)return;root.innerHTML='<div class="loading">公式信用需給データを確認中…</div>';
+  try{
+    // Always fetch the current JP stage after the margin dataset.
+    // Reusing state.stage.jp here left the dashboard permanently stale.
+    const d=force
+      ?await api('/api/margin-supply?refresh=1',{write:true})
+      :await api('/api/margin-supply');
+    const st=await api('/api/stage?market=jp');
+    state.margin=d;state.stage.jp=st;
+
+    const rows=Object.values(st.stocks||{}).filter(x=>x.market==='jp');
+    const available=rows.filter(x=>x.margin_supply?.available);
+    const covered=available.length;
+    const warn=available
+      .filter(x=>Number(x.supply_score)<=-7||x.margin_add_blocked)
+      .sort((a,b)=>(a.supply_score??0)-(b.supply_score??0));
+    const good=available
+      .filter(x=>Number(x.supply_score)>=4)
+      .sort((a,b)=>(b.supply_score??0)-(a.supply_score??0));
+    const neutral=available
+      .filter(x=>Number(x.supply_score)>-7&&Number(x.supply_score)<4&&!x.margin_add_blocked)
+      .sort((a,b)=>Math.abs(Number(b.supply_score||0))-Math.abs(Number(a.supply_score||0)));
+
+    let html=`<div class="margin-hero"><h2>日本株・信用需給</h2><p>JPXの週次信用残と、日々公表・特別周知・信用規制を統合。価格・市場差RS・出来高の主判定は変えず、候補順位とポジション注意へ補助的に反映します。</p><div class="margin-kpis"><div class="margin-kpi"><b>${esc(d.weekly?.as_of||'待ち')}</b><span>週次基準日</span></div><div class="margin-kpi"><b>${d.weekly?.count||0}</b><span>公式収録銘柄</span></div><div class="margin-kpi"><b>${covered}/${rows.length}</b><span>登録銘柄カバー</span></div><div class="margin-kpi"><b>${warn.length}</b><span>需給悪化・警戒</span></div></div></div>`;
+    html+=`<div class="toolbar"><button class="primary small" onclick="loadMarginSupply(true)">公式データを再同期</button><span class="fresh">生成 ${dateText(d.generated_at)}</span></div>`;
+    if(d.cache_warning)html+=`<div class="note down">最新ファイルの取得に失敗したため保存済みデータを表示：${esc(d.cache_warning)}</div>`;
+    if(!d.weekly?.count)html+='<div class="note">初回の「Update JP Margin Supply Data」GitHub Actions完了後に、全銘柄の週次残高が表示されます。</div>';
+    if(d.weekly?.count&&rows.length&&covered===0)html+='<div class="note down"><b>反映エラー：</b>公式データは取得済みですが、登録銘柄への信用需給付与が0件です。画面を再読込しても直らない場合はバックエンドの状態を確認してください。</div>';
+    if(rows.length&&covered<rows.length)html+=`<div class="note">信用需給を取得できた登録銘柄 ${covered}件 / データ待ち ${rows.length-covered}件</div>`;
+    html+='<div class="note"><b>重要：</b>日々公表銘柄は注意喚起で、増担保などの信用規制そのものではありません。残高は週次なので、必ず基準日を確認します。</div>';
+
+    const cards=(title,list,empty,limit=20)=>`<div class="section-title">${title}</div>${list.length?list.slice(0,limit).map(r=>`<div class="compact-row" onclick="openCandidate('${attr(r.symbol)}')"><div class="compact-head"><span class="code">${esc(code(r.symbol))}</span><span class="name grow1">${esc(r.name)}</span>${marginBadgeHtml(r)}</div>${marginSupplyHtml(r)}</div>`).join(''):`<div class="empty">${empty}</div>`}`;
+    const noCoverage=d.weekly?.count&&rows.length&&covered===0;
+    html+=cards('登録銘柄・需給悪化／警戒',warn,noCoverage?'登録銘柄への反映なし':'現在は該当なし');
+    html+=cards('登録銘柄・需給改善／追い風',good,noCoverage?'登録銘柄への反映なし':'現在は該当なし');
+    html+=cards('登録銘柄・中立',neutral,noCoverage?'登録銘柄への反映なし':'中立銘柄なし',30);
+
+    const flagged=d.flagged||[];
+    html+=`<div class="section-title">市場全体の注意・規制銘柄</div><div class="card">${flagged.length?flagged.slice(0,40).map(x=>{const f=x.flags||{},tags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);return `<div class="flag-row"><span class="code">${esc(code(x.symbol))}</span><span class="name">${esc(x.name||x.symbol)}</span><span class="flag-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</span></div>`}).join(''):'<div class="empty">該当なし</div>'}</div>`;
+    html+=`<div class="note">週次残高：JPX「銘柄別信用取引週末残高」／注意・規制：JPXの日々公表・特別周知・信用取引規制ページ。発注前の最終確認は証券会社画面を使用してください。</div>`;
+    root.innerHTML=html;
+    if(force)toast(`信用需給を再同期しました（登録 ${covered}/${rows.length}）`);
+  }catch(e){root.innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
 
 function universeModeLabel(mode){return mode==='guarded_auto'?'週次・安全自動':mode==='proposal'?'提案のみ':'停止'}
