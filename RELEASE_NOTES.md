@@ -38,3 +38,12 @@
 ## 自動更新
 
 既存の市場更新、ランキング、探索、シグナル、バックテスト、18:20頃のユニバース提案更新は変更していません。
+
+
+## UI v44 — Price visibility
+
+- Candidate cards, theme leaders, ranking, explorer, watch, and candidate details show price, daily change, and acquisition time.
+- Intraday values are explicitly labeled as delayed reference values.
+- Visible market/theme/watch quote views refresh from the Worker every five minutes while the app is open.
+- Ranking enrichment now includes price and quote time without changing the ranking or candidate logic.
+- VANTAGE-to-FRAME handoff now also carries the displayed quote and its timestamp.
