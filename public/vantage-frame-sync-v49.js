@@ -68,7 +68,7 @@
   const originalLoad=window.loadWatch;
   if(typeof originalLoad==='function')window.loadWatch=async function(...args){const result=await originalLoad.apply(this,args);await syncFrameWatchlist(state.watch,{silent:true});decorateWatchCards();return result;};
 
-  const version=document.querySelector('.ui-version');if(version)version.textContent='UI v49';
+  const version=document.querySelector('.ui-version');if(version)version.textContent='UI v50';
   setTimeout(()=>syncFrameWatchlist(state.watch,{silent:true}),800);
   setInterval(()=>{if(!document.hidden)syncFrameWatchlist(state.watch,{silent:true})},10*60*1000);
   addEventListener('visibilitychange',()=>{if(!document.hidden)syncFrameWatchlist(state.watch,{silent:true})});

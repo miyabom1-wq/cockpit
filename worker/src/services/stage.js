@@ -63,6 +63,11 @@ async function fetchMacro(market){
   }));
   return Object.fromEntries(results.filter(x=>x.status==='fulfilled'&&x.value?.[1]).map(x=>x.value));
 }
+export async function refreshMacroSnapshots(env){
+  const incoming=await fetchMacro('jp'),payload=await canonicalMacro(env,incoming);
+  return{ok:true,schema:'macro-independent-v1',updated_at:payload.updated_at,received:Object.keys(incoming).length,items:payload.items};
+}
+
 async function analyzeOne(symbol,name,market,benchMap,secondaryBenchMap,opts){
   try{
     const norm=normalizeYahooDaily(await fetchYahooChart(symbol,{range:'2y',cacheTtl:opts.cacheTtl??(opts.kind==='intraday'?60:300)})),providerSymbol=String(norm.meta.symbol||'').toUpperCase();
@@ -91,7 +96,7 @@ function buildMomentum(market,store){
   return{ready:true,market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,trade_date:store.trade_date,complete:store.complete,risk_gate:riskGate,rows,board,analyzer_version:ENGINE_VERSION};
 }
 function buildNoTrade(market,store){
-  const rows=Object.values(store.stocks||{}),hot=rows.filter(x=>finite(x.rsi14)&&x.rsi14>=78).length,extreme=rows.filter(x=>finite(x.div25)&&x.div25>=12).length,dips=rows.filter(x=>x.entry_lane==='C').length,wicks=rows.filter(x=>finite(x.upper_ratio)&&x.upper_ratio>=.4).length,riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});
+  const rows=Object.values(store.stocks||{}),hot=rows.filter(x=>finite(x.rsi14)&&x.rsi14>=78).length,extreme=rows.filter(x=>finite(x.div25)&&x.div25>=10).length,dips=rows.filter(x=>x.entry_lane==='C').length,wicks=rows.filter(x=>finite(x.upper_ratio)&&x.upper_ratio>=.4).length,riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});
   let recLevel=riskGate.level==='stress'?'stress':'normal';if(recLevel!=='stress'&&rows.length&&((hot+extreme)/rows.length>=.25))recLevel='strong';else if(recLevel!=='stress'&&rows.length&&((hot+extreme)/rows.length>=.12))recLevel='recommend';
   const signals=riskGate.level==='stress'?[{label:riskGate.label,detail:(riskGate.reasons||[]).join(' / '),block_new_entries:true}]:[];
   return{market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,recLevel,risk_gate:riskGate,summary:{extreme_pct:rows.length?round(extreme/rows.length*100,1):0,rsi_hot:hot,healthy_dips:dips,shooting_stars:wicks},signals};
@@ -102,7 +107,7 @@ async function commitIfComplete(env,market,id,meta){
   await canonicalMacro(env,macro);
   const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);deriveContext(stocks,ranking,market);if(market==='jp')await enrichRowsWithMargin(env,stocks);applyRiskGate(stocks,riskGate);
   const registered=await getStockList(env,market),validConfirmed=stocks.filter(x=>x.data_quality?.data_valid&&x.data_quality?.close_confirmed).length;
-  const store={schema:'stage-v47',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
+  const store={schema:'stage-v50',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
   const momentum=buildMomentum(market,store),notrade=buildNoTrade(market,store);
   await Promise.all([env.COCKPIT_KV.put(KEYS.stage(market),JSON.stringify(store)),env.COCKPIT_KV.put(KEYS.momentum(market),JSON.stringify(momentum)),env.COCKPIT_KV.put(KEYS.noTrade(market),JSON.stringify(notrade))]);
   return{committed:true,store,momentum,notrade};

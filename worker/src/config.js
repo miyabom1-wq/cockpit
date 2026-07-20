@@ -1,9 +1,9 @@
-export const APP_VERSION = 'v47.0.0';
-export const BUILD_ID = '20260717-jp-margin-supply';
+export const APP_VERSION = 'v50.0.0';
+export const BUILD_ID = '20260720-independent-macro-events';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
-export const ENGINE_VERSION = 'engine-v47.0.0';
+export const ENGINE_VERSION = 'engine-v50.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v3-parity';
-export const DEPLOYED_AT = '2026-07-17T00:00:00.000Z';
+export const DEPLOYED_AT = '2026-07-20T00:00:00.000Z';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 
 export const LIMITS = Object.freeze({
@@ -48,12 +48,12 @@ export const DEFAULT_STOCKS = Object.freeze({
 
 export const MARKET_INDICES = Object.freeze({
   jp: {
-    '日経平均':'^N225','TOPIX':'^TOPX','日経VI':'^NKVI.OS','ドル円':'JPY=X','SOX':'^SOX',
+    '日経平均':'^N225','日経先物（CME円建て）':'NIY=F','TOPIX':'^TOPX','日経VI':'^NKVI.OS','ドル円':'JPY=X','SOX':'^SOX',
     'S&P500':'^GSPC','Nasdaq':'^IXIC','Dow':'^DJI','VIX':'^VIX','韓国KOSPI':'^KS11','韓国KOSDAQ':'^KQ11',
     '米10年債':'^TNX','WTI原油':'CL=F','金':'GC=F','銀':'SI=F','BTC':'BTC-USD','ETH':'ETH-USD'
   },
   us: {
-    'SOX':'^SOX','S&P500':'^GSPC','Nasdaq':'^IXIC','Dow':'^DJI','VIX':'^VIX','TOPIX':'^TOPX',
+    '日経先物（CME円建て）':'NIY=F','SOX':'^SOX','S&P500':'^GSPC','Nasdaq':'^IXIC','Dow':'^DJI','VIX':'^VIX','TOPIX':'^TOPX',
     '韓国KOSPI':'^KS11','韓国KOSDAQ':'^KQ11','米10年債':'^TNX','ドル円':'JPY=X',
     'WTI原油':'CL=F','金':'GC=F','銀':'SI=F','BTC':'BTC-USD','ETH':'ETH-USD'
   }
