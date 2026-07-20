@@ -115,12 +115,23 @@ function applyMarket(list,proposal,market){
 export async function applyUniverseProposal(env,{source='manual',force=false}={}){
   const [config,state]=await Promise.all([readConfig(env),readState(env)]);let proposal=state.proposal;if(!proposal)proposal=(await refreshUniverseProposal(env,{source})).proposal;
   if(config.mode==='off'&&!force)return{ok:false,error:'自動入れ替えは停止中'};
-  const applied=[];for(const market of ['jp','us']){const p=proposal[market];if(!p?.can_apply&&!force)continue;const current=await getStockList(env,market),next=applyMarket(current,p,market);if(JSON.stringify(current.map(x=>x.symbol))===JSON.stringify(next.map(x=>x.symbol)))continue;await saveStockList(env,market,next);applied.push({market,adds:p.adds,drops:p.drops,before:current.length,after:next.length});}
-  const record={id:`u${Date.now()}`,at:nowIso(),source,applied};const nextState={...state,last_auto_at:source==='scheduled'&&applied.length?record.at:state.last_auto_at,history:[...(state.history||[]),record].slice(-60),proposal:null};await env.COCKPIT_KV.put(KEYS.universeState,JSON.stringify(nextState));return{ok:true,applied,record};
+  const blocked=['jp','us'].map(m=>proposal?.[m]).filter(p=>p?.adds?.length&&!p.can_apply).map(p=>({market:p.market,reason:p.blocked_reason||'安全条件未達'}));
+  if(blocked.length&&!force)return{ok:false,error:'安全条件未達のため適用していません',blocked};
+  const applied=[];
+  for(const market of ['jp','us']){
+    const p=proposal[market];if(!p?.adds?.length)continue;if(!p.can_apply&&!force)continue;
+    const current=await getStockList(env,market),next=applyMarket(current,p,market);
+    if(JSON.stringify(current.map(x=>x.symbol))===JSON.stringify(next.map(x=>x.symbol)))continue;
+    await saveStockList(env,market,next);applied.push({market,adds:p.adds,drops:p.drops,before:current.length,after:next.length});
+  }
+  if(!applied.length)return{ok:false,error:'提案は現在の登録内容へ反映できませんでした',blocked};
+  const record={id:`u${Date.now()}`,at:nowIso(),source,forced:!!force,applied};
+  const nextState={...state,last_auto_at:source==='scheduled'?record.at:state.last_auto_at,history:[...(state.history||[]),record].slice(-60),proposal:null};
+  await env.COCKPIT_KV.put(KEYS.universeState,JSON.stringify(nextState));return{ok:true,applied,record};
 }
 export async function maybeAutoRotateUniverse(env,source='scheduled'){
   const [config,state]=await Promise.all([readConfig(env),readState(env)]);const report=await refreshUniverseProposal(env,{source});if(config.mode!=='guarded_auto')return{...report,auto_applied:false};if(isSameWeek(state.last_auto_at,nowIso()))return{...report,auto_applied:false,reason:'今週分は適用済み'};const enough=['jp','us'].some(m=>report.proposal[m]?.can_apply);if(!enough)return{...report,auto_applied:false,reason:'適用条件なし'};const result=await applyUniverseProposal(env,{source});return{...report,auto_applied:Boolean(result.applied?.length),result};
 }
-export async function getUniverseDashboard(env){const [config,state,jp,us]=await Promise.all([readConfig(env),readState(env),getStockList(env,'jp'),getStockList(env,'us')]);return{ok:true,config,proposal:state.proposal,history:(state.history||[]).slice(-20).reverse(),last_auto_at:state.last_auto_at||null,coverage:buildThemeCoverage(jp,us),counts:{jp:{registered:jp.length,core:Math.min(jp.length,LIMITS.jpCore),radar:Math.max(0,jp.length-LIMITS.jpCore),max:LIMITS.jpMax},us:{registered:us.length,lead:Math.min(us.length,LIMITS.usLead),archive:Math.max(0,us.length-LIMITS.usLead),max:LIMITS.usMax}}};}
+export async function getUniverseDashboard(env){const [config,state,jp,us,protectedSet]=await Promise.all([readConfig(env),readState(env),getStockList(env,'jp'),getStockList(env,'us'),protectedSymbols(env)]);const decorate=(list,market)=>list.map((x,i)=>({...x,market,tier:tierFor(market,i),tier_label:market==='jp'?(i<LIMITS.jpCore?'コア':'レーダー'):(i<LIMITS.usLead?'リード':'保管'),protected_reason:protectedReason(x,protectedSet)}));return{ok:true,config,proposal:state.proposal,current:{jp:decorate(jp,'jp'),us:decorate(us,'us')},history:(state.history||[]).slice(-20).reverse(),last_auto_at:state.last_auto_at||null,coverage:buildThemeCoverage(jp,us),counts:{jp:{registered:jp.length,core:Math.min(jp.length,LIMITS.jpCore),radar:Math.max(0,jp.length-LIMITS.jpCore),max:LIMITS.jpMax},us:{registered:us.length,lead:Math.min(us.length,LIMITS.usLead),archive:Math.max(0,us.length-LIMITS.usLead),max:LIMITS.usMax}}};}
 export async function mutateUniverse(env,body={}){const action=body.action||'get';if(action==='refresh')return refreshUniverseProposal(env,{source:'manual'});if(action==='apply')return applyUniverseProposal(env,{source:'manual',force:Boolean(body.force)});if(action==='config'){const current=await readConfig(env),next={...current};if(['off','proposal','guarded_auto'].includes(body.mode))next.mode=body.mode;if(body.weekly_swap_limit!=null)next.weekly_swap_limit=Math.max(1,Math.min(5,Number(body.weekly_swap_limit)||2));if(body.theme_minimum!=null)next.theme_minimum=Math.max(1,Math.min(4,Number(body.theme_minimum)||2));await env.COCKPIT_KV.put(KEYS.universeConfig,JSON.stringify(next));return{ok:true,config:next};}return{ok:false,error:'unknown action'};}
 export { DEFAULT_CONFIG, IMPORTANT_THEMES };

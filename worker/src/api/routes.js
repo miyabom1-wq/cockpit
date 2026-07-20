@@ -21,7 +21,7 @@ export async function route(request,env){
   if(p==='/api/health')return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA},200,request);
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);
   if(p==='/api/export')return json(await exportUserData(env),200,request);
-  if(p==='/api/events')return request.method==='GET'?json({events:await getEvents(env)},200,request):json(await mutateEvent(env,await request.json()),200,request);
+  if(p==='/api/events')return request.method==='GET'?json({events:await getEvents(env,Date.now(),url.searchParams.get('refresh')==='1')},200,request):json(await mutateEvent(env,await request.json()),200,request);
   if(p==='/api/lookup'){const symbol=url.searchParams.get('symbol');if(!symbol)return json({ok:false,error:'symbol required'},400,request);const q=await lookupSymbol(symbol);return q?json(q,200,request):json({ok:false,error:'not found'},404,request);}
   if(p==='/api/positions')return request.method==='GET'?json(await getPositions(env),200,request):json(await mutatePosition(env,await request.json()),200,request);
   if(p==='/api/discipline-state')return request.method==='GET'?json((await getPositions(env)).state,200,request):json(await mutatePosition(env,await request.json()),200,request);

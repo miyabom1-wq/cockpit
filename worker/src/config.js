@@ -1,9 +1,9 @@
-export const APP_VERSION = 'v50.0.0';
-export const BUILD_ID = '20260720-independent-macro-events';
+export const APP_VERSION = 'v51.0.0';
+export const BUILD_ID = '20260721-reliability-universe-events';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
-export const ENGINE_VERSION = 'engine-v50.0.0';
-export const BACKTEST_VERSION = 'registered-bt-v3-parity';
-export const DEPLOYED_AT = '2026-07-20T00:00:00.000Z';
+export const ENGINE_VERSION = 'engine-v51.0.0';
+export const BACKTEST_VERSION = 'registered-bt-v4-retry-integrity';
+export const DEPLOYED_AT = '2026-07-21T00:00:00.000Z';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 
 export const LIMITS = Object.freeze({

@@ -252,6 +252,12 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <style id="macro-event-accuracy-v50">
 .macro-freshness{margin:7px 0 10px;padding:9px 11px;border:1px solid #d5e2e8;border-radius:11px;background:#f5f9fa;color:#52636d;font-size:10px;line-height:1.6}.macro-freshness b{color:#183d44}.macro-freshness.mixed{border-left:4px solid #c78a22;background:#fff9ec}.risk-gate small{display:block;margin-top:5px;font-size:9px;opacity:.82}.event-source{display:inline-flex;margin-top:4px;padding:2px 6px;border-radius:999px;background:#e4f3ef;color:#13715f;font-size:9px;font-weight:800}.event-source.manual{background:#edf0f4;color:#657284}
 </style>
+<style id="backtest-integrity-v51">
+.bt-hero.bt-failed{border-color:#efb9c1;background:linear-gradient(145deg,#fff,#fff4f5)}.bt-integrity-alert,.bt-integrity-note{display:flex;flex-direction:column;gap:3px;margin:10px 0;padding:11px 13px;border-radius:11px;font-size:11px}.bt-integrity-alert{border:1px solid #efc1c8;border-left:4px solid var(--red);background:#fff5f6;color:#8d2536}.bt-integrity-note{border:1px solid #d7e3ea;border-left:4px solid var(--blue);background:#f4f9fa;color:#45616b}.bt-error-cats{display:flex;gap:7px;flex-wrap:wrap}.bt-error-cats>span{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:8px;background:var(--surface2);font-size:10px}.bt-error-cats small{color:var(--faint)}.bt-error-list{margin-top:10px;border-top:1px solid var(--line)}.bt-error-list>div{display:grid;grid-template-columns:80px 110px 1fr auto;gap:8px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--line);font-size:10px}.bt-error-list small{color:var(--muted);overflow-wrap:anywhere}.bt-error-list em{font-style:normal;color:var(--faint)}@media(max-width:650px){.bt-error-list>div{grid-template-columns:70px 1fr}.bt-error-list small{grid-column:1/-1}}
+</style>
+<style id="universe-events-v51">
+.universe-current-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.universe-current-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px 9px;border:1px solid var(--line);border-radius:9px;background:#fff}.universe-current-row small{grid-column:1/-1;color:var(--faint);font-size:9px}.universe-current .section-title{margin-top:8px}@media(max-width:650px){.universe-current-grid{grid-template-columns:1fr}}
+</style>
 </head>
 
 
@@ -259,7 +265,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v50</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v51</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -933,34 +939,48 @@ function ruleCard(rule,research=false){
  const v=rule.validation||{},t=rule.test||{},h=rule.holdout||{};
  return `<div class="rule-card"><div class="rule-head"><span class="badge ${rule.strategy==='A'||rule.strategy==='C_A'?'A':'B'}">${rule.strategy.replace('_','→')}</span><span class="rule-name">${rule.market==='jp'?'日本':'米国'} ${research?'検証中':'厳選ルール'}</span><span class="${research?'badge C':'strict-badge'}">${research?'最終未確認':'最終試験合格'}</span></div><div class="rule-conditions">${esc((rule.labels||[]).join(' ＋ '))}</div><div class="rule-split"><div><div class="k">検証</div><div class="v">${num(v.win_rate,1)}% / n=${v.trades||0}</div></div><div><div class="k">最終試験</div><div class="v">${num(t.win_rate,1)}% / n=${t.trades||0}</div></div><div><div class="k">最終期待値</div><div class="v ${cls(t.expectancy)}">${pct(t.expectancy)}</div></div></div><div class="selective-stats"><span>PF ${num(t.profit_factor)}</span><span>中央値 ${pct(t.median_return)}</span><span>95%CI ${t.win_rate_ci_low??'—'}〜${t.win_rate_ci_high??'—'}%</span><span>検証+最終 ${num(h.win_rate,1)}%</span></div></div>`;
 }
+function btErrorLabel(k){return({rate_limit:'Yahoo制限',provider_access:'取得元拒否',not_found:'銘柄・データなし',network:'通信失敗',symbol_mismatch:'銘柄不一致',history_short:'履歴不足',worker_limit:'Worker制限',analysis:'分析エラー'})[k]||k}
 function renderBacktest(){
- const d=state.backtest||{},p=d.progress||{},total=p.total||0,done=p.done||0,rate=total?Math.min(100,done/total*100):0,status=d.status==='complete'?'完了':'自動集計中';
- const btButton=d.status==='complete'?'<button class="small" disabled>再集計待機中</button>':'<button class="small" onclick="advanceBacktest(this)">5銘柄進める</button>';
- let html=`<div class="bt-hero"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">通常監視は変えず、過去5年を時系列で学習60%・検証20%・最終試験20%に分け、再現した条件だけ厳選候補へ反映します。完了後は登録変更または更新期限までKVへ書き込みません。</div></div><span class="badge ${d.status==='complete'?'A':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>${done}/${total}銘柄</span><span>エラー ${p.errors||0}</span></div><div class="actions">${btButton}</div></div>`;
- if(d.using_previous_complete)html+='<div class="note">再集計中のため、成績欄は前回完了分を表示しています。</div>';
+ const d=state.backtest||{},p=d.progress||{},total=p.total||0,success=p.success??Math.max(0,(p.done||0)-(p.failed??p.errors??0)),failed=p.failed??p.errors??0,retrying=p.retrying||0,pending=p.pending??Math.max(0,total-success-failed-retrying),resolved=success+failed,rate=total?Math.min(100,resolved/total*100):0;
+ const statusMap={complete:'完了',failed:'集計失敗',running:'自動集計中'},status=statusMap[d.status]||'自動集計中',usable=d.result_usable===true;
+ const btButton=d.status==='complete'?'<button class="small" disabled>再集計待機中</button>':d.status==='failed'?'<button class="small primary" onclick="restartBacktest(this)">最初から再集計</button>':'<button class="small" onclick="advanceBacktest(this)">5銘柄進める</button>';
+ let html=`<div class="bt-hero ${d.status==='failed'?'bt-failed':''}"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">各銘柄を最大3回まで再試行し、成功率90%以上の場合だけ検証結果と厳選条件を有効にします。不完全な母集団を「完了」と扱いません。</div></div><span class="badge ${usable?'A':d.status==='failed'?'E':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>成功 ${success} / 失敗 ${failed} / 全${total}</span><span>再試行 ${retrying}・未処理 ${pending}</span></div><div class="actions">${btButton}</div></div>`;
+ if(d.using_previous_complete)html+='<div class="note">新しい再集計中のため、成績欄は前回の有効な完了分を表示しています。</div>';
+ const integrity=d.integrity||{};
+ if(d.status==='failed'||(d.status==='complete'&&!usable))html+=`<div class="bt-integrity-alert"><b>この結果は売買判断に使用しません</b><span>${esc(integrity.reason||'成功率が基準未満です')}。厳選条件の固定も停止しています。</span></div>`;
+ else if(d.status==='running')html+=`<div class="bt-integrity-note"><b>再集計中</b><span>成功率判定は全銘柄の取得・再試行後に確定します。</span></div>`;
+ const categories=d.error_categories||{},attemptCats=d.attempt_error_categories||{},catKeys=[...new Set([...Object.keys(categories),...Object.keys(attemptCats)])];
+ const recent=(d.failures?.length?d.failures:d.recent_errors||[]).slice(-12);
+ if(catKeys.length||recent.length){html+=`<details class="card bt-errors" ${d.status==='failed'?'open':''}><summary class="row"><div class="name grow1">取得・分析エラー</div><span class="count">最終失敗 ${failed}件</span></summary><div class="pad"><div class="bt-error-cats">${catKeys.map(k=>`<span>${esc(btErrorLabel(k))} <b>${categories[k]||0}</b><small>試行${attemptCats[k]||categories[k]||0}</small></span>`).join('')}</div>${recent.length?`<div class="bt-error-list">${recent.map(x=>`<div><span class="code">${esc(x.symbol||'—')}</span><b>${esc(btErrorLabel(x.category))}</b><small>${esc(x.error||'')}</small><em>${x.attempt||1}回目</em></div>`).join('')}</div>`:''}</div></details>`}
  const sel=d.selective||{},confirmed=sel.confirmed||[],research=sel.research||[];
  html+='<div class="section-title">厳選条件（未使用期間60%以上）</div>';
- if(d.status!=='complete')html+='<div class="card pad muted">全登録銘柄の再集計完了後に条件を確定します。途中値から厳選ルールは作りません。</div>';
+ if(!usable)html+=`<div class="card pad muted">${d.status==='failed'?'成功率不足のため厳選条件を作成・固定しません。再集計後に判定します。':'全登録銘柄の再集計完了後に条件を確定します。途中値から厳選ルールは作りません。'}</div>`;
  else if(!confirmed.length)html+='<div class="card pad">勝率60%だけでなく、最終試験の期待値・PF・中央値・サンプル数まで満たす条件はありませんでした。候補を無理に表示しません。</div>';
  else html+='<div class="rule-grid">'+confirmed.map(r=>ruleCard(r,false)).join('')+'</div>';
- if(research.length)html+=`<details class="card"><summary class="row"><div class="name grow1">検証中の条件</div><span class="count">${research.length}件</span></summary><div class="pad"><div class="rule-grid">${research.map(r=>ruleCard(r,true)).join('')}</div></div></details>`;
- html+='<div class="section-title">基礎ルール別の成績</div><div class="bt-grid">';
+ if(usable&&research.length)html+=`<details class="card"><summary class="row"><div class="name grow1">検証中の条件</div><span class="count">${research.length}件</span></summary><div class="pad"><div class="rule-grid">${research.map(r=>ruleCard(r,true)).join('')}</div></div></details>`;
+ html+='<div class="section-title">基礎ルール別の成績</div>'+(usable||d.using_previous_complete?'':'<div class="note">集計が有効になるまで以下の数値は参考表示です。</div>')+'<div class="bt-grid">';
  for(const key of ['A','B','C_A','C_B']){
-  const x=d.strategies?.[key]||{},all=x.metrics||{},m=x.market_metrics?.jp||all,r=x.market_recent_metrics?.jp||x.recent_metrics||{},us=x.market_metrics?.us||{},v=btVerdict(m,r);
+  const x=d.strategies?.[key]||{},all=x.metrics||{},m=x.market_metrics?.jp||all,r=x.market_recent_metrics?.jp||x.recent_metrics||{},us=x.market_metrics?.us||{},v=usable||d.using_previous_complete?btVerdict(m,r):{label:'判定保留',kind:'warn'};
   html+=`<div class="bt-card"><div class="bt-card-head"><span class="badge ${key==='A'||key==='C_A'?'A':'B'}">${key.replace('_','→')}</span><span class="bt-card-title">日本 ${esc(x.label||key)}</span><span class="bt-verdict ${v.kind}">${v.label}</span></div><div class="bt-main">${btMetric(m.win_rate,'勝率')}${btMetric(m.expectancy,'期待値')}${btMetric(m.profit_factor,'PF','num')}</div><div class="bt-detail"><span>日本取引 n=${m.trades||0}</span><span>シグナル ${m.signals||0}</span><span>トリガー率 ${pct(m.trigger_rate)}</span><span>中央値 ${pct(m.median_return)}</span><span>平均利益 ${pct(m.avg_win)}</span><span>平均損失 ${pct(m.avg_loss)}</span><span>MAE中央値 ${pct(m.mae_median)}</span><span>MFE中央値 ${pct(m.mfe_median)}</span><span>直近1年 ${pct(r.expectancy)}</span></div>${(us.trades||0)?`<details><summary class="muted">海外リード参考：勝率 ${pct(us.win_rate)} / 期待値 ${pct(us.expectancy)} / PF ${num(us.profit_factor)} / n=${us.trades}</summary></details>`:''}</div>`;
  }
  html+='</div>';
  const assumptions=d.assumptions||{};
- html+=`<div class="section-title">検証モデル</div><div class="card pad bt-model"><b>エントリー</b> ${esc(assumptions.entry||'—')}<br><b>見送り</b> シグナル終値から+${assumptions.gap_skip_pct??3}%超のギャップ<br><b>損切り</b> ${esc(assumptions.stop||'—')}<br><b>EXIT</b> ${esc(assumptions.exit||'—')}<br><b>同日順序不明</b> ${esc(assumptions.same_day_ambiguous||'—')}<br><b>コスト</b> 往復${assumptions.round_trip_cost_pct??.15}%控除</div>`;
+ html+=`<div class="section-title">検証モデル</div><div class="card pad bt-model"><b>エントリー</b> ${esc(assumptions.entry||'—')}<br><b>見送り</b> シグナル終値から+${assumptions.gap_skip_pct??3}%超のギャップ<br><b>損切り</b> ${esc(assumptions.stop||'—')}<br><b>EXIT</b> ${esc(assumptions.exit||'—')}<br><b>同日順序不明</b> ${esc(assumptions.same_day_ambiguous||'—')}<br><b>コスト</b> 往復${assumptions.round_trip_cost_pct??.15}%控除<br><b>再試行</b> 最大${assumptions.max_retries??3}回 / <b>必要成功率</b> ${assumptions.min_success_rate??90}%</div>`;
  const rows=(d.symbols||[]).filter(x=>(x.trades||0)>=5).sort((a,b)=>(b.expectancy??-99)-(a.expectancy??-99)).slice(0,15);
  html+=`<details class="card"><summary class="row"><div class="name grow1">銘柄別・期待値上位</div><span class="count">${rows.length}件</span></summary>${rows.length?rows.map(x=>`<div class="bt-symbol" onclick="openBacktestSymbol('${x.market}','${attr(x.symbol)}')"><div><span class="name">${esc(x.name)}</span> <span class="code">${esc(code(x.symbol))}</span></div><span class="badge ${x.strategy==='A'||x.strategy==='C_A'?'A':'B'}">${x.strategy.replace('_','→')}</span><span class="bt-exp ${cls(x.expectancy)}">${pct(x.expectancy)}</span><span class="bt-n">n=${x.trades}</span></div>`).join(''):'<div class="empty">1銘柄5取引以上で表示</div>'}</details>`;
- html+='<div class="note">厳選条件は勝率だけを逆算しません。粗い条件を限定し、学習・検証・最終試験を時系列分離します。同一登録母集団では初回完了時のルールを固定し、週次再集計で再最適化しません。現在登録銘柄による参考検証のため、サバイバーシップ・バイアスは残ります。注文は送信しません。</div>';
+ html+='<div class="note">厳選条件は勝率だけを逆算しません。取得成功率90%以上を満たした母集団だけで、学習・検証・最終試験を時系列分離します。現在登録銘柄による参考検証のため、サバイバーシップ・バイアスは残ります。注文は送信しません。</div>';
  $('backtest-list').innerHTML=html;
 }
 async function advanceBacktest(btn){
  const old=btn.textContent;btn.disabled=true;btn.textContent='更新中…';
- try{const d=await api('/api/backtest-run?count=5',{write:true});toast(d.skipped?'再集計はまだ不要です':`最大${d.processed||0}銘柄分を更新`);state.backtest=null;await loadBacktest()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
+ try{const d=await api('/api/backtest-run?count=5',{write:true});toast(d.skipped?'現在の状態を維持しています':`${d.processed||0}回処理・成功${d.progress?.success||0}・再試行${d.progress?.retrying||0}`);state.backtest=null;await loadBacktest()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
 }
+async function restartBacktest(btn){
+ if(!confirm('現在のバックテスト集計を破棄し、全銘柄を最初から再集計しますか？'))return;
+ const old=btn.textContent;btn.disabled=true;btn.textContent='初期化中…';
+ try{const d=await api('/api/backtest-run?count=5&force=1',{write:true});toast(`再集計を開始しました・${d.processed||0}回処理`);state.backtest=null;await loadBacktest()}catch(e){toast(e.message)}finally{btn.disabled=false;btn.textContent=old}
+}
+
 
 async function openBacktestSymbol(market,symbol){
  try{
@@ -975,20 +995,20 @@ async function openBacktestSymbol(market,symbol){
  }catch(e){toast(e.message)}
 }
 
-async function loadEvents(){
+async function loadEvents(refresh=false){
  $('event-list').innerHTML='<div class="loading">取得中…</div>';
- try{state.events=await api('/api/events');renderEvents()}catch(e){$('event-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+ try{state.events=await api('/api/events'+(refresh?'?refresh=1':''));renderEvents()}catch(e){$('event-list').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
 function renderEvents(){
  const now=Date.now(),events=(state.events?.events||[]).slice().sort((a,b)=>new Date(a.time)-new Date(b.time));
  const future=events.filter(e=>new Date(e.time)>=now),past=events.filter(e=>new Date(e.time)<now);
- let html='<div class="section-title">今後の重要日程</div><div class="coverage-warning"><b>公式確認分＋手動登録</b>：主要な確認済み決算を自動表示し、それ以外は手動で補完します。保有銘柄とA/B候補は証券会社・企業IRでも確認してください。</div><div class="card">'+(future.length?future.map(eventRow).join(''):'<div class="empty">手動登録なし</div>')+'</div>';
+ let html='<div class="toolbar"><button class="primary small" onclick="loadEvents(true)">決算予定を更新</button><span class="fresh">ウォッチ＋シグナル対象・最大20銘柄</span></div><div class="section-title">今後の重要日程</div><div class="coverage-warning"><b>公式確認＋自動取得＋手動登録</b>：ウォッチとシグナル履歴に存在する銘柄だけを対象にします。自動取得は参考日程のため、売買前に企業IR・証券会社で時刻を確認してください。対象から削除すると自動予定も表示から消えます。</div><div class="card">'+(future.length?future.map(eventRow).join(''):'<div class="empty">対象銘柄の予定を取得できませんでした</div>')+'</div>';
  if(past.length)html+=`<details class="card"><summary class="row"><div class="name">過去分</div><span class="count">${past.length}件</span></summary>${past.map(eventRow).join('')}</details>`;
  $('event-list').innerHTML=html;
 }
 function eventRow(e){
- const diff=new Date(e.time)-Date.now(),days=Math.ceil(diff/86400000),symbols=(e.symbols||[]).map(code).join(' / ');
- return `<div class="row">${e.read_only?'':`<button class="small" aria-label="固定" title="固定" onclick="togglePin('${attr(e.id)}')">${icon('pin',15,e.pinned?'up':'')}</button>`}<div class="grow1"><div class="name">${esc(e.name)}</div><div class="event-time">${esc(eventTimeLabel(e))}</div>${symbols?`<div class="event-symbols">関連 ${esc(symbols)}</div>`:''}<span class="event-source ${e.source==='official'?'':'manual'}">${e.source==='official'?'公式確認':'手動登録'}</span></div><div class="event-count">${diff>=0?(days<=1?'24h以内':days+'日'):'完了'}</div>${e.read_only?'':`<button class="small danger" aria-label="削除" title="削除" onclick="deleteEvent('${attr(e.id)}')">${icon('trash',15)}</button>`}</div>`;
+ const diff=new Date(e.time)-Date.now(),days=Math.ceil(diff/86400000),symbols=(e.symbols||[]).map(code).join(' / '),provider=e.source==='provider',sourceLabel=e.source==='official'?'公式確認':provider?'自動取得・要確認':'手動登録';
+ return `<div class="row">${e.read_only?'':`<button class="small" aria-label="固定" title="固定" onclick="togglePin('${attr(e.id)}')">${icon('pin',15,e.pinned?'up':'')}</button>`}<div class="grow1"><div class="name">${esc(e.name)}</div><div class="event-time">${esc(eventTimeLabel(e))}</div>${symbols?`<div class="event-symbols">関連 ${esc(symbols)}</div>`:''}<span class="event-source ${e.source==='official'?'':provider?'provider':'manual'}">${sourceLabel}</span></div><div class="event-count">${diff>=0?(days<=1?'24h以内':days+'日'):'完了'}</div>${e.read_only?'':`<button class="small danger" aria-label="削除" title="削除" onclick="deleteEvent('${attr(e.id)}')">${icon('trash',15)}</button>`}</div>`;
 }
 function openEventForm(){
  $('modal-title').textContent='重要日程を追加';$('modal-body').innerHTML=`<div class="formgrid"><select id="ev-cat"><option value="macro">マクロ</option><option value="centralbank">中銀</option><option value="earnings">決算</option><option value="material">個別材料</option><option value="other">その他</option></select><input id="ev-name" placeholder="イベント名"><input class="span2" id="ev-time" type="datetime-local"><input class="span2" id="ev-symbols" placeholder="関連銘柄（例 4063.T, NVDA）"><div class="span2 note">日程は手動登録です。関連銘柄を入れるとAIコピー時に未確認銘柄を判別できます。</div><div class="span2 actions"><button class="primary" onclick="addEvent()">追加</button></div></div>`;openModal();
@@ -1006,7 +1026,7 @@ async function copyAI(btn){
    api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/watchlist'),api('/api/signal-log?limit=60'),api('/api/backtest'),api('/api/events'),api('/api/positions')
   ]);
   state.stage.jp=jp;state.stage.us=us;state.notrade.jp=njp;state.notrade.us=nus;state.momentum.jp=mjp;state.momentum.us=mus;state.watch=w;state.positions=pos;state.events=ev;
-  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・市場差RS・出来高・短期セットアップを使った確認順の整理。','注意: ウォッチの登録時メモと現在データは分離して記載。重要日程は公式確認分と手動登録を併記。指数ごとの基準日は独立。'];
+  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・市場差RS・出来高・短期セットアップを使った確認順の整理。','注意: ウォッチの登録時メモと現在データは分離して記載。重要日程は公式確認・ウォッチ／シグナル対象の自動取得・手動登録を併記。指数ごとの基準日は独立。'];
   for(const [label,m,st,nt,mom] of [['日本','jp',jp,njp,mjp],['米国','us',us,nus,mus]]){
    const ms=marketState(st,m),mm=momentumState(nt),gate=st.risk_gate||mom.risk_gate||nt.risk_gate||{};
    out.push(`\n## ${label}市場\n- 市場地合い: ${ms.label}\n- モメンタム地合い: ${mm.label}\n- リスクゲート: ${gate.label||'通常'} / 新規A・B抑制: ${gate.block_new_entries?'はい':'いいえ'}${(gate.reasons||[]).length?' / '+gate.reasons.join('、'):''}\n- データ: ${st.price_time||st.updated_at||'—'}`);
@@ -1034,10 +1054,10 @@ async function copyAI(btn){
    if(x.legacy_status)out.push(`  - 旧管理状態「${x.legacy_status}」は追跡中へ移行済み。実保有は保有☑のみを参照。`);
   }
   out.push('\n## シグナル実績');for(const s of sig.summary||[]){const d5=s.horizons?.d5;if(d5)out.push(`- ${s.label}: 5日中央値${pct(d5.median)} / 勝率${d5.win_rate}% / n=${d5.n}`)}
-  out.push('\n## 登録銘柄バックテスト');for(const [k,x] of Object.entries(bt.strategies||{})){const m=x.metrics||{};if(m.trades)out.push(`- ${x.label||k}: 勝率${m.win_rate}% / 期待値${pct(m.expectancy)} / PF${m.profit_factor} / n=${m.trades} / 直近1年${pct(x.recent_metrics?.expectancy)}`)}
-  out.push('\n## 厳選バックテスト条件');for(const r of bt.selective?.confirmed||[])out.push(`- ${r.market==='jp'?'日本':'米国'} ${r.strategy.replace('_','→')}: ${(r.labels||[]).join(' + ')} / 最終試験 勝率${r.test?.win_rate}% / 期待値${pct(r.test?.expectancy)} / PF${r.test?.profit_factor} / n=${r.test?.trades}`);if(!(bt.selective?.confirmed||[]).length)out.push('- 確認済み厳選条件なし');
-  out.push('\n## 10日以内の重要日程（公式確認＋手動登録）');const limit=Date.now()+10*86400000,future=(ev.events||[]).filter(x=>new Date(x.time)>=Date.now()).sort((a,b)=>new Date(a.time)-new Date(b.time)),near=future.filter(x=>new Date(x.time)<=limit),later=future.filter(x=>new Date(x.time)>limit&&new Date(x.time)<=Date.now()+30*86400000);
-  if(!near.length)out.push('- 公式確認・手動登録ともになし。決算予定や重要材料がないことを意味しない。');
+  out.push('\n## 登録銘柄バックテスト');const btp=bt.progress||{},bti=bt.integrity||{};out.push(`- 集計状態: ${bt.status||'running'} / 利用可: ${bt.result_usable?'はい':'いいえ'} / 成功 ${btp.success||0} / 失敗 ${btp.failed??btp.errors??0} / 再試行 ${btp.retrying||0} / 全${btp.total||0} / 成功率 ${bti.success_rate??'—'}%`);if(bt.result_usable){for(const [k,x] of Object.entries(bt.strategies||{})){const m=x.metrics||{};if(m.trades)out.push(`- ${x.label||k}: 勝率${m.win_rate}% / 期待値${pct(m.expectancy)} / PF${m.profit_factor} / n=${m.trades} / 直近1年${pct(x.recent_metrics?.expectancy)}`)}}else out.push(`- 判定保留: ${bti.reason||'集計が不完全です'}。バックテスト成績と厳選条件は売買判断に使用しない。`);
+   out.push('\n## 厳選バックテスト条件');if(bt.result_usable){for(const r of bt.selective?.confirmed||[])out.push(`- ${r.market==='jp'?'日本':'米国'} ${r.strategy.replace('_','→')}: ${(r.labels||[]).join(' + ')} / 最終試験 勝率${r.test?.win_rate}% / 期待値${pct(r.test?.expectancy)} / PF${r.test?.profit_factor} / n=${r.test?.trades}`);if(!(bt.selective?.confirmed||[]).length)out.push('- 確認済み厳選条件なし')}else out.push('- 集計不完全のため厳選条件を作成・使用しない');
+   out.push('\n## 10日以内の重要日程（公式確認＋自動取得＋手動登録）');const limit=Date.now()+10*86400000,future=(ev.events||[]).filter(x=>new Date(x.time)>=Date.now()).sort((a,b)=>new Date(a.time)-new Date(b.time)),near=future.filter(x=>new Date(x.time)<=limit),later=future.filter(x=>new Date(x.time)>limit&&new Date(x.time)<=Date.now()+30*86400000);
+  if(!near.length)out.push('- 公式確認・自動取得・手動登録ともになし。決算予定や重要材料がないことを意味しない。');
   const covered=new Set();for(const e of future)for(const sym of e.symbols||[])covered.add(String(sym).toUpperCase());for(const e of near)out.push(`- ${e.name}: ${eventTimeLabel(e)}${(e.symbols||[]).length?' / 関連 '+e.symbols.map(code).join('・'):''}`);if(later.length)out.push(`- 10日超の確認済み日程: ${later.map(e=>e.name+' '+eventTimeLabel(e)).join(' / ')}`)
   const prioritySymbols=new Set([...heldSymbols]);for(const mom of [mjp,mus])for(const lane of mom.board||[])if(['A','B'].includes(lane.key))for(const r of lane.rows||[])prioritySymbols.add(String(r.symbol).toUpperCase());
   const uncovered=[...prioritySymbols].filter(sym=>!covered.has(sym));if(uncovered.length)out.push(`- 10日以内の日程未確認（保有・A/B）: ${uncovered.map(code).join('、')}。企業IR・証券会社で別途確認必須。`);
@@ -1104,36 +1124,40 @@ function universeMarketBlock(label,p){
  }
  return `<div class="universe-market"><div class="universe-market-head"><b>${label}</b><span class="count">現在${p.current_count} / 対象${p.target_count}</span><span class="count">保護${p.protected_count}</span><span class="count">履歴${p.history_days}日</span></div>${rows.length?rows.join(''):`<div class="card pad muted">${esc(p.blocked_reason||'安全な入れ替え候補はありません')}</div>`}</div>`;
 }
+function universeCurrentBlock(label,items=[]){
+ const groups=new Map();for(const x of items){const tier=x.tier_label||x.tier||'登録';if(!groups.has(tier))groups.set(tier,[]);groups.get(tier).push(x)}
+ return `<details class="card universe-current"><summary class="row"><div class="name grow1">${label}・現在の登録銘柄</div><span class="count">${items.length}件</span></summary><div class="pad">${items.length?[...groups].map(([tier,rows])=>`<div class="section-title">${esc(tier)} ${rows.length}件</div><div class="universe-current-grid">${rows.map(x=>`<div class="universe-current-row"><span class="name">${esc(x.name||x.symbol)}</span><span class="code">${esc(code(x.symbol))}</span>${x.pinned?'<span class="pin-state">固定</span>':''}${x.protected_reason?`<span class="watch-mini">${esc(x.protected_reason)}</span>`:''}<small>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加':'登録済み'}</small></div>`).join('')}</div>`).join(''):'<div class="empty">登録なし</div>'}</div></details>`;
+}
 async function loadUniverse(refresh=false){
  const root=$('universe-list');if(!root)return;root.innerHTML='<div class="loading">ユニバースを確認中…</div>';
  try{
-  const d=refresh?await api('/api/universe',{method:'POST',body:{action:'refresh'}}):await api('/api/universe');
-  const cfg=d.config||{},proposal=d.proposal||null,counts=d.counts||{},coverage=proposal?.coverage||d.coverage||[];
-  const jp=proposal?.jp,us=proposal?.us,addCount=(jp?.adds?.length||0)+(us?.adds?.length||0),dropCount=(jp?.drops?.length||0)+(us?.drops?.length||0);
+  const d=refresh?await api('/api/universe',{method:'POST',body:{action:'refresh'}}):await api('/api/universe');if(d.ok===false)throw new Error(d.error||'ユニバースを取得できませんでした');
+  const cfg=d.config||{},proposal=d.proposal||null,counts=d.counts||{},coverage=proposal?.coverage||d.coverage||[],current=d.current||{};
+  const jp=proposal?.jp,us=proposal?.us,addCount=(jp?.adds?.length||0)+(us?.adds?.length||0),dropCount=(jp?.drops?.length||0)+(us?.drops?.length||0),canApply=Boolean(jp?.can_apply||us?.can_apply);
+  const blocked=[jp,us].filter(x=>x&&x.adds?.length&&!x.can_apply).map(x=>`${x.market==='jp'?'日本':'米国'}：${x.blocked_reason||'安全条件未達'}`);
   let html=`<div class="universe-hero"><div class="universe-head"><div><div class="universe-title">分析ユニバース自動管理</div><div class="universe-sub">ランキング・探索・RS・出来高・継続性から入れ替えます。保有、ウォッチ、手動固定、テーマ最低数は保護します。</div></div><span class="universe-mode">${universeModeLabel(cfg.mode)}</span></div><div class="universe-grid"><div class="universe-kpi"><b>${counts.jp?.registered??jp?.current_count??'—'}</b><span>日本登録</span></div><div class="universe-kpi"><b>${counts.us?.lead??us?.active_count??'—'}</b><span>米国リード</span></div><div class="universe-kpi"><b>${addCount}</b><span>追加提案</span></div><div class="universe-kpi"><b>${dropCount}</b><span>退出・降格提案</span></div></div></div>`;
-  html+=`<div class="universe-controls"><button class="primary" onclick="refreshUniverse()">提案を更新</button><button ${!proposal||!addCount?'disabled':''} onclick="applyUniverse()">安全な入れ替えを適用</button><select id="universe-mode" onchange="setUniverseMode(this.value)"><option value="guarded_auto" ${cfg.mode==='guarded_auto'?'selected':''}>週次・安全自動</option><option value="proposal" ${cfg.mode==='proposal'?'selected':''}>提案のみ</option><option value="off" ${cfg.mode==='off'?'selected':''}>停止</option></select></div>`;
-  html+=`<div class="note"><b>自動適用：</b>ランキング履歴${cfg.min_history_days||7}日以上、候補と退出対象のスコア差${cfg.score_advantage||18}以上、週${cfg.weekly_swap_limit||2}組まで。日本が80銘柄以下ならコア内も厳格条件で交換し、80超ではレーダーを優先します。米国はリードから外して保管へ移し、即削除しません。</div>`;
+  html+=`<div class="universe-controls"><button class="primary" onclick="refreshUniverse()">提案を更新</button><button ${!canApply?'disabled':''} title="${attr(blocked.join(' / '))}" onclick="applyUniverse(false)">安全な入れ替えを適用</button>${addCount&&!canApply?'<button class="danger" onclick="applyUniverse(true)">今回だけ手動適用</button>':''}<select id="universe-mode" onchange="setUniverseMode(this.value)"><option value="guarded_auto" ${cfg.mode==='guarded_auto'?'selected':''}>週次・安全自動</option><option value="proposal" ${cfg.mode==='proposal'?'selected':''}>提案のみ</option><option value="off" ${cfg.mode==='off'?'selected':''}>停止</option></select></div>`;
+  html+=`<div class="note"><b>自動適用：</b>ランキング履歴${cfg.min_history_days||7}日以上、候補と退出対象のスコア差${cfg.score_advantage||18}以上、週${cfg.weekly_swap_limit||2}組まで。安全条件未達では通常ボタンを無効化します。「今回だけ手動適用」は保有・ウォッチ・固定・テーマ最低数を守ったまま、履歴日数などの適用ゲートだけを明示的に解除します。</div>`;
+  if(blocked.length)html+=`<div class="note warnline"><b>現在は安全条件未達：</b>${esc(blocked.join(' / '))}</div>`;
   html+=universeMarketBlock('日本株',jp)+universeMarketBlock('米国株',us);
+  html+='<div class="section-title">現在の登録銘柄</div>'+universeCurrentBlock('日本株',current.jp||[])+universeCurrentBlock('米国株',current.us||[]);
   html+='<div class="section-title">テーマ構成</div><div class="coverage-grid">'+coverage.map(x=>`<div class="coverage-row ${x.status}"><b>${esc(x.name)}</b><span>JP ${x.jp}</span><span>US ${x.us}</span><span class="coverage-status">${universeStatusLabel(x.status)}</span></div>`).join('')+'</div>';
   const hist=d.history||[];html+='<div class="section-title">入れ替え履歴</div><div class="card">'+(hist.length?hist.slice(0,10).map(h=>`<div class="universe-history"><b>${dateText(h.at)}</b> · ${h.source==='scheduled'?'自動':'手動'} · ${(h.applied||[]).map(x=>`${x.market.toUpperCase()} +${x.adds?.length||0}/-${x.drops?.length||0}`).join(' / ')||'変更なし'}</div>`).join(''):'<div class="pad muted">まだ入れ替え履歴はありません</div>')+'</div>';
   root.innerHTML=html;
  }catch(e){root.innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
 async function refreshUniverse(){try{await loadUniverse(true);toast('入れ替え提案を更新しました')}catch(e){toast(e.message)}}
-async function applyUniverse(){if(!confirm('保護条件を満たした提案だけを適用します。よろしいですか？'))return;try{const d=await api('/api/universe',{method:'POST',body:{action:'apply'}});toast((d.applied||[]).length?'入れ替えを適用しました':'適用できる変更はありません');await loadUniverse()}catch(e){toast(e.message)}}
-async function setUniverseMode(mode){try{await api('/api/universe',{method:'POST',body:{action:'config',mode}});toast('自動管理モードを変更しました');await loadUniverse()}catch(e){toast(e.message)}}
-
-function openSettings(){
- $('modal-title').textContent='設定・運用状態';
- const key=localStorage.getItem('vantage_write_key')||'';
- const jpCount=state.stage.jp?.focus_counts||{},usCount=state.stage.us?.focus_counts||{};
- $('modal-body').innerHTML=`<div class="settings-grid"><div class="card pad settings-wide"><div class="settings-head"><div><div class="name">運用状態</div><div class="muted">接続、確定終値、自動管理の状態をまとめて確認します。</div></div><button class="small" onclick="checkSystemStatus()">再確認</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>`+
- `<div class="card pad"><div class="name">分析対象</div><div class="meta"><span>日本 コア ${jpCount.core??80}</span><span>レーダー ${jpCount.radar??'最大80'}</span><span>米国 リード ${usCount.lead??40}</span></div><div class="note">上限は日本160（コア80＋レーダー80）、米国の自動分析は40です。世界横断テーマは日米50:50を基準に、少数地域を中立補正します。</div><div class="actions"><button onclick="recalcStage()">現在市場を再計算</button><button onclick="openStockEditor()">銘柄編集</button><button onclick="closeModal();switchTab('watch');setWatchView('universe')">自動入れ替え</button></div></div>`+
- `<div class="card pad"><div class="name">使い方</div><div class="guide-body"><b>市場 → テーマ → FRAME</b>の順に使います。管理タブではウォッチ、シグナル実績、ユニバースを確認します。</div><div class="actions"><button class="primary" onclick="openGuide()">操作ガイドを開く</button></div></div>`+
- `<div class="card pad"><div class="detail-label">書き込みキー（任意）</div><input class="fullinput" id="write-key" type="password" value="${attr(key)}" placeholder="Cloudflare WRITE_TOKENを設定した場合"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></div>`+
- `<div class="card pad"><div class="name">指数通知</div><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト</button></div></div></div>`;
- openModal();checkSystemStatus();
+async function applyUniverse(force=false){
+ const message=force?'安全履歴ゲートを今回だけ解除して提案を適用します。保有・ウォッチ・固定銘柄は保護されます。よろしいですか？':'安全条件を満たした提案だけを適用します。よろしいですか？';
+ if(!confirm(message))return;
+ try{
+  const d=await api('/api/universe',{method:'POST',body:{action:'apply',force}});if(d.ok===false)throw new Error(d.error||'適用できる変更はありません');
+  const applied=d.applied||[],detail=applied.map(x=>`${x.market.toUpperCase()} +${x.adds?.length||0}/-${x.drops?.length||0}`).join(' / ');
+  toast(detail?'入れ替え完了 '+detail:'変更はありません');await loadUniverse();
+ }catch(e){toast('適用されませんでした: '+e.message);await loadUniverse()}
 }
+async function setUniverseMode(mode){try{const d=await api('/api/universe',{method:'POST',body:{action:'config',mode}});if(d.ok===false)throw new Error(d.error||'変更できませんでした');toast('自動管理モードを変更しました');await loadUniverse()}catch(e){toast(e.message)}}
+
 function statusCard(title,value,detail,kind='good'){return `<div class="system-card ${kind}"><div class="system-top"><span class="status-dot"></span><b>${esc(title)}</b></div><strong>${esc(value)}</strong><small>${esc(detail||'')}</small></div>`}
 async function checkSystemStatus(){
  const root=$('system-status');if(!root)return;root.innerHTML='<div class="loading compact">確認中…</div>';
@@ -1372,10 +1396,10 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=50-macro-events').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=51-backtest-integrity').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
-<script src="./vantage-frame-sync-v49.js?v=49"></script>
+<script src="./vantage-frame-sync-v49.js?v=51"></script>
 </body>
 </html>
