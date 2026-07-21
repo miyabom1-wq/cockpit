@@ -1,0 +1,9 @@
+{
+  "name": "PAPER - VANTAGE Trading Journal",
+  "short_name": "PAPER",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef1f5",
+  "theme_color": "#111827",
+  "icons": []
+}
