@@ -2,14 +2,14 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827"><link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icon-192.png">
 <title>PAPER</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef1f5;color:#151923;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;padding:18px 14px 80px}.wrap{max-width:720px;margin:auto}header{display:flex;align-items:center;gap:10px;margin-bottom:16px}.logo{width:34px;height:34px;border-radius:10px;background:#111827;color:#fff;display:grid;place-items:center;font-weight:800}.sub{font-size:12px;color:#687386}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:sticky;top:0;background:#eef1f5;padding:6px 0;z-index:5}.tabs button,.btn{border:1px solid #cfd5de;background:#fff;border-radius:9px;padding:10px;font-weight:650}.tabs button.active,.btn.primary{background:#111827;color:#fff;border-color:#111827}.panel{display:none}.panel.active{display:block}.card{background:#fff;border:1px solid #d9dee6;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 10px rgba(20,30,50,.05)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.k{font-size:11px;color:#737d8c}.v{font-size:18px;font-weight:750}.up{color:#13865b}.down{color:#d22d43}input,select,textarea{width:100%;border:1px solid #cfd5de;border-radius:9px;padding:10px;background:#fff;font:inherit}label{display:block;font-size:12px;color:#667085;margin:9px 0 4px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{cursor:pointer}.btn.danger{color:#c92a3f}.row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid #edf0f4;padding-top:10px;margin-top:10px}.badge{font-size:10px;padding:3px 7px;border-radius:999px;background:#e9eef5;color:#445063}.empty{text-align:center;color:#7b8492;padding:28px 10px}.mono{font-variant-numeric:tabular-nums}.note{font-size:11px;color:#6b7482;line-height:1.6}.wide{grid-column:1/-1}@media(max-width:520px){.tabs button{font-size:12px;padding:9px 4px}}
 </style>
 </head>
 <body><div class="wrap">
-<header><div class="logo">P</div><div><b>PAPER</b><div class="sub">FRAME → ENTRY → EXIT</div></div></header>
+<header><div class="logo">P</div><div><b>PAPER</b><div class="sub">FRAME → ENTRY → EXIT</div></div><button id="installApp" class="btn" style="margin-left:auto;display:none">インストール</button></header>
 <div class="tabs"><button data-tab="positions" class="active">建玉</button><button data-tab="entry">ENTRY</button><button data-tab="history">履歴</button><button data-tab="stats">成績</button></div>
 <section id="positions" class="panel active"></section>
 <section id="entry" class="panel"><div class="card"><b>仮想エントリー</b><div class="grid">
@@ -36,5 +36,16 @@ window.exitTrade=(id,partial)=>{let p=db.positions.find(x=>x.id===id);let q=part
 async function loadVantageCandidates(){let out=document.getElementById('vantageList');out.textContent='読込中…';try{let r=await fetch('../../api/watchlist');let j=await r.json(),a=j.items||j.watchlist||j.stocks||[];if(!Array.isArray(a)||!a.length)throw Error('候補なし');out.innerHTML='<b>候補:</b> '+a.slice(0,12).map(x=>`<button class="btn" style="padding:5px 8px;margin:4px" onclick="pick('${x.symbol||x.code||''}','${(x.name||'').replaceAll("'","")}')">${x.name||x.symbol||x.code}</button>`).join('')}catch(e){out.textContent='VANTAGE候補を取得できませんでした。銘柄コードを手入力してください。'}}
 window.pick=(s,nm)=>{symbol.value=s.replace('.T','');name.value=nm};
 function csv(){let rows=[['symbol','name','qty','entry','exit','pnl','reason','opened','closed'],...db.history.map(x=>[x.symbol,x.name,x.qty,x.entry,x.exit,x.pnl,x.reason,x.opened,x.closed])];let blob=new Blob(['\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replaceAll('"','""')}"`).join(',')).join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='paper-history.csv';a.click()}
-tabs();add.onclick=addTrade;loadVantage.onclick=loadVantageCandidates;backup.onclick=csv;render();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+let installPrompt=null;
+const installButton=document.getElementById('installApp');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();installPrompt=e;installButton.style.display='block';
+});
+installButton.onclick=async()=>{
+  if(!installPrompt){alert('Chromeの通常タブでこのページを開き、メニューから「アプリをインストール」を選択してください。');return;}
+  installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installButton.style.display='none';
+};
+window.addEventListener('appinstalled',()=>{installButton.style.display='none'});
+tabs();add.onclick=addTrade;loadVantage.onclick=loadVantageCandidates;backup.onclick=csv;render();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./'});
 </script></body></html>
