@@ -112,6 +112,10 @@ async function commitIfComplete(env,market,id,meta){
   await Promise.all([env.COCKPIT_KV.put(KEYS.stage(market),JSON.stringify(store)),env.COCKPIT_KV.put(KEYS.momentum(market),JSON.stringify(momentum)),env.COCKPIT_KV.put(KEYS.noTrade(market),JSON.stringify(notrade))]);
   return{committed:true,store,momentum,notrade};
 }
+export function batchFreshnessRatios(stocks=[],tradeDate=null){
+  const total=stocks.length,session=stocks.filter(x=>!tradeDate||x?.date===tradeDate).length,confirmed=stocks.filter(x=>(!tradeDate||x?.date===tradeDate)&&x?.data_quality?.close_confirmed).length;
+  return{total,session,confirmed,session_ratio:total?round(session/total*100,1):0,confirmed_ratio:total?round(confirmed/total*100,1):0};
+}
 export async function runStageBatch(env,batchKey,options={}){
   const match=String(batchKey||'').match(/^(jp|us)(\d+)$/);if(!match)throw new Error('unknown batch: '+batchKey);
   const market=match[1],part=Number(match[2]),parts=options.parts||partsFor(market);if(part<1||part>parts)throw new Error('batch out of range');
@@ -121,11 +125,14 @@ export async function runStageBatch(env,batchKey,options={}){
   const list=(await getStockList(env,market)).slice(0,activeLimit(market)),slice=list.slice((part-1)*LIMITS.batchSize,part*LIMITS.batchSize);
   const benchmark=await getBenchmark(env,market,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
   const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
-  const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null,payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,...(macro?{macro}:{})};
+  const freshness=batchFreshnessRatios(stocks,tradeDate),sessionFloor=Number(options.minSessionRatio),confirmedFloor=Number(options.minConfirmedRatio);
+  if(Number.isFinite(sessionFloor)&&freshness.session_ratio<sessionFloor)throw new Error(`session freshness ${freshness.session_ratio}% below ${sessionFloor}%`);
+  if(Number.isFinite(confirmedFloor)&&freshness.confirmed_ratio<confirmedFloor)throw new Error(`confirmed freshness ${freshness.confirmed_ratio}% below ${confirmedFloor}%`);
+  const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null,payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,batch_freshness:freshness,...(macro?{macro}:{})};
   await env.COCKPIT_KV.put(stageWorkingKey(id,part),JSON.stringify(payload),{expirationTtl:WORK_TTL});
   const metaRaw=await env.COCKPIT_KV.get(stageMetaKey(id)),meta=parseJson(metaRaw,{market,parts,completed:[],kind,tradeDate,created_at:nowIso()});if(!meta.completed.includes(part))meta.completed.push(part);meta.updated_at=nowIso();await env.COCKPIT_KV.put(stageMetaKey(id),JSON.stringify(meta),{expirationTtl:WORK_TTL});
   const commit=meta.completed.length>=parts?await commitIfComplete(env,market,id,meta):{committed:false};
-  return{ok:true,market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,count:stocks.length,completed_parts:meta.completed.sort((a,b)=>a-b),committed:commit.committed};
+  return{ok:true,market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,count:stocks.length,completed_parts:meta.completed.sort((a,b)=>a-b),committed:commit.committed,batch_freshness:freshness};
 }
 export async function getStage(env,market){
   const m=market==='us'?'us':'jp',stage=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m)),{market:m,complete:false,stocks:{},macro:{},focus_counts:{}}),other=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m==='jp'?'us':'jp')),{macro:{}}),canonical=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}});
