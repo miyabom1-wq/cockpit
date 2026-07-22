@@ -30,16 +30,22 @@ export function scheduleNodes(now=new Date()){
   // Macro observations have their own exchange calendars. Run them independently
   // from JP/US stock-stage jobs so a Japanese holiday does not freeze KOSPI,
   // FX, volatility or futures. Early Saturday JST captures Friday's US close.
-  if(day>=1&&day<=5){addMacro('macro_0910',550);addMacro('macro_1210',730);addMacro('macro_1630',990);addMacro('macro_1810',1090);addMacro('macro_2350',1430);}
+  if(day>=1&&day<=5){addMacro('macro_0910',550);addMacro('macro_1220',740);addMacro('macro_1630',990);addMacro('macro_1810',1090);addMacro('macro_2350',1430);}
   if(day>=1&&day<=6)addMacro('macro_0635',395);
   const jpDate=date,jpObj=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()));
   if(isTradingDay('jp',jpObj)){
-    add('jp','jp_0930',570,'intraday',jpDate,4);add('jp','jp_1020',620,'intraday',jpDate,4);add('jp','jp_1200',720,'intraday',jpDate,marketParts('jp'));add('jp','jp_1420',860,'intraday',jpDate,4);add('jp','jp_1505',905,'intraday',jpDate,4);add('jp','jp_1535',935,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});add('jp','jp_1640_retry',1000,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');add('jp','jp_1820_universe',1100,'confirmed',jpDate,1,'universe');add('jp','jp_1910_margin',1150,'confirmed',jpDate,1,'margin');
+    add('jp','jp_0930',570,'intraday',jpDate,4);add('jp','jp_1020',620,'intraday',jpDate,4);add('jp','jp_1130',690,'intraday',jpDate,marketParts('jp'),'stage',{minSessionRatio:80,burst:2});add('jp','jp_1420',860,'intraday',jpDate,4);add('jp','jp_1505',905,'intraday',jpDate,4);add('jp','jp_1535',935,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});add('jp','jp_1640_retry',1000,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');add('jp','jp_1820_universe',1100,'confirmed',jpDate,1,'universe');add('jp','jp_1910_margin',1150,'confirmed',jpDate,1,'margin');
   }
   const usObj=minute<720?new Date(jpObj.getTime()-86400000):jpObj,usDate=usObj.toISOString().slice(0,10);if(isTradingDay('us',usObj)){if(isUsDst(now)){add('us','us_2230',1350,'intraday',usDate,marketParts('us'),'stage',{minSessionRatio:80});add('us','us_0505',305,'confirmed',usDate,marketParts('us'),'stage',{minConfirmedRatio:90});add('us','us_0540_retry',340,'confirmed',usDate,marketParts('us'),'stage',{minConfirmedRatio:90});}else{add('us','us_2330',1410,'intraday',usDate,marketParts('us'),'stage',{minSessionRatio:80});add('us','us_0605',365,'confirmed',usDate,marketParts('us'),'stage',{minConfirmedRatio:90});add('us','us_0640_retry',400,'confirmed',usDate,marketParts('us'),'stage',{minConfirmedRatio:90});}}
   return{minute,nodes};
 }
-async function scheduledStage(env){const{minute,nodes}=scheduleNodes();for(const n of nodes){if(minute<n.at||minute>=n.at+55)continue;const marker=`sched:v50:${n.key}:${n.tradeDate}`;if(await env.COCKPIT_KV.get(marker))continue;
+async function scheduledStage(env){
+  const {minute,nodes}=scheduleNodes();
+  let processed=0;
+  for(const n of nodes){
+    if(minute<n.at||minute>=n.at+55)continue;
+    const marker=`sched:v50:${n.key}:${n.tradeDate}`;
+    if(await env.COCKPIT_KV.get(marker))continue;
     try{
       if(n.action==='macro')await refreshMacroSnapshots(env);
       else if(n.action==='explorer')await buildExplorer(env,'jp',true);
@@ -48,14 +54,42 @@ async function scheduledStage(env){const{minute,nodes}=scheduleNodes();for(const
       else if(n.action==='enrich'){
         const retry=n.key.includes('_retry'),ready=retry?await currentCloseReady(env,n.market,n.tradeDate):await snapshotReady(env,n);
         if(!ready)throw new Error(`${n.market} snapshot not ready for enrich`);
-        await getEnrichedRanking(env,n.market,true);if(n.kind==='confirmed'){await captureSignalLog(env,n.market,'auto');await captureThemeSnapshot(env,'scheduled');}
+        await getEnrichedRanking(env,n.market,true);
+        if(n.kind==='confirmed'){
+          await captureSignalLog(env,n.market,'auto');
+          await captureThemeSnapshot(env,'scheduled');
+        }
       }else{
-        if(n.key.includes('_retry')&&await currentCloseReady(env,n.market,n.tradeDate)){/* skip already complete */}
-        else{const opt=scheduleSnapshotOptions(n.market,n.key.split(':')[0],n.kind,n.tradeDate);opt.parts=n.parts;if(n.minSessionRatio)opt.minSessionRatio=n.minSessionRatio;if(n.minConfirmedRatio)opt.minConfirmedRatio=n.minConfirmedRatio;await runStageBatch(env,`${n.market}${n.part}`,opt);}
+        if(n.key.includes('_retry')&&await currentCloseReady(env,n.market,n.tradeDate)){
+          /* skip already complete */
+        }else{
+          const opt=scheduleSnapshotOptions(n.market,n.key.split(':')[0],n.kind,n.tradeDate);
+          opt.parts=n.parts;
+          if(n.minSessionRatio)opt.minSessionRatio=n.minSessionRatio;
+          if(n.minConfirmedRatio)opt.minConfirmedRatio=n.minConfirmedRatio;
+          await runStageBatch(env,`${n.market}${n.part}`,opt);
+        }
       }
-      await env.COCKPIT_KV.put(marker,String(Date.now()),{expirationTtl:129600});
-    }catch(e){console.error('[scheduled]',n.key,e?.stack||e);}break;
-  }}
+
+      await env.COCKPIT_KV.put(marker,String(Date.now()),{
+        expirationTtl:129600
+      });
+
+      processed++;
+      const burst=
+        n.action==='stage'&&
+        Number(n.part)>1&&
+        Number(n.part)<Number(n.parts)
+          ?Math.max(1,Number(n.burst||1))
+          :1;
+
+      if(processed>=burst)break;
+    }catch(e){
+      console.error('[scheduled]',n.key,e?.stack||e);
+      break;
+    }
+  }
+}
 export default{
   async fetch(request,env){if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders(request)});if(!authorized(request,env))return json({ok:false,error:'write access denied'},403,request);try{await initializeStorage(env);return await route(request,env);}catch(e){console.error('[fetch]',e?.stack||e);return json({ok:false,error:e?.message||String(e)},500,request);}},
   async scheduled(event,env,ctx){ctx.waitUntil((async()=>{try{await initializeStorage(env);await scheduledStage(env);}catch(e){console.error('[stage cron]',e?.stack||e);}try{await pushIndex(env);}catch(e){console.error('[push cron]',e?.stack||e);}try{await runBacktestStep(env,1,false);}catch(e){console.error('[backtest cron]',e?.stack||e);}})());}
