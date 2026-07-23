@@ -67,7 +67,8 @@ async function scheduledStage(env){
           opt.parts=n.parts;
           if(n.minSessionRatio)opt.minSessionRatio=n.minSessionRatio;
           if(n.minConfirmedRatio)opt.minConfirmedRatio=n.minConfirmedRatio;
-          await runStageBatch(env,`${n.market}${n.part}`,opt);
+          const result=await runStageBatch(env,`${n.market}${n.part}`,opt);
+          if(result?.committed&&result?.kind==='confirmed')await captureSignalLog(env,result.market,'auto-stage');
         }
       }
 

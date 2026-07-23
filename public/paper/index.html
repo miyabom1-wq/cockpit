@@ -47,5 +47,6 @@ installButton.onclick=async()=>{
 };
 window.addEventListener('appinstalled',()=>{installButton.style.display='none'});
 tabs();add.onclick=addTrade;loadVantage.onclick=loadVantageCandidates;backup.onclick=csv;render();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js',{scope:'./'});
-</script></body></html>
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js?v=2-auto-quotes',{scope:'./'});
+</script>
+<script src="./paper-auto-quotes-v2.js?v=2"></script></body></html>

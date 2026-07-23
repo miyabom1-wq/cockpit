@@ -4,11 +4,11 @@ import { ensureSchema } from '../storage/kv-schema.js';
 import { migrateLegacyData, exportUserData } from '../storage/migration.js';
 import { handleStockListAction } from '../storage/stocklist.js';
 import { lookupSymbol } from '../data/yahoo.js';
-import { getEvents, mutateEvent } from '../services/events.js';
+import { getEvents, mutateEvent, syncRegisteredEventBatch } from '../services/events.js';
 import { getPositions, mutatePosition } from '../services/positions.js';
 import { getWatchlist, mutateWatchlist } from '../services/watchlist.js';
 import { getStage, getMomentum, getNoTrade, getReentry, runStageBatch } from '../services/stage.js';
-import { getSignalLog, mutateSignalLog, captureSignalLog } from '../services/signal-log.js';
+import { getSignalLog, mutateSignalLog, captureSignalLog, syncConfirmedSignalLogs } from '../services/signal-log.js';
 import { getBacktestDashboard, getBacktestSymbol, runBacktestStep } from '../services/backtest.js';
 import { getRanking, getEnrichedRanking, getExplorer } from '../services/ranking.js';
 import { addSub, removeSub, sendPushToAll, VAPID_PUBLIC_KEY_RAW } from '../services/push.js';
@@ -22,6 +22,7 @@ export async function route(request,env){
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);
   if(p==='/api/export')return json(await exportUserData(env),200,request);
   if(p==='/api/events')return request.method==='GET'?json({events:await getEvents(env,Date.now(),url.searchParams.get('refresh')==='1')},200,request):json(await mutateEvent(env,await request.json()),200,request);
+  if(p==='/api/events-sync'){const body=request.method==='POST'?await request.json():{};return json(await syncRegisteredEventBatch(env,{batch:body.batch,batchSize:body.batch_size}),200,request);}
   if(p==='/api/lookup'){const symbol=url.searchParams.get('symbol');if(!symbol)return json({ok:false,error:'symbol required'},400,request);const q=await lookupSymbol(symbol);return q?json(q,200,request):json({ok:false,error:'not found'},404,request);}
   if(p==='/api/positions')return request.method==='GET'?json(await getPositions(env),200,request):json(await mutatePosition(env,await request.json()),200,request);
   if(p==='/api/discipline-state')return request.method==='GET'?json((await getPositions(env)).state,200,request):json(await mutatePosition(env,await request.json()),200,request);
@@ -30,9 +31,16 @@ export async function route(request,env){
   if(p==='/api/momentum')return json(await getMomentum(env,url.searchParams.get('market')||'jp'),200,request);
   if(p==='/api/notrade')return json(await getNoTrade(env,url.searchParams.get('market')||'jp'),200,request);
   if(p==='/api/reentry')return json(await getReentry(env,url.searchParams.get('market')||'jp'),200,request);
-  if(p==='/api/stage-run')return json(await runStageBatch(env,url.searchParams.get('batch')),200,request);
+  if(p==='/api/stage-run'){
+    const result=await runStageBatch(env,url.searchParams.get('batch'));
+    if(result?.committed&&result?.kind==='confirmed')await captureSignalLog(env,result.market,'manual-stage');
+    return json(result,200,request);
+  }
   if(p==='/api/stocklist'){const market=url.searchParams.get('market')||'jp',body=request.method==='GET'?{action:'get'}:await request.json();return json(await handleStockListAction(env,market,body),200,request);}
-  if(p==='/api/signal-log')return request.method==='GET'?json(await getSignalLog(env,url.searchParams.get('limit')),200,request):json(await mutateSignalLog(env,await request.json()),200,request);
+  if(p==='/api/signal-log'){
+    if(request.method==='GET'){await syncConfirmedSignalLogs(env,'open-signals');return json(await getSignalLog(env,url.searchParams.get('limit')),200,request);}
+    return json(await mutateSignalLog(env,await request.json()),200,request);
+  }
   if(p==='/api/signal-log-capture')return json(await captureSignalLog(env,url.searchParams.get('market')||'jp','manual'),200,request);
   if(p==='/api/backtest')return json(await getBacktestDashboard(env),200,request);
   if(p==='/api/backtest-symbol')return json(await getBacktestSymbol(env,url.searchParams.get('market')||'jp',url.searchParams.get('symbol')),200,request);

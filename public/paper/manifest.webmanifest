@@ -3,7 +3,7 @@
   "name": "PAPER - VANTAGE Demo Trading",
   "short_name": "PAPER",
   "description": "FRAMEからENTRY・EXITまでを検証するデモトレード管理アプリ",
-  "start_url": "./",
+  "start_url": "./?v=2",
   "scope": "./",
   "display": "standalone",
   "display_override": [

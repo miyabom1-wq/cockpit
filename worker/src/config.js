@@ -1,5 +1,5 @@
 export const APP_VERSION = 'v51.0.0';
-export const BUILD_ID = '20260721-optimized-market-schedule';
+export const BUILD_ID = '20260723-reliability-sync-fixes';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v51.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v4-retry-integrity';

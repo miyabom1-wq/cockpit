@@ -112,19 +112,37 @@ function applyMarket(list,proposal,market){
   for(const a of adds){if(next.some(x=>x.symbol===a.symbol))continue;const item={symbol:a.symbol,name:a.name,added_at:nowIso(),source:'auto_rotation',auto_added_at:nowIso(),pinned:false};if(m==='jp')next.push(item);else next.splice(Math.min(LIMITS.usLead-1,next.length),0,item);}
   const max=m==='jp'?LIMITS.jpMax:LIMITS.usMax;return next.slice(0,max);
 }
+export function reconcileProposalForCurrent(currentList=[],proposal={},market='jp'){
+  const m=market==='us'?'us':'jp',currentSymbols=new Set((currentList||[]).map(x=>x.symbol));
+  const rawAdds=(proposal?.adds||[]).filter(x=>x?.symbol&&!currentSymbols.has(x.symbol));
+  const replacementAdds=rawAdds.filter(x=>x.replacement&&currentSymbols.has(x.replacement));
+  const freeSlots=Math.max(0,(m==='jp'?LIMITS.jpMax:LIMITS.usMax)-currentSymbols.size);
+  const freeAdds=rawAdds.filter(x=>!x.replacement||!currentSymbols.has(x.replacement)).slice(0,freeSlots).map(x=>({...x,replacement:null}));
+  const allowed=new Set([...replacementAdds,...freeAdds].map(x=>x.symbol));
+  const adds=rawAdds.filter(x=>allowed.has(x.symbol)).map(x=>x.replacement&&currentSymbols.has(x.replacement)?x:{...x,replacement:null});
+  const replacements=new Set(adds.map(x=>x.replacement).filter(Boolean));
+  const drops=(proposal?.drops||[]).filter(x=>x?.symbol&&currentSymbols.has(x.symbol)&&replacements.has(x.symbol));
+  const staleRemoved=(proposal?.adds||[]).length-adds.length+(proposal?.drops||[]).length-drops.length;
+  return{...proposal,market:m,adds,drops,stale_removed:staleRemoved};
+}
 export async function applyUniverseProposal(env,{source='manual',force=false}={}){
   const [config,state]=await Promise.all([readConfig(env),readState(env)]);let proposal=state.proposal;if(!proposal)proposal=(await refreshUniverseProposal(env,{source})).proposal;
   if(config.mode==='off'&&!force)return{ok:false,error:'自動入れ替えは停止中'};
-  const blocked=['jp','us'].map(m=>proposal?.[m]).filter(p=>p?.adds?.length&&!p.can_apply).map(p=>({market:p.market,reason:p.blocked_reason||'安全条件未達'}));
+  const currentByMarket={},prepared={};
+  for(const market of ['jp','us']){currentByMarket[market]=await getStockList(env,market);prepared[market]=reconcileProposalForCurrent(currentByMarket[market],proposal?.[market]||{},market);}
+  const blocked=['jp','us'].map(m=>prepared[m]).filter(p=>p?.adds?.length&&!p.can_apply).map(p=>({market:p.market,reason:p.blocked_reason||'安全条件未達'}));
   if(blocked.length&&!force)return{ok:false,error:'安全条件未達のため適用していません',blocked};
   const applied=[];
   for(const market of ['jp','us']){
-    const p=proposal[market];if(!p?.adds?.length)continue;if(!p.can_apply&&!force)continue;
-    const current=await getStockList(env,market),next=applyMarket(current,p,market);
+    const p=prepared[market];if(!p?.adds?.length)continue;if(!p.can_apply&&!force)continue;
+    const current=currentByMarket[market],next=applyMarket(current,p,market);
     if(JSON.stringify(current.map(x=>x.symbol))===JSON.stringify(next.map(x=>x.symbol)))continue;
     await saveStockList(env,market,next);applied.push({market,adds:p.adds,drops:p.drops,before:current.length,after:next.length});
   }
-  if(!applied.length)return{ok:false,error:'提案は現在の登録内容へ反映できませんでした',blocked};
+  if(!applied.length){
+    await env.COCKPIT_KV.put(KEYS.universeState,JSON.stringify({...state,proposal:null}));
+    return{ok:true,applied:[],stale_proposal_cleared:true,blocked};
+  }
   const record={id:`u${Date.now()}`,at:nowIso(),source,forced:!!force,applied};
   const nextState={...state,last_auto_at:source==='scheduled'?record.at:state.last_auto_at,history:[...(state.history||[]),record].slice(-60),proposal:null};
   await env.COCKPIT_KV.put(KEYS.universeState,JSON.stringify(nextState));return{ok:true,applied,record};

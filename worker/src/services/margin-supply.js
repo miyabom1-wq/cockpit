@@ -2,7 +2,7 @@ import { KEYS } from '../storage/kv-schema.js';
 import { finite, nowIso, parseJson, round } from '../utils.js';
 
 export const MARGIN_DATA_SCHEMA='jp-margin-v1';
-const PUBLIC_DATA_URL='https://miyabom1-wq.github.io/cockpit/data/jp-margin.json';
+const PUBLIC_DATA_URLS=['https://raw.githubusercontent.com/miyabom1-wq/cockpit/main/public/data/jp-margin.json','https://miyabom1-wq.github.io/cockpit/data/jp-margin.json'];
 const CACHE_TTL=6*3600;
 const MAX_STALE_MS=16*24*3600*1000;
 
@@ -59,9 +59,17 @@ export function evaluateMarginSupply(analysis,item){
 }
 
 async function fetchPublicDataset(){
-  const res=await fetch(`${PUBLIC_DATA_URL}?t=${Math.floor(Date.now()/3600000)}`,{headers:{Accept:'application/json','User-Agent':'VANTAGE/47 margin-supply'},cf:{cacheTtl:300}});
-  if(!res.ok)throw new Error(`信用需給データ HTTP ${res.status}`);
-  const data=await res.json();if(!validDataset(data))throw new Error('信用需給データ形式が不正です');return data;
+  let last=null;
+  for(const base of PUBLIC_DATA_URLS){
+    try{
+      const res=await fetch(`${base}?v=${Date.now()}`,{headers:{Accept:'application/json','Cache-Control':'no-cache','User-Agent':'VANTAGE/53 margin-supply'},cf:{cacheTtl:0}});
+      if(!res.ok){last=new Error(`信用需給データ HTTP ${res.status}`);continue;}
+      const data=await res.json();
+      if(!validDataset(data)){last=new Error('信用需給データ形式が不正です');continue;}
+      return{...data,worker_sync_source:base,worker_synced_at:nowIso()};
+    }catch(error){last=error;}
+  }
+  throw last||new Error('信用需給データを取得できませんでした');
 }
 export async function getMarginDataset(env,{force=false,fetchIfMissing=true}={}){
   const cached=parseJson(await env.COCKPIT_KV.get(KEYS.marginSupply),null);

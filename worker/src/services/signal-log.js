@@ -35,6 +35,8 @@ function compute(item){
   item.phase=item.active?'active':out.d5?'complete':'tracking';item.completed_at=out.d5?.date||null;
 }
 function compactReason(a){return(Array.isArray(a.entry_reason)?a.entry_reason.join(' / '):a.entry_reason)||a.entry_label||'';}
+export function shouldIncrementSignalSeen(item,date){return String(item?.last_seen_date||'')!==String(date||'');}
+
 export async function captureSignalLog(env,market='jp',source='auto'){
   const m=market==='us'?'us':'jp',stage=await getStage(env,m);
   if(!stage?.complete)return{ok:false,skipped:true,error:'Stageの完全スナップショットがありません'};
@@ -47,21 +49,30 @@ export async function captureSignalLog(env,market='jp',source='auto'){
   const currentKey=new Set(current.map(x=>`${x.symbol}:${x.entry_lane}`));
   for(const item of items.filter(x=>x.market===m&&x.active)){
     const row=stocks[item.symbol];
-    // 取得失敗・日付不一致を「条件終了」と誤認しない。正常な確定日足がある場合だけ終了判定する。
     const evaluable=row?.data_quality?.data_valid&&row?.data_quality?.close_confirmed&&row?.date===date;
     if(evaluable&&!currentKey.has(`${item.symbol}:${item.entry_lane}`)){item.active=false;item.condition_end_date=date;item.condition_end_reason='A/B条件から外れた';}
   }
   let added=0,continued=0;
   for(const a of current){
     let item=items.find(x=>x.market===m&&x.symbol===a.symbol&&x.entry_lane===a.entry_lane&&x.active);
-    if(item){item.times_seen=(item.times_seen||1)+1;item.last_seen_date=date;item.reason=compactReason(a);item.relative_text=`市場RS5 ${a.rs5??'—'}% / 登録内順位 ${a.rs_percentile??'—'}%`;item.risk_reason=(a.risk_reason||[]).join(' / ');continued++;}
-    else{
+    if(item){
+      if(shouldIncrementSignalSeen(item,date)){item.times_seen=(item.times_seen||1)+1;continued++;}
+      item.last_seen_date=date;item.reason=compactReason(a);item.relative_text=`市場RS5 ${a.rs5??'—'}% / 登録内順位 ${a.rs_percentile??'—'}%`;item.risk_reason=(a.risk_reason||[]).join(' / ');
+    }else{
       item={id:`s-${m}-${a.symbol}-${a.entry_lane}-${date}`,symbol:a.symbol,name:a.name,market:m,entry_lane:a.entry_lane,start_date:date,start_price:Number(a.price),active:true,phase:'active',condition_end_date:null,reason:compactReason(a),relative_text:`市場RS5 ${a.rs5??'—'}% / 登録内順位 ${a.rs_percentile??'—'}%`,risk_reason:(a.risk_reason||[]).join(' / '),times_seen:1,last_seen_date:date,source,analyzer_version:ENGINE_VERSION,snapshot_id:stage.snapshot_id,observations:[{date,close:Number(a.price),confirmed:true}],outcomes:{},created_at:nowIso()};items.unshift(item);added++;
     }
   }
   for(const item of items)compute(item);
   store.items=items.slice(0,300);await save(env,store);
   return{ok:true,market:m,date,captured:current.length,added,continued,source,analyzer_version:ENGINE_VERSION,snapshot_id:stage.snapshot_id};
+}
+export async function syncConfirmedSignalLogs(env,source='auto_read'){
+  const results=[];
+  for(const market of ['jp','us']){
+    try{results.push(await captureSignalLog(env,market,source));}
+    catch(error){results.push({ok:false,market,error:error?.message||String(error)});}
+  }
+  return{ok:true,results};
 }
 export async function getSignalLog(env,limit=300){
   const store=await read(env),items=store.items.map(x=>{compute(x);return x;}).slice(0,Math.max(1,Math.min(500,Number(limit)||300)));
