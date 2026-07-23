@@ -164,20 +164,96 @@ export async function syncRegisteredEventBatch(env,{batch=0,batchSize=EVENT_BATC
   return{ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,processed:plan.items.length,found,missing:plan.items.length-found,next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count};
 }
 
-export async function getEvents(env,now=Date.now(),force=false){
+export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbols=new Set(),lastCheckedAt=null){
+  const checked=checkedSymbols instanceof Set?checkedSymbols:new Set(checkedSymbols||[]);
+  const trackedMap=new Map((tracked||[]).map(item=>[String(item.symbol||'').toUpperCase(),item]));
+  const foundSymbols=new Set();
+
+  for(const event of automaticEvents||[]){
+    if(event?.category!=='earnings')continue;
+    for(const symbol of normalizeSymbols(event.symbols||[])){
+      if(trackedMap.has(symbol))foundSymbols.add(symbol);
+    }
+  }
+
+  const missing=[],unchecked=[];
+  for(const item of trackedMap.values()){
+    if(foundSymbols.has(item.symbol))continue;
+    if(checked.has(item.symbol))missing.push(item);
+    else unchecked.push(item);
+  }
+
+  const marketSummary=market=>{
+    const items=[...trackedMap.values()].filter(item=>item.market===market);
+    const symbols=new Set(items.map(item=>item.symbol));
+    return{
+      total:items.length,
+      checked:[...checked].filter(symbol=>symbols.has(symbol)).length,
+      found:[...foundSymbols].filter(symbol=>symbols.has(symbol)).length,
+      missing:missing.filter(item=>item.market===market).length,
+      unchecked:unchecked.filter(item=>item.market===market).length
+    };
+  };
+
+  return{
+    window_days:120,
+    tracked_total:trackedMap.size,
+    checked_total:[...checked].filter(symbol=>trackedMap.has(symbol)).length,
+    earnings_found:foundSymbols.size,
+    missing_total:missing.length,
+    unchecked_total:unchecked.length,
+    by_market:{jp:marketSummary('jp'),us:marketSummary('us')},
+    missing_symbols:missing.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
+    unchecked_symbols:unchecked.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
+    last_checked_at:lastCheckedAt,
+    source_policy:'Official verified records plus free provider next earnings date; missing does not mean no earnings.'
+  };
+}
+
+async function buildEventDashboard(env,now=Date.now(),force=false){
   const manual=await getManualEvents(env),tracked=await readTracked(env),trackedSet=new Set(tracked.map(x=>x.symbol));
   if(force&&tracked.length)await syncRegisteredEventBatch(env,{batch:0});
+
   const verified=officialEvents(now,trackedSet),verifiedSymbols=new Set(verified.map(symbolOf));
   const candidates=tracked.filter(x=>!verifiedSymbols.has(x.symbol));
-  const dynamic=(await Promise.all(candidates.map(x=>cachedProviderEvent(env,x)))).filter(Boolean)
+  const cachedRows=await Promise.all(candidates.map(async item=>({item,cached:await readProviderCache(env,item.symbol)})));
+
+  const dynamic=cachedRows
+    .map(({item,cached})=>cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null)
+    .filter(Boolean)
     .filter(x=>Date.parse(x.time)>=now-DAY&&Date.parse(x.time)<=now+120*DAY);
+
   const manualKeys=new Set(manual.map(eventKey)),readOnly=[...verified,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
   const bySymbol=new Map();
   for(const x of readOnly){
     const s=symbolOf(x),old=bySymbol.get(s);
     if(!old||x.source==='official'||Date.parse(x.time)<Date.parse(old.time))bySymbol.set(s,x);
   }
-  return[...manual,...bySymbol.values()].sort((a,b)=>new Date(a.time)-new Date(b.time));
+
+  const events=[...manual,...bySymbol.values()].sort((a,b)=>new Date(a.time)-new Date(b.time));
+  const checkedSymbols=new Set(verified.flatMap(event=>event.symbols||[]));
+  let lastCheckedAt=null;
+
+  for(const {item,cached} of cachedRows){
+    if(cached?.fetched_at){
+      checkedSymbols.add(item.symbol);
+      if(!lastCheckedAt||Date.parse(cached.fetched_at)>Date.parse(lastCheckedAt))lastCheckedAt=cached.fetched_at;
+    }
+  }
+
+  return{
+    events,
+    coverage:eventCoverageSummary(tracked,[...verified,...dynamic],checkedSymbols,lastCheckedAt),
+    generated_at:nowIso()
+  };
+}
+
+export async function getEventDashboard(env,now=Date.now(),force=false){
+  return buildEventDashboard(env,now,force);
+}
+
+export async function getEvents(env,now=Date.now(),force=false){
+  return(await buildEventDashboard(env,now,force)).events;
 }
 
 async function save(env,list){await env.COCKPIT_KV.put(KEYS.events,JSON.stringify(list));}

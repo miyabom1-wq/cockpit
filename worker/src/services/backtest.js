@@ -3,7 +3,7 @@ import { getStockList } from '../storage/stocklist.js';
 import { fetchYahooChart } from '../data/yahoo.js';
 import { normalizeYahooDaily } from '../data/normalization.js';
 import { prepareSeries, analyzePreparedAt } from '../engine/analysis.js';
-import { benchmarkValues } from '../engine/relative-strength.js';
+import { benchmarkValues, sanitizeBenchmarkRows } from '../engine/relative-strength.js';
 import { finite, mean, median, round, nowIso, parseJson, stableHash } from '../utils.js';
 
 const STATE=`backtest:${BACKTEST_VERSION}:state`;
@@ -69,12 +69,13 @@ export function benchmarkSymbols(market,kind='primary'){
 
 async function benchmarkOne(env,market,kind){
   const key=BENCH(market,kind),cached=parseJson(await env.COCKPIT_KV.get(key),null);
-  if(cached&&daysSince(cached.fetched_at)<7&&Array.isArray(cached.rows)&&cached.rows.length>=MIN_HISTORY_DAYS)return cached.rows;
+  const cachedRows=sanitizeBenchmarkRows(cached?.rows);
+  if(cached&&daysSince(cached.fetched_at)<7&&cachedRows.length>=MIN_HISTORY_DAYS)return cachedRows;
 
   let last=null;
   for(const symbol of benchmarkSymbols(market,kind)){
     try{
-      const rows=normalizeYahooDaily(await fetchYahooChart(symbol,{range:'5y',cacheTtl:600})).rows;
+      const rows=sanitizeBenchmarkRows(normalizeYahooDaily(await fetchYahooChart(symbol,{range:'5y',cacheTtl:600})).rows);
       if(rows.length<MIN_HISTORY_DAYS){last=new Error(`指数履歴不足 ${symbol}: ${rows.length}営業日`);continue;}
       await env.COCKPIT_KV.put(key,JSON.stringify({fetched_at:nowIso(),symbol,rows}));
       return rows;
@@ -83,7 +84,7 @@ async function benchmarkOne(env,market,kind){
     }
   }
 
-  if(cached&&Array.isArray(cached.rows)&&cached.rows.length>=MIN_HISTORY_DAYS)return cached.rows;
+  if(cachedRows.length>=MIN_HISTORY_DAYS)return cachedRows;
   throw last||new Error(`${market} ${kind} benchmark unavailable`);
 }
 

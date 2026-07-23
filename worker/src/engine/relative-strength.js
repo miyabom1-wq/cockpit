@@ -1,8 +1,15 @@
 import { finite, pct, round } from '../utils.js';
 export function returnAt(closes,index,period){return index>=period?pct(closes[index],closes[index-period]):null;}
+export function sanitizeBenchmarkRows(benchmarkRows=[]){
+  return(Array.isArray(benchmarkRows)?benchmarkRows:[])
+    .filter(row=>row&&row.date&&finite(row.close))
+    .map(row=>({...row,date:String(row.date),close:Number(row.close)}))
+    .sort((a,b)=>a.date.localeCompare(b.date));
+}
 export function benchmarkValues(benchmarkRows){
-  const map=new Map(),closes=benchmarkRows.map(r=>r.close);
-  for(let i=0;i<benchmarkRows.length;i++)map.set(benchmarkRows[i].date,{ret5:returnAt(closes,i,5),ret20:returnAt(closes,i,20),change_pct:returnAt(closes,i,1)});
+  const rows=sanitizeBenchmarkRows(benchmarkRows);
+  const map=new Map(),closes=rows.map(r=>r.close);
+  for(let i=0;i<rows.length;i++)map.set(rows[i].date,{ret5:returnAt(closes,i,5),ret20:returnAt(closes,i,20),change_pct:returnAt(closes,i,1)});
   return map;
 }
 export function rsAt(prepared,index,benchmarkMap){
