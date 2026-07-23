@@ -16,7 +16,7 @@ const BENCH=(m,k='primary')=>`backtest:${BACKTEST_VERSION}:benchmark:${m}:${k}`;
 const COST=.15;
 const GAP=3;
 const REFRESH_DAYS=7;
-const MAX_RETRIES=3;
+const MAX_RETRIES=5;
 const MIN_SUCCESS_RATE=90;
 const MIN_HISTORY_DAYS=260;
 const STRATEGIES={A:{label:'A初回',max_hold:10},B:{label:'B初回',max_hold:5},C_A:{label:'C→A',max_hold:10},C_B:{label:'C→B',max_hold:5}};
@@ -61,16 +61,42 @@ async function loadState(env,force=false){
   return state;
 }
 
+export function benchmarkSymbols(market,kind='primary'){
+  const m=market==='us'?'us':'jp',secondary=kind==='secondary';
+  if(m==='jp')return secondary?['^TOPX','^N225']:['^N225','^TOPX'];
+  return secondary?['^IXIC','^GSPC']:['^GSPC','^IXIC'];
+}
+
 async function benchmarkOne(env,market,kind){
   const key=BENCH(market,kind),cached=parseJson(await env.COCKPIT_KV.get(key),null);
   if(cached&&daysSince(cached.fetched_at)<7&&Array.isArray(cached.rows)&&cached.rows.length>=MIN_HISTORY_DAYS)return cached.rows;
-  const symbol=kind==='secondary'?(market==='jp'?'^TOPX':'^IXIC'):(market==='jp'?'^N225':'^GSPC');
-  const rows=normalizeYahooDaily(await fetchYahooChart(symbol,{range:'5y',cacheTtl:3600})).rows;
-  if(rows.length<MIN_HISTORY_DAYS)throw new Error(`指数履歴不足 ${symbol}: ${rows.length}営業日`);
-  await env.COCKPIT_KV.put(key,JSON.stringify({fetched_at:nowIso(),symbol,rows}));
-  return rows;
+
+  let last=null;
+  for(const symbol of benchmarkSymbols(market,kind)){
+    try{
+      const rows=normalizeYahooDaily(await fetchYahooChart(symbol,{range:'5y',cacheTtl:600})).rows;
+      if(rows.length<MIN_HISTORY_DAYS){last=new Error(`指数履歴不足 ${symbol}: ${rows.length}営業日`);continue;}
+      await env.COCKPIT_KV.put(key,JSON.stringify({fetched_at:nowIso(),symbol,rows}));
+      return rows;
+    }catch(error){
+      last=error;
+    }
+  }
+
+  if(cached&&Array.isArray(cached.rows)&&cached.rows.length>=MIN_HISTORY_DAYS)return cached.rows;
+  throw last||new Error(`${market} ${kind} benchmark unavailable`);
 }
-async function benchmark(env,market){const [primary,secondary]=await Promise.all([benchmarkOne(env,market,'primary'),benchmarkOne(env,market,'secondary')]);return{primary,secondary};}
+
+async function benchmark(env,market){
+  const primary=await benchmarkOne(env,market,'primary');
+  let secondary=primary;
+  try{
+    secondary=await benchmarkOne(env,market,'secondary');
+  }catch(error){
+    console.error('[backtest secondary benchmark fallback]',market,error?.message||error);
+  }
+  return{primary,secondary};
+}
 
 function simulate(prepared,index,maxHold){
   const rows=prepared.rows,signal=rows[index],next=rows[index+1];if(!next)return{status:'no_next'};
@@ -140,6 +166,11 @@ export function classifyBacktestError(error){
   return'analysis';
 }
 function retryableCategory(category){return['rate_limit','provider_access','network','worker_limit'].includes(category);}
+export function shouldAutoRestartBacktest(state={}){
+  const failures=Array.isArray(state.failures)?state.failures:[];
+  return state.status==='failed'&&failures.length>0&&failures.every(x=>retryableCategory(x.category));
+}
+
 function errorRecord(item,error,attempt,final=false){return{id:itemId(item),symbol:item.symbol,name:item.name||item.symbol,market:item.market,attempt,category:classifyBacktestError(error),error:String(error?.message||error||'unknown error').slice(0,240),final,at:nowIso()};}
 function errorCategories(items=[]){const out={};for(const x of items)out[x.category||'analysis']=(out[x.category||'analysis']||0)+1;return out;}
 function successCount(s){return new Set((s.symbol_summaries||[]).map(x=>itemId(x))).size;}
@@ -194,9 +225,22 @@ function removeFailure(s,id){s.failures=(s.failures||[]).filter(x=>x.id!==id);}
 function setFailure(s,record){s.failures=[...(s.failures||[]).filter(x=>x.id!==record.id),record];}
 function upsertSummary(s,item,result){const id=itemId(item),entry={symbol:item.symbol,name:item.name,market:item.market,strategies:Object.fromEntries(Object.entries(result.strategies).map(([k,v])=>[k,{metrics:v.metrics}]))};s.symbol_summaries=[...(s.symbol_summaries||[]).filter(x=>itemId(x)!==id),entry];}
 
+async function fetchBacktestRows(symbol){
+  let last=null;
+  for(const range of ['5y','10y']){
+    try{
+      const rows=normalizeYahooDaily(await fetchYahooChart(symbol,{range,cacheTtl:600})).rows;
+      if(rows.length>=MIN_HISTORY_DAYS)return rows;
+      last=new Error(`履歴不足 ${symbol}: ${rows.length}営業日`);
+    }catch(error){
+      last=error;
+    }
+  }
+  throw last||new Error(`${symbol} history unavailable`);
+}
+
 async function analyzeBacktestItem(env,item,benchCache){
-  const raw=await fetchYahooChart(item.symbol,{range:'5y',cacheTtl:3600}),rows=normalizeYahooDaily(raw).rows;
-  if(rows.length<MIN_HISTORY_DAYS)throw new Error(`履歴不足 ${item.symbol}: ${rows.length}営業日`);
+  const rows=await fetchBacktestRows(item.symbol);
   if(!benchCache[item.market])benchCache[item.market]=await benchmark(env,item.market);
   const result=backtestSeries(rows,benchCache[item.market],item);
   await env.COCKPIT_KV.put(SYMBOL(item.market,item.symbol),JSON.stringify(result));
@@ -212,6 +256,7 @@ async function finalizeCycle(env,s){
 
 export async function runBacktestStep(env,count=1,force=false){
   let s=await loadState(env,force);
+  if(s.status==='failed'&&!force&&shouldAutoRestartBacktest(s))s=await loadState(env,true);
   if(['complete','failed'].includes(s.status)&&!force)return{ok:true,skipped:true,reason:s.status==='complete'?'fresh complete result':'failed result requires force restart',...summaryFromState(s,s.status==='complete')};
   const lock=await env.COCKPIT_KV.get(LOCK);if(lock&&Date.now()-Number(lock)<120000)return{ok:true,skipped:true,reason:'locked'};
   await env.COCKPIT_KV.put(LOCK,String(Date.now()),{expirationTtl:180});

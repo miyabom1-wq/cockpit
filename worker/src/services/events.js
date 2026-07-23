@@ -1,11 +1,12 @@
 import { KEYS } from '../storage/kv-schema.js';
 import { getStockList } from '../storage/stocklist.js';
+import { fetchYahooChart } from '../data/yahoo.js';
 import { parseJson, nowIso, normalizeSymbol } from '../utils.js';
 
 const DAY=86400000;
 const PROVIDER_CACHE_MS=12*60*60*1000;
 const PROVIDER_CACHE_TTL=14*24*60*60;
-const EVENT_BATCH_SIZE=20;
+const EVENT_BATCH_SIZE=10;
 const VERIFIED_EVENTS=Object.freeze([
   {id:'official-4063-20260724',name:'信越化学 2026年1Q決算',time:'2026-07-24T06:30:00.000Z',time_note:'7/24 15:30',category:'earnings',symbols:['4063.T'],source:'official',source_name:'信越化学 IR',read_only:true,pinned:true},
   {id:'official-stx-20260728',name:'Seagate FY2026 Q4・通期決算',time:'2026-07-28T20:00:00.000Z',time_note:'7/28 米国市場終了後',category:'earnings',symbols:['STX'],source:'official',source_name:'Seagate IR',read_only:true,pinned:true},
@@ -90,18 +91,41 @@ export function parseCalendarEventPayload(payload,{symbol,name,market,scope}={})
   });
 }
 
+export function parseChartMetaEvent(meta,{symbol,name,market,scope}={}){
+  const values=[meta?.earningsTimestamp,meta?.earningsTimestampStart,meta?.earningsTimestampEnd]
+    .map(Number).filter(x=>Number.isFinite(x)&&x>0).sort((a,b)=>a-b);
+  if(!values.length)return null;
+  const time=new Date(values[0]*1000).toISOString();
+  const rangeEnd=values.length>1?new Date(values.at(-1)*1000).toISOString():null;
+  return normalizeEvent({
+    id:`provider-${String(symbol).toLowerCase()}-${time.slice(0,10)}`,
+    name:`${name||symbol} 決算予定`,time,
+    time_note:rangeEnd&&rangeEnd.slice(0,10)!==time.slice(0,10)?`${dateLabel(time)}〜${dateLabel(rangeEnd)}・時刻未確認`:`${dateLabel(time)}・時刻未確認`,
+    category:'earnings',symbols:[symbol],source:'provider',source_name:'Yahoo Finance chart metadata',
+    read_only:true,pinned:false,market,tracked_scope:scope,provider_range_end:rangeEnd,provider_fetched_at:nowIso()
+  });
+}
+
 async function fetchProviderCalendar(item){
   let last=null;
   for(const host of ['query1.finance.yahoo.com','query2.finance.yahoo.com']){
     try{
       const url=`https://${host}/v10/finance/quoteSummary/${encodeURIComponent(item.symbol)}?modules=calendarEvents&formatted=false`;
-      const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/53.0)','Accept':'application/json,text/plain,*/*'},cf:{cacheTtl:300}});
+      const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/54.0)','Accept':'application/json,text/plain,*/*'},cf:{cacheTtl:120}});
       if(!res.ok){last=new Error(`${item.symbol} calendar HTTP ${res.status}`);continue;}
       const event=parseCalendarEventPayload(await res.json(),item);
       if(event)return event;
       last=new Error(`${item.symbol} calendar missing`);
     }catch(e){last=e;}
   }
+
+  try{
+    const chart=await fetchYahooChart(item.symbol,{range:'5d',cacheTtl:60});
+    const event=parseChartMetaEvent(chart?.meta||{},item);
+    if(event)return event;
+    last=new Error(`${item.symbol} chart earnings metadata missing`);
+  }catch(e){last=e;}
+
   throw last||new Error(`${item.symbol} calendar fetch failed`);
 }
 
@@ -135,7 +159,7 @@ async function mapLimit(items,limit,fn){
 
 export async function syncRegisteredEventBatch(env,{batch=0,batchSize=EVENT_BATCH_SIZE}={}){
   const tracked=await readTracked(env),plan=eventSyncBatch(tracked,batch,batchSize);
-  const results=await mapLimit(plan.items,5,x=>providerEvent(env,x,true));
+  const results=await mapLimit(plan.items,2,x=>providerEvent(env,x,true));
   const found=results.filter(Boolean).length;
   return{ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,processed:plan.items.length,found,missing:plan.items.length-found,next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count};
 }
