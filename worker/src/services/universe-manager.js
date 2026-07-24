@@ -36,7 +36,7 @@ function themeName(symbol,fallback='その他'){
 }
 function tierFor(market,index){if(market==='jp')return index<LIMITS.jpCore?'core':'radar';return index<LIMITS.usLead?'lead':'archive';}
 function laneValue(lane){return({A:26,B:22,C:10,D:-5,E:-22})[lane]??-2;}
-function rankPoints(rank,market){const r=Number(rank);if(!finite(r))return 0;if(r<=20)return 34;if(r<=50)return 27;if(r<=100)return 20;if(r<=200)return market==='jp'?12:7;if(r<=300)return market==='jp'?6:0;return 0;}
+function rankPoints(rank,market){if(!finite(rank))return 0;const r=Number(rank);if(r<=20)return 34;if(r<=50)return 27;if(r<=100)return 20;if(r<=200)return market==='jp'?12:7;if(r<=300)return market==='jp'?6:0;return 0;}
 function persistence(history,symbol,limit){const snaps=(history?.snapshots||[]).slice(-limit);return snaps.filter(s=>(s.items||[]).some(x=>x.symbol===symbol)).length;}
 function latestRank(ranking,symbol){return (ranking?.items||[]).find(x=>x.symbol===symbol)?.rank??null;}
 function analysisScore(row={}){

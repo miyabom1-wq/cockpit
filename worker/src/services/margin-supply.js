@@ -20,8 +20,8 @@ export function evaluateMarginSupply(analysis,item){
     if(flags.daily_disclosure)cautions.push('日々公表銘柄（規制とは別）');
     return{available:false,label:cautions.length?'需給注意':'データ待ち',score:flags.margin_restriction?-12:flags.special_notice?-8:flags.daily_disclosure?-2:0,as_of:null,published_at:null,summary:cautions.join(' / ')||'週次信用残の取得待ち',reasons,cautions,flags,add_blocked:!!(flags.margin_restriction||flags.special_notice),position_cap:flags.margin_restriction?'reduced':'normal'};
   }
-  const buy=Number(weekly.buy_balance),sell=Number(weekly.sell_balance),buyChangePct=finite(weekly.buy_change_pct)?Number(weekly.buy_change_pct):pctChange(buy,finite(weekly.buy_change)?buy-Number(weekly.buy_change):null),sellChangePct=finite(weekly.sell_change_pct)?Number(weekly.sell_change_pct):pctChange(sell,finite(weekly.sell_change)?sell-Number(weekly.sell_change):null);
-  const ratio=finite(weekly.ratio)?Number(weekly.ratio):(finite(buy)&&finite(sell)&&sell>0?buy/sell:null),avgVol=Number(analysis?.avg_volume20),turnover=finite(buy)&&finite(avgVol)&&avgVol>0?buy/avgVol:null,ret5=Number(analysis?.ret5);
+  const buy=finite(weekly.buy_balance)?Number(weekly.buy_balance):null,sell=finite(weekly.sell_balance)?Number(weekly.sell_balance):null,buyChangePct=finite(weekly.buy_change_pct)?Number(weekly.buy_change_pct):pctChange(buy,finite(weekly.buy_change)?buy-Number(weekly.buy_change):null),sellChangePct=finite(weekly.sell_change_pct)?Number(weekly.sell_change_pct):pctChange(sell,finite(weekly.sell_change)?sell-Number(weekly.sell_change):null);
+  const ratio=finite(weekly.ratio)?Number(weekly.ratio):(finite(buy)&&finite(sell)&&sell>0?buy/sell:null),avgVol=finite(analysis?.avg_volume20)?Number(analysis.avg_volume20):null,turnover=finite(buy)&&finite(avgVol)&&avgVol>0?buy/avgVol:null,ret5=finite(analysis?.ret5)?Number(analysis.ret5):null;
   let score=0;
   if(finite(ret5)&&finite(buyChangePct)){
     if(ret5>0&&buyChangePct<=-5){score+=12;reasons.push('株価上昇と信用買残減少が同時進行');}
