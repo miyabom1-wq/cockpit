@@ -116,6 +116,13 @@ export function batchFreshnessRatios(stocks=[],tradeDate=null){
   const total=stocks.length,session=stocks.filter(x=>!tradeDate||x?.date===tradeDate).length,confirmed=stocks.filter(x=>(!tradeDate||x?.date===tradeDate)&&x?.data_quality?.close_confirmed).length;
   return{total,session,confirmed,session_ratio:total?round(session/total*100,1):0,confirmed_ratio:total?round(confirmed/total*100,1):0};
 }
+export function freshnessBelowFloor(freshness={},metric,floor){
+  const required=Number(floor);
+  if(!Number.isFinite(required))return false;
+  if((Number(freshness?.total)||0)===0)return false;
+  return Number(freshness?.[metric])<required;
+}
+
 export async function runStageBatch(env,batchKey,options={}){
   const match=String(batchKey||'').match(/^(jp|us)(\d+)$/);if(!match)throw new Error('unknown batch: '+batchKey);
   const market=match[1],part=Number(match[2]),parts=options.parts||partsFor(market);if(part<1||part>parts)throw new Error('batch out of range');
@@ -126,8 +133,8 @@ export async function runStageBatch(env,batchKey,options={}){
   const benchmark=await getBenchmark(env,market,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
   const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
   const freshness=batchFreshnessRatios(stocks,tradeDate),sessionFloor=Number(options.minSessionRatio),confirmedFloor=Number(options.minConfirmedRatio);
-  if(Number.isFinite(sessionFloor)&&freshness.session_ratio<sessionFloor)throw new Error(`session freshness ${freshness.session_ratio}% below ${sessionFloor}%`);
-  if(Number.isFinite(confirmedFloor)&&freshness.confirmed_ratio<confirmedFloor)throw new Error(`confirmed freshness ${freshness.confirmed_ratio}% below ${confirmedFloor}%`);
+  if(freshnessBelowFloor(freshness,'session_ratio',sessionFloor))throw new Error(`session freshness ${freshness.session_ratio}% below ${sessionFloor}%`);
+  if(freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor))throw new Error(`confirmed freshness ${freshness.confirmed_ratio}% below ${confirmedFloor}%`);
   const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null,payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,batch_freshness:freshness,...(macro?{macro}:{})};
   await env.COCKPIT_KV.put(stageWorkingKey(id,part),JSON.stringify(payload),{expirationTtl:WORK_TTL});
   const metaRaw=await env.COCKPIT_KV.get(stageMetaKey(id)),meta=parseJson(metaRaw,{market,parts,completed:[],kind,tradeDate,created_at:nowIso()});if(!meta.completed.includes(part))meta.completed.push(part);meta.updated_at=nowIso();await env.COCKPIT_KV.put(stageMetaKey(id),JSON.stringify(meta),{expirationTtl:WORK_TTL});

@@ -1,5 +1,5 @@
-export const APP_VERSION = 'v60.0.0';
-export const BUILD_ID = '20260724-us-earnings-clean-names';
+export const APP_VERSION = 'v61.0.0';
+export const BUILD_ID = '20260724-close-empty-batch-fix';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v51.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v6-sparse-benchmark-safe';
