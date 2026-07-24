@@ -1,0 +1,15 @@
+{
+  "schema": "vantage-jpx-earnings-v1",
+  "generated_at": null,
+  "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
+  "source_files": [],
+  "events": [],
+  "stats": {
+    "status": "pending_first_github_action",
+    "links_found": 0,
+    "files_processed": 0,
+    "raw_rows": 0,
+    "unique_future_events": 0,
+    "warnings": []
+  }
+}

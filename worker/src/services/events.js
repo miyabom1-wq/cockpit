@@ -7,12 +7,20 @@ const DAY=86400000;
 const PROVIDER_CACHE_MS=12*60*60*1000;
 const PROVIDER_CACHE_TTL=14*24*60*60;
 const EVENT_BATCH_SIZE=10;
+const JPX_CACHE_KEY='events:jpx:v1';
+const JPX_CACHE_MS=6*60*60*1000;
+const JPX_CACHE_TTL=8*24*60*60;
+const JPX_DATA_URLS=[
+  'https://raw.githubusercontent.com/miyabom1-wq/cockpit/main/public/data/jpx_earnings.json',
+  'https://miyabom1-wq.github.io/cockpit/data/jpx_earnings.json'
+];
+
 const VERIFIED_EVENTS=Object.freeze([
-  {id:'official-4063-20260724',name:'信越化学 2026年1Q決算',time:'2026-07-24T06:30:00.000Z',time_note:'7/24 15:30',category:'earnings',symbols:['4063.T'],source:'official',source_name:'信越化学 IR',read_only:true,pinned:true},
-  {id:'official-stx-20260728',name:'Seagate FY2026 Q4・通期決算',time:'2026-07-28T20:00:00.000Z',time_note:'7/28 米国市場終了後',category:'earnings',symbols:['STX'],source:'official',source_name:'Seagate IR',read_only:true,pinned:true},
-  {id:'official-2914-20260730',name:'JT 2026年2Q決算',time:'2026-07-30T06:30:00.000Z',time_note:'7/30 15:30',category:'earnings',symbols:['2914.T'],source:'official',source_name:'JT IR',read_only:true,pinned:true},
-  {id:'official-7011-20260804',name:'三菱重工 2026年度1Q決算',time:'2026-08-04T04:30:00.000Z',time_note:'8/4 13:30',category:'earnings',symbols:['7011.T'],source:'official',source_name:'三菱重工 IR',read_only:true,pinned:true},
-  {id:'official-lite-20260811',name:'Lumentum FY2026 Q4・通期決算',time:'2026-08-11T20:00:00.000Z',time_note:'8/11 米国市場終了後',category:'earnings',symbols:['LITE'],source:'official',source_name:'Lumentum IR',read_only:true,pinned:true}
+  {id:'official-4063-20260724',name:'信越化学 2026年1Q決算',time:'2026-07-24T06:30:00.000Z',time_note:'7/24 15:30',category:'earnings',symbols:['4063.T'],source:'official',source_name:'信越化学 IR',official_kind:'company_ir',source_priority:100,read_only:true,pinned:true},
+  {id:'official-stx-20260728',name:'Seagate FY2026 Q4・通期決算',time:'2026-07-28T20:00:00.000Z',time_note:'7/28 米国市場終了後',category:'earnings',symbols:['STX'],source:'official',source_name:'Seagate IR',official_kind:'company_ir',source_priority:100,read_only:true,pinned:true},
+  {id:'official-2914-20260730',name:'JT 2026年2Q決算',time:'2026-07-30T06:30:00.000Z',time_note:'7/30 15:30',category:'earnings',symbols:['2914.T'],source:'official',source_name:'JT IR',official_kind:'company_ir',source_priority:100,read_only:true,pinned:true},
+  {id:'official-7011-20260804',name:'三菱重工 2026年度1Q決算',time:'2026-08-04T04:30:00.000Z',time_note:'8/4 13:30',category:'earnings',symbols:['7011.T'],source:'official',source_name:'三菱重工 IR',official_kind:'company_ir',source_priority:100,read_only:true,pinned:true},
+  {id:'official-lite-20260811',name:'Lumentum FY2026 Q4・通期決算',time:'2026-08-11T20:00:00.000Z',time_note:'8/11 米国市場終了後',category:'earnings',symbols:['LITE'],source:'official',source_name:'Lumentum IR',official_kind:'company_ir',source_priority:100,read_only:true,pinned:true}
 ]);
 
 function normalizeSymbols(value){
@@ -29,6 +37,14 @@ function symbolOf(x){return normalizeSymbols(x?.symbols||[])[0]||'';}
 function dateLabel(iso){const d=new Date(iso);return Number.isNaN(d.getTime())?'日程未確認':`${d.getUTCMonth()+1}/${d.getUTCDate()}`;}
 function phaseOrder(x){return x?.active?0:x?.phase==='tracking'?1:x?.phase==='complete'?2:3;}
 function providerKey(symbol){return`events:earnings:v2:${symbol}`;}
+function eventPriority(x){
+  if(Number.isFinite(Number(x?.source_priority)))return Number(x.source_priority);
+  if(x?.official_kind==='company_ir')return 100;
+  if(x?.official_kind==='jpx')return 80;
+  if(x?.source==='official')return 70;
+  if(x?.source==='provider')return 20;
+  return 10;
+}
 
 async function getManualEvents(env){
   const v=parseJson(await env.COCKPIT_KV.get(KEYS.events),[]);
@@ -87,7 +103,7 @@ export function parseCalendarEventPayload(payload,{symbol,name,market,scope}={})
     name:`${name||symbol} 決算予定`,time,
     time_note:rangeEnd&&rangeEnd.slice(0,10)!==time.slice(0,10)?`${dateLabel(time)}〜${dateLabel(rangeEnd)}・時刻未確認`:`${dateLabel(time)}・時刻未確認`,
     category:'earnings',symbols:[symbol],source:'provider',source_name:'Yahoo Finance calendarEvents',
-    read_only:true,pinned:false,market,tracked_scope:scope,provider_range_end:rangeEnd,provider_fetched_at:nowIso()
+    source_priority:20,read_only:true,pinned:false,market,tracked_scope:scope,provider_range_end:rangeEnd,provider_fetched_at:nowIso()
   });
 }
 
@@ -102,7 +118,7 @@ export function parseChartMetaEvent(meta,{symbol,name,market,scope}={}){
     name:`${name||symbol} 決算予定`,time,
     time_note:rangeEnd&&rangeEnd.slice(0,10)!==time.slice(0,10)?`${dateLabel(time)}〜${dateLabel(rangeEnd)}・時刻未確認`:`${dateLabel(time)}・時刻未確認`,
     category:'earnings',symbols:[symbol],source:'provider',source_name:'Yahoo Finance chart metadata',
-    read_only:true,pinned:false,market,tracked_scope:scope,provider_range_end:rangeEnd,provider_fetched_at:nowIso()
+    source_priority:20,read_only:true,pinned:false,market,tracked_scope:scope,provider_range_end:rangeEnd,provider_fetched_at:nowIso()
   });
 }
 
@@ -111,21 +127,19 @@ async function fetchProviderCalendar(item){
   for(const host of ['query1.finance.yahoo.com','query2.finance.yahoo.com']){
     try{
       const url=`https://${host}/v10/finance/quoteSummary/${encodeURIComponent(item.symbol)}?modules=calendarEvents&formatted=false`;
-      const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/54.0)','Accept':'application/json,text/plain,*/*'},cf:{cacheTtl:120}});
+      const res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/57.0)','Accept':'application/json,text/plain,*/*'},cf:{cacheTtl:120}});
       if(!res.ok){last=new Error(`${item.symbol} calendar HTTP ${res.status}`);continue;}
       const event=parseCalendarEventPayload(await res.json(),item);
       if(event)return event;
       last=new Error(`${item.symbol} calendar missing`);
     }catch(e){last=e;}
   }
-
   try{
     const chart=await fetchYahooChart(item.symbol,{range:'5d',cacheTtl:60});
     const event=parseChartMetaEvent(chart?.meta||{},item);
     if(event)return event;
     last=new Error(`${item.symbol} chart earnings metadata missing`);
   }catch(e){last=e;}
-
   throw last||new Error(`${item.symbol} calendar fetch failed`);
 }
 
@@ -146,10 +160,7 @@ async function providerEvent(env,item,force=false){
     return null;
   }
 }
-async function cachedProviderEvent(env,item){
-  const cached=await readProviderCache(env,item.symbol);
-  return cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null;
-}
+
 async function mapLimit(items,limit,fn){
   const out=new Array(items.length);let next=0;
   async function worker(){while(next<items.length){const i=next++;out[i]=await fn(items[i],i);}}
@@ -157,22 +168,99 @@ async function mapLimit(items,limit,fn){
   return out;
 }
 
-export async function syncRegisteredEventBatch(env,{batch=0,batchSize=EVENT_BATCH_SIZE}={}){
-  const tracked=await readTracked(env),plan=eventSyncBatch(tracked,batch,batchSize);
-  const results=await mapLimit(plan.items,2,x=>providerEvent(env,x,true));
-  const found=results.filter(Boolean).length;
-  return{ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,processed:plan.items.length,found,missing:plan.items.length-found,next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count};
+function validJpxDataset(value){
+  return value&&typeof value==='object'&&Array.isArray(value.events)&&String(value.schema||'').startsWith('vantage-jpx-earnings');
 }
 
-export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbols=new Set(),lastCheckedAt=null){
+async function fetchJpxDataset(env,{force=false}={}){
+  const cached=parseJson(await env.COCKPIT_KV.get(JPX_CACHE_KEY),null);
+  if(!force&&cached?.dataset&&Date.now()-Date.parse(cached.fetched_at||0)<JPX_CACHE_MS){
+    return{available:true,dataset:cached.dataset,fetched_at:cached.fetched_at,source_url:cached.source_url,stale:false,error:null};
+  }
+
+  let last=null;
+  for(const base of JPX_DATA_URLS){
+    try{
+      const url=force?`${base}${base.includes('?')?'&':'?'}ts=${Date.now()}`:base;
+      const res=await fetch(url,{headers:{'Accept':'application/json','User-Agent':'VANTAGE/57.0'},cache:'no-store',cf:{cacheTtl:force?0:120}});
+      if(!res.ok){last=new Error(`JPX JSON HTTP ${res.status}`);continue;}
+      const dataset=await res.json();
+      if(!validJpxDataset(dataset)){last=new Error('JPX JSON schema invalid');continue;}
+      const record={fetched_at:nowIso(),source_url:base,dataset};
+      await env.COCKPIT_KV.put(JPX_CACHE_KEY,JSON.stringify(record),{expirationTtl:JPX_CACHE_TTL});
+      return{available:true,dataset,fetched_at:record.fetched_at,source_url:base,stale:false,error:null};
+    }catch(error){
+      last=error;
+    }
+  }
+
+  if(cached?.dataset&&validJpxDataset(cached.dataset)){
+    return{available:true,dataset:cached.dataset,fetched_at:cached.fetched_at,source_url:cached.source_url,stale:true,error:String(last?.message||last||'JPX data fetch failed')};
+  }
+  return{available:false,dataset:null,fetched_at:null,source_url:null,stale:false,error:String(last?.message||last||'JPX data unavailable')};
+}
+
+export function jpxEventsFromDataset(dataset,tracked=[],now=Date.now()){
+  if(!validJpxDataset(dataset))return[];
+  const trackedMap=new Map((tracked||[]).filter(x=>x.market==='jp').map(x=>[String(x.symbol).toUpperCase(),x]));
+  const out=[];
+  for(const row of dataset.events||[]){
+    const raw=String(row.symbol||row.code||'').toUpperCase();
+    const symbol=normalizeSymbol(raw.endsWith('.T')?raw:raw.replace(/\.0$/,'').replace(/^([0-9A-Z]{4})0$/,'$1'),'jp');
+    const item=trackedMap.get(symbol);
+    if(!item)continue;
+    const time=String(row.time||`${row.date}T14:59:00.000Z`);
+    const ms=Date.parse(time);
+    if(!Number.isFinite(ms)||ms<now-DAY||ms>now+120*DAY)continue;
+    const label=String(row.period||row.fiscal_label||'').trim();
+    out.push(normalizeEvent({
+      id:`jpx-${symbol.toLowerCase()}-${time.slice(0,10)}`,
+      name:`${item.name||row.name||symbol} ${label?`${label} `:''}決算予定`,
+      time,
+      time_note:`${dateLabel(time)}・時刻未確認`,
+      category:'earnings',symbols:[symbol],source:'official',source_name:'JPX 決算発表予定日',
+      official_kind:'jpx',source_priority:80,source_url:row.source_url||dataset.source_page||null,
+      read_only:true,pinned:false,market:'jp',tracked_scope:item.scope,
+      official_dataset_generated_at:dataset.generated_at||null
+    }));
+  }
+  return out;
+}
+
+export async function syncRegisteredEventBatch(env,{batch=0,batchSize=EVENT_BATCH_SIZE}={}){
+  const tracked=await readTracked(env),plan=eventSyncBatch(tracked,batch,batchSize);
+  const [results,jpxState]=await Promise.all([
+    mapLimit(plan.items,2,x=>providerEvent(env,x,true)),
+    fetchJpxDataset(env,{force:plan.batch===0})
+  ]);
+  const jpxEvents=jpxEventsFromDataset(jpxState.dataset,plan.items);
+  const foundSymbols=new Set([
+    ...results.filter(Boolean).flatMap(x=>x.symbols||[]),
+    ...jpxEvents.flatMap(x=>x.symbols||[])
+  ]);
+  return{
+    ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,
+    processed:plan.items.length,found:foundSymbols.size,missing:Math.max(0,plan.items.length-foundSymbols.size),
+    next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count,
+    jpx:{available:jpxState.available,stale:jpxState.stale,error:jpxState.error,generated_at:jpxState.dataset?.generated_at||null,event_count:jpxState.dataset?.events?.length||0}
+  };
+}
+
+export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbols=new Set(),lastCheckedAt=null,meta={}){
   const checked=checkedSymbols instanceof Set?checkedSymbols:new Set(checkedSymbols||[]);
   const trackedMap=new Map((tracked||[]).map(item=>[String(item.symbol||'').toUpperCase(),item]));
-  const foundSymbols=new Set();
+  const foundSymbols=new Set(),officialSymbols=new Set(),jpxSymbols=new Set(),providerSymbols=new Set();
 
   for(const event of automaticEvents||[]){
     if(event?.category!=='earnings')continue;
     for(const symbol of normalizeSymbols(event.symbols||[])){
-      if(trackedMap.has(symbol))foundSymbols.add(symbol);
+      if(!trackedMap.has(symbol))continue;
+      foundSymbols.add(symbol);
+      if(event.source==='provider')providerSymbols.add(symbol);
+      else if(event.source==='official'){
+        officialSymbols.add(symbol);
+        if(event.official_kind==='jpx'||String(event.source_name||'').startsWith('JPX'))jpxSymbols.add(symbol);
+      }
     }
   }
 
@@ -186,27 +274,25 @@ export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbol
   const marketSummary=market=>{
     const items=[...trackedMap.values()].filter(item=>item.market===market);
     const symbols=new Set(items.map(item=>item.symbol));
+    const count=set=>[...set].filter(symbol=>symbols.has(symbol)).length;
     return{
-      total:items.length,
-      checked:[...checked].filter(symbol=>symbols.has(symbol)).length,
-      found:[...foundSymbols].filter(symbol=>symbols.has(symbol)).length,
+      total:items.length,checked:[...checked].filter(symbol=>symbols.has(symbol)).length,
+      found:count(foundSymbols),official:count(officialSymbols),jpx:count(jpxSymbols),provider:count(providerSymbols),
       missing:missing.filter(item=>item.market===market).length,
       unchecked:unchecked.filter(item=>item.market===market).length
     };
   };
 
   return{
-    window_days:120,
-    tracked_total:trackedMap.size,
+    window_days:120,tracked_total:trackedMap.size,
     checked_total:[...checked].filter(symbol=>trackedMap.has(symbol)).length,
-    earnings_found:foundSymbols.size,
-    missing_total:missing.length,
-    unchecked_total:unchecked.length,
+    earnings_found:foundSymbols.size,official_found:officialSymbols.size,jpx_found:jpxSymbols.size,provider_found:providerSymbols.size,
+    missing_total:missing.length,not_listed_total:missing.length,unchecked_total:unchecked.length,
     by_market:{jp:marketSummary('jp'),us:marketSummary('us')},
     missing_symbols:missing.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
     unchecked_symbols:unchecked.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
-    last_checked_at:lastCheckedAt,
-    source_policy:'Official verified records plus free provider next earnings date; missing does not mean no earnings.'
+    last_checked_at:lastCheckedAt,jpx:meta.jpx||null,
+    source_policy:'JPX free official schedule for Japan, company IR overrides, Yahoo next earnings date as supplemental reference. Not listed does not mean no earnings.'
   };
 }
 
@@ -214,26 +300,30 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
   const manual=await getManualEvents(env),tracked=await readTracked(env),trackedSet=new Set(tracked.map(x=>x.symbol));
   if(force&&tracked.length)await syncRegisteredEventBatch(env,{batch:0});
 
-  const verified=officialEvents(now,trackedSet),verifiedSymbols=new Set(verified.map(symbolOf));
-  const candidates=tracked.filter(x=>!verifiedSymbols.has(x.symbol));
-  const cachedRows=await Promise.all(candidates.map(async item=>({item,cached:await readProviderCache(env,item.symbol)})));
-
+  const jpxState=await fetchJpxDataset(env,{force:false});
+  const verified=officialEvents(now,trackedSet);
+  const jpx=jpxEventsFromDataset(jpxState.dataset,tracked,now);
+  const cachedRows=await Promise.all(tracked.map(async item=>({item,cached:await readProviderCache(env,item.symbol)})));
   const dynamic=cachedRows
     .map(({item,cached})=>cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null)
     .filter(Boolean)
     .filter(x=>Date.parse(x.time)>=now-DAY&&Date.parse(x.time)<=now+120*DAY);
 
-  const manualKeys=new Set(manual.map(eventKey)),readOnly=[...verified,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
+  const manualKeys=new Set(manual.map(eventKey));
+  const readOnly=[...verified,...jpx,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
   const bySymbol=new Map();
   for(const x of readOnly){
     const s=symbolOf(x),old=bySymbol.get(s);
-    if(!old||x.source==='official'||Date.parse(x.time)<Date.parse(old.time))bySymbol.set(s,x);
+    if(!old||eventPriority(x)>eventPriority(old)||(eventPriority(x)===eventPriority(old)&&Date.parse(x.time)<Date.parse(old.time)))bySymbol.set(s,x);
   }
 
   const events=[...manual,...bySymbol.values()].sort((a,b)=>new Date(a.time)-new Date(b.time));
   const checkedSymbols=new Set(verified.flatMap(event=>event.symbols||[]));
-  let lastCheckedAt=null;
+  let lastCheckedAt=jpxState.dataset?.generated_at||null;
 
+  if(jpxState.available){
+    for(const item of tracked)if(item.market==='jp')checkedSymbols.add(item.symbol);
+  }
   for(const {item,cached} of cachedRows){
     if(cached?.fetched_at){
       checkedSymbols.add(item.symbol);
@@ -241,20 +331,24 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
     }
   }
 
+  const jpxMeta={
+    available:jpxState.available,stale:jpxState.stale,error:jpxState.error,
+    generated_at:jpxState.dataset?.generated_at||null,
+    source_page:jpxState.dataset?.source_page||null,
+    source_files:jpxState.dataset?.source_files||[],
+    event_count:jpxState.dataset?.events?.length||0,
+    stats:jpxState.dataset?.stats||null
+  };
+
   return{
     events,
-    coverage:eventCoverageSummary(tracked,[...verified,...dynamic],checkedSymbols,lastCheckedAt),
+    coverage:eventCoverageSummary(tracked,[...verified,...jpx,...dynamic],checkedSymbols,lastCheckedAt,{jpx:jpxMeta}),
     generated_at:nowIso()
   };
 }
 
-export async function getEventDashboard(env,now=Date.now(),force=false){
-  return buildEventDashboard(env,now,force);
-}
-
-export async function getEvents(env,now=Date.now(),force=false){
-  return(await buildEventDashboard(env,now,force)).events;
-}
+export async function getEventDashboard(env,now=Date.now(),force=false){return buildEventDashboard(env,now,force);}
+export async function getEvents(env,now=Date.now(),force=false){return(await buildEventDashboard(env,now,force)).events;}
 
 async function save(env,list){await env.COCKPIT_KV.put(KEYS.events,JSON.stringify(list));}
 export async function mutateEvent(env,body={}){

@@ -1574,7 +1574,7 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=56-backtest-event-coverage').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=57-jpx-official-earnings').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
@@ -1583,5 +1583,6 @@ syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 <script src="./reliability-fixes-v54.js?v=20260724"></script>
 <script src="./navigation-v55.js?v=20260724"></script>
 <script src="./event-coverage-v56.js?v=20260724"></script>
+<script src="./event-official-v57.js?v=20260724"></script>
 </body>
 </html>

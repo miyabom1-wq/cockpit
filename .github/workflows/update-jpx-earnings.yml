@@ -1,0 +1,62 @@
+name: Update JPX Earnings Calendar
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '25 8 * * 1-5'
+  push:
+    branches:
+      - main
+    paths:
+      - 'tools/update_jpx_earnings.py'
+      - '.github/workflows/update-jpx-earnings.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-jpx-earnings
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install parser dependencies
+        run: python -m pip install --disable-pip-version-check requests beautifulsoup4 pandas openpyxl xlrd
+
+      - name: Download and parse JPX schedules
+        run: python tools/update_jpx_earnings.py
+
+      - name: Validate output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('public/data/jpx_earnings.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          assert data['schema'] == 'vantage-jpx-earnings-v1'
+          assert isinstance(data['events'], list) and data['events']
+          print('events:', len(data['events']))
+          PY
+
+      - name: Commit updated calendar
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/jpx_earnings.json
+          if git diff --cached --quiet; then
+            echo "No calendar changes"
+          else
+            git commit -m "Update JPX earnings calendar"
+            git push
+          fi

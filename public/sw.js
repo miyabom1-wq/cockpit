@@ -1,5 +1,5 @@
-const CACHE='vantage-v56-backtest-event-coverage-20260724';
-const SHELL=['./vantage-frame-sync-v49.js','./reliability-fixes-v53.js','./reliability-fixes-v54.js','./navigation-v55.js','./event-coverage-v56.js','./manifest.json','./icon-v45-192.png','./icon-v45-512.png','./icon-v45-maskable-192.png','./icon-v45-maskable-512.png','./icon-badge.png','./apple-touch-icon-v45.png'];
+const CACHE='vantage-v57-jpx-official-earnings-20260724';
+const SHELL=['./vantage-frame-sync-v49.js','./reliability-fixes-v53.js','./reliability-fixes-v54.js','./navigation-v55.js','./event-coverage-v56.js','./event-official-v57.js','./manifest.json','./icon-v45-192.png','./icon-v45-512.png','./icon-v45-maskable-192.png','./icon-v45-maskable-512.png','./icon-badge.png','./apple-touch-icon-v45.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).catch(()=>null).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',e=>{
