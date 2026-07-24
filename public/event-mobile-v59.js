@@ -90,6 +90,7 @@ function patchMoreIconFallback(){
 function srcInfo(event){
   const name=String(event?.source_name||'');
   if(event?.official_kind==='jpx'||name.startsWith('JPX'))return{label:'JPX公式',cls:'jpx'};
+  if(event?.provider_kind==='nasdaq_zacks')return{label:'Nasdaq参考',cls:'provider'};
   if(event?.source==='official')return{label:'企業IR',cls:'ir'};
   if(event?.source==='provider')return{label:'Yahoo参考',cls:'provider'};
   return{label:'手動',cls:'manual'};
@@ -143,8 +144,11 @@ function dText(event){
   return `D-${days}`;
 }
 function cleanName(event){
-  return String(event?.name||'イベント')
-    .replace(/\b[0-9]{3,6}\.T\b/g,'')
+  return String(event?.name||'\u30a4\u30d9\u30f3\u30c8')
+    .replace(/\b[0-9]{3,6}\.T\b/g,' ')
+    .replace(/\b20\d{2}-\d{2}-\d{2}(?:00:00:00)?\b/g,' ')
+    .replace(/\b20\d{6}(?:\d{6})?\b/g,' ')
+    .replace(/\s+(?:\u6c7a\u7b97\u4e88\u5b9a|\u6c7a\u7b97)\s*$/,'')
     .replace(/\s{2,}/g,' ')
     .trim();
 }
@@ -166,7 +170,7 @@ function eventRow(event){
       </div>
       <div class="v59-side">
         <b>${esc(dText(event))}</b>
-        <small>${esc(event.category==='earnings'?'決算':'予定')}</small>
+        <small>${esc(looksMacroEvent(event)?'経済':(isCorporateEarnings(event)?'決算':'予定'))}</small>
       </div>
     </div>
   `;
@@ -216,6 +220,7 @@ function coveragePanel(cov){
   const jp=cov?.by_market?.jp||{};
   const us=cov?.by_market?.us||{};
   const jpx=cov?.jpx||{};
+  const usc=cov?.us_calendar||{};
   const sourceClass=jpx.available&&!jpx.stale?'ok':'warn';
   const sourceText=jpx.available
     ?`JPX公式 ${jpx.event_count||0}件・${jpx.generated_at?dateText(jpx.generated_at):'更新時刻なし'}${jpx.stale?'（保存済み）':''}`
@@ -230,6 +235,7 @@ function coveragePanel(cov){
     </div>
     <div class="v59-sourcebar">
       <span class="v59-pill ${sourceClass}">${esc(sourceText)}</span>
+      <span class="v59-pill ${usc.available&&!usc.stale?'ok':'warn'}">米国カレンダー ${usc.available?(usc.event_count||0)+'件':'未取得'}</span>
       <span class="v59-pill">日本 ${jp.found||0}/${jp.total||0}</span>
       <span class="v59-pill">米国 ${us.found||0}/${us.total||0}</span>
     </div>
@@ -294,5 +300,5 @@ installStyle();
 patchMoreIconFallback();
 new MutationObserver(()=>patchMoreIconFallback()).observe(document.body,{childList:true,subtree:true});
 const version=document.querySelector('.ui-version');
-if(version)version.textContent='UI v59';
+if(version)version.textContent='UI v60';
 })();

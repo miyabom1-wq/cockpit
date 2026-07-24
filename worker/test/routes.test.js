@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import worker from '../src/index.js';import { MockKV } from './helpers.js';
-test('health exposes one deployment identity',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/health'),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.version,'v57.2.0');assert.equal(d.entrypoint,'src/index.js');assert.ok(d.build);assert.ok(d.schema);});
+test('health exposes one deployment identity',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/health'),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.version,'v60.0.0');assert.equal(d.entrypoint,'src/index.js');assert.ok(d.build);assert.ok(d.schema);});
 test('stocklist API remains compatible and preserves focus tiers',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/stocklist?market=jp',{headers:{Origin:'https://miyabom1-wq.github.io'}}),env,{}),d=await res.json();assert.equal(d.ok,true);assert.ok(d.list.length>0);assert.equal(d.list[0].focus_tier,'core');});
 
 test('private read is rejected outside the official frontend when no token is configured',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/watchlist'),env,{});assert.equal(res.status,403);});

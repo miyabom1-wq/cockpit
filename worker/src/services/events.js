@@ -2,6 +2,7 @@ import { KEYS } from '../storage/kv-schema.js';
 import { getStockList } from '../storage/stocklist.js';
 import { fetchYahooChart } from '../data/yahoo.js';
 import { parseJson, nowIso, normalizeSymbol } from '../utils.js';
+import { fetchUsEarningsDataset, usEventsFromDataset } from './us-earnings.js';
 
 const DAY=86400000;
 const PROVIDER_CACHE_MS=12*60*60*1000;
@@ -231,11 +232,10 @@ export function jpxEventsFromDataset(dataset,tracked=[],now=Date.now()){
     const time=String(row.time||`${row.date}T14:59:00.000Z`);
     const ms=Date.parse(time);
     if(!Number.isFinite(ms)||ms<now-DAY||ms>now+120*DAY)continue;
-    const label=String(row.period||row.fiscal_label||'').trim();
     out.push(normalizeEvent({
       id:`jpx-${symbol.toLowerCase()}-${time.slice(0,10)}`,
-      name:`${item.name||row.name||symbol} ${label?`${label} `:''}決算予定`,
-      time,
+      name:`${item.name||row.name||symbol} 決算予定`,
+      time,fiscal_period_raw:row.period||row.fiscal_label||null,
       time_note:`${dateLabel(time)}・時刻未確認`,
       category:'earnings',symbols:[symbol],source:'official',source_name:'JPX 決算発表予定日',
       official_kind:'jpx',source_priority:80,source_url:row.source_url||dataset.source_page||null,
@@ -248,34 +248,25 @@ export function jpxEventsFromDataset(dataset,tracked=[],now=Date.now()){
 
 export async function syncRegisteredEventBatch(env,{batch=0,batchSize=EVENT_BATCH_SIZE}={}){
   const tracked=await readTracked(env),plan=eventSyncBatch(tracked,batch,batchSize);
-  const [results,jpxState]=await Promise.all([
-    mapLimit(plan.items,2,x=>providerEvent(env,x,true)),
-    fetchJpxDataset(env,{force:plan.batch===0})
-  ]);
-  const jpxEvents=jpxEventsFromDataset(jpxState.dataset,plan.items);
-  const foundSymbols=new Set([
-    ...results.filter(Boolean).flatMap(x=>x.symbols||[]),
-    ...jpxEvents.flatMap(x=>x.symbols||[])
-  ]);
-  return{
-    ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,
-    processed:plan.items.length,found:foundSymbols.size,missing:Math.max(0,plan.items.length-foundSymbols.size),
-    next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count,
-    jpx:{available:jpxState.available,stale:jpxState.stale,error:jpxState.error,generated_at:jpxState.dataset?.generated_at||null,event_count:jpxState.dataset?.events?.length||0}
-  };
+  const [jpxState,usState]=await Promise.all([fetchJpxDataset(env,{force:plan.batch===0}),fetchUsEarningsDataset(env,{force:plan.batch===0})]);
+  const jpxEvents=jpxEventsFromDataset(jpxState.dataset,plan.items),usEvents=usEventsFromDataset(usState.dataset,plan.items);
+  const covered=new Set([...jpxEvents,...usEvents].flatMap(x=>x.symbols||[]));
+  const results=await mapLimit(plan.items.filter(x=>!covered.has(x.symbol)),2,x=>providerEvent(env,x,true));
+  const foundSymbols=new Set([...results.filter(Boolean).flatMap(x=>x.symbols||[]),...jpxEvents.flatMap(x=>x.symbols||[]),...usEvents.flatMap(x=>x.symbols||[])]);
+  return{ok:true,batch:plan.batch,batch_count:plan.batch_count,batch_size:plan.batch_size,total:plan.total,processed:plan.items.length,found:foundSymbols.size,missing:Math.max(0,plan.items.length-foundSymbols.size),next_batch:plan.batch+1<plan.batch_count?plan.batch+1:null,complete:plan.batch+1>=plan.batch_count,jpx:{available:jpxState.available,stale:jpxState.stale,error:jpxState.error,generated_at:jpxState.dataset?.generated_at||null,event_count:jpxState.dataset?.events?.length||0},us_calendar:{available:usState.available,stale:usState.stale,error:usState.error,generated_at:usState.dataset?.generated_at||null,event_count:usState.dataset?.events?.length||0}};
 }
 
 export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbols=new Set(),lastCheckedAt=null,meta={}){
   const checked=checkedSymbols instanceof Set?checkedSymbols:new Set(checkedSymbols||[]);
   const trackedMap=new Map((tracked||[]).map(item=>[String(item.symbol||'').toUpperCase(),item]));
-  const foundSymbols=new Set(),officialSymbols=new Set(),jpxSymbols=new Set(),providerSymbols=new Set();
+  const foundSymbols=new Set(),officialSymbols=new Set(),jpxSymbols=new Set(),providerSymbols=new Set(),nasdaqSymbols=new Set();
 
   for(const event of automaticEvents||[]){
     if(event?.category!=='earnings')continue;
     for(const symbol of normalizeSymbols(event.symbols||[])){
       if(!trackedMap.has(symbol))continue;
       foundSymbols.add(symbol);
-      if(event.source==='provider')providerSymbols.add(symbol);
+      if(event.source==='provider'){providerSymbols.add(symbol);if(event.provider_kind==='nasdaq_zacks')nasdaqSymbols.add(symbol);}
       else if(event.source==='official'){
         officialSymbols.add(symbol);
         if(event.official_kind==='jpx'||String(event.source_name||'').startsWith('JPX'))jpxSymbols.add(symbol);
@@ -296,7 +287,7 @@ export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbol
     const count=set=>[...set].filter(symbol=>symbols.has(symbol)).length;
     return{
       total:items.length,checked:[...checked].filter(symbol=>symbols.has(symbol)).length,
-      found:count(foundSymbols),official:count(officialSymbols),jpx:count(jpxSymbols),provider:count(providerSymbols),
+      found:count(foundSymbols),official:count(officialSymbols),jpx:count(jpxSymbols),provider:count(providerSymbols),nasdaq:count(nasdaqSymbols),
       missing:missing.filter(item=>item.market===market).length,
       unchecked:unchecked.filter(item=>item.market===market).length
     };
@@ -305,12 +296,12 @@ export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbol
   return{
     window_days:120,tracked_total:trackedMap.size,
     checked_total:[...checked].filter(symbol=>trackedMap.has(symbol)).length,
-    earnings_found:foundSymbols.size,official_found:officialSymbols.size,jpx_found:jpxSymbols.size,provider_found:providerSymbols.size,
+    earnings_found:foundSymbols.size,official_found:officialSymbols.size,jpx_found:jpxSymbols.size,provider_found:providerSymbols.size,nasdaq_found:nasdaqSymbols.size,
     missing_total:missing.length,not_listed_total:missing.length,unchecked_total:unchecked.length,
     by_market:{jp:marketSummary('jp'),us:marketSummary('us')},
     missing_symbols:missing.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
     unchecked_symbols:unchecked.map(item=>({symbol:item.symbol,name:item.name,market:item.market,scope:item.scope})),
-    last_checked_at:lastCheckedAt,jpx:meta.jpx||null,
+    last_checked_at:lastCheckedAt,jpx:meta.jpx||null,us_calendar:meta.us_calendar||null,
     source_policy:'JPX free official schedule for Japan, company IR overrides, Yahoo next earnings date as supplemental reference. Not listed does not mean no earnings.'
   };
 }
@@ -319,9 +310,10 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
   const manual=await getManualEvents(env),tracked=await readTracked(env),trackedSet=new Set(tracked.map(x=>x.symbol));
   if(force&&tracked.length)await syncRegisteredEventBatch(env,{batch:0});
 
-  const jpxState=await fetchJpxDataset(env,{force:false});
+  const [jpxState,usState]=await Promise.all([fetchJpxDataset(env,{force:false}),fetchUsEarningsDataset(env,{force:false})]);
   const verified=officialEvents(now,trackedSet);
   const jpx=jpxEventsFromDataset(jpxState.dataset,tracked,now);
+  const usCalendar=usEventsFromDataset(usState.dataset,tracked,now);
   const cachedRows=await Promise.all(tracked.map(async item=>({item,cached:await readProviderCache(env,item.symbol)})));
   const dynamic=cachedRows
     .map(({item,cached})=>cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null)
@@ -329,7 +321,7 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
     .filter(x=>Date.parse(x.time)>=now-DAY&&Date.parse(x.time)<=now+120*DAY);
 
   const manualKeys=new Set(manual.map(eventKey));
-  const readOnly=[...verified,...jpx,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
+  const readOnly=[...verified,...jpx,...usCalendar,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
   const bySymbol=new Map();
   for(const x of readOnly){
     const s=symbolOf(x),old=bySymbol.get(s);
@@ -338,10 +330,13 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
 
   const events=[...manual,...bySymbol.values()].sort((a,b)=>new Date(a.time)-new Date(b.time));
   const checkedSymbols=new Set(verified.flatMap(event=>event.symbols||[]));
-  let lastCheckedAt=jpxState.dataset?.generated_at||null;
+  let lastCheckedAt=[jpxState.dataset?.generated_at,usState.dataset?.generated_at].filter(Boolean).sort().at(-1)||null;
 
   if(jpxState.available){
     for(const item of tracked)if(item.market==='jp')checkedSymbols.add(item.symbol);
+  }
+  if(usState.available){
+    for(const item of tracked)if(item.market==='us')checkedSymbols.add(item.symbol);
   }
   for(const {item,cached} of cachedRows){
     if(cached?.fetched_at){
@@ -359,9 +354,10 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
     stats:jpxState.dataset?.stats||null
   };
 
+  const usMeta={available:usState.available,stale:usState.stale,error:usState.error,generated_at:usState.dataset?.generated_at||null,source_page:usState.dataset?.source_page||null,event_count:usState.dataset?.events?.length||0,stats:usState.dataset?.stats||null};
   return{
     events,
-    coverage:eventCoverageSummary(tracked,[...verified,...jpx,...dynamic],checkedSymbols,lastCheckedAt,{jpx:jpxMeta}),
+    coverage:eventCoverageSummary(tracked,[...verified,...jpx,...usCalendar,...dynamic],checkedSymbols,lastCheckedAt,{jpx:jpxMeta,us_calendar:usMeta}),
     generated_at:nowIso()
   };
 }

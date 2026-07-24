@@ -1,0 +1,11 @@
+{
+  "schema": "vantage-us-earnings-v1",
+  "generated_at": null,
+  "source_page": "https://www.nasdaq.com/market-activity/earnings",
+  "source_api": "https://api.nasdaq.com/api/calendar/earnings",
+  "events": [],
+  "stats": {
+    "status": "pending_first_github_action",
+    "events": 0
+  }
+}

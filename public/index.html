@@ -1574,7 +1574,7 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=59-event-ui-cleanup').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=60-us-earnings').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
@@ -1585,6 +1585,6 @@ syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 <script src="./event-coverage-v56.js?v=20260724"></script>
 <script src="./event-official-v57.js?v=20260724"></script>
 <script src="./event-mobile-v58.js?v=20260724"></script>
-<script src="./event-mobile-v59.js?v=20260724"></script>
+<script src="./event-mobile-v59.js?v=20260724b"></script>
 </body>
 </html>
