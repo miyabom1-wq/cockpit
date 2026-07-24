@@ -1,5 +1,5 @@
-export const APP_VERSION = 'v57.0.0';
-export const BUILD_ID = '20260724-jpx-official-earnings';
+export const APP_VERSION = 'v57.1.0';
+export const BUILD_ID = '20260724-jpx-cache-race-fix';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v51.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v6-sparse-benchmark-safe';

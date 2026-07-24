@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { eventCoverageSummary, jpxEventsFromDataset } from '../src/services/events.js';
+import { eventCoverageSummary, jpxEventsFromDataset, validJpxDataset } from '../src/services/events.js';
 
 test('JPX official dataset maps only tracked Japanese symbols',()=>{
   const dataset={
@@ -38,4 +38,18 @@ test('event coverage separates JPX official and provider sources',()=>{
   assert.equal(coverage.provider_found,1);
   assert.equal(coverage.not_listed_total,1);
   assert.equal(coverage.by_market.jp.jpx,1);
+});
+
+
+test('empty JPX placeholder is never accepted as a live dataset',()=>{
+  assert.equal(validJpxDataset({
+    schema:'vantage-jpx-earnings-v1',
+    generated_at:null,
+    events:[]
+  }),false);
+  assert.equal(validJpxDataset({
+    schema:'vantage-jpx-earnings-v1',
+    generated_at:'2026-07-24T00:09:23.116527Z',
+    events:[{symbol:'8035.T',date:'2026-07-30'}]
+  }),true);
 });

@@ -168,20 +168,30 @@ async function mapLimit(items,limit,fn){
   return out;
 }
 
-function validJpxDataset(value){
-  return value&&typeof value==='object'&&Array.isArray(value.events)&&String(value.schema||'').startsWith('vantage-jpx-earnings');
+export function validJpxDataset(value){
+  const generated=Date.parse(value?.generated_at||'');
+  return Boolean(
+    value&&
+    typeof value==='object'&&
+    Array.isArray(value.events)&&
+    value.events.length>0&&
+    Number.isFinite(generated)&&
+    String(value.schema||'').startsWith('vantage-jpx-earnings')
+  );
 }
 
 async function fetchJpxDataset(env,{force=false}={}){
   const cached=parseJson(await env.COCKPIT_KV.get(JPX_CACHE_KEY),null);
-  if(!force&&cached?.dataset&&Date.now()-Date.parse(cached.fetched_at||0)<JPX_CACHE_MS){
+  const cachedValid=validJpxDataset(cached?.dataset);
+  if(!force&&cachedValid&&Date.now()-Date.parse(cached.fetched_at||0)<JPX_CACHE_MS){
     return{available:true,dataset:cached.dataset,fetched_at:cached.fetched_at,source_url:cached.source_url,stale:false,error:null};
   }
 
   let last=null;
   for(const base of JPX_DATA_URLS){
     try{
-      const url=force?`${base}${base.includes('?')?'&':'?'}ts=${Date.now()}`:base;
+      const bust=force||!cachedValid;
+      const url=bust?`${base}${base.includes('?')?'&':'?'}ts=${Date.now()}`:base;
       const res=await fetch(url,{headers:{'Accept':'application/json','User-Agent':'VANTAGE/57.0'},cache:'no-store',cf:{cacheTtl:force?0:120}});
       if(!res.ok){last=new Error(`JPX JSON HTTP ${res.status}`);continue;}
       const dataset=await res.json();
@@ -194,7 +204,7 @@ async function fetchJpxDataset(env,{force=false}={}){
     }
   }
 
-  if(cached?.dataset&&validJpxDataset(cached.dataset)){
+  if(cachedValid){
     return{available:true,dataset:cached.dataset,fetched_at:cached.fetched_at,source_url:cached.source_url,stale:true,error:String(last?.message||last||'JPX data fetch failed')};
   }
   return{available:false,dataset:null,fetched_at:null,source_url:null,stale:false,error:String(last?.message||last||'JPX data unavailable')};
