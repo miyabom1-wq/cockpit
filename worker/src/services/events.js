@@ -180,6 +180,15 @@ export function validJpxDataset(value){
   );
 }
 
+export function jpxFetchOptions(bust=false){
+  const base={
+    headers:{'Accept':'application/json','User-Agent':'VANTAGE/57.2'}
+  };
+  return bust
+    ?{...base,cache:'no-store'}
+    :{...base,cf:{cacheTtl:120}};
+}
+
 async function fetchJpxDataset(env,{force=false}={}){
   const cached=parseJson(await env.COCKPIT_KV.get(JPX_CACHE_KEY),null);
   const cachedValid=validJpxDataset(cached?.dataset);
@@ -192,7 +201,7 @@ async function fetchJpxDataset(env,{force=false}={}){
     try{
       const bust=force||!cachedValid;
       const url=bust?`${base}${base.includes('?')?'&':'?'}ts=${Date.now()}`:base;
-      const res=await fetch(url,{headers:{'Accept':'application/json','User-Agent':'VANTAGE/57.0'},cache:'no-store',cf:{cacheTtl:force?0:120}});
+      const res=await fetch(url,jpxFetchOptions(bust));
       if(!res.ok){last=new Error(`JPX JSON HTTP ${res.status}`);continue;}
       const dataset=await res.json();
       if(!validJpxDataset(dataset)){last=new Error('JPX JSON schema invalid');continue;}

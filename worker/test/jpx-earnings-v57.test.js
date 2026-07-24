@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { eventCoverageSummary, jpxEventsFromDataset, validJpxDataset } from '../src/services/events.js';
+import { eventCoverageSummary, jpxEventsFromDataset, validJpxDataset, jpxFetchOptions } from '../src/services/events.js';
 
 test('JPX official dataset maps only tracked Japanese symbols',()=>{
   const dataset={
@@ -52,4 +52,15 @@ test('empty JPX placeholder is never accepted as a live dataset',()=>{
     generated_at:'2026-07-24T00:09:23.116527Z',
     events:[{symbol:'8035.T',date:'2026-07-30'}]
   }),true);
+});
+
+
+test('JPX fetch options never combine no-store with Cloudflare cacheTtl',()=>{
+  const forced=jpxFetchOptions(true);
+  assert.equal(forced.cache,'no-store');
+  assert.equal(forced.cf,undefined);
+
+  const cached=jpxFetchOptions(false);
+  assert.equal(cached.cache,undefined);
+  assert.equal(cached.cf.cacheTtl,120);
 });
