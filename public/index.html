@@ -455,7 +455,21 @@ function gateHtml(m){const g=marketGate(m);if(g.level==='normal')return'';const 
 function macroBasis(v){const parts=[];if(v?.date)parts.push('基準 '+dateOnly(v.date));if(v?.price_time)parts.push('価格時刻 '+dateText(v.price_time));return parts.join(' · ')}
 function macroFreshness(macro={}){const keys=['日経平均','日経先物（CME円建て）','韓国KOSPI','SOX','S&P500','VIX','ドル円'],items=keys.map(k=>[k,macro[k]]).filter(([,v])=>v?.date),dates=[...new Set(items.map(([,v])=>v.date))].sort();return{mixed:dates.length>1,label:dates.length>1?'一部データ更新済み':'同一基準日',detail:items.map(([k,v])=>`${k} ${dateOnly(v.date)}`).join(' / ')||'基準日待ち'}}
 function heatState(r={}){const d=Number(r.div25),rsi=Number(r.rsi14??r.rsi),chg=Number(r.change_pct);if((Number.isFinite(d)&&d>=10)||(Number.isFinite(rsi)&&rsi>=78)||(Number.isFinite(chg)&&chg>=8))return'過熱';if(Number.isFinite(d)&&d>=8)return'拡張警戒';if(Number.isFinite(d)&&d<=-8)return'大幅下方乖離';return'過熱なし'}
-function eventTimeLabel(e={}){return e.time_note||dateText(e.time)}
+function eventShortDate(value){
+ const d=new Date(value);
+ if(Number.isNaN(d.getTime()))return'';
+ return (d.getMonth()+1)+'/'+d.getDate();
+}
+function eventTimeLabel(e={}){
+ const date=eventShortDate(e.time);
+ const note=String(e.time_note||'').trim();
+ const detail=note
+  .replace(/^\d{1,2}\/\d{1,2}\s*(?:[\u30fb\u00b7-]\s*)?/,'')
+  .replace(/^[\s\u30fb\u00b7-]+|[\s\u30fb\u00b7-]+$/g,'')
+  .trim();
+ if(date&&detail)return date+' \u30fb '+detail;
+ return date||detail||dateText(e.time);
+}
 function snapshotPayload(r){if(!r)return null;const keys=['symbol','name','market','date','price','change_pct','price_time','entry_lane','entry_label','entry_quality','effective_vol_ratio','vol_ratio','div25','rs5','rs20','long_stage','stage','stage_code','setup_label','snapshot_id'],o={};for(const k of keys)if(r[k]!=null)o[k]=r[k];return Object.keys(o).length?o:null}
 function currentWatchData(w,bm){return bm.get(String(w?.symbol||'').toUpperCase())||w?.current_data||w?.stage_data||{}}
 
@@ -1574,7 +1588,7 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=61-event-date').then(r=>r.update()).catch(()=>{}));
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=62-home-event-date').then(r=>r.update()).catch(()=>{}));
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
@@ -1585,6 +1599,6 @@ syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 <script src="./event-coverage-v56.js?v=20260724"></script>
 <script src="./event-official-v57.js?v=20260724"></script>
 <script src="./event-mobile-v58.js?v=20260724"></script>
-<script src="./event-mobile-v59.js?v=20260726-date"></script>
+<script src="./event-mobile-v59.js?v=20260726-home-date"></script>
 </body>
 </html>
