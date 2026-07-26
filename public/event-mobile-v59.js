@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const PATCH='v59-event-accordion-cleanup-20260724';
+const PATCH='v61-event-date-label-20260726';
 if(window.__vantageV59Patch===PATCH)return;
 window.__vantageV59Patch=PATCH;
 
@@ -123,13 +123,20 @@ function isCorporateEarnings(event){
   return true;
 }
 function timeLabel(event){
+  const date=shortDate(event?.time);
   const note=String(event?.time_note||'').trim();
-  if(note && !/時刻未確認/.test(note))return note;
-  if(note)return note.replace(/・?時刻未確認/g,'').trim()||shortDate(event.time);
+  const cleaned=note
+    .replace(/^\d{1,2}\/\d{1,2}\s*(?:[\u30fb\u00b7-]\s*)?/,'')
+    .replace(/(?:\u6642\u523b\u672a\u78ba\u8a8d|\u6642\u523b\u672a\u516c\u8868|\u6642\u9593\u672a\u516c\u8868)/g,'')
+    .replace(/^[\s\u30fb\u00b7-]+|[\s\u30fb\u00b7-]+$/g,'')
+    .trim();
+
+  if(cleaned)return date?date+' \u30fb '+cleaned:cleaned;
+
   const source=srcInfo(event);
-  if(source.cls==='jpx')return `${shortDate(event.time)} ・ 時間未公表`;
-  if(source.cls==='provider')return `${shortDate(event.time)} ・ 参考日程`;
-  return shortDate(event.time);
+  if(source.cls==='jpx')return date?date+' \u30fb \u6642\u9593\u672a\u516c\u8868':'\u6642\u9593\u672a\u516c\u8868';
+  if(source.cls==='provider')return date?date+' \u30fb \u53c2\u8003\u65e5\u7a0b':'\u53c2\u8003\u65e5\u7a0b';
+  return date;
 }
 function marketOf(event){
   const s=String(event?.symbols?.[0]||'').toUpperCase();
@@ -299,6 +306,7 @@ window.renderEvents=function(){
 installStyle();
 patchMoreIconFallback();
 new MutationObserver(()=>patchMoreIconFallback()).observe(document.body,{childList:true,subtree:true});
+if(typeof state!=='undefined'&&state.events?.events?.length)queueMicrotask(()=>window.renderEvents());
 const version=document.querySelector('.ui-version');
-if(version)version.textContent='UI v60';
+if(version)version.textContent='UI v61';
 })();
