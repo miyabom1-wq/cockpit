@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#102a32">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json?build=vantage-stable-v63d-api-bypass-20260727">
+<link rel="manifest" href="manifest.json?build=vantage-stable-v63h-runtime-recovery-20260727">
 <link rel="apple-touch-icon" href="apple-touch-icon-v45.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,7 +384,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':'https://cockpit-backend.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-stable-v63d-api-bypass-20260727';
+const FRONTEND_BUILD='vantage-stable-v63h-runtime-recovery-20260727';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
@@ -707,8 +707,23 @@ function themeCard(group){
  return `<details class="theme-card ${p.kind}" ${['GERMINATION','RECOVERY'].includes(p.code)?'open':''}><summary><div class="theme-card-head"><div class="grow1"><div class="theme-title">${esc(group.name)}</div><div class="theme-reason">${esc(p.reason)}</div></div>${phaseBadge(p)}</div><div class="theme-kpis"><span>市場差RS5 <b class="${cls(p.rs5)}">${pct(p.rs5)}</b></span><span>市場差RS20 <b class="${cls(p.rs20)}">${pct(p.rs20)}</b></span><span>A/B <b>${p.a+p.b}/${p.n}</b></span><span>広がり <b>${num(p.breadth,0)}%</b></span></div>${regional}${confidence}${themeHistoryLine(group)}</summary><div class="theme-detail"><div class="theme-detail-grid"><div><b>${num(p.vol)}x</b><span>平均出来高比</span></div><div><b>${p.c}</b><span>押し目監視</span></div><div><b>${p.e}</b><span>警戒</span></div><div><b>${num(p.improving,0)}%</b><span>市場差RS改善率</span></div></div><div class="section-title">先導銘柄</div>${leaders.map(r=>`<div class="theme-leader" onclick="openCandidate('${attr(r.symbol)}')"><span class="market-chip ${marketOf(r.symbol)}">${marketOf(r.symbol)==='jp'?'JP':'US'}</span><span class="badge ${r.entry_lane||'D'}">${esc(r.entry_lane||'D')}</span><span class="name grow1">${esc(r.name)}</span><span class="code">${esc(code(r.symbol))}</span><span class="${cls(r.rs5)} num" title="銘柄の5日騰落率－市場指数の5日騰落率">市場差 ${pct(r.rs5)}</span>${quoteHtml(r,marketOf(r.symbol),true)}<button class="frame-mini" title="FRAMEで判定" onclick="event.stopPropagation();openFrame('${attr(r.symbol)}','${attr(r.name)}','${marketOf(r.symbol)}','theme')">F</button></div>`).join('')}<div class="note">先導銘柄はVANTAGEへ登録され、自動分析対象になっている銘柄から抽出します。市場全銘柄ではありません。具体的な売買水準はFRAMEで確認します。</div></div></details>`;
 }
 async function ensureGlobalThemeData(){
- const need=!state.momentum.jp?.ready||!state.momentum.us?.ready||!state.stage.jp?.complete||!state.stage.us?.complete;
- if(need){const [jpMom,usMom,jpStage,usStage]=await Promise.all([api('/api/momentum?market=jp'),api('/api/momentum?market=us'),api('/api/stage?market=jp'),api('/api/stage?market=us')]);state.momentum.jp=jpMom;state.momentum.us=usMom;state.stage.jp=jpStage;state.stage.us=usStage}
+ const specs=[
+  ['momentum','jp',!state.momentum.jp?.ready,()=>api('/api/momentum?market=jp')],
+  ['momentum','us',!state.momentum.us?.ready,()=>api('/api/momentum?market=us')],
+  ['stage','jp',!state.stage.jp?.complete,()=>api('/api/stage?market=jp')],
+  ['stage','us',!state.stage.us?.complete,()=>api('/api/stage?market=us')]
+ ].filter(([, ,needed])=>needed);
+ if(!specs.length){state.themeLoadErrors=[];return}
+
+ const results=await Promise.allSettled(specs.map(([, , ,run])=>run()));
+ const errors=[];
+ results.forEach((result,index)=>{
+  const [type,market]=specs[index];
+  if(result.status==='fulfilled'&&result.value)state[type][market]=result.value;
+  else errors.push((market==='jp'?'日本':'米国')+(type==='stage'?'市場':'候補')+'：'+String(result.reason?.message||result.reason||'取得失敗'));
+ });
+ state.themeLoadErrors=errors;
+ if(!state.momentum.jp?.ready&&!state.momentum.us?.ready)throw new Error('日米のテーマ候補データを取得できませんでした');
 }
 function themeGroupsForScope(scope){
  const groups=new Map(),add=(r,m)=>{const name=themeName(r);if(!groups.has(name))groups.set(name,{name,jp:[],us:[],rows:[]});const g=groups.get(name);g[m].push(r);g.rows.push(r)};
@@ -747,22 +762,96 @@ async function loadGlobalBoard(){
 }
 function globalRankingSection(d,m){const items=(d?.items||[]).slice(0,20);return `<section class="global-ranking-section"><div class="global-ranking-title"><span class="market-chip ${m}">${m==='jp'?'JP':'US'}</span>${m==='jp'?'日本・売買代金順位':'米国・売買代金順位'}</div>${items.map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span>${rankMoveLabel(it)}<span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span></div>${quoteHtml(it,m)}<div class="meta">${marginBadgeHtml(it)}<span>売買代金 ${turnoverText(it.value,m)}</span>${it.vol_ratio!=null?`<span>出来高 ${num(it.vol_ratio)}x</span>`:''}${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}</div></div>`).join('')||'<div class="empty">データなし</div>'}</section>`}
 async function loadGlobalRanking(){
- $('stage-ranking').innerHTML='<div class="loading">日米ランキングを取得中…</div>';try{const [jp,us]=await Promise.all([api('/api/ranking-enriched?market=jp'),api('/api/ranking-enriched?market=us')]);state.ranking.jp=jp;state.ranking.us=us;$('stage-ranking').innerHTML='<div class="scope-note">売買代金は通貨・市場構造が異なるため、日米を単純合算せず地域内順位として並列表示します。</div><div class="global-ranking-grid">'+globalRankingSection(jp,'jp')+globalRankingSection(us,'us')+'</div>'}catch(e){$('stage-ranking').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+ $('stage-ranking').innerHTML='<div class="loading">日米ランキングを取得中…</div>';
+ const results=await Promise.allSettled([
+  api('/api/ranking-enriched?market=jp'),
+  api('/api/ranking-enriched?market=us')
+ ]);
+ if(results[0].status==='fulfilled')state.ranking.jp=results[0].value;
+ if(results[1].status==='fulfilled')state.ranking.us=results[1].value;
+ const errors=[];
+ if(results[0].status==='rejected')errors.push('日本：'+String(results[0].reason?.message||'取得失敗'));
+ if(results[1].status==='rejected')errors.push('米国：'+String(results[1].reason?.message||'取得失敗'));
+ if(!state.ranking.jp&&!state.ranking.us){
+  $('stage-ranking').innerHTML='<div class="card pad down">日米ランキングを取得できませんでした。</div>';
+  return;
+ }
+ const warning=errors.length?`<div class="coverage-warning">一部取得失敗：${esc(errors.join(' / '))}。取得済み市場を表示しています。</div>`:'';
+ $('stage-ranking').innerHTML=warning+
+  '<div class="scope-note">売買代金は通貨・市場構造が異なるため、日米を単純合算せず地域内順位として並列表示します。</div><div class="global-ranking-grid">'+
+  (state.ranking.jp?globalRankingSection(state.ranking.jp,'jp'):'')+
+  (state.ranking.us?globalRankingSection(state.ranking.us,'us'):'')+
+  '</div>';
 }
-
+function loadResultError(result,label){
+ if(result?.status==='fulfilled')return null;
+ const message=String(result?.reason?.message||result?.reason||'取得失敗');
+ return label+'：'+message;
+}
+function applyStageLoadWarning(errors=[]){
+ const root=$('stage-summary');
+ if(!root)return;
+ root.querySelector('.runtime-load-warning')?.remove();
+ if(!errors.length)return;
+ const box=document.createElement('div');
+ box.className='coverage-warning runtime-load-warning';
+ box.textContent='一部データ取得失敗：'+errors.join(' / ')+'。取得できた情報を表示しています。';
+ root.prepend(box);
+}
+function setVantageDataState(status,errors=[]){
+ document.documentElement.dataset.vantageDataState=status;
+ if(errors.length)document.documentElement.dataset.vantageDataErrors=errors.join(' | ');
+ else delete document.documentElement.dataset.vantageDataErrors;
+}
 async function loadStage(){
- const m=state.market;if($('stage-fresh'))$('stage-fresh').textContent='取得中…';if($('theme-fresh'))$('theme-fresh').textContent='取得中…';
- try{
-  const [st,nt,mom,pos,ev,bt]=await Promise.all([
-   api('/api/stage?market='+m),api('/api/notrade?market='+m),api('/api/momentum?market='+m),
-   api('/api/positions').catch(()=>({positions:[]})),api('/api/events').catch(()=>({events:[]})),
-   api('/api/backtest').catch(()=>state.backtest),
-  ]);
-  state.stage[m]=st;state.notrade[m]=nt;state.momentum[m]=mom;state.positions=pos;state.events=ev;if(bt)state.backtest=bt;
-  const cv=st.close_verification||null;
-  const fresh=freshnessText(st);if($('stage-fresh'))$('stage-fresh').textContent=fresh;if($('theme-fresh'))$('theme-fresh').textContent=fresh;
-  renderSummary(m);renderBoard(m);
- }catch(e){if($('stage-fresh'))$('stage-fresh').textContent='取得失敗';if($('theme-fresh'))$('theme-fresh').textContent='取得失敗';$('stage-summary').innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
+ const m=state.market;
+ if($('stage-fresh'))$('stage-fresh').textContent='取得中…';
+ if($('theme-fresh'))$('theme-fresh').textContent='取得中…';
+
+ const core=await Promise.allSettled([
+  api('/api/stage?market='+m),
+  api('/api/notrade?market='+m),
+  api('/api/momentum?market='+m)
+ ]);
+ const errors=[];
+ if(core[0].status==='fulfilled'&&core[0].value)state.stage[m]=core[0].value;
+ else errors.push(loadResultError(core[0],m==='jp'?'日本市場':'米国市場'));
+ if(core[1].status==='fulfilled'&&core[1].value)state.notrade[m]=core[1].value;
+ else errors.push(loadResultError(core[1],'過熱判定'));
+ if(core[2].status==='fulfilled'&&core[2].value)state.momentum[m]=core[2].value;
+ else errors.push(loadResultError(core[2],'候補分析'));
+
+ const optional=await Promise.allSettled([
+  api('/api/positions'),
+  api('/api/events'),
+  api('/api/backtest')
+ ]);
+ if(optional[0].status==='fulfilled'&&optional[0].value)state.positions=optional[0].value;
+ else if(!state.positions)state.positions={positions:[]};
+ if(optional[1].status==='fulfilled'&&optional[1].value)state.events=optional[1].value;
+ else if(!state.events)state.events={events:[]};
+ if(optional[2].status==='fulfilled'&&optional[2].value)state.backtest=optional[2].value;
+
+ const st=state.stage[m],mom=state.momentum[m];
+ if(st){
+  const fresh=freshnessText(st);
+  if($('stage-fresh'))$('stage-fresh').textContent=errors.length?fresh+' · 一部取得失敗':fresh;
+  if($('theme-fresh'))$('theme-fresh').textContent=errors.length?fresh+' · 一部取得失敗':fresh;
+  renderSummary(m);
+ }else{
+  if($('stage-fresh'))$('stage-fresh').textContent='市場データ取得失敗';
+  if($('theme-fresh'))$('theme-fresh').textContent='市場データ取得失敗';
+  $('stage-summary').innerHTML='<div class="card pad down">市場データを取得できませんでした。通信状態を確認して再読み込みしてください。</div>';
+ }
+ if(mom)renderBoard(m);
+ else $('stage-board').innerHTML='<div class="card pad down">候補分析を取得できませんでした。市場概要は取得できた範囲で表示しています。</div>';
+
+ if(st||mom){
+  setVantageDataState(errors.length?'partial':'ready',errors.filter(Boolean));
+  applyStageLoadWarning(errors.filter(Boolean));
+ }else{
+  setVantageDataState('failed',errors.filter(Boolean));
+ }
 }
 function marketState(st,m){
  const gate=st?.risk_gate||marketGate(m);if(gate?.level==='stress')return{label:gate.label||'ストレス／価格発見',kind:'bad'};if(gate?.level==='caution')return{label:'警戒・選別',kind:'warn'};
@@ -1631,6 +1720,16 @@ async function autoSyncVisibleQuotes(){
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
 let vantageReloading=false;
+async function clearLegacyVantageCaches(){
+ try{
+  if(!('caches'in window))return;
+  const key='vantage_cache_cleanup_'+FRONTEND_BUILD;
+  if(localStorage.getItem(key)==='1')return;
+  const keys=await caches.keys();
+  await Promise.all(keys.filter(name=>name.startsWith('vantage-')).map(name=>caches.delete(name)));
+  localStorage.setItem(key,'1');
+ }catch{}
+}
 async function checkFrontendBuild(){
  try{
   const response=await fetch('./version.json?ts='+Date.now(),{cache:'no-store'});
@@ -1647,31 +1746,36 @@ async function checkFrontendBuild(){
 }
 if('serviceWorker'in navigator){
  navigator.serviceWorker.addEventListener('controllerchange',()=>{
-  if(vantageReloading)return;
+  const key='vantage_controller_'+FRONTEND_BUILD;
+  if(vantageReloading||sessionStorage.getItem(key))return;
   vantageReloading=true;
+  sessionStorage.setItem(key,'1');
   location.reload();
  });
  addEventListener('load',async()=>{
   try{
    const registration=await navigator.serviceWorker.register('./sw.js?build='+FRONTEND_BUILD,{updateViaCache:'none'});
-   const activate=worker=>worker?.postMessage({type:'SKIP_WAITING'});
-   if(registration.waiting)activate(registration.waiting);
+   if(registration.waiting)registration.waiting.postMessage({type:'SKIP_WAITING'});
    registration.addEventListener('updatefound',()=>{
     const installing=registration.installing;
     installing?.addEventListener('statechange',()=>{
-     if(installing.state==='installed'&&navigator.serviceWorker.controller)activate(installing);
+     if(installing.state==='installed'&&navigator.serviceWorker.controller)installing.postMessage({type:'SKIP_WAITING'});
     });
    });
    await registration.update();
   }catch{}
+  await clearLegacyVantageCaches();
   await checkFrontendBuild();
  });
  addEventListener('visibilitychange',()=>{if(!document.hidden)checkFrontendBuild()});
  setInterval(checkFrontendBuild,600000);
 }
+syncMarketButtons(state.market);
+syncThemeScopeButtons();
+clearLegacyVantageCaches().finally(()=>loadStage());
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
-<script src="./vantage-runtime-v63.js?build=vantage-stable-v63d-api-bypass-20260727"></script>
+<script src="./vantage-runtime-v63.js?build=vantage-stable-v63h-runtime-recovery-20260727"></script>
 </body>
 </html>

@@ -36,11 +36,11 @@ test('scheduler health persists success and failure details',async()=>{
   assert.equal(health.jobs['jp_1535:b1'].failures,0);
 });
 
-test('service worker uses network first for mutable application files',()=>{
+test('service worker is notification-only and never intercepts application requests',()=>{
   const sw=fs.readFileSync(path.resolve('../public/sw.js'),'utf8');
-  assert.match(sw,/destination==='script'/);
-  assert.match(sw,/cache:'no-store'/);
-  assert.doesNotMatch(sw,/caches\.match\(request\)\.then\(hit=>hit\|\|fetch/);
+  assert.match(sw,/NETWORK_MODE='notification-only'/);
+  assert.doesNotMatch(sw,/addEventListener\(['"]fetch['"]/);
+  assert.match(sw,/caches\.delete/);
 });
 
 test('frontend is distributed as one frozen runtime bundle',()=>{

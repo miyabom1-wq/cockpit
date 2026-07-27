@@ -1,7 +1,8 @@
 {
-  "frontend_build": "vantage-stable-v63d-api-bypass-20260727",
+  "frontend_build": "vantage-stable-v63h-runtime-recovery-20260727",
   "ui_version": "v62",
   "backend_required": "v63.0.0",
-  "generated_at": "2026-07-27T03:15:45.406Z",
-  "network_mode": "browser-cors-bypass-service-worker"
+  "generated_at": "2026-07-27T04:01:09.504Z",
+  "network_mode": "notification-only-service-worker",
+  "load_mode": "partial-success"
 }
