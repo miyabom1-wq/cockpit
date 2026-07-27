@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#102a32">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?build=vantage-stable-v63-20260726">
 <link rel="apple-touch-icon" href="apple-touch-icon-v45.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,6 +384,8 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':'https://cockpit-backend.miyab.workers.dev';
+const FRONTEND_BUILD='vantage-stable-v63-20260726';
+document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -511,11 +513,49 @@ function openFrame(sym,name='',market='',source='candidate'){
 
 function writeHeaders(){const h={'Content-Type':'application/json'};const k=localStorage.getItem('vantage_write_key');if(k)h['X-Vantage-Key']=k;return h}
 async function api(path,opt={}){
- const options={...opt};if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
- const key=localStorage.getItem('vantage_write_key');if(key)options.headers={'X-Vantage-Key':key,...(options.headers||{})};
- if(options.write||options.method&&options.method!=='GET'){options.headers={...writeHeaders(),...(options.headers||{})};delete options.write}
- const r=await fetch(API_BASE+path,options);let d=null;try{d=await r.json()}catch{}
- if(!r.ok)throw new Error(d?.error||('API '+r.status));return d;
+ const options={...opt};
+ if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
+ const key=localStorage.getItem('vantage_write_key');
+ if(key)options.headers={'X-Vantage-Key':key,...(options.headers||{})};
+ if(options.write||options.method&&options.method!=='GET'){
+  options.headers={...writeHeaders(),...(options.headers||{})};
+  delete options.write;
+ }
+ const method=String(options.method||'GET').toUpperCase();
+ const attempts=method==='GET'?2:1;
+ let lastError=null;
+ for(let attempt=0;attempt<attempts;attempt++){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
+  try{
+   const response=await fetch(API_BASE+path,{
+    ...options,
+    cache:method==='GET'?'no-store':options.cache,
+    signal:controller.signal
+   });
+   let data=null;
+   const raw=await response.text();
+   if(raw){
+    try{data=JSON.parse(raw)}
+    catch{throw new Error('API response was not valid JSON')}
+   }
+   if(!response.ok){
+    const error=new Error(data?.error||('API '+response.status));
+    error.status=response.status;
+    throw error;
+   }
+   return data;
+  }catch(error){
+   lastError=error?.name==='AbortError'?new Error('API timeout: '+path):error;
+   const status=Number(lastError?.status||0);
+   const retryable=method==='GET'&&(status===0||status===429||status>=500);
+   if(!retryable||attempt>=attempts-1)throw lastError;
+   await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
+  }finally{
+   clearTimeout(timer);
+  }
+ }
+ throw lastError||new Error('API request failed');
 }
 function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1800)}
 function updateClock(){$('clock').textContent=new Date().toLocaleString('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})}
@@ -1207,7 +1247,7 @@ async function checkSystemStatus(){
  try{
   const [health,jp,us,uni]=await Promise.all([api('/api/health'),api('/api/stage?market=jp'),api('/api/stage?market=us'),api('/api/universe').catch(()=>null)]);
   const u=uni?.config||{},proposal=uni?.proposal||{};const uniText=u.mode==='guarded_auto'?'週次・安全自動':u.mode==='proposal'?'提案のみ':'停止';
-  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'}`,'good')}${statusCard('日本株',freshnessText(jp),`次の確定処理 16:10頃・再確認17:00頃`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`夏時間は確定5:20頃・冬時間6:20頃`,freshnessKind(us))}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line"><b>自動更新：</b>日本は場中複数回・大引け後に確定、米国は寄り後と引け後。休場日には更新しません。</div>`;
+  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'}`,'good')}${statusCard('日本株',freshnessText(jp),`大引け後に確定・18:30頃まで自動再確認`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`夏時間は確定5:20頃・冬時間6:20頃`,freshnessKind(us))}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line"><b>自動更新：</b>日本は場中複数回・大引け後に確定、米国は寄り後と引け後。休場日には更新しません。</div>`;
  }catch(e){root.innerHTML=`<div class="status-error">接続確認に失敗しました。${esc(e.message)}</div>`}
 }
 function openGuide(section='flow'){
@@ -1588,17 +1628,48 @@ async function autoSyncVisibleQuotes(){
 }
 setInterval(autoSyncVisibleQuotes,300000);
 addEventListener('visibilitychange',()=>{if(!document.hidden)autoSyncVisibleQuotes()});
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=62-home-event-date').then(r=>r.update()).catch(()=>{}));
+let vantageReloading=false;
+async function checkFrontendBuild(){
+ try{
+  const response=await fetch('./version.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok)return;
+  const remote=await response.json();
+  if(!remote?.frontend_build||remote.frontend_build===FRONTEND_BUILD)return;
+  const key='vantage_reload_'+remote.frontend_build;
+  if(sessionStorage.getItem(key))return;
+  sessionStorage.setItem(key,'1');
+  const url=new URL(location.href);
+  url.searchParams.set('build',remote.frontend_build);
+  location.replace(url.toString());
+ }catch{}
+}
+if('serviceWorker'in navigator){
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{
+  if(vantageReloading)return;
+  vantageReloading=true;
+  location.reload();
+ });
+ addEventListener('load',async()=>{
+  try{
+   const registration=await navigator.serviceWorker.register('./sw.js?build='+FRONTEND_BUILD,{updateViaCache:'none'});
+   const activate=worker=>worker?.postMessage({type:'SKIP_WAITING'});
+   if(registration.waiting)activate(registration.waiting);
+   registration.addEventListener('updatefound',()=>{
+    const installing=registration.installing;
+    installing?.addEventListener('statechange',()=>{
+     if(installing.state==='installed'&&navigator.serviceWorker.controller)activate(installing);
+    });
+   });
+   await registration.update();
+  }catch{}
+  await checkFrontendBuild();
+ });
+ addEventListener('visibilitychange',()=>{if(!document.hidden)checkFrontendBuild()});
+ setInterval(checkFrontendBuild,600000);
+}
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
-<script src="./vantage-frame-sync-v49.js?v=51"></script>
-<script src="./reliability-fixes-v53.js?v=20260723"></script>
-<script src="./reliability-fixes-v54.js?v=20260724"></script>
-<script src="./navigation-v55.js?v=20260724"></script>
-<script src="./event-coverage-v56.js?v=20260724"></script>
-<script src="./event-official-v57.js?v=20260724"></script>
-<script src="./event-mobile-v58.js?v=20260724"></script>
-<script src="./event-mobile-v59.js?v=20260726-home-date"></script>
+<script src="./vantage-runtime-v63.js?build=vantage-stable-v63-20260726"></script>
 </body>
 </html>

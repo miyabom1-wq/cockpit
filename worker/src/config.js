@@ -1,9 +1,10 @@
-export const APP_VERSION = 'v62.0.0';
-export const BUILD_ID = '20260724-numeric-integrity-backtest-v7';
+export const APP_VERSION = 'v63.0.0';
+export const BUILD_ID = '20260726-stable-core-runtime';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v52.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v7-numeric-integrity';
-export const DEPLOYED_AT = '2026-07-24T09:07:14.289Z';
+export const SCHEDULE_VERSION = 'sched-v63-stable';
+export const DEPLOYED_AT = '2026-07-27T02:56:02.480Z';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 
 export const LIMITS = Object.freeze({
