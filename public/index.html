@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#102a32">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json?build=vantage-stable-v63-20260726">
+<link rel="manifest" href="manifest.json?build=vantage-stable-v63d-api-bypass-20260727">
 <link rel="apple-touch-icon" href="apple-touch-icon-v45.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -384,7 +384,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':'https://cockpit-backend.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-stable-v63-20260726';
+const FRONTEND_BUILD='vantage-stable-v63d-api-bypass-20260727';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
@@ -531,6 +531,8 @@ async function api(path,opt={}){
    const response=await fetch(API_BASE+path,{
     ...options,
     cache:method==='GET'?'no-store':options.cache,
+    mode:'cors',
+    credentials:'omit',
     signal:controller.signal
    });
    let data=null;
@@ -1670,6 +1672,6 @@ if('serviceWorker'in navigator){
 syncMarketButtons(state.market);syncThemeScopeButtons();loadStage();
 </script>
 
-<script src="./vantage-runtime-v63.js?build=vantage-stable-v63-20260726"></script>
+<script src="./vantage-runtime-v63.js?build=vantage-stable-v63d-api-bypass-20260727"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 'use strict';
-const BUILD='vantage-stable-v63-20260726';
-const CACHE='vantage-stable-v63';
+const BUILD='vantage-stable-v63d-api-bypass-20260727';
+const CACHE='vantage-stable-v63d-api-bypass';
 const SHELL=[
  './?build='+BUILD,
  './vantage-runtime-v63.js?build='+BUILD,
@@ -67,10 +67,7 @@ self.addEventListener('fetch',event=>{
  const request=event.request;
  if(request.method!=='GET')return;
  const url=new URL(request.url);
- if(url.origin!==self.location.origin){
-  event.respondWith(fetch(request));
-  return;
- }
+ if(url.origin!==self.location.origin)return;
  const destination=request.destination;
  const isNavigation=request.mode==='navigate'||(request.headers.get('accept')||'').includes('text/html');
  const isMutable=isNavigation||destination==='script'||destination==='style'||url.pathname.endsWith('.json');
