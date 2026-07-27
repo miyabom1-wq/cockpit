@@ -9,11 +9,10 @@ import { runBacktestStep } from './services/backtest.js';
 import { evaluateIndexTriggers, sendPushToAll } from './services/push.js';
 import { isTradingDay, isUsDst } from './data/calendar.js';
 import { jstDate } from './utils.js';
-import { KV_SCHEMA_VERSION, SCHEDULE_VERSION } from './config.js';
+import { KV_SCHEMA_VERSION } from './config.js';
 import { captureThemeSnapshot } from './services/theme-history.js';
 import { maybeAutoRotateUniverse } from './services/universe-manager.js';
 import { getMarginDataset } from './services/margin-supply.js';
-import { updateSchedulerHealth, recordSchedulerJob } from './services/system-health.js';
 
 
 async function initializeStorage(env){
@@ -42,36 +41,18 @@ export function scheduleNodes(now=new Date()){
 }
 async function scheduledStage(env){
   const {minute,nodes}=scheduleNodes();
-  const tickAt=new Date().toISOString();
-  const due=nodes.filter(node=>minute>=node.at&&minute<node.at+55).length;
-  await updateSchedulerHealth(env,{
-    schedule_version:SCHEDULE_VERSION,
-    last_tick_at:tickAt,
-    last_tick_status:'running',
-    due_nodes:due,
-    processed_nodes:0,
-    last_error:null
-  }).catch(()=>null);
-
   let processed=0;
-  let budget=1;
-  let failedNode=null;
-
   for(const n of nodes){
     if(minute<n.at||minute>=n.at+55)continue;
-    const marker=`sched:${SCHEDULE_VERSION}:${n.key}:${n.tradeDate}`;
+    const marker=`sched:v50:${n.key}:${n.tradeDate}`;
     if(await env.COCKPIT_KV.get(marker))continue;
-
-    if(processed===0)budget=Math.max(1,Number(n.burst||1));
-
     try{
       if(n.action==='macro')await refreshMacroSnapshots(env);
       else if(n.action==='explorer')await buildExplorer(env,'jp',true);
       else if(n.action==='universe')await maybeAutoRotateUniverse(env,'scheduled');
       else if(n.action==='margin')await getMarginDataset(env,{force:true});
       else if(n.action==='enrich'){
-        const retry=n.key.includes('_retry');
-        const ready=retry?await currentCloseReady(env,n.market,n.tradeDate):await snapshotReady(env,n);
+        const retry=n.key.includes('_retry'),ready=retry?await currentCloseReady(env,n.market,n.tradeDate):await snapshotReady(env,n);
         if(!ready)throw new Error(`${n.market} snapshot not ready for enrich`);
         await getEnrichedRanking(env,n.market,true);
         if(n.kind==='confirmed'){
@@ -80,7 +61,7 @@ async function scheduledStage(env){
         }
       }else{
         if(n.key.includes('_retry')&&await currentCloseReady(env,n.market,n.tradeDate)){
-          /* already complete */
+          /* skip already complete */
         }else{
           const opt=scheduleSnapshotOptions(n.market,n.key.split(':')[0],n.kind,n.tradeDate);
           opt.parts=n.parts;
@@ -91,70 +72,26 @@ async function scheduledStage(env){
         }
       }
 
-      await env.COCKPIT_KV.put(marker,String(Date.now()),{expirationTtl:129600});
-      await recordSchedulerJob(env,n,'ok').catch(()=>null);
+      await env.COCKPIT_KV.put(marker,String(Date.now()),{
+        expirationTtl:129600
+      });
+
       processed++;
-      if(processed>=budget)break;
-    }catch(error){
-      failedNode=n.key;
-      await recordSchedulerJob(env,n,'error',error).catch(()=>null);
-      console.error('[scheduled]',n.key,error?.stack||error);
+      const burst=
+        n.action==='stage'&&
+        Number(n.part)>1&&
+        Number(n.part)<Number(n.parts)
+          ?Math.max(1,Number(n.burst||1))
+          :1;
+
+      if(processed>=burst)break;
+    }catch(e){
+      console.error('[scheduled]',n.key,e?.stack||e);
       break;
     }
   }
-
-  await updateSchedulerHealth(env,{
-    schedule_version:SCHEDULE_VERSION,
-    last_completed_at:new Date().toISOString(),
-    last_tick_status:failedNode?'error':processed?'ok':'idle',
-    processed_nodes:processed,
-    failed_node:failedNode,
-    last_error:failedNode?`scheduled job failed: ${failedNode}`:null
-  }).catch(()=>null);
-
-  return{processed,failed_node:failedNode};
 }
-
 export default{
-  async fetch(request,env){
-    if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders(request)});
-    if(!authorized(request,env))return json({ok:false,error:'write access denied'},403,request);
-    try{
-      await initializeStorage(env);
-      return await route(request,env);
-    }catch(error){
-      console.error('[fetch]',error?.stack||error);
-      return json({ok:false,error:error?.message||String(error)},500,request);
-    }
-  },
-  async scheduled(event,env,ctx){
-    ctx.waitUntil((async()=>{
-      try{
-        await initializeStorage(env);
-        await scheduledStage(env);
-      }catch(error){
-        console.error('[stage cron]',error?.stack||error);
-        await updateSchedulerHealth(env,{
-          schedule_version:SCHEDULE_VERSION,
-          last_completed_at:new Date().toISOString(),
-          last_tick_status:'fatal',
-          last_error:String(error?.message||error).slice(0,500)
-        }).catch(()=>null);
-      }
-      try{
-        await pushIndex(env);
-        await recordSchedulerJob(env,{key:'push_index',action:'push'},'ok').catch(()=>null);
-      }catch(error){
-        console.error('[push cron]',error?.stack||error);
-        await recordSchedulerJob(env,{key:'push_index',action:'push'},'error',error).catch(()=>null);
-      }
-      try{
-        await runBacktestStep(env,1,false);
-        await recordSchedulerJob(env,{key:'backtest_step',action:'backtest'},'ok').catch(()=>null);
-      }catch(error){
-        console.error('[backtest cron]',error?.stack||error);
-        await recordSchedulerJob(env,{key:'backtest_step',action:'backtest'},'error',error).catch(()=>null);
-      }
-    })());
-  }
+  async fetch(request,env){if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders(request)});if(!authorized(request,env))return json({ok:false,error:'write access denied'},403,request);try{await initializeStorage(env);return await route(request,env);}catch(e){console.error('[fetch]',e?.stack||e);return json({ok:false,error:e?.message||String(e)},500,request);}},
+  async scheduled(event,env,ctx){ctx.waitUntil((async()=>{try{await initializeStorage(env);await scheduledStage(env);}catch(e){console.error('[stage cron]',e?.stack||e);}try{await pushIndex(env);}catch(e){console.error('[push cron]',e?.stack||e);}try{await runBacktestStep(env,1,false);}catch(e){console.error('[backtest cron]',e?.stack||e);}})());}
 };

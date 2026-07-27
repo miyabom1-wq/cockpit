@@ -1,4 +1,4 @@
-import { APP_VERSION, BUILD_ID, KV_SCHEMA_VERSION, ENGINE_VERSION, BACKTEST_VERSION, DEPLOYED_AT, SCHEDULE_VERSION } from '../config.js';
+import { APP_VERSION, BUILD_ID, KV_SCHEMA_VERSION, ENGINE_VERSION, BACKTEST_VERSION, DEPLOYED_AT } from '../config.js';
 import { json } from './http.js';
 import { ensureSchema } from '../storage/kv-schema.js';
 import { migrateLegacyData, exportUserData } from '../storage/migration.js';
@@ -15,55 +15,10 @@ import { addSub, removeSub, sendPushToAll, VAPID_PUBLIC_KEY_RAW } from '../servi
 import { getThemeHistory, captureThemeSnapshot } from '../services/theme-history.js';
 import { getUniverseDashboard, mutateUniverse } from '../services/universe-manager.js';
 import { getMarginDashboard, MARGIN_DATA_SCHEMA } from '../services/margin-supply.js';
-import { getSchedulerHealth } from '../services/system-health.js';
 
 export async function route(request,env){
   const url=new URL(request.url),p=url.pathname;
-  if(p==='/api/health'){
-    const scheduler=await getSchedulerHealth(env);
-    const age=scheduler.last_tick_at?Math.max(0,Math.round((Date.now()-new Date(scheduler.last_tick_at).getTime())/60000)):null;
-    return json({
-      ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,
-      engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,
-      time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',
-      schedule_version:SCHEDULE_VERSION,margin:MARGIN_DATA_SCHEMA,
-      scheduler:{...scheduler,age_minutes:age,healthy:age!==null&&age<=15&&scheduler.last_tick_status!=='fatal'}
-    },200,request);
-  }
-  if(p==='/api/system-audit'){
-    const safe=async(fn)=>{try{return await fn()}catch(error){return{ok:false,error:String(error?.message||error)}}};
-    const [scheduler,jp,us,backtest,events,universe]=await Promise.all([
-      getSchedulerHealth(env),
-      safe(()=>getStage(env,'jp')),
-      safe(()=>getStage(env,'us')),
-      safe(()=>getBacktestDashboard(env)),
-      safe(()=>getEventDashboard(env)),
-      safe(()=>getUniverseDashboard(env))
-    ]);
-    const stageSummary=value=>({
-      ok:value?.ok!==false,
-      trade_date:value?.trade_date||null,
-      kind:value?.kind||null,
-      complete:value?.complete===true,
-      snapshot_id:value?.snapshot_id||null,
-      updated_at:value?.updated_at||null,
-      confirmed_ratio:Number(value?.close_verification?.ratio||0),
-      error:value?.error||null
-    });
-    return json({
-      ok:true,generated_at:new Date().toISOString(),
-      backend:{version:APP_VERSION,build:BUILD_ID,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION},
-      scheduler,
-      stages:{jp:stageSummary(jp),us:stageSummary(us)},
-      backtest:{
-        status:backtest?.status||null,result_usable:backtest?.result_usable===true,
-        progress:backtest?.progress||null,system_failure:backtest?.system_failure||null,
-        error_categories:backtest?.error_categories||null,error:backtest?.error||null
-      },
-      events:{coverage:events?.coverage||null,error:events?.error||null},
-      universe:{mode:universe?.config?.mode||null,proposal_at:universe?.proposal?.generated_at||null,error:universe?.error||null}
-    },200,request);
-  }
+  if(p==='/api/health')return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA},200,request);
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);
   if(p==='/api/export')return json(await exportUserData(env),200,request);
   if(p==='/api/events')return request.method==='GET'?json(await getEventDashboard(env,Date.now(),url.searchParams.get('refresh')==='1'),200,request):json(await mutateEvent(env,await request.json()),200,request);
