@@ -2,7 +2,7 @@
   "name": "VANTAGE — Market & Theme Radar",
   "short_name": "VANTAGE",
   "description": "世界市場とテーマのモメンタムを検知し、FRAMEへ候補を渡す分析レーダー",
-  "start_url": "./?v=51",
+  "start_url": "./?build=vantage-ui62-final-runtime-20260727",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -34,5 +34,5 @@
       "purpose": "maskable"
     }
   ],
-  "id": "vantage-v44"
+  "id": "vantage-ui62-final"
 }
