@@ -171,6 +171,41 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:10px 0 14px}.theme-summary>div{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px}.theme-summary b{display:block;font:700 17px var(--mono);color:#087664}.theme-summary span{font-size:9px;color:var(--faint)}
 .theme-card{margin:8px 0;background:var(--surface);border:1px solid var(--line);border-left:4px solid #aeb6c2;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}.theme-card.seed{border-left-color:#0f8b78}.theme-card.repair{border-left-color:#5c78d5}.theme-card.good{border-left-color:#17a66d}.theme-card.hot{border-left-color:#d39220}.theme-card.bad{border-left-color:#d83048}.theme-card>summary{display:block;padding:13px 14px}.theme-card-head{display:flex;align-items:flex-start;gap:10px}.theme-title{font-weight:750;font-size:14px}.theme-reason{font-size:10px;color:var(--muted);margin-top:2px}.theme-phase{font-size:9px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--surface3);color:var(--muted)}.theme-phase.seed{background:#dff3ef;color:#087664}.theme-phase.repair{background:#e5eafa;color:#4763bd}.theme-phase.good{background:var(--greenBg);color:var(--green)}.theme-phase.hot{background:var(--amberBg);color:var(--amber)}.theme-phase.bad{background:var(--redBg);color:var(--red)}.theme-kpis{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:9px;font:10px var(--mono);color:var(--muted)}.theme-detail{padding:0 14px 13px;border-top:1px solid var(--line)}.theme-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.theme-detail-grid>div{padding:8px;background:var(--surface2);border-radius:9px;text-align:center}.theme-detail-grid b{display:block;font:700 13px var(--mono)}.theme-detail-grid span{font-size:8px;color:var(--faint)}.theme-leader{display:flex;align-items:center;gap:7px;padding:8px 5px;border-bottom:1px solid var(--line);cursor:pointer}.theme-leader:last-of-type{border-bottom:0}.theme-leader:hover{background:var(--surface2)}
 @media(max-width:640px){.ui-version{display:none}.role-note{align-items:flex-start}.role-note span{line-height:1.5}.theme-hero{grid-template-columns:1fr;padding:15px}.theme-cycle{grid-template-columns:repeat(5,minmax(0,1fr))}.pulse-grid{grid-template-columns:repeat(2,1fr)}.theme-summary{gap:4px}.theme-summary>div{padding:8px 3px}.theme-detail-grid{grid-template-columns:repeat(2,1fr)}.theme-kpis{gap:5px 10px}}
+
+/* vantage-chart-priority-v63-style: 候補は売買指示ではなく、最優先のチャート確認対象として表示 */
+.chart-priority-panel{
+ margin:10px 0 15px;padding:14px;
+ background:linear-gradient(145deg,#102a32 0%,#134048 72%,#087c71 100%);
+ border:1px solid rgba(105,221,204,.24);border-radius:18px;
+ box-shadow:0 13px 30px rgba(12,43,53,.16);color:#fff
+}
+.chart-priority-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.chart-priority-title{font-size:16px;font-weight:800;letter-spacing:.01em}
+.chart-priority-sub{font-size:10px;line-height:1.65;color:#c5dfdc;margin-top:3px}
+.chart-priority-count{
+ margin-left:auto;flex:none;padding:4px 9px;border-radius:999px;
+ background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.14);
+ color:#dffaf5;font:800 10px var(--mono)
+}
+.chart-priority-empty{
+ padding:12px;border-radius:12px;background:rgba(255,255,255,.09);
+ color:#d0e4e2;font-size:11px
+}
+.chart-priority-panel .signal-card{
+ margin:7px 0;background:rgba(255,255,255,.98);
+ border-color:rgba(208,226,226,.9);box-shadow:none;color:var(--text)
+}
+.chart-priority-panel .signal-card:last-child{margin-bottom:0}
+.signal-chart-now{
+ margin-left:auto;flex:none;padding:6px 10px;border:0;border-radius:9px;
+ background:#102a32;color:#fff;font-size:10px;font-weight:800;box-shadow:none
+}
+.signal-chart-now:hover{background:#17434a;color:#fff}
+@media(max-width:640px){
+ .chart-priority-panel{padding:12px;border-radius:16px}
+ .chart-priority-head{gap:8px}.chart-priority-title{font-size:15px}
+ .chart-priority-sub{font-size:9px}.signal-chart-now{padding:6px 9px}
+}
 </style>
 
 <style id="vantage-quotes-v44-style">
@@ -294,7 +329,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v55</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v63</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -384,7 +419,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':'https://cockpit-backend.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui62-final-runtime-20260727';
+const FRONTEND_BUILD='vantage-ui63-chart-priority-20260729';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
@@ -1535,7 +1570,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
   window.setSignalMarket=function(m){state.signalMarket=m;localStorage.setItem('vantage_signal_market',m);renderSignals()};
   const signalMarketOf=x=>x.market||marketOf(x.symbol);
   const phaseOf=x=>x.phase||(x.active?'active':finite(x.outcomes?.d5?.return_pct)?'complete':'tracking');
-  const phaseLabel=x=>phaseOf(x)==='active'?'今日のA/B候補':phaseOf(x)==='complete'?'5日結果確定':'過去シグナル・5日観測中';
+  const phaseLabel=x=>phaseOf(x)==='active'?'チャート確認候補':phaseOf(x)==='complete'?'5日結果確定':'過去シグナル・5日観測中';
   const phaseKind=x=>phaseOf(x)==='active'?'live':phaseOf(x)==='complete'?'done':'wait';
   const horizonStat=(items,lane,h='d5')=>{
     const vals=items.filter(x=>x.entry_lane===lane).map(x=>x.outcomes?.[h]?.return_pct).filter(finite).map(Number).sort((a,b)=>a-b);
@@ -1552,7 +1587,8 @@ const finite = v => v != null && Number.isFinite(Number(v));
     const baseline=finite(x.start_price)?(signalMarketOf(x)==='jp'?num(x.start_price,0)+'円':'$'+num(x.start_price,2)):'—';
     const glance=(k,label)=>finite(o[k]?.return_pct)?`<span class="signal-glance ${cls(o[k].return_pct)}"><b>${label}</b>${pct(o[k].return_pct)}</span>`:`<span class="signal-glance wait"><b>${label}</b>待ち</span>`;
     const current=days>0&&finite(x.current_return)?`<span class="signal-glance ${cls(x.current_return)}"><b>現在</b>${pct(x.current_return)}</span>`:'';
-    return `<details class="compact-row signal-card ${kind}"><summary class="signal-card-summary"><div class="signal-card-top"><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="badge ${lane}">${esc(lane)}</span><span class="signal-progress ${kind}">${phase}</span></div>`+
+    const chartNow=phaseOf(x)==='active'?`<button class="signal-chart-now" onclick="event.preventDefault();event.stopPropagation();openChart('${attr(x.symbol)}')">チャート</button>`:'';
+    return `<details class="compact-row signal-card ${kind}"><summary class="signal-card-summary"><div class="signal-card-top"><span class="name grow1">${esc(x.name)}</span><span class="code">${esc(code(x.symbol))}</span><span class="badge ${lane}">${esc(lane)}</span><span class="signal-progress ${kind}">${phase}</span>${chartNow}</div>`+
       `<div class="signal-card-glance"><span class="signal-glance"><b>開始</b>${esc(x.start_date||'—')}</span><span class="signal-glance"><b>観測</b>${days}/5</span><span class="signal-glance ${remaining?'wait':'up'}"><b>残り</b>${remaining}日</span>${current}${glance('d1','1日')}${glance('d3','3日')}${glance('d5','5日')}</div></summary>`+
       `<div class="signal-detail"><div class="meta"><span>${signalMarketOf(x)==='jp'?'日本株':'米国株'}</span><span class="signal-progress ${kind}">${phase}</span><span>開始 ${x.start_date}</span><span>観測 ${days}営業日目</span><span>確定まで ${remaining}営業日</span>${x.condition_end_date?`<span>条件終了 ${x.condition_end_date}</span>`:''}<span>MFE ${finite(x.mfe)?pct(x.mfe):'—'}</span><span>MAE ${finite(x.mae)?pct(x.mae):'—'}</span></div>`+
       `<div class="signal-baseline">基準：検出日の終値 ${baseline}。増減率はこの価格との比較です。</div><div class="outcomes">${outcomes||`<span class="outcome wait">翌営業日の終値待ち</span>`}</div>`+
@@ -1581,9 +1617,10 @@ const finite = v => v != null && Number.isFinite(Number(v));
     const a=horizonStat(items,'A'),b=horizonStat(items,'B'),completed=items.filter(x=>finite(x.outcomes?.d5?.return_pct)).length;
     const jpCount=all.filter(x=>signalMarketOf(x)==='jp').length,usCount=all.length-jpCount;
     let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${m==='jp'?'active':''}" onclick="setSignalMarket('jp')">日本株 ${jpCount}</button><button class="${m==='us'?'active':''}" onclick="setSignalMarket('us')">米国株 ${usCount}</button></div><button class="small" onclick="refreshSignalValidation(this)">検証を更新</button></div>`;
-    html+=`<details class="signal-guide"><summary>シグナル検証の見方</summary><div class="guide-body"><b>今日のA/B候補</b>＝最新の確定終値で候補条件に該当。<b>過去シグナル・5日観測中</b>＝A/Bから外れた後も5営業日まで追跡中。<b>5日結果確定</b>＝検出日の終値から5営業日後まで測定済み。<br>当日は基準価格と同じなので、誤解を避けて0.0%ではなく「翌営業日の終値待ち」と表示します。自動更新は各市場の引け後です。</div></details>`;
+    html+=`<section class="chart-priority-panel"><div class="chart-priority-head"><div class="grow1"><div class="chart-priority-title">チャート確認候補</div><div class="chart-priority-sub">売買シグナルではありません。VANTAGEが拾った違和感を先頭に並べ、エントリー可否はチャートで判断します。</div></div><span class="chart-priority-count">${active.length}件</span></div><div class="chart-priority-list">${active.length?active.map(signalCardNew).join(''):'<div class="chart-priority-empty">本日の確認候補はありません</div>'}</div></section>`;
+    html+=`<details class="signal-guide"><summary>シグナル検証の見方</summary><div class="guide-body"><b>チャート確認候補</b>＝最新の確定終値で条件に該当した、チャート確認用の抽出銘柄。<b>過去シグナル・5日観測中</b>＝A/Bから外れた後も5営業日まで追跡中。<b>5日結果確定</b>＝検出日の終値から5営業日後まで測定済み。<br>当日は基準価格と同じなので、誤解を避けて0.0%ではなく「翌営業日の終値待ち」と表示します。自動更新は各市場の引け後です。</div></details>`;
     html+=`<div class="signal-hero"><div class="signal-hero-head"><div class="grow1"><div class="signal-hero-title">${m==='jp'?'日本株':'米国株'}シグナルの再現性</div><div class="signal-hero-sub">検出日の終値を基準に、1・3・5営業日後の終値を比較します。5日確定30件までは参考値です。</div></div><span class="badge ${completed>=30?'A':'C'}">${completed>=30?'評価可能':'蓄積中'}</span></div><div class="signal-hero-grid">${signalKpi('A',a)}${signalKpi('B',b)}<div class="signal-kpi ${completed<30?'wait':''}"><div class="v">${completed}</div><div class="k">5日確定件数</div><div class="sub">${completed>=30?'判断母数を確保':'目安30件まであと'+Math.max(0,30-completed)+'件'}</div></div></div></div>`;
-    html+=signalSectionNew('今日のA/B候補',active)+signalSectionNew('過去シグナル・5日観測中',tracking)+signalSectionNew('5日結果確定',complete);
+    html+=signalSectionNew('過去シグナル・5日観測中',tracking)+signalSectionNew('5日結果確定',complete);
     $('signal-list').innerHTML=html;
   };
 
