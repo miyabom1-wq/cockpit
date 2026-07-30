@@ -31,7 +31,8 @@ const WRITE_GETS=new Set([
 
 function trustedFrontend(request){
   const origin=request.headers.get('Origin')||'';
-  return origin===FRONTEND_ORIGIN||origin.startsWith('http://localhost:');
+  const requestOrigin=new URL(request.url).origin;
+  return origin===FRONTEND_ORIGIN||origin===requestOrigin||origin.startsWith('http://localhost:');
 }
 
 function suppliedTokenMatches(request,env){
@@ -49,11 +50,15 @@ export function requiresAuthorization(request,url){
 export function authorized(request,env){
   const url=new URL(request.url);
   if(!requiresAuthorization(request,url))return true;
-
   if(suppliedTokenMatches(request,env))return true;
+
+  const method=String(request.method||'GET').toUpperCase();
+  // Read-only personal panels remain available from the official frontend
+  // even if WRITE_TOKEN was rotated. Mutations and manual refresh operations
+  // still require the token whenever it is configured.
+  if(method==='GET'&&PRIVATE_READS.has(url.pathname)&&trustedFrontend(request))return true;
 
   const token=String(env.WRITE_TOKEN||'');
   if(!token&&trustedFrontend(request))return true;
-
   return false;
 }

@@ -16,3 +16,9 @@ enabled = true
 # wrangler secret put WRITE_TOKEN
 # wrangler secret put VAPID_PRIVATE_KEY
 # wrangler secret put VAPID_SUBJECT
+
+[assets]
+directory = "../public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = [ "/api/*" ]

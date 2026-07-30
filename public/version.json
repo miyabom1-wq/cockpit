@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui70-durable-runtime-20260730",
-  "ui_version": "v70",
-  "backend_required": "v70.0.0",
-  "generated_at": "2026-07-30T15:00:00.000Z",
-  "network_mode": "notification-only-service-worker",
-  "load_mode": "resilient-partial-ai-copy",
-  "smoke_mode": "jp-us-durable-scheduler"
+  "frontend_build": "vantage-ui71-unified-worker-20260731",
+  "ui_version": "v71",
+  "backend_required": "v71.0.0",
+  "generated_at": "2026-07-31T01:30:00+09:00",
+  "network_mode": "cloudflare-worker-static-assets",
+  "load_mode": "same-origin-worker-and-assets",
+  "smoke_mode": "unified-origin-auth-recovery"
 }
