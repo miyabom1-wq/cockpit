@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui62-final-runtime-20260727",
-  "ui_version": "v62",
-  "backend_required": "v63.0.0",
-  "generated_at": "2026-07-27T07:14:26.215Z",
+  "frontend_build": "vantage-ui70-durable-runtime-20260730",
+  "ui_version": "v70",
+  "backend_required": "v70.0.0",
+  "generated_at": "2026-07-30T15:00:00.000Z",
   "network_mode": "notification-only-service-worker",
-  "load_mode": "separate-fetch-and-render",
-  "smoke_mode": "jp-us-browser-verified"
+  "load_mode": "resilient-partial-ai-copy",
+  "smoke_mode": "jp-us-durable-scheduler"
 }

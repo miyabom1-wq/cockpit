@@ -1,9 +1,9 @@
-export const APP_VERSION = 'v61.0.0';
-export const BUILD_ID = '20260724-close-empty-batch-fix';
+export const APP_VERSION = 'v70.0.0';
+export const BUILD_ID = '20260730-durable-scheduler-ai-copy';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v51.0.0';
 export const BACKTEST_VERSION = 'registered-bt-v6-sparse-benchmark-safe';
-export const DEPLOYED_AT = '2026-07-24T00:00:00.000Z';
+export const DEPLOYED_AT = '2026-07-30T15:00:00.000Z';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 
 export const LIMITS = Object.freeze({

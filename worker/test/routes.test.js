@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import worker from '../src/index.js';import { MockKV } from './helpers.js';
-test('health exposes one deployment identity',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/health'),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.version,'v61.0.0');assert.equal(d.entrypoint,'src/index.js');assert.ok(d.build);assert.ok(d.schema);});
+test('health exposes one deployment identity',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/health'),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.version,'v70.0.0');assert.equal(d.entrypoint,'src/index.js');assert.ok(d.build);assert.ok(d.schema);});
 test('stocklist API remains compatible and preserves focus tiers',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/stocklist?market=jp',{headers:{Origin:'https://miyabom1-wq.github.io'}}),env,{}),d=await res.json();assert.equal(d.ok,true);assert.ok(d.list.length>0);assert.equal(d.list[0].focus_tier,'core');});
 
 test('private read is rejected outside the official frontend when no token is configured',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/watchlist'),env,{});assert.equal(res.status,403);});
@@ -10,3 +10,24 @@ test('first request migrates legacy signal data before schema is finalized',asyn
 test('universe dashboard exposes guarded rotation configuration',async()=>{const env={COCKPIT_KV:new MockKV()},res=await worker.fetch(new Request('https://example.com/api/universe',{headers:{Origin:'https://miyabom1-wq.github.io'}}),env,{}),d=await res.json();assert.equal(res.status,200);assert.equal(d.ok,true);assert.equal(d.config.mode,'guarded_auto');assert.ok(d.counts.jp.registered>0);assert.equal(d.counts.us.lead,40);});
 
 test('legacy non-default manual symbols are migrated as pinned',async()=>{const kv=new MockKV({'stocklist:jp':JSON.stringify([{symbol:'9999.T',name:'手動銘柄'}])}),env={COCKPIT_KV:kv};const res=await worker.fetch(new Request('https://example.com/api/stocklist?market=jp',{headers:{Origin:'https://miyabom1-wq.github.io'}}),env,{}),d=await res.json();assert.equal(d.list[0].source,'legacy_manual');assert.equal(d.list[0].pinned,true);});
+
+
+test('official frontend still needs the token for write actions',async()=>{
+  const env={COCKPIT_KV:new MockKV(),WRITE_TOKEN:'secret'};
+  const res=await worker.fetch(new Request('https://example.com/api/watchlist',{
+    method:'POST',
+    headers:{Origin:'https://miyabom1-wq.github.io','Content-Type':'application/json'},
+    body:JSON.stringify({action:'add',symbol:'1111.T'})
+  }),env,{});
+  assert.equal(res.status,403);
+});
+
+test('system audit reports scheduler state without exposing secrets',async()=>{
+  const env={COCKPIT_KV:new MockKV()};
+  const res=await worker.fetch(new Request('https://example.com/api/system-audit'),env,{});
+  const data=await res.json();
+  assert.equal(res.status,200);
+  assert.equal(data.ok,true);
+  assert.ok(data.scheduler);
+  assert.ok(data.stages.jp);
+});

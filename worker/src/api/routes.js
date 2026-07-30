@@ -15,10 +15,15 @@ import { addSub, removeSub, sendPushToAll, VAPID_PUBLIC_KEY_RAW } from '../servi
 import { getThemeHistory, captureThemeSnapshot } from '../services/theme-history.js';
 import { getUniverseDashboard, mutateUniverse } from '../services/universe-manager.js';
 import { getMarginDashboard, MARGIN_DATA_SCHEMA } from '../services/margin-supply.js';
+import { getSystemAudit } from '../services/system-health.js';
 
 export async function route(request,env){
   const url=new URL(request.url),p=url.pathname;
-  if(p==='/api/health')return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA},200,request);
+  if(p==='/api/health'){
+    const audit=await getSystemAudit(env);
+    return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA,scheduler:audit.scheduler,stages:audit.stages},200,request);
+  }
+  if(p==='/api/system-audit')return json(await getSystemAudit(env),200,request);
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);
   if(p==='/api/export')return json(await exportUserData(env),200,request);
   if(p==='/api/events')return request.method==='GET'?json(await getEventDashboard(env,Date.now(),url.searchParams.get('refresh')==='1'),200,request):json(await mutateEvent(env,await request.json()),200,request);

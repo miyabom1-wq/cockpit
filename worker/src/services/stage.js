@@ -102,15 +102,55 @@ function buildNoTrade(market,store){
   return{market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,recLevel,risk_gate:riskGate,summary:{extreme_pct:rows.length?round(extreme/rows.length*100,1):0,rsi_hot:hot,healthy_dips:dips,shooting_stars:wicks},signals};
 }
 async function commitIfComplete(env,market,id,meta){
-  const expected=meta.parts,parts=[];for(let i=1;i<=expected;i++){const raw=await env.COCKPIT_KV.get(stageWorkingKey(id,i));if(!raw)return{committed:false};parts.push(parseJson(raw,{stocks:[]}));}
-  const stocks=parts.flatMap(x=>x.stocks||[]),partMacro=parts.find(x=>x.macro)?.macro||{},saved=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}}),macro=mergeMacroSnapshots(saved.items||{},partMacro),riskGate=evaluateRiskGate(market,macro);
+  const expected=Number(meta.parts)||1,parts=[],missingParts=[];
+  for(let i=1;i<=expected;i++){
+    const raw=await env.COCKPIT_KV.get(stageWorkingKey(id,i));
+    if(!raw){missingParts.push(i);continue;}
+    parts.push(parseJson(raw,{part:i,stocks:[]}));
+  }
+  if(missingParts.length)return{committed:false,retry_required:false,missing_parts:missingParts};
+
+  const stocks=parts.flatMap(x=>x.stocks||[]);
+  const freshness=batchFreshnessRatios(stocks,meta.tradeDate);
+  const sessionFloor=Number(meta.minSessionRatio);
+  const confirmedFloor=Number(meta.minConfirmedRatio);
+  const sessionBelow=freshnessBelowFloor(freshness,'session_ratio',sessionFloor);
+  const confirmedBelow=freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor);
+  const staleParts=parts
+    .filter(part=>{
+      const f=part.batch_freshness||batchFreshnessRatios(part.stocks||[],meta.tradeDate);
+      return freshnessBelowFloor(f,'session_ratio',sessionFloor)||freshnessBelowFloor(f,'confirmed_ratio',confirmedFloor);
+    })
+    .map(part=>Number(part.part))
+    .filter(Number.isFinite);
+
+  if(sessionBelow||confirmedBelow){
+    return{
+      committed:false,
+      retry_required:true,
+      global_freshness:freshness,
+      stale_parts:staleParts,
+      reason:sessionBelow
+        ?`global session freshness ${freshness.session_ratio}% below ${sessionFloor}%`
+        :`global confirmed freshness ${freshness.confirmed_ratio}% below ${confirmedFloor}%`,
+    };
+  }
+
+  const partMacro=parts.find(x=>x.macro)?.macro||{},saved=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}}),macro=mergeMacroSnapshots(saved.items||{},partMacro),riskGate=evaluateRiskGate(market,macro);
   await canonicalMacro(env,macro);
-  const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);deriveContext(stocks,ranking,market);if(market==='jp')await enrichRowsWithMargin(env,stocks);applyRiskGate(stocks,riskGate);
+  const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);
+  deriveContext(stocks,ranking,market);
+  if(market==='jp')await enrichRowsWithMargin(env,stocks);
+  applyRiskGate(stocks,riskGate);
   const registered=await getStockList(env,market),validConfirmed=stocks.filter(x=>x.data_quality?.data_valid&&x.data_quality?.close_confirmed).length;
-  const store={schema:'stage-v50',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
+  const store={schema:'stage-v70',engine_version:ENGINE_VERSION,build:BUILD_ID,market,snapshot_id:id,trade_date:meta.tradeDate,kind:meta.kind,complete:true,updated_at:nowIso(),price_time:stocks.map(x=>x.price_time).filter(Boolean).sort().at(-1)||null,freshness:meta.kind==='confirmed'?'確定終値・大引け':'場中・暫定',vol_partial:meta.kind!=='confirmed',close_verification:{trade_date:meta.tradeDate,verified:validConfirmed,total:stocks.length,ratio:stocks.length?round(validConfirmed/stocks.length*100,1):0},focus_counts:market==='jp'?{core:Math.min(registered.length,LIMITS.jpCore),radar:Math.max(0,Math.min(registered.length,LIMITS.jpMax)-LIMITS.jpCore)}:{lead:Math.min(registered.length,LIMITS.usLead),archive:Math.max(0,registered.length-LIMITS.usLead)},macro,risk_gate:riskGate,stocks:Object.fromEntries(stocks.map(x=>[x.symbol,x]))};
   const momentum=buildMomentum(market,store),notrade=buildNoTrade(market,store);
-  await Promise.all([env.COCKPIT_KV.put(KEYS.stage(market),JSON.stringify(store)),env.COCKPIT_KV.put(KEYS.momentum(market),JSON.stringify(momentum)),env.COCKPIT_KV.put(KEYS.noTrade(market),JSON.stringify(notrade))]);
-  return{committed:true,store,momentum,notrade};
+  await Promise.all([
+    env.COCKPIT_KV.put(KEYS.stage(market),JSON.stringify(store)),
+    env.COCKPIT_KV.put(KEYS.momentum(market),JSON.stringify(momentum)),
+    env.COCKPIT_KV.put(KEYS.noTrade(market),JSON.stringify(notrade))
+  ]);
+  return{committed:true,store,momentum,notrade,global_freshness:freshness,stale_parts:[]};
 }
 export function batchFreshnessRatios(stocks=[],tradeDate=null){
   const total=stocks.length,session=stocks.filter(x=>!tradeDate||x?.date===tradeDate).length,confirmed=stocks.filter(x=>(!tradeDate||x?.date===tradeDate)&&x?.data_quality?.close_confirmed).length;
@@ -123,23 +163,74 @@ export function freshnessBelowFloor(freshness={},metric,floor){
   return Number(freshness?.[metric])<required;
 }
 
+export async function registeredMarketParts(env,market){
+  const m=market==='us'?'us':'jp';
+  const list=(await getStockList(env,m)).slice(0,activeLimit(m));
+  return Math.max(1,Math.ceil(list.length/LIMITS.batchSize));
+}
+
 export async function runStageBatch(env,batchKey,options={}){
-  const match=String(batchKey||'').match(/^(jp|us)(\d+)$/);if(!match)throw new Error('unknown batch: '+batchKey);
-  const market=match[1],part=Number(match[2]),parts=options.parts||partsFor(market);if(part<1||part>parts)throw new Error('batch out of range');
+  const match=String(batchKey||'').match(/^(jp|us)(\d+)$/);
+  if(!match)throw new Error('unknown batch: '+batchKey);
+
+  const market=match[1],part=Number(match[2]);
+  const list=(await getStockList(env,market)).slice(0,activeLimit(market));
+  const dynamicParts=Math.max(1,Math.ceil(list.length/LIMITS.batchSize));
+  const parts=Math.max(1,Number(options.parts)||dynamicParts);
+  if(part<1||part>parts)throw new Error('batch out of range');
+
   let id=options.snapshotId,kind=options.kind,tradeDate=options.tradeDate;
-  if(!id){const m=await resolveManualSnapshot(env,market,part);id=m.id;kind=m.kind;tradeDate=m.date;}
-  kind=kind||modeNow(market);tradeDate=tradeDate||expectedDateFor(market);
-  const list=(await getStockList(env,market)).slice(0,activeLimit(market)),slice=list.slice((part-1)*LIMITS.batchSize,part*LIMITS.batchSize);
+  if(!id){
+    const m=await resolveManualSnapshot(env,market,part);
+    id=m.id;kind=m.kind;tradeDate=m.date;
+  }
+  kind=kind||modeNow(market);
+  tradeDate=tradeDate||expectedDateFor(market);
+
+  const slice=list.slice((part-1)*LIMITS.batchSize,part*LIMITS.batchSize);
   const benchmark=await getBenchmark(env,market,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
   const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
-  const freshness=batchFreshnessRatios(stocks,tradeDate),sessionFloor=Number(options.minSessionRatio),confirmedFloor=Number(options.minConfirmedRatio);
-  if(freshnessBelowFloor(freshness,'session_ratio',sessionFloor))throw new Error(`session freshness ${freshness.session_ratio}% below ${sessionFloor}%`);
-  if(freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor))throw new Error(`confirmed freshness ${freshness.confirmed_ratio}% below ${confirmedFloor}%`);
-  const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null,payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,batch_freshness:freshness,...(macro?{macro}:{})};
+
+  const freshness=batchFreshnessRatios(stocks,tradeDate);
+  const sessionFloor=Number(options.minSessionRatio);
+  const confirmedFloor=Number(options.minConfirmedRatio);
+  const batchRetryRequired=
+    freshnessBelowFloor(freshness,'session_ratio',sessionFloor)||
+    freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor);
+
+  const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null;
+  const payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,batch_freshness:freshness,...(macro?{macro}:{})};
   await env.COCKPIT_KV.put(stageWorkingKey(id,part),JSON.stringify(payload),{expirationTtl:WORK_TTL});
-  const metaRaw=await env.COCKPIT_KV.get(stageMetaKey(id)),meta=parseJson(metaRaw,{market,parts,completed:[],kind,tradeDate,created_at:nowIso()});if(!meta.completed.includes(part))meta.completed.push(part);meta.updated_at=nowIso();await env.COCKPIT_KV.put(stageMetaKey(id),JSON.stringify(meta),{expirationTtl:WORK_TTL});
-  const commit=meta.completed.length>=parts?await commitIfComplete(env,market,id,meta):{committed:false};
-  return{ok:true,market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,count:stocks.length,completed_parts:meta.completed.sort((a,b)=>a-b),committed:commit.committed,batch_freshness:freshness};
+
+  const metaRaw=await env.COCKPIT_KV.get(stageMetaKey(id));
+  const meta=parseJson(metaRaw,{
+    market,parts,completed:[],kind,tradeDate,created_at:nowIso(),
+    minSessionRatio:Number.isFinite(sessionFloor)?sessionFloor:null,
+    minConfirmedRatio:Number.isFinite(confirmedFloor)?confirmedFloor:null,
+  });
+  meta.parts=parts;
+  meta.kind=kind;
+  meta.tradeDate=tradeDate;
+  if(Number.isFinite(sessionFloor))meta.minSessionRatio=sessionFloor;
+  if(Number.isFinite(confirmedFloor))meta.minConfirmedRatio=confirmedFloor;
+  if(!meta.completed.includes(part))meta.completed.push(part);
+  meta.updated_at=nowIso();
+  await env.COCKPIT_KV.put(stageMetaKey(id),JSON.stringify(meta),{expirationTtl:WORK_TTL});
+
+  const commit=meta.completed.length>=parts?await commitIfComplete(env,market,id,meta):{committed:false,retry_required:false};
+  const retryRequired=commit.committed?false:Boolean(batchRetryRequired||commit.retry_required);
+
+  return{
+    ok:true,market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,count:stocks.length,
+    completed_parts:meta.completed.sort((a,b)=>a-b),
+    committed:Boolean(commit.committed),
+    retry_required:retryRequired,
+    batch_retry_required:batchRetryRequired,
+    batch_freshness:freshness,
+    global_freshness:commit.global_freshness||null,
+    stale_parts:commit.stale_parts||[],
+    reason:commit.reason||null,
+  };
 }
 export async function getStage(env,market){
   const m=market==='us'?'us':'jp',stage=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m)),{market:m,complete:false,stocks:{},macro:{},focus_counts:{}}),other=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m==='jp'?'us':'jp')),{macro:{}}),canonical=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}});

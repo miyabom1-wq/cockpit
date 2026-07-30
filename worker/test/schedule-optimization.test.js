@@ -10,7 +10,6 @@ test('JP lunch schedule is ready before the afternoon session', () => {
   assert.equal(nodes.get('jp_1130:b1')?.at, 690);
   assert.equal(nodes.get('jp_1130:b8')?.at, 690);
   assert.equal(nodes.get('jp_1130:b1')?.minSessionRatio, 80);
-  assert.equal(nodes.get('jp_1130:b2')?.burst, 2);
   assert.equal(nodes.get('macro_1220')?.at, 740);
   assert.equal(nodes.has('jp_1200:b1'), false);
   assert.equal(nodes.has('macro_1210'), false);
@@ -23,6 +22,8 @@ test('JP close schedule is published shortly after the close', () => {
   assert.equal(nodes.get('jp_1535:b8')?.at, 935);
   assert.equal(nodes.get('jp_1535:b1')?.minConfirmedRatio, 90);
   assert.equal(nodes.get('jp_1640_retry:b1')?.at, 1000);
+  assert.equal(nodes.get('jp_1800_recovery:b1')?.at, 1080);
+  assert.equal(nodes.get('jp_1800_recovery:b1')?.window, 360);
   assert.equal(nodes.get('macro_1630')?.at, 990);
   assert.equal(nodes.has('jp_1520:b1'), false);
   assert.equal(nodes.has('jp_1610:b1'), false);
@@ -35,11 +36,13 @@ test('US schedules follow daylight saving time', () => {
   assert.equal(dst.get('us_0505:b1')?.at, 305);
   assert.equal(dst.get('us_0505:b1')?.minConfirmedRatio, 90);
   assert.equal(dst.get('us_0540_retry:b1')?.at, 340);
+  assert.equal(dst.get('us_0600_recovery:b1')?.window, 360);
 
   const standard = nodeMap(new Date('2026-12-01T14:30:00.000Z'));
   assert.equal(standard.get('us_2330:b1')?.at, 1410);
   assert.equal(standard.get('us_0605:b1')?.at, 365);
   assert.equal(standard.get('us_0640_retry:b1')?.at, 400);
+  assert.equal(standard.get('us_0700_recovery:b1')?.window, 300);
 });
 
 test('batch freshness ratios separate session and confirmed rows', () => {
@@ -56,4 +59,12 @@ test('batch freshness ratios separate session and confirmed rows', () => {
     session_ratio:50,
     confirmed_ratio:25,
   });
+});
+
+
+test('overnight recovery keeps the prior JP close eligible after midnight',()=>{
+  const nodes=nodeMap(new Date('2026-07-30T15:30:00.000Z'));
+  assert.equal(nodes.get('jp_overnight_recovery:b1')?.tradeDate,'2026-07-30');
+  assert.equal(nodes.get('jp_overnight_recovery:b1')?.window,480);
+  assert.equal(nodes.get('us_0000_live_recovery:b1')?.window,240);
 });
