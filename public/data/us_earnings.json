@@ -1,6 +1,6 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-08-01T21:15:08.262405Z",
+  "generated_at": "2026-08-02T21:15:48.811629Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
@@ -32777,7 +32777,7 @@
     }
   ],
   "stats": {
-    "requested_weekdays": 85,
+    "requested_weekdays": 86,
     "events": 3277,
     "failed_dates": 0,
     "failures": []
