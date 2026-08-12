@@ -11,6 +11,17 @@ const pctChange=(value,base)=>finite(value)&&finite(base)&&Number(base)!==0?(Num
 function normalizedSymbol(v){const s=String(v||'').toUpperCase().trim();return /\.T$/.test(s)?s:/^[0-9A-Z]{4}$/.test(s)?`${s}.T`:s;}
 function validDataset(x){return x&&x.schema===MARGIN_DATA_SCHEMA&&x.items&&typeof x.items==='object';}
 function datasetAgeMs(x){const t=Date.parse(x?.generated_at||x?.weekly?.published_at||0);return Number.isFinite(t)?Math.max(0,Date.now()-t):Infinity;}
+export function marginGeneratedJstDate(data){
+  const t=Date.parse(data?.generated_at||'');
+  return Number.isFinite(t)?new Date(t+9*3600000).toISOString().slice(0,10):null;
+}
+export function marginDatasetFreshForTradeDate(data,tradeDate){
+  return validDataset(data)&&marginGeneratedJstDate(data)===String(tradeDate||'');
+}
+function marginFreshnessError(data,tradeDate){
+  const generatedDate=marginGeneratedJstDate(data),error=new Error(`信用需給データ更新待ち: generated=${generatedDate||'unknown'} expected=${tradeDate||'unknown'}`);
+  error.code='MARGIN_DATA_NOT_FRESH';error.generated_date=generatedDate;error.expected_date=tradeDate||null;return error;
+}
 
 export function evaluateMarginSupply(analysis,item){
   const weekly=item?.weekly||null,flags=item?.flags||{},reasons=[],cautions=[];
@@ -71,12 +82,22 @@ async function fetchPublicDataset(){
   }
   throw last||new Error('信用需給データを取得できませんでした');
 }
-export async function getMarginDataset(env,{force=false,fetchIfMissing=true}={}){
-  const cached=parseJson(await env.COCKPIT_KV.get(KEYS.marginSupply),null);
-  if(!force&&validDataset(cached))return{...cached,stale:datasetAgeMs(cached)>MAX_STALE_MS};
-  if(!force&&!fetchIfMissing)return{schema:MARGIN_DATA_SCHEMA,generated_at:null,weekly:{as_of:null,count:0,status:'cache-waiting'},rules:{},source:{},items:{}};
-  try{const data=await fetchPublicDataset();await env.COCKPIT_KV.put(KEYS.marginSupply,JSON.stringify(data));return data;}
-  catch(e){if(validDataset(cached))return{...cached,cache_warning:e?.message||String(e),stale:datasetAgeMs(cached)>MAX_STALE_MS};throw e;}
+export async function getMarginDataset(env,{force=false,fetchIfMissing=true,requireGeneratedDate=null}={}){
+  const cached=parseJson(await env.COCKPIT_KV.get(KEYS.marginSupply),null),cachedValid=validDataset(cached);
+  const cachedFresh=!requireGeneratedDate||marginDatasetFreshForTradeDate(cached,requireGeneratedDate);
+  if(!force&&cachedValid&&cachedFresh)return{...cached,stale:datasetAgeMs(cached)>MAX_STALE_MS};
+  if(!force&&!fetchIfMissing){
+    if(cachedValid){if(requireGeneratedDate&&!cachedFresh)throw marginFreshnessError(cached,requireGeneratedDate);return{...cached,stale:datasetAgeMs(cached)>MAX_STALE_MS};}
+    return{schema:MARGIN_DATA_SCHEMA,generated_at:null,weekly:{as_of:null,count:0,status:'cache-waiting'},rules:{},source:{},items:{}};
+  }
+  try{
+    const data=await fetchPublicDataset();
+    if(requireGeneratedDate&&!marginDatasetFreshForTradeDate(data,requireGeneratedDate))throw marginFreshnessError(data,requireGeneratedDate);
+    await env.COCKPIT_KV.put(KEYS.marginSupply,JSON.stringify(data));return data;
+  }catch(e){
+    if(cachedValid&&cachedFresh)return{...cached,cache_warning:e?.message||String(e),stale:datasetAgeMs(cached)>MAX_STALE_MS};
+    throw e;
+  }
 }
 
 export function enrichMarginSupply(rows,dataset){

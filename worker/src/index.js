@@ -28,6 +28,7 @@ import {
 } from './services/system-health.js';
 
 const SCHEDULER_MARKER_VERSION='v70';
+const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
 
 async function initializeStorage(env){
@@ -104,7 +105,7 @@ export function scheduleNodes(now=new Date()){
     add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');
     add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');
     add('jp','jp_1820_universe',1100,'confirmed',jpDate,1,'universe');
-    add('jp','jp_1910_margin',1150,'confirmed',jpDate,1,'margin');
+    add('jp','jp_1910_margin',1150,'confirmed',jpDate,1,'margin',{window:180});
   }
 
   const usObj=minute<720?new Date(jpObj.getTime()-86400000):jpObj;
@@ -149,12 +150,16 @@ function nodePriority(node){
   return 4;
 }
 
+function schedulerMarkerVersion(node){
+  return node.action==='margin'?MARGIN_MARKER_VERSION:SCHEDULER_MARKER_VERSION;
+}
+
 function markerKey(node){
-  return`sched:${SCHEDULER_MARKER_VERSION}:${node.key}:${node.tradeDate}`;
+  return`sched:${schedulerMarkerVersion(node)}:${node.key}:${node.tradeDate}`;
 }
 
 function cooldownKey(node){
-  return`sched:cooldown:${SCHEDULER_MARKER_VERSION}:${node.key}:${node.tradeDate}`;
+  return`sched:cooldown:${schedulerMarkerVersion(node)}:${node.key}:${node.tradeDate}`;
 }
 
 async function markDone(env,node,details={}){
@@ -201,9 +206,18 @@ export async function scheduledStage(env,now=new Date()){
       }
 
       if(node.action==='margin'){
-        const result=await getMarginDataset(env,{force:true});
-        await markDone(env,node,{ok:true,as_of:result?.as_of||null});
-        return{processed:1,node:node.key};
+        try{
+          const result=await getMarginDataset(env,{force:true,requireGeneratedDate:node.tradeDate});
+          await markDone(env,node,{ok:true,generated_at:result?.generated_at||null,as_of:result?.weekly?.as_of||null});
+          return{processed:1,node:node.key};
+        }catch(error){
+          if(error?.code==='MARGIN_DATA_NOT_FRESH'){
+            await env.COCKPIT_KV.put(cooldownKey(node),error.message,{expirationTtl:RETRY_COOLDOWN_SECONDS});
+            await recordSchedulerRetry(env,node,{error:error.message,generated_date:error.generated_date||null,expected_date:error.expected_date||node.tradeDate});
+            return{processed:0,retry:true,node:node.key};
+          }
+          throw error;
+        }
       }
 
       if(node.action==='enrich'){

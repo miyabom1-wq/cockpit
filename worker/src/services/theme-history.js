@@ -28,14 +28,16 @@ function stats(rows=[]){
   const n=rows.length;if(!n)return null;
   const count=lane=>rows.filter(x=>x.entry_lane===lane).length;
   const a=count('A'),b=count('B'),c=count('C'),e=count('E');
+  const isOverheated=x=>Number(x?.rsi14)>=78||Number(x?.div25)>=10||Number(x?.change_pct)>=8;
+  const overheatE=rows.filter(x=>x.entry_lane==='E'&&isOverheated(x)).length,weakE=Math.max(0,e-overheatE);
   const improving=rows.filter(x=>finite(x.rs5)&&finite(x.rs20)&&Number(x.rs5)>Number(x.rs20)).length/n*100;
   return{
-    n,a,b,c,e,
-    aRate:a/n,bRate:b/n,cRate:c/n,eRate:e/n,abRate:(a+b)/n,bcRate:(b+c)/n,
+    n,a,b,c,e,overheatE,weakE,
+    aRate:a/n,bRate:b/n,cRate:c/n,eRate:e/n,overheatERate:overheatE/n,weakERate:weakE/n,abRate:(a+b)/n,bcRate:(b+c)/n,
     rs5:average(rows,'rs5'),rs20:average(rows,'rs20'),
     vol:average(rows,'effective_vol_ratio')??average(rows,'vol_ratio'),
     breadth:rows.filter(x=>Number(x.ret5??x.change_pct)>0).length/n*100,
-    hot:rows.filter(x=>Number(x.rsi14)>=75||Number(x.div25)>=10).length/n*100,
+    hot:rows.filter(x=>Number(x.rsi14)>=75||Number(x.div25)>=10||Number(x.change_pct)>=8).length/n*100,
     improving
   };
 }
@@ -68,36 +70,43 @@ function classify(m,regional={}){
   const n=m?.n||0,a=m?.a||0,b=m?.b||0,c=m?.c||0,e=m?.e||0;
   const rs5=m?.rs5,rs20=m?.rs20,breadth=m?.breadth??0,hot=m?.hot??0,improving=m?.improving??0;
   const abRate=m?.abRate??(n?(a+b)/n:0),bcRate=m?.bcRate??(n?(b+c)/n:0),eRate=m?.eRate??(n?e/n:0);
+  const overheatERate=m?.overheatERate??0,weakERate=m?.weakERate??Math.max(0,eRate-overheatERate);
+  const jp=regional.jp||null,us=regional.us||null,meta=confidenceMeta(jp,us);
+  const insufficient=n>0&&meta.confidence<35;
+  const relativeBreakdown=(rs5??0)<=-4&&(rs20??0)<=-3;
+  const broadBreakdown=weakERate>=.3&&(rs5??0)<0&&(rs20??0)<0&&breadth<45;
+  const eDrivenOverheat=overheatERate>=.3&&(rs5??0)>1&&breadth>=55;
   let code='WAIT',label='待機',kind='neutral',reason='明確な資金集中は未確認';
-  if(eRate>=.3||((rs5??0)<=-4&&(rs20??0)<=-3)){code='BREAKDOWN';label='崩壊';kind='bad';reason='警戒銘柄と相対劣後が優勢';}
-  else if(hot>=25&&((rs20??0)>=4||(rs5??0)>=6)){code='OVERHEAT';label='過熱';kind='hot';reason='上昇は強いが過熱銘柄が増加';}
+  if(insufficient){code='WAIT';label='判定保留';kind='neutral';reason='テーマ母数が少なく判定確度が不足';}
+  else if(relativeBreakdown||broadBreakdown){code='BREAKDOWN';label='崩壊';kind='bad';reason='相対劣後と悪化型の警戒銘柄が優勢';}
+  else if((hot>=25&&((rs20??0)>=4||(rs5??0)>=6))||eDrivenOverheat){code='OVERHEAT';label='過熱';kind='hot';reason='上昇は強いが過熱型の警戒銘柄が増加';}
   else if(abRate>=.35&&(rs5??0)>1&&(rs20??0)>=0&&breadth>=55){code='EXPANSION';label='拡大';kind='good';reason='A・B候補と上昇銘柄の広がりを確認';}
   else if((rs20??0)<0&&(rs5??0)>(rs20??0)+2&&bcRate>=.25){code='RECOVERY';label='修復';kind='repair';reason='中期劣後の中で短期相対強度が反転';}
   else if(b>=1&&(rs5??0)>0&&improving>=40){code='GERMINATION';label='発芽';kind='seed';reason='反転初動と短期相対強度の改善を確認';}
-  const jp=regional.jp||null,us=regional.us||null,meta=confidenceMeta(jp,us);
+  else if((rs5??0)<0&&(rs20??0)>0){code='WAIT';label='調整';kind='neutral';reason='中期優位を保ちながら短期調整';}
   const provisional=meta.confidence<60&&['GERMINATION','EXPANSION'].includes(code);
   if(provisional){label+='候補';reason+='。ただし地域またはテーマ母数が少ないため確認継続';}
   const score=round(
     (Number(rs5)||0)*1.8+(Number(rs20)||0)*.8+(breadth-50)*.08+(improving-50)*.04+
-    abRate*18-eRate*20-(hot>35?(hot-35)*.12:0),1
+    abRate*18-weakERate*20-(hot>35?(hot-35)*.12:0),1
   );
   return{
     code,label,kind,reason,score,provisional,
     n,a,b,c,e,rs5:round(rs5),rs20:round(rs20),vol:round(m?.vol),breadth:round(breadth,1),hot:round(hot,1),improving:round(improving,1),
-    abRate:round(abRate,4),bcRate:round(bcRate,4),eRate:round(eRate,4),
+    abRate:round(abRate,4),bcRate:round(bcRate,4),eRate:round(eRate,4),overheatERate:round(overheatERate,4),weakERate:round(weakERate,4),
     jp:compactRegion(jp),us:compactRegion(us),...meta,
     propagation:propagationLabel(jp,us)
   };
 }
 function compactRegion(x){
   if(!x)return null;
-  return{n:x.n,a:x.a,b:x.b,c:x.c,e:x.e,rs5:round(x.rs5),rs20:round(x.rs20),vol:round(x.vol),breadth:round(x.breadth,1),improving:round(x.improving,1),abRate:round(x.abRate,4),eRate:round(x.eRate,4)};
+  return{n:x.n,a:x.a,b:x.b,c:x.c,e:x.e,rs5:round(x.rs5),rs20:round(x.rs20),vol:round(x.vol),breadth:round(x.breadth,1),improving:round(x.improving,1),abRate:round(x.abRate,4),eRate:round(x.eRate,4),overheatERate:round(x.overheatERate,4),weakERate:round(x.weakERate,4)};
 }
 function balanced(jpRows,usRows){
   const jp=stats(jpRows),us=stats(usRows),active=[jp,us].filter(Boolean);
   if(!active.length)return classify({n:0},{jp,us});
   const m={n:(jp?.n||0)+(us?.n||0),a:(jp?.a||0)+(us?.a||0),b:(jp?.b||0)+(us?.b||0),c:(jp?.c||0)+(us?.c||0),e:(jp?.e||0)+(us?.e||0)};
-  const neutral={aRate:0,bRate:0,cRate:0,eRate:0,abRate:0,bcRate:0,rs5:0,rs20:0,vol:1,breadth:50,hot:0,improving:50};
+  const neutral={aRate:0,bRate:0,cRate:0,eRate:0,overheatERate:0,weakERate:0,abRate:0,bcRate:0,rs5:0,rs20:0,vol:1,breadth:50,hot:0,improving:50};
   for(const k of Object.keys(neutral))m[k]=balancedMetric(jp,us,k,neutral[k]);
   return classify(m,{jp,us});
 }
