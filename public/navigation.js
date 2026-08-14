@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const NAV_BUILD='v73.6.1-final-compact-macro-20260814';
+const NAV_BUILD='v73.7-final-context-backtest-20260814';
 if(window.__vantageNavigationBuild===NAV_BUILD)return;
 window.__vantageNavigationBuild=NAV_BUILD;
 

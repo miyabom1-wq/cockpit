@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.6.1-final-compact-macro-20260814';
+const BUILD='vantage-ui73.7-final-context-backtest-20260814';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

@@ -34,7 +34,7 @@ async function queue(env){
 function fresh(q,sig){
   return{
     version:BACKTEST_VERSION,status:'running',signature:sig,queue:q,cursor:0,retry_queue:[],attempts:{},
-    started_at:nowIso(),updated_at:nowIso(),finished_at:null,errors:[],failures:[],
+    started_at:nowIso(),updated_at:nowIso(),finished_at:null,errors:[],failures:[],exclusions:[],
     pools:Object.fromEntries(Object.keys(STRATEGIES).map(k=>[k,[]])),symbol_summaries:[]
   };
 }
@@ -43,7 +43,7 @@ function normalizeState(old,snap){
   return{
     ...fresh(snap.queue,snap.signature),...old,version:BACKTEST_VERSION,signature:snap.signature,queue:snap.queue,
     retry_queue:Array.isArray(old?.retry_queue)?old.retry_queue:[],attempts:old?.attempts&&typeof old.attempts==='object'?old.attempts:{},
-    errors:Array.isArray(old?.errors)?old.errors:[],failures:Array.isArray(old?.failures)?old.failures:[],
+    errors:Array.isArray(old?.errors)?old.errors:[],failures:Array.isArray(old?.failures)?old.failures:[],exclusions:Array.isArray(old?.exclusions)?old.exclusions:[],
     pools:old?.pools&&typeof old.pools==='object'?old.pools:Object.fromEntries(Object.keys(STRATEGIES).map(k=>[k,[]])),
     symbol_summaries:Array.isArray(old?.symbol_summaries)?old.symbol_summaries:[]
   };
@@ -76,7 +76,7 @@ async function benchmarkOne(env,market,kind){
   for(const symbol of benchmarkSymbols(market,kind)){
     try{
       const rows=sanitizeBenchmarkRows(normalizeYahooDaily(await fetchYahooChart(symbol,{range:'5y',cacheTtl:600})).rows);
-      if(rows.length<MIN_HISTORY_DAYS){last=new Error(`指数履歴不足 ${symbol}: ${rows.length}営業日`);continue;}
+      if(rows.length<MIN_HISTORY_DAYS){last=new Error(`指数取得不完全 ${symbol}: ${rows.length}営業日`);continue;}
       await env.COCKPIT_KV.put(key,JSON.stringify({fetched_at:nowIso(),symbol,rows}));
       return rows;
     }catch(error){
@@ -162,11 +162,13 @@ export function classifyBacktestError(error){
   if(/404|not found|result missing|no data/.test(text))return'not_found';
   if(/timeout|timed out|network|fetch failed|socket|econn|http 5\d\d/.test(text))return'network';
   if(/provider symbol mismatch|銘柄コード不一致/.test(text))return'symbol_mismatch';
+  if(/取得元空データ|指数取得不完全|provider empty|empty provider/.test(text))return'provider_empty';
   if(/履歴不足|insufficient history/.test(text))return'history_short';
   if(/cpu|memory|subrequest|limit exceeded/.test(text))return'worker_limit';
   return'analysis';
 }
-function retryableCategory(category){return['rate_limit','provider_access','network','worker_limit'].includes(category);}
+function retryableCategory(category){return['rate_limit','provider_access','provider_empty','network','worker_limit'].includes(category);}
+export function excludableBacktestCategory(category){return['history_short','not_found'].includes(category);}
 export function shouldAutoRestartBacktest(state={}){
   const failures=Array.isArray(state.failures)?state.failures:[];
   return state.status==='failed'&&failures.length>0&&failures.every(x=>retryableCategory(x.category));
@@ -176,18 +178,19 @@ function errorRecord(item,error,attempt,final=false){return{id:itemId(item),symb
 function errorCategories(items=[]){const out={};for(const x of items)out[x.category||'analysis']=(out[x.category||'analysis']||0)+1;return out;}
 function successCount(s){return new Set((s.symbol_summaries||[]).map(x=>itemId(x))).size;}
 function failureCount(s){return new Set((s.failures||[]).map(x=>x.id)).size;}
+function exclusionCount(s){return new Set((s.exclusions||[]).map(x=>x.id)).size;}
 
-export function backtestIntegrityFromCounts(total,success,failed,retrying=0,pending=0){
-  const rate=total?round(success/total*100,1):0;
-  const resolved=success+failed;
-  const valid=total>0&&retrying===0&&pending===0&&rate>=MIN_SUCCESS_RATE&&success>=Math.min(total,30);
+export function backtestIntegrityFromCounts(total,success,failed,retrying=0,pending=0,excluded=0){
+  const eligible=Math.max(0,total-excluded),rate=eligible?round(success/eligible*100,1):0;
+  const resolved=success+failed+excluded;
+  const valid=eligible>0&&retrying===0&&pending===0&&rate>=MIN_SUCCESS_RATE&&success>=Math.min(eligible,30);
   let reason='集計中';
   if(retrying||pending)reason=`未処理 ${pending}件・再試行 ${retrying}件`;
-  else if(!valid)reason=`成功率 ${rate}%（必要 ${MIN_SUCCESS_RATE}%以上）`;
-  else reason=`成功率 ${rate}%・検証利用可`;
-  return{total,success,failed,retrying,pending,resolved,success_rate:rate,required_success_rate:MIN_SUCCESS_RATE,valid,reason};
+  else if(!valid)reason=`検証対象 ${eligible}件中の成功率 ${rate}%（必要 ${MIN_SUCCESS_RATE}%以上）${excluded?`・対象外 ${excluded}件`:''}`;
+  else reason=`検証対象 ${eligible}件中の成功率 ${rate}%・検証利用可${excluded?`（対象外 ${excluded}件）`:''}`;
+  return{total,eligible,excluded,success,failed,retrying,pending,resolved,success_rate:rate,required_success_rate:MIN_SUCCESS_RATE,valid,reason};
 }
-function integrityFromState(s){const total=s.queue.length,success=successCount(s),failed=failureCount(s),retrying=(s.retry_queue||[]).length,pending=Math.max(0,total-Number(s.cursor||0));return backtestIntegrityFromCounts(total,success,failed,retrying,pending);}
+function integrityFromState(s){const total=s.queue.length,success=successCount(s),failed=failureCount(s),excluded=exclusionCount(s),retrying=(s.retry_queue||[]).length,pending=Math.max(0,total-Number(s.cursor||0));return backtestIntegrityFromCounts(total,success,failed,retrying,pending,excluded);}
 
 function summaryFromState(s,includeSelective=s.status==='complete'){
   const strategies={};
@@ -201,10 +204,10 @@ function summaryFromState(s,includeSelective=s.status==='complete'){
   return{
     version:BACKTEST_VERSION,engine_version:ENGINE_VERSION,generated_at:nowIso(),status:s.status,result_usable:usable,
     cycle_started_at:s.started_at,cycle_finished_at:s.finished_at,
-    progress:{done:integrity.resolved,total:integrity.total,success:integrity.success,failed:integrity.failed,retrying:integrity.retrying,pending:integrity.pending,attempted:Number(s.cursor||0),errors:integrity.failed,error_events:(s.errors||[]).length},
-    integrity,error_categories:errorCategories(s.failures||[]),attempt_error_categories:errorCategories(s.errors||[]),
-    failures:(s.failures||[]).slice(-50),recent_errors:(s.errors||[]).slice(-12),
-    assumptions:{lookback:'5年（取得可能範囲）',entry:'翌営業日にシグナル日高値を突破',gap_skip_pct:GAP,stop:'シグナル日安値',exit:'5日線終値割れ確認後の翌営業日始値、または時間切れ',same_day_ambiguous:'高値突破とストップ接触の順序不明日は除外',round_trip_cost_pct:COST,universe:'現在登録銘柄（日本最大160、米国リード40）',price_series:'ライブと共通のYahoo quote OHLC正規化',rsi_atr:'Wilder RMA',survivorship_bias:true,max_retries:MAX_RETRIES,min_success_rate:MIN_SUCCESS_RATE},
+    progress:{done:integrity.resolved,total:integrity.total,eligible:integrity.eligible,excluded:integrity.excluded,success:integrity.success,failed:integrity.failed,retrying:integrity.retrying,pending:integrity.pending,attempted:Number(s.cursor||0),errors:integrity.failed,error_events:(s.errors||[]).length},
+    integrity,error_categories:errorCategories(s.failures||[]),excluded_categories:errorCategories(s.exclusions||[]),attempt_error_categories:errorCategories(s.errors||[]),
+    failures:(s.failures||[]).slice(-50),exclusions:(s.exclusions||[]).slice(-50),recent_errors:(s.errors||[]).slice(-12),
+    assumptions:{lookback:'5年（取得可能範囲）',entry:'翌営業日にシグナル日高値を突破',gap_skip_pct:GAP,stop:'シグナル日安値',exit:'5日線終値割れ確認後の翌営業日始値、または時間切れ',same_day_ambiguous:'高値突破とストップ接触の順序不明日は除外',round_trip_cost_pct:COST,universe:'現在登録銘柄（日本最大160、米国リード40）',price_series:'ライブと共通のYahoo quote OHLC正規化',rsi_atr:'Wilder RMA',survivorship_bias:true,max_retries:MAX_RETRIES,min_success_rate:MIN_SUCCESS_RATE,exclusion_policy:'履歴不足・取得対象外は母集団から除外し、通信・分析異常とは分離'},
     strategies,symbols,selective:includeSelective&&integrity.valid?ruleSearch(s.pools):{confirmed:[],research:[],pending:true,blocked_reason:integrity.reason}
   };
 }
@@ -223,7 +226,9 @@ function nextWork(s){
 }
 function enqueueRetry(s,item){const id=itemId(item);if(!(s.retry_queue||[]).some(x=>itemId(x)===id))s.retry_queue.push(item);}
 function removeFailure(s,id){s.failures=(s.failures||[]).filter(x=>x.id!==id);}
-function setFailure(s,record){s.failures=[...(s.failures||[]).filter(x=>x.id!==record.id),record];}
+function removeExclusion(s,id){s.exclusions=(s.exclusions||[]).filter(x=>x.id!==id);}
+function setFailure(s,record){removeExclusion(s,record.id);s.failures=[...(s.failures||[]).filter(x=>x.id!==record.id),record];}
+function setExclusion(s,record){removeFailure(s,record.id);s.exclusions=[...(s.exclusions||[]).filter(x=>x.id!==record.id),record];}
 function upsertSummary(s,item,result){const id=itemId(item),entry={symbol:item.symbol,name:item.name,market:item.market,strategies:Object.fromEntries(Object.entries(result.strategies).map(([k,v])=>[k,{metrics:v.metrics}]))};s.symbol_summaries=[...(s.symbol_summaries||[]).filter(x=>itemId(x)!==id),entry];}
 
 async function fetchBacktestRows(symbol){
@@ -232,7 +237,7 @@ async function fetchBacktestRows(symbol){
     try{
       const rows=normalizeYahooDaily(await fetchYahooChart(symbol,{range,cacheTtl:600})).rows;
       if(rows.length>=MIN_HISTORY_DAYS)return rows;
-      last=new Error(`履歴不足 ${symbol}: ${rows.length}営業日`);
+      last=rows.length===0?new Error(`取得元空データ ${symbol}`):new Error(`履歴不足 ${symbol}: ${rows.length}営業日`);
     }catch(error){
       last=error;
     }
@@ -263,16 +268,24 @@ export async function runBacktestStep(env,count=1,force=false){
   await env.COCKPIT_KV.put(LOCK,String(Date.now()),{expirationTtl:180});
   let processed=0;const benchCache={};
   try{
+    try{
+      for(const market of [...new Set(s.queue.map(x=>x.market))])benchCache[market]=await benchmark(env,market);
+    }catch(error){
+      const record={id:'benchmark',symbol:'BENCHMARK',name:'市場指数',market:'global',attempt:1,category:classifyBacktestError(error),error:String(error?.message||error||'benchmark unavailable').slice(0,240),final:false,scope:'benchmark',at:nowIso()};
+      s.errors=[...(s.errors||[]),record].slice(-200);s.updated_at=nowIso();await env.COCKPIT_KV.put(STATE,JSON.stringify(s));
+      return{ok:true,processed:0,paused:true,paused_reason:'benchmark_unavailable',...summaryFromState(s,false),next_symbol:s.cursor<s.queue.length?s.queue[s.cursor]:s.retry_queue?.[0]||null};
+    }
     for(let z=0;z<Math.max(1,Math.min(5,Number(count)||1));z++){
       const item=nextWork(s);if(!item)break;processed++;
       const id=itemId(item),attempt=Number(s.attempts[id]||0)+1;s.attempts[id]=attempt;
       try{
         const result=await analyzeBacktestItem(env,item,benchCache);
         for(const k of Object.keys(STRATEGIES))s.pools[k].push(...(result.strategies[k]?.trades||[]));
-        upsertSummary(s,item,result);removeFailure(s,id);
+        upsertSummary(s,item,result);removeFailure(s,id);removeExclusion(s,id);
       }catch(error){
         const record=errorRecord(item,error,attempt,false);s.errors=[...(s.errors||[]),record].slice(-200);
         if(retryableCategory(record.category)&&attempt<MAX_RETRIES)enqueueRetry(s,item);
+        else if(excludableBacktestCategory(record.category))setExclusion(s,{...record,final:true,excluded:true});
         else setFailure(s,{...record,final:true});
       }
       s.updated_at=nowIso();

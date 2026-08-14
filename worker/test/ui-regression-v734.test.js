@@ -25,6 +25,8 @@ test('Today prioritizes daily context, compact macro, and upcoming events',()=>{
   const body=html.slice(start,end);
   assert.match(body,/today-context/);
   assert.match(body,/todayMacroHtml\(st\)/);
+  assert.match(html,/today-macro-price/);
+  assert.match(html,/grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(body,/todayScheduleHtml\(m\)/);
   assert.match(html,/10日以内に登録対象の予定はありません/);
   assert.doesNotMatch(body,/stock-daily-grid|A\/B候補|押し目監視|RSI過熱/);

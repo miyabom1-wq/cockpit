@@ -184,15 +184,15 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 }
 
 
-/* v73.6 final flow: Today = schedule + exceptions, Candidates = discovery, Monitor = observation */
+/* v73.7 final flow: Today = context + market levels + schedule, Candidates = discovery, Monitor = observation */
 .today-brief{display:grid;gap:9px;margin:10px 0 12px}
 .today-context{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid #d8e3e6;border-radius:14px;background:rgba(255,255,255,.92);box-shadow:0 3px 12px rgba(20,42,54,.035)}
 .today-context.good{border-left:4px solid #2f9a72}.today-context.warn{border-left:4px solid #c38b2c}.today-context.bad{border-left:4px solid #c94b5e}
 .today-context-main{min-width:0;flex:1}.today-context-main b{display:block;font-size:14px;line-height:1.3}.today-context-main span{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
 .today-context-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.today-context-state.good{background:var(--greenBg);color:var(--green)}.today-context-state.warn{background:var(--amberBg);color:var(--amber)}.today-context-state.bad{background:var(--redBg);color:var(--red)}
-.today-macro{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-.today-macro-item{min-width:0;padding:8px 8px 7px;border:1px solid #dce5e8;border-radius:12px;background:rgba(255,255,255,.88);box-shadow:none;text-align:left;color:var(--text)}.today-macro-item:hover{background:#fff;border-color:#c9d8dc}.today-macro-item:active{transform:none;background:#f7fafb}
-.today-macro-name{display:block;font-size:9px;font-weight:750;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-macro-move{display:block;margin-top:2px;font:800 13px var(--mono);line-height:1.25}.today-macro-5d{display:block;margin-top:1px;font:8px var(--mono);color:var(--faint);white-space:nowrap}
+.today-macro{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.today-macro-item{min-width:0;padding:10px 10px 9px;border:1px solid #dce5e8;border-radius:13px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(20,42,54,.025);text-align:left;color:var(--text)}.today-macro-item:hover{background:#fff;border-color:#c9d8dc}.today-macro-item:active{transform:none;background:#f7fafb}
+.today-macro-name{display:block;font-size:9px;font-weight:750;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-macro-value{display:flex;align-items:baseline;gap:7px;margin-top:3px;min-width:0}.today-macro-price{min-width:0;overflow:hidden;text-overflow:ellipsis;font:800 15px var(--mono);letter-spacing:-.03em;color:var(--text);white-space:nowrap}.today-macro-move{margin-left:auto;flex:0 0 auto;font:800 11px var(--mono);line-height:1.25;white-space:nowrap}.today-macro-5d{display:block;margin-top:2px;font:8px var(--mono);color:var(--faint);white-space:nowrap}
 .today-schedule{overflow:hidden;border:1px solid #d8e3e6;border-radius:16px;background:rgba(255,255,255,.95);box-shadow:0 5px 18px rgba(20,42,54,.04)}
 .today-schedule-head{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid #e7ecef}.today-schedule-head b{font-size:13px}.today-schedule-head span{font-size:9px;color:var(--muted)}.today-schedule-head .today-schedule-count{margin-left:auto;font:800 9px var(--mono);color:#087664;background:#e2f3ef;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-schedule-head button{padding:4px 7px;font-size:9px}
 .today-event-list{display:grid}.today-event{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center;padding:10px 13px;border-bottom:1px solid #edf0f2}.today-event:last-child{border-bottom:0}.today-event-main{min-width:0}.today-event-name{font-size:12px;font-weight:750;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-event-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:3px;font-size:9px;color:var(--muted)}.today-event-horizon{font:800 9px var(--mono);color:#52636d;background:#f0f4f5;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-event-horizon.soon{color:#9b6b18;background:#fff3d9}.today-schedule-empty{padding:14px 13px;font-size:11px;color:var(--muted)}.today-schedule-more{display:block;width:100%;padding:8px 12px;border:0;border-top:1px solid #edf0f2;border-radius:0;background:#f8fafb;color:var(--muted);font-size:10px;text-align:center;box-shadow:none}
@@ -202,7 +202,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-focus-line{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px}.theme-focus-name{white-space:nowrap}.theme-focus-sep{opacity:.58;font-weight:500}
 .theme-alert{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center!important}.theme-alert>div{min-width:0}.theme-alert .delta{margin-left:0!important;min-width:76px;text-align:right;white-space:nowrap}
 @media(max-width:720px){
- .today-context{padding:10px 11px}.today-context-main b{font-size:13px}.today-context-main span{font-size:9px}.today-macro{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.today-macro-item{padding:7px 7px 6px;border-radius:11px}.today-macro-name{font-size:8px}.today-macro-move{font-size:12px}.today-macro-5d{font-size:7px}.today-schedule-head{padding:10px 11px}.today-event{padding:9px 11px}.today-event-name{font-size:11px}.today-event-meta{font-size:9px}.today-schedule-head .today-schedule-count{font-size:8px}
+ .today-context{padding:10px 11px}.today-context-main b{font-size:13px}.today-context-main span{font-size:9px}.today-macro{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.today-macro-item{padding:9px 9px 8px;border-radius:12px}.today-macro-name{font-size:9px}.today-macro-price{font-size:15px}.today-macro-move{font-size:11px}.today-macro-5d{font-size:8px}.today-schedule-head{padding:10px 11px}.today-event{padding:9px 11px}.today-event-name{font-size:11px}.today-event-meta{font-size:9px}.today-schedule-head .today-schedule-count{font-size:8px}
  .theme-focus-line{gap:4px 8px;font-size:18px!important;line-height:1.3!important}.theme-focus-sep{display:none}
  .theme-alert{grid-template-columns:minmax(0,1fr) 72px}.theme-alert .delta{min-width:72px;text-align:right}
 }
@@ -378,7 +378,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.6.1</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.7</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -460,10 +460,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.6.1-final-compact-macro-20260814';
+const FRONTEND_BUILD='vantage-ui73.7-final-context-backtest-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.6.1-final-compact-macro';
+document.documentElement.dataset.mobileLayout='v73.7-final-context-backtest';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -1001,18 +1001,26 @@ function todayEventHorizon(e){
  const days=Math.ceil(diff/86400000);
  return days+'日';
 }
+function todayMacroPriceText(key,x){
+ const p=Number(x?.price);if(!Number.isFinite(p))return'—';
+ if(key==='米10年債')return (p/10).toFixed(2)+'%';
+ if(key==='ドル円')return p.toLocaleString('ja-JP',{minimumFractionDigits:2,maximumFractionDigits:2});
+ if(key==='VIX')return p.toFixed(2);
+ const digits=Math.abs(p)>=10000?0:Math.abs(p)>=1000?1:2;
+ return p.toLocaleString('ja-JP',{minimumFractionDigits:digits,maximumFractionDigits:digits});
+}
 function todayMacroHtml(st){
  const macro=st?.macro||{};
  const defs=[
-  ['日経','日経平均'],['SOX','SOX'],['KOSPI','韓国KOSPI'],
-  ['S&P','S&P500'],['VIX','VIX'],['USD/JPY','ドル円']
+  ['日経','日経平均'],['日経先物','日経先物（CME円建て）'],['SOX','SOX'],['S&P500','S&P500'],['Nasdaq','Nasdaq'],
+  ['KOSPI','韓国KOSPI'],['KOSDAQ','韓国KOSDAQ'],['VIX','VIX'],['USD/JPY','ドル円'],['米10年','米10年債']
  ];
  const items=defs.map(([label,key])=>{
   const x=macro[key];if(!x)return'';
-  const d=Number(x.change_pct),r5=Number(x.ret5);
+  const d=Number(x.change_pct),r5=Number(x.ret5),price=todayMacroPriceText(key,x);
   const move=Number.isFinite(d)?pct(d):'—';
   const five=Number.isFinite(r5)?`5D ${pct(r5)}`:'5D —';
-  return `<button type="button" class="today-macro-item" onclick="openMacroChart('${attr(key)}')" title="${attr(key)}をTradingViewで開く"><span class="today-macro-name">${esc(label)}</span><span class="today-macro-move ${Number.isFinite(d)?cls(d):''}">${move}</span><span class="today-macro-5d">${five}</span></button>`;
+  return `<button type="button" class="today-macro-item" onclick="openMacroChart('${attr(key)}')" title="${attr(key)}をTradingViewで開く"><span class="today-macro-name">${esc(label)}</span><span class="today-macro-value"><span class="today-macro-price">${esc(price)}</span><span class="today-macro-move ${Number.isFinite(d)?cls(d):''}">${move}</span></span><span class="today-macro-5d">${five}</span></button>`;
  }).filter(Boolean).join('');
  return items?`<section class="today-macro" aria-label="主要市場スナップ">${items}</section>`:'';
 }
@@ -1263,12 +1271,12 @@ function ruleCard(rule,research=false){
  const v=rule.validation||{},t=rule.test||{},h=rule.holdout||{};
  return `<div class="rule-card"><div class="rule-head"><span class="badge ${rule.strategy==='A'||rule.strategy==='C_A'?'A':'B'}">${rule.strategy.replace('_','→')}</span><span class="rule-name">${rule.market==='jp'?'日本':'米国'} ${research?'検証中':'厳選ルール'}</span><span class="${research?'badge C':'strict-badge'}">${research?'最終未確認':'最終試験合格'}</span></div><div class="rule-conditions">${esc((rule.labels||[]).join(' ＋ '))}</div><div class="rule-split"><div><div class="k">検証</div><div class="v">${num(v.win_rate,1)}% / n=${v.trades||0}</div></div><div><div class="k">最終試験</div><div class="v">${num(t.win_rate,1)}% / n=${t.trades||0}</div></div><div><div class="k">最終期待値</div><div class="v ${cls(t.expectancy)}">${pct(t.expectancy)}</div></div></div><div class="selective-stats"><span>PF ${num(t.profit_factor)}</span><span>中央値 ${pct(t.median_return)}</span><span>95%CI ${t.win_rate_ci_low??'—'}〜${t.win_rate_ci_high??'—'}%</span><span>検証+最終 ${num(h.win_rate,1)}%</span></div></div>`;
 }
-function btErrorLabel(k){return({rate_limit:'Yahoo制限',provider_access:'取得元拒否',not_found:'銘柄・データなし',network:'通信失敗',symbol_mismatch:'銘柄不一致',history_short:'履歴不足',worker_limit:'Worker制限',analysis:'分析エラー'})[k]||k}
+function btErrorLabel(k){return({rate_limit:'Yahoo制限',provider_access:'取得元拒否',provider_empty:'取得元一時空',not_found:'銘柄・データなし',network:'通信失敗',symbol_mismatch:'銘柄不一致',history_short:'履歴不足',worker_limit:'Worker制限',analysis:'分析エラー'})[k]||k}
 function renderBacktest(){
- const d=state.backtest||{},p=d.progress||{},total=p.total||0,success=p.success??Math.max(0,(p.done||0)-(p.failed??p.errors??0)),failed=p.failed??p.errors??0,retrying=p.retrying||0,pending=p.pending??Math.max(0,total-success-failed-retrying),resolved=success+failed,rate=total?Math.min(100,resolved/total*100):0;
+ const d=state.backtest||{},p=d.progress||{},total=p.total||0,excluded=p.excluded||0,success=p.success??Math.max(0,(p.done||0)-(p.failed??p.errors??0)-excluded),failed=p.failed??p.errors??0,retrying=p.retrying||0,pending=p.pending??Math.max(0,total-success-failed-excluded-retrying),resolved=success+failed+excluded,rate=total?Math.min(100,resolved/total*100):0;
  const statusMap={complete:'完了',failed:'集計失敗',running:'自動集計中'},status=statusMap[d.status]||'自動集計中',usable=d.result_usable===true;
  const btButton=d.status==='complete'?'<button class="small" disabled>再集計待機中</button>':d.status==='failed'?'<button class="small primary" onclick="restartBacktest(this)">最初から再集計</button>':'<button class="small" onclick="advanceBacktest(this)">5銘柄進める</button>';
- let html=`<div class="bt-hero ${d.status==='failed'?'bt-failed':''}"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">各銘柄を最大3回まで再試行し、成功率90%以上の場合だけ検証結果と厳選条件を有効にします。不完全な母集団を「完了」と扱いません。</div></div><span class="badge ${usable?'A':d.status==='failed'?'E':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>成功 ${success} / 失敗 ${failed} / 全${total}</span><span>再試行 ${retrying}・未処理 ${pending}</span></div><div class="actions">${btButton}</div></div>`;
+ let html=`<div class="bt-hero ${d.status==='failed'?'bt-failed':''}"><div class="bt-head"><div class="grow1"><div class="bt-title">登録銘柄バックテスト</div><div class="bt-sub">各銘柄を最大5回まで再試行し、検証対象の成功率90%以上の場合だけ検証結果と厳選条件を有効にします。不完全な母集団を「完了」と扱いません。</div></div><span class="badge ${usable?'A':d.status==='failed'?'E':'C'}">${status}</span></div><div class="bt-progress"><span style="width:${rate.toFixed(1)}%"></span></div><div class="bt-progress-meta"><span>成功 ${success} / 対象外 ${excluded} / 取得失敗 ${failed} / 全${total}</span><span>再試行 ${retrying}・未処理 ${pending}</span></div><div class="actions">${btButton}</div></div>`;
  if(d.using_previous_complete)html+='<div class="note">新しい再集計中のため、成績欄は前回の有効な完了分を表示しています。</div>';
  const integrity=d.integrity||{};
  if(d.status==='failed'||(d.status==='complete'&&!usable))html+=`<div class="bt-integrity-alert"><b>この結果は売買判断に使用しません</b><span>${esc(integrity.reason||'成功率が基準未満です')}。厳選条件の固定も停止しています。</span></div>`;
@@ -1276,6 +1284,8 @@ function renderBacktest(){
  const categories=d.error_categories||{},attemptCats=d.attempt_error_categories||{},catKeys=[...new Set([...Object.keys(categories),...Object.keys(attemptCats)])];
  const recent=(d.failures?.length?d.failures:d.recent_errors||[]).slice(-12);
  if(catKeys.length||recent.length){html+=`<details class="card bt-errors" ${d.status==='failed'?'open':''}><summary class="row"><div class="name grow1">取得・分析エラー</div><span class="count">最終失敗 ${failed}件</span></summary><div class="pad"><div class="bt-error-cats">${catKeys.map(k=>`<span>${esc(btErrorLabel(k))} <b>${categories[k]||0}</b><small>試行${attemptCats[k]||categories[k]||0}</small></span>`).join('')}</div>${recent.length?`<div class="bt-error-list">${recent.map(x=>`<div><span class="code">${esc(x.symbol||'—')}</span><b>${esc(btErrorLabel(x.category))}</b><small>${esc(x.error||'')}</small><em>${x.attempt||1}回目</em></div>`).join('')}</div>`:''}</div></details>`}
+ const excludedRows=(d.exclusions||[]).slice(-12),excludedCats=d.excluded_categories||{};
+ if(excludedRows.length){html+=`<details class="card bt-errors"><summary class="row"><div class="name grow1">検証対象外</div><span class="count">${excluded}件</span></summary><div class="pad"><div class="bt-error-cats">${Object.keys(excludedCats).map(k=>`<span>${esc(btErrorLabel(k))} <b>${excludedCats[k]||0}</b></span>`).join('')}</div><div class="bt-error-list">${excludedRows.map(x=>`<div><span class="code">${esc(x.symbol||'—')}</span><b>${esc(btErrorLabel(x.category))}</b><small>${esc(x.error||'')}</small></div>`).join('')}</div></div></details>`}
  const sel=d.selective||{},confirmed=sel.confirmed||[],research=sel.research||[];
  html+='<div class="section-title">厳選条件（未使用期間60%以上）</div>';
  if(!usable)html+=`<div class="card pad muted">${d.status==='failed'?'成功率不足のため厳選条件を作成・固定しません。再集計後に判定します。':'全登録銘柄の再集計完了後に条件を確定します。途中値から厳選ルールは作りません。'}</div>`;
@@ -1419,7 +1429,7 @@ async function copyAI(btn){
    if(x.legacy_status)out.push(`  - 旧管理状態「${x.legacy_status}」は追跡中へ移行済み。実保有は保有☑のみを参照。`);
   }
   out.push('\n## シグナル実績');for(const s of sig.summary||[]){const d5=s.horizons?.d5;if(d5)out.push(`- ${s.label}: 5日中央値${pct(d5.median)} / 勝率${d5.win_rate}% / n=${d5.n}`)}
-  out.push('\n## 登録銘柄バックテスト');const btp=bt.progress||{},bti=bt.integrity||{};out.push(`- 集計状態: ${bt.status||'running'} / 利用可: ${bt.result_usable?'はい':'いいえ'} / 成功 ${btp.success||0} / 失敗 ${btp.failed??btp.errors??0} / 再試行 ${btp.retrying||0} / 全${btp.total||0} / 成功率 ${bti.success_rate??'—'}%`);if(bt.result_usable){for(const [k,x] of Object.entries(bt.strategies||{})){const m=x.metrics||{};if(m.trades)out.push(`- ${x.label||k}: 勝率${m.win_rate}% / 期待値${pct(m.expectancy)} / PF${m.profit_factor} / n=${m.trades} / 直近1年${pct(x.recent_metrics?.expectancy)}`)}}else out.push(`- 判定保留: ${bti.reason||'集計が不完全です'}。バックテスト成績と厳選条件は売買判断に使用しない。`);
+  out.push('\n## 登録銘柄バックテスト');const btp=bt.progress||{},bti=bt.integrity||{};out.push(`- 集計状態: ${bt.status||'running'} / 利用可: ${bt.result_usable?'はい':'いいえ'} / 成功 ${btp.success||0} / 対象外 ${btp.excluded||0} / 取得失敗 ${btp.failed??btp.errors??0} / 再試行 ${btp.retrying||0} / 全${btp.total||0} / 成功率 ${bti.success_rate??'—'}%`);if(bt.result_usable){for(const [k,x] of Object.entries(bt.strategies||{})){const m=x.metrics||{};if(m.trades)out.push(`- ${x.label||k}: 勝率${m.win_rate}% / 期待値${pct(m.expectancy)} / PF${m.profit_factor} / n=${m.trades} / 直近1年${pct(x.recent_metrics?.expectancy)}`)}}else out.push(`- 判定保留: ${bti.reason||'集計が不完全です'}。バックテスト成績と厳選条件は売買判断に使用しない。`);
    out.push('\n## 厳選バックテスト条件');if(bt.result_usable){for(const r of bt.selective?.confirmed||[])out.push(`- ${r.market==='jp'?'日本':'米国'} ${r.strategy.replace('_','→')}: ${(r.labels||[]).join(' + ')} / 最終試験 勝率${r.test?.win_rate}% / 期待値${pct(r.test?.expectancy)} / PF${r.test?.profit_factor} / n=${r.test?.trades}`);if(!(bt.selective?.confirmed||[]).length)out.push('- 確認済み厳選条件なし')}else out.push('- 集計不完全のため厳選条件を作成・使用しない');
    out.push('\n## 10日以内の重要日程（公式確認＋自動取得＋手動登録）');const limit=Date.now()+10*86400000,future=(ev.events||[]).filter(x=>new Date(x.time)>=Date.now()).sort((a,b)=>new Date(a.time)-new Date(b.time)),near=future.filter(x=>new Date(x.time)<=limit),later=future.filter(x=>new Date(x.time)>limit&&new Date(x.time)<=Date.now()+30*86400000);
   if(!near.length)out.push('- 公式確認・自動取得・手動登録ともになし。決算予定や重要材料がないことを意味しない。');
@@ -1996,11 +2006,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.6"></script>
-<script src="./reliability-sync.js?build=v73.6"></script>
-<script src="./event-resilience.js?build=v73.6"></script>
-<script src="./navigation.js?build=v73.6"></script>
-<script src="./events-ui.js?build=v73.6"></script>
+<script src="./frame-sync.js?build=v73.7"></script>
+<script src="./reliability-sync.js?build=v73.7"></script>
+<script src="./event-resilience.js?build=v73.7"></script>
+<script src="./navigation.js?build=v73.7"></script>
+<script src="./events-ui.js?build=v73.7"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

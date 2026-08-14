@@ -26,11 +26,15 @@ test('three tabs keep distinct roles and Today shows schedule plus compact marke
   assert.match(html,/function todayMacroHtml\(st\)/);
   assert.match(html,/class=\"today-macro\"/);
   assert.match(html,/\['日経','日経平均'\]/);
+  assert.match(html,/\['日経先物','日経先物（CME円建て）'\]/);
   assert.match(html,/\['SOX','SOX'\]/);
   assert.match(html,/\['KOSPI','韓国KOSPI'\]/);
-  assert.match(html,/\['S&P','S&P500'\]/);
+  assert.match(html,/\['S&P500','S&P500'\]/);
+  assert.match(html,/\['Nasdaq','Nasdaq'\]/);
+  assert.match(html,/\['KOSDAQ','韓国KOSDAQ'\]/);
   assert.match(html,/\['VIX','VIX'\]/);
   assert.match(html,/\['USD\/JPY','ドル円'\]/);
+  assert.match(html,/\['米10年','米10年債'\]/);
   assert.doesNotMatch(body,/macro-list|マクロ \/ 指数/);
   assert.match(nav,/予定・地合いの例外・データ更新/);
 });
