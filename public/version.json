@@ -1,8 +1,8 @@
 {
-  "frontend_build": "vantage-ui71-unified-worker-20260731",
-  "ui_version": "v71",
+  "frontend_build": "vantage-ui73-theme-consolidated-20260814",
+  "ui_version": "v73",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-07-31T01:30:00+09:00",
+  "generated_at": "2026-08-14T16:12:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
   "smoke_mode": "unified-origin-auth-recovery"

@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui70-durable-runtime-20260730';
+const BUILD='vantage-ui73-theme-consolidated-20260814';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{
