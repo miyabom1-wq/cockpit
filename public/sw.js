@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.5-final-mobile-20260814';
+const BUILD='vantage-ui73.6-final-flow-20260814';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

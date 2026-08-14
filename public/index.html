@@ -184,22 +184,25 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 }
 
 
-/* v73.4 stock-focus UI: individual-stock decisions first */
-.stock-daily{margin:10px 0 12px;padding:14px;border:1px solid #d9e2e7;border-left:4px solid #7b95a3;border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 5px 18px rgba(20,42,54,.04)}
-.stock-daily.good{border-left-color:#2f9a72}.stock-daily.warn{border-left-color:#c38b2c}.stock-daily.bad{border-left-color:#c94b5e}
-.stock-daily-head{display:flex;align-items:flex-start;gap:12px}.stock-daily-head>div{min-width:0;flex:1}.stock-daily-eyebrow{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--faint);margin-bottom:3px}.stock-daily-head b{display:block;font-size:17px;line-height:1.25}.stock-daily-head small{display:block;margin-top:4px;font-size:10px;color:var(--muted)}
-.stock-daily-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.stock-daily-state.good{background:var(--greenBg);color:var(--green)}.stock-daily-state.warn{background:var(--amberBg);color:var(--amber)}.stock-daily-state.bad{background:var(--redBg);color:var(--red)}
-.stock-daily-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:12px}.stock-daily-metric{min-width:0;padding:9px 10px;border:1px solid #e1e6ea;border-radius:12px;background:#f8fafb}.stock-daily-metric span{display:block;font-size:9px;color:var(--faint);white-space:nowrap}.stock-daily-metric b{display:block;margin-top:2px;font:800 18px "Inter",var(--mono)}.stock-daily-metric.priority b{color:#176d8e}.stock-daily-metric.dip b{color:#257c5d}.stock-daily-metric.hot b{color:#b17819}.stock-daily-metric.risk b{color:#bf3e51}
-.stock-daily-alerts{display:grid;gap:5px;margin-top:9px;padding-top:8px;border-top:1px solid #e9edf0}.stock-daily-alerts span{font-size:10px;color:var(--muted);line-height:1.45}.stock-daily-alerts b{margin-right:5px;color:var(--text)}
+/* v73.6 final flow: Today = schedule + exceptions, Candidates = discovery, Monitor = observation */
+.today-brief{display:grid;gap:9px;margin:10px 0 12px}
+.today-context{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid #d8e3e6;border-radius:14px;background:rgba(255,255,255,.92);box-shadow:0 3px 12px rgba(20,42,54,.035)}
+.today-context.good{border-left:4px solid #2f9a72}.today-context.warn{border-left:4px solid #c38b2c}.today-context.bad{border-left:4px solid #c94b5e}
+.today-context-main{min-width:0;flex:1}.today-context-main b{display:block;font-size:14px;line-height:1.3}.today-context-main span{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
+.today-context-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.today-context-state.good{background:var(--greenBg);color:var(--green)}.today-context-state.warn{background:var(--amberBg);color:var(--amber)}.today-context-state.bad{background:var(--redBg);color:var(--red)}
+.today-schedule{overflow:hidden;border:1px solid #d8e3e6;border-radius:16px;background:rgba(255,255,255,.95);box-shadow:0 5px 18px rgba(20,42,54,.04)}
+.today-schedule-head{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid #e7ecef}.today-schedule-head b{font-size:13px}.today-schedule-head span{font-size:9px;color:var(--muted)}.today-schedule-head .today-schedule-count{margin-left:auto;font:800 9px var(--mono);color:#087664;background:#e2f3ef;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-schedule-head button{padding:4px 7px;font-size:9px}
+.today-event-list{display:grid}.today-event{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center;padding:10px 13px;border-bottom:1px solid #edf0f2}.today-event:last-child{border-bottom:0}.today-event-main{min-width:0}.today-event-name{font-size:12px;font-weight:750;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-event-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:3px;font-size:9px;color:var(--muted)}.today-event-horizon{font:800 9px var(--mono);color:#52636d;background:#f0f4f5;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-event-horizon.soon{color:#9b6b18;background:#fff3d9}.today-schedule-empty{padding:14px 13px;font-size:11px;color:var(--muted)}.today-schedule-more{display:block;width:100%;padding:8px 12px;border:0;border-top:1px solid #edf0f2;border-radius:0;background:#f8fafb;color:var(--muted);font-size:10px;text-align:center;box-shadow:none}
 #watch-list .compact-row.is-watch{border-left:3px solid #8cb6c8}
 #watch-list .compact-row.is-held{border-left:4px solid #3f9b73;background:linear-gradient(90deg,rgba(222,243,233,.45),rgba(255,255,255,.96) 34%)}
 #watch-list .compact-row.is-held[open]{background:#fbfefc}
-.watch-filter-caption{margin:2px 2px 6px;font-size:10px;font-weight:700;color:var(--faint)}
+.theme-focus-line{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px}.theme-focus-name{white-space:nowrap}.theme-focus-sep{opacity:.58;font-weight:500}
+.theme-alert{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center!important}.theme-alert>div{min-width:0}.theme-alert .delta{margin-left:0!important;min-width:76px;text-align:right;white-space:nowrap}
 @media(max-width:720px){
- .stock-daily{padding:12px 11px}.stock-daily-head b{font-size:16px}.stock-daily-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.stock-daily-metric{padding:8px 9px}.stock-daily-metric b{font-size:17px}
- .theme-focus-title{display:flex;gap:6px;margin:8px 0 7px}.theme-focus-title span{display:inline-flex;align-items:center;max-width:100%;padding:6px 9px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.09);font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.theme-focus-title span:not(:last-child)::after{content:none}.theme-hero p{display:none}
+ .today-context{padding:10px 11px}.today-context-main b{font-size:13px}.today-context-main span{font-size:9px}.today-schedule-head{padding:10px 11px}.today-event{padding:9px 11px}.today-event-name{font-size:11px}.today-event-meta{font-size:9px}.today-schedule-head .today-schedule-count{font-size:8px}
+ .theme-focus-line{gap:4px 8px;font-size:18px!important;line-height:1.3!important}.theme-focus-sep{display:none}
+ .theme-alert{grid-template-columns:minmax(0,1fr) 72px}.theme-alert .delta{min-width:72px;text-align:right}
 }
-
 </style>
 
 <style id="vantage-watch-signal-v35-style">
@@ -216,7 +219,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 
 .brand-sub{font-size:9px;color:var(--faint);letter-spacing:.08em;margin-top:-2px}.ui-version{font:9px var(--mono);color:var(--faint);padding:4px 7px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .role-note{display:flex;align-items:center;gap:10px;padding:11px 13px;margin:0 0 12px;background:linear-gradient(135deg,rgba(15,139,120,.1),rgba(255,255,255,.72));border:1px solid rgba(15,139,120,.2);border-radius:13px}.role-note b{font-size:13px;color:#087664}.role-note span{font-size:10px;color:var(--muted)}
-.theme-segment,.manage-segment{position:static}.theme-hero{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:18px;margin:10px 0 12px;background:linear-gradient(145deg,#102a32,#163d42);color:#fff;border-radius:18px;box-shadow:0 12px 30px rgba(9,45,50,.18)}.theme-eyebrow{font:700 9px var(--mono);letter-spacing:.16em;color:#75d6c7}.theme-hero h2{font-size:20px;line-height:1.35;margin:5px 0}.theme-focus-title{display:flex;align-items:baseline;flex-wrap:wrap;gap:0}.theme-focus-title span{min-width:0}.theme-focus-title span:not(:last-child)::after{content:" / ";opacity:.72}.theme-hero p{font-size:10px;color:#bdd3d1;max-width:620px}.theme-cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.theme-cycle span{font-size:9px;padding:5px 6px;border-radius:999px;background:rgba(255,255,255,.09);text-align:center;white-space:nowrap}.theme-cycle span:first-child,.theme-cycle span:last-child{background:rgba(117,214,199,.22);color:#a9f0e5}
+.theme-segment,.manage-segment{position:static}.theme-hero{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:18px;margin:10px 0 12px;background:linear-gradient(145deg,#102a32,#163d42);color:#fff;border-radius:18px;box-shadow:0 12px 30px rgba(9,45,50,.18)}.theme-eyebrow{font:700 9px var(--mono);letter-spacing:.16em;color:#75d6c7}.theme-hero h2{font-size:20px;line-height:1.35;margin:5px 0}.theme-hero p{font-size:10px;color:#bdd3d1;max-width:620px}.theme-cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.theme-cycle span{font-size:9px;padding:5px 6px;border-radius:999px;background:rgba(255,255,255,.09);text-align:center;white-space:nowrap}.theme-cycle span:first-child,.theme-cycle span:last-child{background:rgba(117,214,199,.22);color:#a9f0e5}
 .pulse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}.pulse{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:10px 11px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.pulse span{font-size:10px;color:var(--muted)}.pulse b{font:700 13px var(--mono)}.pulse small{grid-column:1/-1;font:9px var(--mono);color:var(--faint)}
 .theme-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:10px 0 14px}.theme-summary>div{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px}.theme-summary b{display:block;font:700 17px var(--mono);color:#087664}.theme-summary span{font-size:9px;color:var(--faint)}
 .theme-card{margin:8px 0;background:var(--surface);border:1px solid var(--line);border-left:4px solid #aeb6c2;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}.theme-card.seed{border-left-color:#0f8b78}.theme-card.repair{border-left-color:#5c78d5}.theme-card.good{border-left-color:#17a66d}.theme-card.hot{border-left-color:#d39220}.theme-card.bad{border-left-color:#d83048}.theme-card>summary{display:block;padding:13px 14px}.theme-card-head{display:flex;align-items:flex-start;gap:10px}.theme-title{font-weight:750;font-size:14px}.theme-reason{font-size:10px;color:var(--muted);margin-top:2px}.theme-phase{font-size:9px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--surface3);color:var(--muted)}.theme-phase.seed{background:#dff3ef;color:#087664}.theme-phase.repair{background:#e5eafa;color:#4763bd}.theme-phase.good{background:var(--greenBg);color:var(--green)}.theme-phase.hot{background:var(--amberBg);color:var(--amber)}.theme-phase.bad{background:var(--redBg);color:var(--red)}.theme-kpis{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:9px;font:10px var(--mono);color:var(--muted)}.theme-detail{padding:0 14px 13px;border-top:1px solid var(--line)}.theme-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.theme-detail-grid>div{padding:8px;background:var(--surface2);border-radius:9px;text-align:center}.theme-detail-grid b{display:block;font:700 13px var(--mono)}.theme-detail-grid span{font-size:8px;color:var(--faint)}.theme-leader{display:flex;align-items:center;gap:7px;padding:8px 5px;border-bottom:1px solid var(--line);cursor:pointer}.theme-leader:last-of-type{border-bottom:0}.theme-leader:hover{background:var(--surface2)}
@@ -262,7 +265,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-alerts{display:grid;gap:7px;margin:10px 0 12px}.theme-alert{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.theme-alert.transition{border-left:4px solid var(--blue)}.theme-alert.acceleration{border-left:4px solid var(--green)}.theme-alert.deceleration{border-left:4px solid var(--amber)}.theme-alert b{font-size:12px}.theme-alert span{font-size:10px;color:var(--muted)}.theme-alert .delta{margin-left:auto;font:700 11px var(--mono)}
 .history-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 11px;margin:8px 0;background:#f5f8f8;border:1px solid #dce8e6;border-radius:11px;font-size:10px;color:var(--muted)}.history-status b{color:#087664}.history-status .method{margin-left:auto;font-size:9px;color:var(--faint)}
 .theme-history-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}.history-trend{font-size:9px;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--surface3);color:var(--muted)}.history-trend.accel{background:var(--greenBg);color:var(--green)}.history-trend.slow{background:var(--amberBg);color:var(--amber)}.history-trend.transition{background:var(--blueBg);color:var(--blue)}.history-deltas{display:flex;gap:5px;font:9px var(--mono);color:var(--muted)}.history-deltas span{padding:3px 5px;background:var(--surface2);border-radius:6px}.theme-spark{width:88px;height:26px;margin-left:auto}.theme-spark .axis{stroke:#dfe5e7;stroke-width:1}.theme-spark .line{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
-@media(max-width:640px){.history-status .method{width:100%;margin-left:0}.theme-spark{width:72px}.theme-alert{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px;row-gap:3px;padding:10px 11px}.theme-alert>div{min-width:0}.theme-alert>div>br{display:none}.theme-alert b{display:block;line-height:1.3;word-break:normal;overflow-wrap:break-word}.theme-alert>div>span{display:block;margin-top:4px;line-height:1.35}.theme-alert .delta{margin:0;align-self:start;white-space:nowrap;padding-top:1px}}
+@media(max-width:640px){.history-status .method{width:100%;margin-left:0}.theme-spark{width:72px}.theme-alert{align-items:flex-start}.theme-alert .delta{margin-left:0}}
 </style>
 <style id="vantage-frame-handoff-style">
 .frame-mini{width:30px;height:28px;padding:0;border-radius:8px;border:1px solid #b9d8d2;background:#e8f7f4;color:#087565;font:800 12px "Inter",sans-serif;display:grid;place-items:center;flex:none}.frame-mini:hover{background:#d9f1ec;color:#075d52}.frame-action{background:#162b43!important;border-color:#162b43!important;color:#fff!important}.handoff-note{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--muted);margin-top:8px}.handoff-note b{color:var(--blue)}
@@ -290,8 +293,8 @@ button.primary{background:var(--teal);border-color:var(--teal)}button.primary:ho
 .universe-hero{padding:18px 19px;border-radius:20px;background:linear-gradient(135deg,#14283d,#16474c);color:#fff;box-shadow:0 12px 30px rgba(20,40,61,.16);margin-bottom:12px}.universe-head{display:flex;align-items:flex-start;gap:12px}.universe-title{font-size:18px;font-weight:800}.universe-sub{font-size:11px;color:#d4e4e5;line-height:1.65;margin-top:3px}.universe-mode{margin-left:auto;border-radius:999px;padding:5px 10px;background:rgba(255,255,255,.14);font-size:10px;font-weight:800;white-space:nowrap}.universe-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}.universe-kpi{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:10px}.universe-kpi b{display:block;font:750 18px var(--mono)}.universe-kpi span{display:block;font-size:9px;color:#cbdcde;margin-top:2px}.universe-controls{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.universe-market{margin:12px 0}.universe-market-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}.universe-market-head b{font-size:14px}.universe-market-head .count{margin-left:0}.rotation-pair{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:8px;margin:7px 0}.rotation-item{padding:11px 12px;border-radius:13px;border:1px solid var(--line);background:#fff}.rotation-item.add{border-color:#bfe1d9;background:#f1faf8}.rotation-item.drop{border-color:#eed3d8;background:#fff7f8}.rotation-item .top{display:flex;align-items:center;gap:7px}.rotation-item .why{font-size:10px;color:var(--muted);line-height:1.5;margin-top:5px}.rotation-arrow{display:grid;place-items:center;color:var(--teal);font-size:18px;font-weight:800}.coverage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.coverage-row{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;padding:10px 11px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:11px}.coverage-row.missing{border-color:#f0c4cc;background:#fff5f7}.coverage-row.thin{border-color:#efdcae;background:#fffaf0}.coverage-status{font-size:9px;font-weight:800;border-radius:999px;padding:3px 7px;background:#e7f4ef;color:#167252}.coverage-row.missing .coverage-status{background:#fde3e7;color:#b4253f}.coverage-row.thin .coverage-status{background:#fff0d4;color:#986500}.universe-history{font-size:10px;color:var(--muted);padding:9px 11px;border-bottom:1px solid var(--line)}.universe-history:last-child{border-bottom:0}.pin-state{color:#08796d;font-weight:800}.manage-segment{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}@media(max-width:720px){.universe-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.coverage-grid{grid-template-columns:1fr}.rotation-pair{grid-template-columns:1fr}.rotation-arrow{transform:rotate(90deg)}.manage-segment{grid-template-columns:repeat(3,minmax(0,1fr))}.manage-segment button{font-size:10px;padding:9px 2px}}
 </style>
 <style id="quotes-v44">
-*:focus-visible{outline:3px solid rgba(21,134,126,.28);outline-offset:2px}body.modal-open{overflow:hidden}.header-actions{display:flex;gap:7px}.helpbtn{background:#e9f4f2;color:#0b776f;border-color:#d2e9e5}.workflow-bar{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px;margin:0 0 16px;padding:8px;background:rgba(255,255,255,.82);border:1px solid #dce5e8;border-radius:17px;box-shadow:0 5px 18px rgba(18,39,53,.045)}.workflow-bar button{display:flex;align-items:center;gap:9px;border:0;background:transparent;text-align:left;padding:8px 10px;border-radius:12px}.workflow-bar button:hover{background:#edf5f4}.workflow-no{width:25px;height:25px;display:grid;place-items:center;border-radius:50%;background:#dff0ed;color:#08766e;font:800 11px Inter,var(--mono)}.workflow-bar b{display:block;font-size:12px;color:#1d2b3b}.workflow-bar small{display:block;font-size:9px;color:#778595}.workflow-arrow{color:#9aa6b2}.fresh{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.fresh-state{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:10px;color:#657587}.fresh-state i,.status-dot{width:7px;height:7px;border-radius:50%;background:#20a46d;box-shadow:0 0 0 3px rgba(32,164,109,.1)}.fresh-state.live i{background:#3b7bdd}.fresh-state.warn i,.system-card.warn .status-dot{background:#d18a1e}.system-card.bad{background:#fff5f6;border-color:#f0cbd1}.system-card.bad .status-dot{background:#d83048}.fresh-state.wait i,.system-card.wait .status-dot{background:#9aa6b2}.tech-details{margin-top:9px;border-top:1px solid #e7ecef}.tech-details summary{padding:8px 0;color:#758391;font-size:10px;font-weight:700}.user-audit{grid-template-columns:repeat(4,minmax(0,1fr))}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.settings-wide{grid-column:1/-1}.settings-head{display:flex;align-items:flex-start;gap:10px}.settings-head button{margin-left:auto}.system-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.system-card{border:1px solid #dde6e9;border-radius:13px;padding:11px;background:#f8fafb}.system-top{display:flex;align-items:center;gap:7px;font-size:10px;color:#607080}.system-card strong{display:block;font-size:12px;margin-top:7px;line-height:1.45}.system-card small{display:block;font-size:9px;color:#7c8995;margin-top:4px;line-height:1.45}.schedule-line{margin-top:9px;padding:9px 11px;border-radius:10px;background:#f1f6f6;color:#63717d;font-size:10px}.status-error{padding:11px;border-radius:10px;background:#fff0d4;color:#8b6111}.loading.compact{padding:12px}.guide-hero{padding:20px;border-radius:18px;background:linear-gradient(135deg,#13283d,#14535a);color:#fff}.guide-hero span{font:800 9px Inter,var(--mono);letter-spacing:.14em;color:#9fd9d4}.guide-hero h2{margin:5px 0 4px;font-size:22px}.guide-hero p{margin:0;color:#d5e8e7;font-size:11px}.guide-nav{display:flex;gap:6px;overflow:auto;padding:10px 0 4px;scrollbar-width:none;position:sticky;top:-20px;background:#fff;z-index:3}.guide-nav::-webkit-scrollbar{display:none}.guide-nav button{white-space:nowrap;border-radius:999px;padding:7px 10px;font-size:10px}.guide-sections section{scroll-margin-top:56px;padding:13px 2px;border-bottom:1px solid #e7ecef}.guide-sections h3{margin:0 0 9px;font-size:15px}.guide-sections p{font-size:11px;color:#536373;line-height:1.75}.guide-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.guide-steps>div{padding:11px;border:1px solid #e0e8eb;border-radius:13px;background:#f8fafb}.guide-steps b{display:block;color:#08766e}.guide-steps span{display:block;margin-top:4px;font-size:10px;color:#667582;line-height:1.6}.guide-table{display:grid;grid-template-columns:70px 1fr;gap:1px;border:1px solid #e1e8eb;border-radius:12px;overflow:hidden}.guide-table b,.guide-table span{padding:9px 10px;background:#f8fafb;font-size:10px}.guide-table b{color:#1d3548}.guide-table.lanes b{font:900 12px Inter,var(--mono);color:#08766e}.guide-note{padding:9px 11px!important;border-radius:10px;background:#eef6f5;color:#49635f!important}.empty{border-radius:14px}.toast{max-width:calc(100vw - 24px);text-align:center}.modal-head .close{flex:none}
-@media(max-width:720px){.header-actions .btn-label>span{display:none}.header-actions .iconbtn{width:38px;padding:0}.workflow-bar{grid-template-columns:1fr auto 1fr auto 1fr;gap:2px;padding:5px}.workflow-bar button{padding:7px 5px;gap:5px}.workflow-no{width:22px;height:22px}.workflow-bar small{display:none}.settings-grid{grid-template-columns:1fr}.settings-wide{grid-column:auto}.system-grid{grid-template-columns:1fr 1fr}.guide-steps{grid-template-columns:1fr}.user-audit{grid-template-columns:1fr 1fr}.fresh{align-items:flex-start}.fresh-state{white-space:normal}.guide-nav{top:-16px}}
+*:focus-visible{outline:3px solid rgba(21,134,126,.28);outline-offset:2px}body.modal-open{overflow:hidden}.header-actions{display:flex;gap:7px}.helpbtn{background:#e9f4f2;color:#0b776f;border-color:#d2e9e5}.fresh{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.fresh-state{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;font-size:10px;color:#657587}.fresh-state i,.status-dot{width:7px;height:7px;border-radius:50%;background:#20a46d;box-shadow:0 0 0 3px rgba(32,164,109,.1)}.fresh-state.live i{background:#3b7bdd}.fresh-state.warn i,.system-card.warn .status-dot{background:#d18a1e}.system-card.bad{background:#fff5f6;border-color:#f0cbd1}.system-card.bad .status-dot{background:#d83048}.fresh-state.wait i,.system-card.wait .status-dot{background:#9aa6b2}.tech-details{margin-top:9px;border-top:1px solid #e7ecef}.tech-details summary{padding:8px 0;color:#758391;font-size:10px;font-weight:700}.user-audit{grid-template-columns:repeat(4,minmax(0,1fr))}.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.settings-wide{grid-column:1/-1}.settings-head{display:flex;align-items:flex-start;gap:10px}.settings-head button{margin-left:auto}.system-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}.system-card{border:1px solid #dde6e9;border-radius:13px;padding:11px;background:#f8fafb}.system-top{display:flex;align-items:center;gap:7px;font-size:10px;color:#607080}.system-card strong{display:block;font-size:12px;margin-top:7px;line-height:1.45}.system-card small{display:block;font-size:9px;color:#7c8995;margin-top:4px;line-height:1.45}.schedule-line{margin-top:9px;padding:9px 11px;border-radius:10px;background:#f1f6f6;color:#63717d;font-size:10px}.status-error{padding:11px;border-radius:10px;background:#fff0d4;color:#8b6111}.loading.compact{padding:12px}.guide-hero{padding:20px;border-radius:18px;background:linear-gradient(135deg,#13283d,#14535a);color:#fff}.guide-hero span{font:800 9px Inter,var(--mono);letter-spacing:.14em;color:#9fd9d4}.guide-hero h2{margin:5px 0 4px;font-size:22px}.guide-hero p{margin:0;color:#d5e8e7;font-size:11px}.guide-nav{display:flex;gap:6px;overflow:auto;padding:10px 0 4px;scrollbar-width:none;position:sticky;top:-20px;background:#fff;z-index:3}.guide-nav::-webkit-scrollbar{display:none}.guide-nav button{white-space:nowrap;border-radius:999px;padding:7px 10px;font-size:10px}.guide-sections section{scroll-margin-top:56px;padding:13px 2px;border-bottom:1px solid #e7ecef}.guide-sections h3{margin:0 0 9px;font-size:15px}.guide-sections p{font-size:11px;color:#536373;line-height:1.75}.guide-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.guide-steps>div{padding:11px;border:1px solid #e0e8eb;border-radius:13px;background:#f8fafb}.guide-steps b{display:block;color:#08766e}.guide-steps span{display:block;margin-top:4px;font-size:10px;color:#667582;line-height:1.6}.guide-table{display:grid;grid-template-columns:70px 1fr;gap:1px;border:1px solid #e1e8eb;border-radius:12px;overflow:hidden}.guide-table b,.guide-table span{padding:9px 10px;background:#f8fafb;font-size:10px}.guide-table b{color:#1d3548}.guide-table.lanes b{font:900 12px Inter,var(--mono);color:#08766e}.guide-note{padding:9px 11px!important;border-radius:10px;background:#eef6f5;color:#49635f!important}.empty{border-radius:14px}.toast{max-width:calc(100vw - 24px);text-align:center}.modal-head .close{flex:none}
+@media(max-width:720px){.header-actions .btn-label>span{display:none}.header-actions .iconbtn{width:38px;padding:0}.settings-grid{grid-template-columns:1fr}.settings-wide{grid-column:auto}.system-grid{grid-template-columns:1fr 1fr}.guide-steps{grid-template-columns:1fr}.user-audit{grid-template-columns:1fr 1fr}.fresh{align-items:flex-start}.fresh-state{white-space:normal}.guide-nav{top:-16px}}
 </style>
 
 <style id="vantage-identity-v43">
@@ -302,7 +305,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 .brand-wrap,.header-spacer,.ui-version,.clock,.header-actions{position:relative;z-index:1}.brand{color:#fff}.brand-sub{color:#a8d8d2}.brand-mark{background:rgba(8,24,38,.66);color:#6ce4d2;border:1px solid rgba(117,230,214,.22);box-shadow:0 10px 22px rgba(3,22,29,.34)}
 .ui-version{background:rgba(111,231,213,.14);color:#a8f2e7;border-color:rgba(128,235,219,.22)}.clock{color:#c5d9dc}.iconbtn{background:rgba(255,255,255,.1);color:#e7f6f4;border:1px solid rgba(255,255,255,.12)}.iconbtn:hover{background:rgba(255,255,255,.18);color:#fff}
 .tabs{border-top:4px solid var(--teal);background:rgba(255,255,255,.94)}.tabs button.active{background:linear-gradient(135deg,#10273a,#087f73)}
-.workflow-bar{border-left:4px solid var(--teal);background:linear-gradient(90deg,#e5f6f2,#fff)}
+
 .role-note{border-left:5px solid var(--teal)}
 .app-role-badge{display:inline-flex;margin-left:7px;padding:2px 7px;border-radius:999px;background:rgba(109,228,210,.14);color:#7be7d6;font:800 8px var(--mono);letter-spacing:.14em;vertical-align:1px}
 .rs-definition{display:flex;align-items:flex-start;gap:8px;margin:10px 0 12px;padding:10px 12px;border:1px solid #cfe4e0;border-left:4px solid var(--teal);border-radius:13px;background:#f4fbf9;color:#526777;font-size:10px;line-height:1.65}.rs-definition b{color:#08796d;white-space:nowrap}.rs-definition code{font:700 10px var(--mono);color:#26394b;background:#e8f4f1;padding:2px 5px;border-radius:5px}
@@ -372,25 +375,17 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.5</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.6</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
-  <button class="active" data-tab="stage" onclick="switchTab('stage')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M3 17h18M5 14l4-4 3 2 6-7 2 2"/></svg><span>市場</span></button>
-  <button data-tab="themes" onclick="switchTab('themes')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg><span>テーマ</span></button>
-  <button data-tab="watch" onclick="switchTab('watch')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span>管理</span></button>
+  <button class="active" data-tab="stage" onclick="switchTab('stage')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M3 17h18M5 14l4-4 3 2 6-7 2 2"/></svg><span>今日</span></button>
+  <button data-tab="themes" onclick="switchTab('themes')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg><span>候補</span></button>
+  <button data-tab="watch" onclick="switchTab('watch')"><svg class="ui-icon tab-icon" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg><span>監視</span></button>
 </nav>
-<div class="workflow-bar" aria-label="基本の操作順">
-  <button onclick="switchTab('stage')"><span class="workflow-no">1</span><span><b>市場</b><small>地合いを確認</small></span></button>
-  <span class="workflow-arrow">›</span>
-  <button onclick="switchTab('themes')"><span class="workflow-no">2</span><span><b>テーマ</b><small>資金の初動を選別</small></span></button>
-  <span class="workflow-arrow">›</span>
-  <button onclick="openGuide('handoff')"><span class="workflow-no">3</span><span><b>FRAME</b><small>仕掛け位置を判定</small></span></button>
-</div>
-
 <main>
 <section id="tab-stage" class="panel active">
-  <div class="role-note"><b>市場</b><span>いまリスクを取れるか、指数・韓国・ボラティリティ・重要日程を確認します。</span></div>
+  <div class="role-note"><b>今日</b><span>予定・地合いの例外・データ更新を短く確認します。</span></div>
   <div class="toolbar market">
     <button id="m-jp" class="active market-main" onclick="setMarket('jp')">日本株メイン</button>
     <button id="m-us" class="market-lead" onclick="setMarket('us')">海外リード</button>
@@ -400,7 +395,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 </section>
 
 <section id="tab-themes" class="panel">
-  <div class="role-note"><b>テーマ</b><span>資金の発芽・拡大・過熱・崩壊・修復を検知し、FRAMEへ送る候補を選びます。</span></div>
+  <div class="role-note"><b>候補</b><span>テーマから銘柄へ絞り、FRAMEへ送る候補を選びます。</span></div>
   <div class="toolbar market">
     <button id="t-global" class="active scope-global" onclick="setThemeScope('global')">世界横断</button>
     <button id="t-jp" class="market-main" onclick="setThemeScope('jp')">日本詳細</button>
@@ -420,7 +415,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 </section>
 
 <section id="tab-watch" class="panel">
-  <div class="role-note"><b>管理</b><span>ウォッチ、シグナル実績、バックテスト、重要イベントを一か所で管理します。</span></div>
+  <div class="role-note"><b>監視</b><span>ウォッチを保有優先で並べ、シグナル・イベント・需給を必要なときに確認します。</span></div>
   <div class="segment grow manage-segment">
     <button class="active" data-watch-view="list" onclick="setWatchView('list')">ウォッチ</button>
     <button data-watch-view="signals" onclick="setWatchView('signals')">シグナル</button>
@@ -462,17 +457,16 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.5-final-mobile-20260814';
+const FRONTEND_BUILD='vantage-ui73.6-final-flow-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.5-final-mobile';
+document.documentElement.dataset.mobileLayout='v73.6-final-flow';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
  ranking:{jp:null,us:null},watch:null,signals:null,backtest:null,events:null,positions:null,margin:null,
  themeContext:{},globalRisk:null,
- watchSort:localStorage.getItem('vantage_watch_sort')||'board',
- watchFilter:localStorage.getItem('vantage_watch_filter')||'all'
+ watchSort:localStorage.getItem('vantage_watch_sort')||'board'
 };
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -851,8 +845,7 @@ async function loadThemeRadar(){
   const macro={...(state.stage.us?.macro||{}),...(state.stage.jp?.macro||{})};
   if($('theme-fresh'))$('theme-fresh').innerHTML=`${freshnessBadge(state.stage.jp,'JP')} ${freshnessBadge(state.stage.us,'US')}`;
   const scopeLabel=scope==='global'?'世界横断・日米均衡':scope==='jp'?'日本詳細':'米国詳細';
-  const focusTitle=focus.length?`<h2 class="theme-focus-title">${focus.map(x=>`<span>${esc(x.name)}</span>`).join('')}</h2>`:'<h2 class="theme-focus-title empty"><span>発芽・修復テーマを監視中</span></h2>';
-  let html=`<div class="theme-hero"><div><div class="theme-eyebrow">NEXT MOMENTUM · ${esc(scopeLabel)}</div>${focusTitle}<p>個別の高値突破ではなく、テーマ内の反転初動・市場差RS・参加銘柄の広がりを先に捉えます。日本は実行市場、米国は先行市場として分離して確認します。</p></div><div class="theme-cycle"><span>発芽</span><span>拡大</span><span>過熱</span><span>崩壊</span><span>修復</span></div></div>`;
+  let html=`<div class="theme-hero"><div><div class="theme-eyebrow">NEXT MOMENTUM · ${esc(scopeLabel)}</div><h2 class="theme-focus-line">${focus.length?focus.map(x=>`<span class="theme-focus-name">${esc(x.name)}</span>`).join('<span class="theme-focus-sep">/</span>'):'<span class="theme-focus-name">発芽・修復テーマを監視中</span>'}</h2><p>個別の高値突破ではなく、テーマ内の反転初動・市場差RS・参加銘柄の広がりを先に捉えます。日本は実行市場、米国は先行市場として分離して確認します。</p></div><div class="theme-cycle"><span>発芽</span><span>拡大</span><span>過熱</span><span>崩壊</span><span>修復</span></div></div>`;
   html+=`<div class="global-gate ${risk.kind}"><b>${esc(risk.label)}</b><span>${esc(risk.detail)} · スコア ${risk.score}/${risk.seen}</span></div>`;
   if(scope==='global')html+=themeAlertPanel(history);
   html+=`<div class="pulse-grid">${macroPulse('S&P500',macro['S&P500'])}${macroPulse('SOX',macro['SOX'])}${macroPulse('KOSPI',macro['韓国KOSPI'])}${macroPulse('KOSDAQ',macro['韓国KOSDAQ'])}${macroPulse('日経平均',macro['日経平均'])}${macroPulse('VIX',macro['VIX'])}</div>`;
@@ -993,23 +986,42 @@ function momentumState(nt){
  if(nt?.recLevel==='recommend')return{label:'選別',kind:'warn'};
  return{label:'通常',kind:'good'};
 }
+function eventMatchesMarket(e,m){
+ const symbols=(e?.symbols||[]).filter(Boolean);
+ if(!symbols.length)return true;
+ return symbols.some(sym=>marketOf(sym)===m);
+}
+function todayEventHorizon(e){
+ const diff=new Date(e?.time).getTime()-Date.now();
+ if(!Number.isFinite(diff))return'';
+ if(diff<=24*3600000)return'24h以内';
+ const days=Math.ceil(diff/86400000);
+ return days+'日';
+}
+function todayScheduleHtml(m){
+ const now=Date.now(),limit=now+10*86400000;
+ const rows=(state.events?.events||[])
+  .filter(e=>{const t=new Date(e?.time).getTime();return Number.isFinite(t)&&t>=now&&t<=limit&&eventMatchesMarket(e,m)})
+  .sort((a,b)=>new Date(a.time)-new Date(b.time));
+ const in24=rows.filter(e=>new Date(e.time).getTime()<=now+24*3600000).length;
+ const shown=rows.slice(0,4);
+ const body=shown.length?shown.map(e=>{
+  const horizon=todayEventHorizon(e),symbols=(e.symbols||[]).map(code).filter(Boolean).slice(0,3).join('・');
+  return `<div class="today-event"><div class="today-event-main"><div class="today-event-name">${esc(e.name||'予定')}</div><div class="today-event-meta"><span>${esc(eventTimeLabel(e))}</span>${symbols?`<span>${esc(symbols)}</span>`:''}</div></div><span class="today-event-horizon ${horizon==='24h以内'?'soon':''}">${esc(horizon)}</span></div>`;
+ }).join(''):'<div class="today-schedule-empty">10日以内に登録対象の予定はありません。</div>';
+ const more=rows.length>4?`<button class="today-schedule-more" onclick="switchTab('watch');setWatchView('events')">ほか ${rows.length-4}件・予定一覧を開く</button>`:'';
+ return `<section class="today-schedule"><div class="today-schedule-head"><b>今日の予定</b><span>登録・監視対象を優先</span><span class="today-schedule-count">24h ${in24} / 10日 ${rows.length}</span><button onclick="switchTab('watch');setWatchView('events')">一覧</button></div><div class="today-event-list">${body}</div>${more}</section>`;
+}
 function renderSummary(m){
  const st=state.stage[m],nt=state.notrade[m];if(!st)return;
- const ms=marketState(st,m),mm=momentumState(nt),hot=nt?.summary||{};
- const rows=state.momentum?.[m]?.rows||state.momentum?.[m]?.board||[];
- const laneCount=lane=>rows.filter(r=>String(r?.entry_lane||'').toUpperCase()===lane).length;
- const ab=laneCount('A')+laneCount('B');
- const dips=Number.isFinite(Number(hot.healthy_dips))?Number(hot.healthy_dips):laneCount('C');
- const rsiHot=Number.isFinite(Number(hot.rsi_hot))?Number(hot.rsi_hot):rows.filter(r=>Number(r?.rsi14??r?.rsi)>=78).length;
- const supplyWarn=m==='jp'?Object.values(st.stocks||{}).filter(r=>r?.margin_add_blocked||Number(r?.supply_score??r?.margin_supply?.score)<=-7).length:null;
- const tails=Number.isFinite(Number(hot.shooting_stars))?Number(hot.shooting_stars):0;
- const recKind=mm.kind==='bad'?'bad':mm.kind==='warn'?'warn':'good';
- const headline=nt?.recLevel==='stress'?'新規候補は抑制':recKind==='bad'?'新規候補は見送り':recKind==='warn'?'候補を選別':'候補抽出は通常';
- const context=m==='jp'?'日本株':'米国株';
- let html=gateHtml(m);
- html+=`<section class="stock-daily ${recKind}"><div class="stock-daily-head"><div><span class="stock-daily-eyebrow">${context}・個別株環境</span><b>${headline}</b><small>市場 ${esc(ms.label)} · モメンタム ${esc(mm.label)}</small></div><span class="stock-daily-state ${recKind}">${esc(mm.label)}</span></div><div class="stock-daily-grid"><div class="stock-daily-metric priority"><span>A/B候補</span><b>${ab}</b></div><div class="stock-daily-metric dip"><span>押し目監視</span><b>${dips}</b></div><div class="stock-daily-metric hot"><span>RSI過熱</span><b>${rsiHot}</b></div><div class="stock-daily-metric ${m==='jp'&&supplyWarn?'risk':''}"><span>${m==='jp'?'需給警戒':'上ヒゲ'}</span><b>${m==='jp'?supplyWarn:tails}</b></div></div>`;
- if(nt?.signals?.length)html+=`<div class="stock-daily-alerts">${nt.signals.slice(0,2).map(x=>`<span><b>${esc(x.label)}</b>${esc(x.detail)}</span>`).join('')}</div>`;
- html+='</section>';
+ const ms=marketState(st,m),mm=momentumState(nt),context=m==='jp'?'日本株':'米国株';
+ const kind=marketGate(m)?.level==='stress'||mm.kind==='bad'?'bad':(marketGate(m)?.level==='caution'||mm.kind==='warn'?'warn':'good');
+ const headline=marketGate(m)?.block_new_entries?'新規候補を抑制中':kind==='bad'?'警戒を優先':kind==='warn'?'選別して確認':'通常運転';
+ let html='<div class="today-brief">';
+ html+=gateHtml(m);
+ html+=`<section class="today-context ${kind}"><div class="today-context-main"><b>${context} · ${headline}</b><span>市場 ${esc(ms.label)} · モメンタム ${esc(mm.label)}</span></div><span class="today-context-state ${kind}">${esc(mm.label)}</span></section>`;
+ html+=todayScheduleHtml(m);
+ html+='</div>';
  $('stage-summary').innerHTML=html;
 }
 function openMacroChart(name){
@@ -1188,24 +1200,12 @@ async function addSelectedExplorer(){
  try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items}});if(!d?.ok)throw new Error(d?.error||'追加できませんでした');toast((d.added||[]).length+'銘柄を追加'+((d.skipped||[]).length?' / 見送り'+d.skipped.length:'') );await loadExplorer()}catch(e){toast(e.message)}
 }
 
-function isHeldWatch(w){
- const key=String(w?.symbol||'').toUpperCase();
- return Boolean(w?.held)||(state.positions?.positions||[]).some(p=>String(p?.symbol||'').toUpperCase()===key);
-}
-window.setMonitorFilter=function(v){
- state.watchFilter=v==='held'?'held':'all';
- localStorage.setItem('vantage_watch_filter',state.watchFilter);
- if(state.watchView!=='list'){setWatchView('list');return}
- renderWatch();
- document.querySelectorAll('.v55-kpi.key-watch,.v55-kpi.key-held').forEach(b=>b.classList.remove('is-active'));
- document.querySelector(state.watchFilter==='held'?'.v55-kpi.key-held':'.v55-kpi.key-watch')?.classList.add('is-active');
-};
 function setWatchSort(v){state.watchSort=v;localStorage.setItem('vantage_watch_sort',v);renderWatch()}
 function sortWatch(items){
- const bm=boardMap(),rank={A:0,B:1,C:2,D:3,E:4};
+ const bm=boardMap(),rank={A:0,B:1,C:2,D:3,E:4},held=heldSet();
+ const isHeld=w=>w?.held===true||held.has(String(w?.symbol||'').toUpperCase());
  return items.slice().sort((a,b)=>{
-  const heldDiff=Number(isHeldWatch(b))-Number(isHeldWatch(a));
-  if(heldDiff)return heldDiff;
+  const heldOrder=Number(isHeld(b))-Number(isHeld(a));if(heldOrder)return heldOrder;
   if(state.watchSort==='added')return new Date(b.added_at||0)-new Date(a.added_at||0);
   if(state.watchSort==='market'){const d=String(a.market).localeCompare(String(b.market));if(d)return d}
   const ar=rank[bm.get(String(a.symbol).toUpperCase())?.entry_lane]??9,br=rank[bm.get(String(b.symbol).toUpperCase())?.entry_lane]??9;
@@ -1670,34 +1670,25 @@ const finite = v => v != null && Number.isFinite(Number(v));
 
   window.renderWatch = function(){
     if($('watch-sort'))$('watch-sort').value=state.watchSort;
-    const watchItems=state.watch?.items||[],bm=boardMap();
-    let scopeRows;
-    if(state.watchFilter==='held'){
-      const bySymbol=new Map(watchItems.map(w=>[String(w.symbol||'').toUpperCase(),w]));
-      scopeRows=(state.positions?.positions||[]).map(pos=>{
-        const key=String(pos.symbol||'').toUpperCase(),watched=bySymbol.get(key);
-        return watched||{id:'',symbol:pos.symbol,name:pos.name||code(pos.symbol),market:pos.market||marketOf(pos.symbol),status:'tracking',held:true,_positionOnly:true};
-      });
-      scopeRows=sortWatch(scopeRows);
-    }else{
-      scopeRows=sortWatch(watchItems);
-    }
-    const jpCount=scopeRows.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=scopeRows.length-jpCount;
-    const items=scopeRows.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
-    const enriched=items.map(w=>({w,r:currentWatchData(w,bm)}));
+    const all=sortWatch(state.watch?.items||[]),bm=boardMap();
+    const jpCount=all.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=all.length-jpCount;
+    const items=all.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
+    const heldSymbols=heldSet();
+    const enriched=items.map(w=>({w,r:currentWatchData(w,bm),isHeld:w?.held===true||heldSymbols.has(String(w?.symbol||'').toUpperCase())}));
 
-    let html=`<div class="watch-filter-caption">${state.watchFilter==='held'?'実保有のみ表示':'ウォッチ全体・保有を上位表示'}</div><div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国 ${usCount}</button></div></div>`;
-    if(!items.length){$('watch-list').innerHTML=html+`<div class="empty">${state.watchFilter==='held'?'この市場の実保有はありません':'この市場のウォッチは空です'}</div>`;return}
+    let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国 ${usCount}</button></div></div>`;
+    if(!items.length){$('watch-list').innerHTML=html+'<div class="empty">この市場のウォッチは空です</div>';return}
 
-    html+=enriched.map(({w,r})=>{
-      const held=isHeldWatch(w),m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'判定待ち',ds=watchDataState(r),status=w.status||'tracking';
+    html+=enriched.map(({w,r,isHeld})=>{
+      const m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'判定待ち',ds=watchDataState(r),status=w.status||'tracking';
       const chg=finite(r.change_pct)?pct(r.change_pct):'—',chgClass=finite(r.change_pct)?cls(r.change_pct):'muted';
       const stageText=r.long_stage||r.stage||r.stage_code||'日足レジーム待ち';
       const setup=r.setup_label?`<span>${esc(r.setup_label)}</span>`:'';
-      return `<details class="compact-row ${held?'is-held':'is-watch'}"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small>${w._positionOnly?'':`<button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button>`}</summary>`+
+      return `<details class="compact-row ${isHeld?'is-held':'is-watch'}"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${isHeld?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
         `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-current-line"><b>現在データ</b>　騰落率 ${finite(r.change_pct)?pct(r.change_pct):'—'} / 出来高 ${finite(r.effective_vol_ratio??r.vol_ratio)?num(r.effective_vol_ratio??r.vol_ratio)+'x':'—'} / 25MA ${pct(r.div25)} / 5日市場差RS ${pct(r.rs5)} / ${esc(watchTimeText(r,w))}</div>${marginSupplyHtml(r)}<div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格と判定は現在データ欄を参照。場中価格は遅延する場合があります。'}</div>`+
         `${w.signal_snapshot?`<div class="watch-history-note"><b>登録時スナップショット（現在値ではない）</b><br>${esc(dateText(w.signal_at||w.added_at))} / 騰落率 ${pct(w.signal_snapshot.change_pct)} / 出来高 ${num(w.signal_snapshot.effective_vol_ratio??w.signal_snapshot.vol_ratio)}x / 25MA ${pct(w.signal_snapshot.div25)} / 市場差RS5 ${pct(w.signal_snapshot.rs5)} / 判定 ${esc(w.signal_snapshot.entry_lane||'—')}</div>`:''}${w.legacy_status?`<div class="watch-history-note">旧状態「${esc(w.legacy_status)}」は管理用の追跡中へ移行済みです。実保有は保有☑だけを参照します。</div>`:''}`+
-        `${w._positionOnly?`<div class="data-separation">実保有として登録されています。ウォッチ管理へ追加すると、押し待ち・メモ・個別更新も使えます。</div><div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','hold')">FRAMEで判定</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="addWatchFromCandidate('${attr(w.symbol)}','${attr(w.name)}','${m}')">ウォッチへ追加</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">保有解除</button></div>`:`<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div><div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div>`}</div></details>`;
+        `<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
+        `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${isHeld?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
     }).join('');
     $('watch-list').innerHTML=html;
   };
@@ -1986,11 +1977,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.5"></script>
-<script src="./reliability-sync.js?build=v73.5"></script>
-<script src="./event-resilience.js?build=v73.5"></script>
-<script src="./navigation.js?build=v73.5"></script>
-<script src="./events-ui.js?build=v73.5"></script>
+<script src="./frame-sync.js?build=v73.6"></script>
+<script src="./reliability-sync.js?build=v73.6"></script>
+<script src="./event-resilience.js?build=v73.6"></script>
+<script src="./navigation.js?build=v73.6"></script>
+<script src="./events-ui.js?build=v73.6"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

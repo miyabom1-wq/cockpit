@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 const here=path.dirname(fileURLToPath(import.meta.url));
 const workerRoot=path.resolve(here,'..');
 const publicRoot=path.resolve(workerRoot,'../public');
@@ -18,28 +17,24 @@ test('candidate theme renderer has no out-of-scope helper dependency',()=>{
   assert.ok(helperAt>=0&&cardAt>helperAt,'theme leader helper must be in the same global scope before themeCard');
 });
 
-test('Today is stock focused and does not render the raw macro dashboard',()=>{
+test('Today prioritizes useful daily context and upcoming events',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const start=html.indexOf('function renderSummary(m)');
   const end=html.indexOf('function openMacroChart',start);
   assert.ok(start>=0&&end>start);
   const body=html.slice(start,end);
-  assert.match(body,/個別株環境/);
-  assert.match(body,/A\/B候補/);
-  assert.match(body,/押し目監視/);
-  assert.doesNotMatch(body,/マクロ \/ 指数/);
-  assert.doesNotMatch(body,/macro-list/);
-  assert.doesNotMatch(body,/todayEventDigest\(\)/);
+  assert.match(body,/today-context/);
+  assert.match(body,/todayScheduleHtml\(m\)/);
+  assert.match(html,/10日以内に登録対象の予定はありません/);
+  assert.doesNotMatch(body,/stock-daily-grid|A\/B候補|押し目監視|RSI過熱/);
 });
 
-test('monitor visually separates watch and held states',()=>{
+test('monitor keeps holdings visible inside watch cards without a duplicate held dashboard card',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const nav=fs.readFileSync(path.join(publicRoot,'navigation.js'),'utf8');
   assert.match(html,/is-held/);
   assert.match(html,/is-watch/);
   assert.match(nav,/key-watch/);
-  assert.match(nav,/key-held/);
-  assert.match(nav,/key-signal/);
-  assert.match(nav,/key-event/);
-  assert.match(nav,/key-supply/);
+  assert.doesNotMatch(nav,/key-held/);
+  assert.match(nav,/grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
 });

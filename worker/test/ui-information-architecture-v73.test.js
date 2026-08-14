@@ -6,27 +6,46 @@ import { fileURLToPath } from 'node:url';
 const here=path.dirname(fileURLToPath(import.meta.url));
 const publicRoot=path.resolve(here,'../../public');
 
-test('Today stays focused on individual-stock context instead of duplicating candidate and monitor tabs',()=>{
+test('three tabs keep distinct roles and Today shows schedule instead of candidate counts',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const nav=fs.readFileSync(path.join(publicRoot,'navigation.js'),'utf8');
-  assert.doesNotMatch(nav,/renderTodayOverview|v55-today-overview|上位テーマ|A・B候補/);
-  assert.doesNotMatch(html,/次の重要日程|class="focus-strip"|v52-margin-overview/);
-  assert.doesNotMatch(html,/todayEventDigest\(\)/);
-  assert.match(html,/個別株環境/);
-  assert.match(html,/A\/B候補/);
-  assert.doesNotMatch(html,/マクロ \/ 指数/);
-  assert.doesNotMatch(html,/section-title\">地合い/);
-  assert.match(html,/\.role-note\{display:none\}/);
-  assert.match(html,/時刻未確認\|時刻未公表\|時間未公表/);
+  assert.match(html,/data-tab="stage"[\s\S]*?<span>今日<\/span>/);
+  assert.match(html,/data-tab="themes"[\s\S]*?<span>候補<\/span>/);
+  assert.match(html,/data-tab="watch"[\s\S]*?<span>監視<\/span>/);
+  assert.doesNotMatch(html,/class="workflow-bar"/);
+  const start=html.indexOf('function renderSummary(m)');
+  const end=html.indexOf('function openMacroChart',start);
+  assert.ok(start>=0&&end>start);
+  const body=html.slice(start,end);
+  assert.match(body,/todayScheduleHtml\(m\)/);
+  assert.match(html,/function todayScheduleHtml\(m\)/);
+  assert.match(html,/今日の予定/);
+  assert.match(html,/24h/);
+  assert.doesNotMatch(body,/A\/B候補|押し目監視|RSI過熱|需給警戒/);
+  assert.doesNotMatch(body,/macro-list|マクロ \/ 指数/);
+  assert.match(nav,/予定・地合いの例外・データ更新/);
 });
 
-test('Theme expansion reveals leaders directly and monitor avoids duplicate mystery KPIs',()=>{
+test('Candidate mobile layout keeps theme names and 1D deltas aligned',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
-  assert.match(html,/theme-leaders-head/);
-  assert.doesNotMatch(html,/v73-leaders|タップで表示/);
-  assert.doesNotMatch(html,/watch-overview|価格取得済み|価格待ち<\/div><\/div><\/div>/);
-  assert.match(html,/watch-market-switch/);
-  assert.match(html,/信用需給を開く/);
+  assert.match(html,/theme-focus-line/);
+  assert.match(html,/theme-focus-name/);
+  assert.match(html,/white-space:nowrap/);
+  assert.match(html,/\.theme-alert\{display:grid!important;grid-template-columns:minmax\(0,1fr\) auto/);
+  assert.match(html,/\.theme-alert \.delta\{margin-left:0!important;min-width:76px;text-align:right/);
+  assert.doesNotMatch(html,/\bthemeSeq\b/);
+});
+
+test('Monitor has no redundant held KPI and watch list sorts held positions first',()=>{
+  const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const nav=fs.readFileSync(path.join(publicRoot,'navigation.js'),'utf8');
-  assert.match(nav,/v55-kpi:nth-child\(1\).*span 3/);
+  assert.match(nav,/key-watch/);
+  assert.doesNotMatch(nav,/key-held/);
+  assert.match(nav,/key-signal/);
+  assert.match(nav,/key-event/);
+  assert.match(nav,/key-supply/);
+  assert.match(html,/const heldOrder=Number\(isHeld\(b\)\)-Number\(isHeld\(a\)\)/);
+  assert.match(html,/heldSymbols=heldSet\(\)/);
+  assert.match(html,/isHeld\?'is-held':'is-watch'/);
+  assert.match(html,/badge held/);
 });

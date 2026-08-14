@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const NAV_BUILD='v73.5-final-mobile-20260814';
+const NAV_BUILD='v73.6-final-flow-20260814';
 if(window.__vantageNavigationBuild===NAV_BUILD)return;
 window.__vantageNavigationBuild=NAV_BUILD;
 
@@ -20,17 +20,15 @@ function installStyle(){
     .v55-candidate-nav{display:flex;gap:8px;align-items:center;margin:12px 0;flex-wrap:wrap}
     .v55-candidate-nav .segment{margin:0;flex:1;min-width:210px}
     .v55-candidate-nav select{min-width:150px}
-    .v55-kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
+    .v55-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
     .v55-kpi{border:1px solid var(--line,#dfe3e8);border-radius:13px;padding:11px;background:var(--card,#fff);cursor:pointer;text-align:left}
     .v55-kpi:hover{border-color:var(--accent,#2563eb)}
     .v55-kpi b{display:block;font-size:20px;line-height:1.2}
     .v55-kpi span{display:block;font-size:11px;color:var(--muted,#667085);margin-top:4px}
     .v55-kpi.key-watch{background:linear-gradient(180deg,#f7fbfd,#eef7fa);border-color:#c9dde6}.v55-kpi.key-watch b{color:#176d8e}
-    .v55-kpi.key-held{background:linear-gradient(180deg,#f8fdf9,#edf8f1);border-color:#c9e2d2}.v55-kpi.key-held b{color:#26785a}
     .v55-kpi.key-signal{background:#f8f7fc;border-color:#ded8ec}.v55-kpi.key-signal b{color:#6b5791}
     .v55-kpi.key-event{background:#fffaf0;border-color:#eadcbd}.v55-kpi.key-event b{color:#9b6b18}
     .v55-kpi.key-supply{background:#fff7f8;border-color:#ecd6da}.v55-kpi.key-supply b{color:#b74658}
-.v55-kpi.is-active{box-shadow:0 0 0 2px rgba(15,139,120,.18),0 6px 18px rgba(20,42,54,.07);border-color:#83bdb4}.v55-kpi.is-active span{color:#244a4a;font-weight:700}
     .v55-monitor-summary{margin-bottom:12px}
     .v55-context{display:none;align-items:center;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line,#dfe3e8);border-radius:13px;background:var(--card,#fff)}
     .v55-context.show{display:flex}
@@ -44,10 +42,8 @@ function installStyle(){
     #v55-more-btn .v55-dots{font-size:21px;line-height:1;margin-top:-4px}
     .v55-hidden{display:none!important}
     @media(max-width:820px){
-      .workflow-bar{display:none}
-      .v55-kpi-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
-      .v55-kpi:nth-child(1),.v55-kpi:nth-child(2){grid-column:span 3}
-      .v55-kpi:nth-child(n+3){grid-column:span 2}
+      .v55-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+      .v55-kpi{grid-column:auto!important}
       .v55-kpi{min-width:0;padding:10px}
       .v55-kpi b{font-size:18px}
       .v55-kpi span{font-size:10px;line-height:1.35}
@@ -70,29 +66,12 @@ function relabelShell(){
   }
 
   const stageNote=qs('#tab-stage .role-note');
-  if(stageNote)stageNote.innerHTML='<b>今日</b><span>個別株の候補が出やすい環境か、押し目・過熱・需給だけを短く確認します。</span>';
+  if(stageNote)stageNote.innerHTML='<b>今日</b><span>予定・地合いの例外・データ更新を短く確認します。</span>';
   const themeNote=qs('#tab-themes .role-note');
   if(themeNote)themeNote.innerHTML='<b>候補</b><span>テーマから銘柄へ絞り、FRAMEへ送る候補を選びます。</span>';
   const watchNote=qs('#tab-watch .role-note');
-  if(watchNote)watchNote.innerHTML='<b>監視</b><span>ウォッチ、保有、継続シグナル、イベント、需給警戒をまとめて確認します。</span>';
+  if(watchNote)watchNote.innerHTML='<b>監視</b><span>ウォッチを保有優先で並べ、シグナル・イベント・需給を必要なときに確認します。</span>';
 
-  const flow=qsa('.workflow-bar button');
-  const flowData=[
-    ['1','今日','実行環境を確認','stage'],
-    ['2','候補','テーマから銘柄へ','themes'],
-    ['3','監視','保有と観察を確認','watch']
-  ];
-  flow.forEach((button,index)=>{
-    const item=flowData[index];
-    if(!item)return;
-    const no=button.querySelector('.workflow-no');
-    const title=button.querySelector('b');
-    const small=button.querySelector('small');
-    if(no)no.textContent=item[0];
-    if(title)title.textContent=item[1];
-    if(small)small.textContent=item[2];
-    button.setAttribute('onclick',`switchTab('${item[3]}')`);
-  });
 
   const footer=qs('footer');
   if(footer)footer.textContent='VANTAGE · Today / Candidates / Monitor';
@@ -204,7 +183,7 @@ function setWatchContext(view){
 
   if(view==='list'){
     context?.classList.remove('show');
-    if(note)note.innerHTML='<b>監視</b><span>ウォッチ、保有、継続シグナル、イベント、需給警戒をまとめて確認します。</span>';
+    if(note)note.innerHTML='<b>監視</b><span>ウォッチを保有優先で並べ、シグナル・イベント・需給を必要なときに確認します。</span>';
     return;
   }
 
@@ -308,18 +287,16 @@ async function renderMonitorSummary(){
   root.innerHTML='<div class="loading compact">監視状況を集約中…</div>';
 
   try{
-    const [watch,signals,events,positions,jpStage]=await Promise.all([
+    const [watch,signals,events,jpStage]=await Promise.all([
       state.watch?Promise.resolve(state.watch):api('/api/watchlist').catch(()=>({items:[]})),
       state.signals?Promise.resolve(state.signals):api('/api/signal-log?limit=80').catch(()=>({items:[]})),
       state.events?Promise.resolve(state.events):api('/api/events').catch(()=>({events:[]})),
-      state.positions?Promise.resolve(state.positions):api('/api/positions').catch(()=>({positions:[]})),
       state.stage.jp?Promise.resolve(state.stage.jp):api('/api/stage?market=jp').catch(()=>({stocks:{}}))
     ]);
 
     state.watch=watch;
     state.signals=signals;
     state.events=events;
-    state.positions=positions;
     state.stage.jp=jpStage;
 
     const signalItems=signals.items||signals.signals||signals.records||[];
@@ -331,10 +308,9 @@ async function renderMonitorSummary(){
 
     root.innerHTML=`
       <div class="v55-kpi-grid">
-        <button class="v55-kpi key-watch ${state.watchFilter==='held'?'':'is-active'}" onclick="setMonitorFilter('all')"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
-        <button class="v55-kpi key-held ${state.watchFilter==='held'?'is-active':''}" onclick="setMonitorFilter('held')"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
+        <button class="v55-kpi key-watch" onclick="returnToV55Monitor()"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
         <button class="v55-kpi key-signal" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
-        <button class="v55-kpi key-event" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日以内イベント</span></button>
+        <button class="v55-kpi key-event" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日予定</span></button>
         <button class="v55-kpi key-supply" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒</span></button>
       </div>
     `;
