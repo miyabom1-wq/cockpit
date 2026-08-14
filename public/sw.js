@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73-theme-consolidated-20260814';
+const BUILD='vantage-ui73.1-mobile-auth-hotfix-20260814';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

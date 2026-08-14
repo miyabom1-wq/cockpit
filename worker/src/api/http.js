@@ -32,7 +32,18 @@ const WRITE_GETS=new Set([
 function trustedFrontend(request){
   const origin=request.headers.get('Origin')||'';
   const requestOrigin=new URL(request.url).origin;
-  return origin===FRONTEND_ORIGIN||origin===requestOrigin||origin.startsWith('http://localhost:');
+  if(origin===FRONTEND_ORIGIN||origin===requestOrigin||origin.startsWith('http://localhost:'))return true;
+
+  // Same-origin GET fetches (especially installed PWAs) may omit Origin.
+  // Sec-Fetch-Site is browser-controlled and lets the official Worker-hosted
+  // frontend read private panels without weakening mutation authorization.
+  const fetchSite=(request.headers.get('Sec-Fetch-Site')||'').toLowerCase();
+  if(!origin&&fetchSite==='same-origin')return true;
+
+  // Fallback for browsers/webviews that omit Sec-Fetch-Site but send Referer.
+  const referer=request.headers.get('Referer')||'';
+  if(!origin&&referer.startsWith(requestOrigin+'/'))return true;
+  return false;
 }
 
 function suppliedTokenMatches(request,env){
