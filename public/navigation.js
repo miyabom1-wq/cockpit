@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const NAV_BUILD='v73.4-stock-focus-20260814';
+const NAV_BUILD='v73.5-final-mobile-20260814';
 if(window.__vantageNavigationBuild===NAV_BUILD)return;
 window.__vantageNavigationBuild=NAV_BUILD;
 
@@ -30,6 +30,7 @@ function installStyle(){
     .v55-kpi.key-signal{background:#f8f7fc;border-color:#ded8ec}.v55-kpi.key-signal b{color:#6b5791}
     .v55-kpi.key-event{background:#fffaf0;border-color:#eadcbd}.v55-kpi.key-event b{color:#9b6b18}
     .v55-kpi.key-supply{background:#fff7f8;border-color:#ecd6da}.v55-kpi.key-supply b{color:#b74658}
+.v55-kpi.is-active{box-shadow:0 0 0 2px rgba(15,139,120,.18),0 6px 18px rgba(20,42,54,.07);border-color:#83bdb4}.v55-kpi.is-active span{color:#244a4a;font-weight:700}
     .v55-monitor-summary{margin-bottom:12px}
     .v55-context{display:none;align-items:center;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line,#dfe3e8);border-radius:13px;background:var(--card,#fff)}
     .v55-context.show{display:flex}
@@ -77,7 +78,7 @@ function relabelShell(){
 
   const flow=qsa('.workflow-bar button');
   const flowData=[
-    ['1','今日','地合いと日程','stage'],
+    ['1','今日','実行環境を確認','stage'],
     ['2','候補','テーマから銘柄へ','themes'],
     ['3','監視','保有と観察を確認','watch']
   ];
@@ -330,8 +331,8 @@ async function renderMonitorSummary(){
 
     root.innerHTML=`
       <div class="v55-kpi-grid">
-        <button class="v55-kpi key-watch" onclick="returnToV55Monitor()"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
-        <button class="v55-kpi key-held" onclick="returnToV55Monitor()"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
+        <button class="v55-kpi key-watch ${state.watchFilter==='held'?'':'is-active'}" onclick="setMonitorFilter('all')"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
+        <button class="v55-kpi key-held ${state.watchFilter==='held'?'is-active':''}" onclick="setMonitorFilter('held')"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
         <button class="v55-kpi key-signal" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
         <button class="v55-kpi key-event" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日以内イベント</span></button>
         <button class="v55-kpi key-supply" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒</span></button>

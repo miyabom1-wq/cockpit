@@ -194,8 +194,10 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 #watch-list .compact-row.is-watch{border-left:3px solid #8cb6c8}
 #watch-list .compact-row.is-held{border-left:4px solid #3f9b73;background:linear-gradient(90deg,rgba(222,243,233,.45),rgba(255,255,255,.96) 34%)}
 #watch-list .compact-row.is-held[open]{background:#fbfefc}
+.watch-filter-caption{margin:2px 2px 6px;font-size:10px;font-weight:700;color:var(--faint)}
 @media(max-width:720px){
  .stock-daily{padding:12px 11px}.stock-daily-head b{font-size:16px}.stock-daily-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.stock-daily-metric{padding:8px 9px}.stock-daily-metric b{font-size:17px}
+ .theme-focus-title{display:flex;gap:6px;margin:8px 0 7px}.theme-focus-title span{display:inline-flex;align-items:center;max-width:100%;padding:6px 9px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.09);font-size:13px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.theme-focus-title span:not(:last-child)::after{content:none}.theme-hero p{display:none}
 }
 
 </style>
@@ -214,7 +216,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 
 .brand-sub{font-size:9px;color:var(--faint);letter-spacing:.08em;margin-top:-2px}.ui-version{font:9px var(--mono);color:var(--faint);padding:4px 7px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
 .role-note{display:flex;align-items:center;gap:10px;padding:11px 13px;margin:0 0 12px;background:linear-gradient(135deg,rgba(15,139,120,.1),rgba(255,255,255,.72));border:1px solid rgba(15,139,120,.2);border-radius:13px}.role-note b{font-size:13px;color:#087664}.role-note span{font-size:10px;color:var(--muted)}
-.theme-segment,.manage-segment{position:static}.theme-hero{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:18px;margin:10px 0 12px;background:linear-gradient(145deg,#102a32,#163d42);color:#fff;border-radius:18px;box-shadow:0 12px 30px rgba(9,45,50,.18)}.theme-eyebrow{font:700 9px var(--mono);letter-spacing:.16em;color:#75d6c7}.theme-hero h2{font-size:20px;line-height:1.35;margin:5px 0}.theme-hero p{font-size:10px;color:#bdd3d1;max-width:620px}.theme-cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.theme-cycle span{font-size:9px;padding:5px 6px;border-radius:999px;background:rgba(255,255,255,.09);text-align:center;white-space:nowrap}.theme-cycle span:first-child,.theme-cycle span:last-child{background:rgba(117,214,199,.22);color:#a9f0e5}
+.theme-segment,.manage-segment{position:static}.theme-hero{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:18px;margin:10px 0 12px;background:linear-gradient(145deg,#102a32,#163d42);color:#fff;border-radius:18px;box-shadow:0 12px 30px rgba(9,45,50,.18)}.theme-eyebrow{font:700 9px var(--mono);letter-spacing:.16em;color:#75d6c7}.theme-hero h2{font-size:20px;line-height:1.35;margin:5px 0}.theme-focus-title{display:flex;align-items:baseline;flex-wrap:wrap;gap:0}.theme-focus-title span{min-width:0}.theme-focus-title span:not(:last-child)::after{content:" / ";opacity:.72}.theme-hero p{font-size:10px;color:#bdd3d1;max-width:620px}.theme-cycle{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}.theme-cycle span{font-size:9px;padding:5px 6px;border-radius:999px;background:rgba(255,255,255,.09);text-align:center;white-space:nowrap}.theme-cycle span:first-child,.theme-cycle span:last-child{background:rgba(117,214,199,.22);color:#a9f0e5}
 .pulse-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}.pulse{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:10px 11px;background:var(--surface);border:1px solid var(--line);border-radius:12px}.pulse span{font-size:10px;color:var(--muted)}.pulse b{font:700 13px var(--mono)}.pulse small{grid-column:1/-1;font:9px var(--mono);color:var(--faint)}
 .theme-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:10px 0 14px}.theme-summary>div{text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px}.theme-summary b{display:block;font:700 17px var(--mono);color:#087664}.theme-summary span{font-size:9px;color:var(--faint)}
 .theme-card{margin:8px 0;background:var(--surface);border:1px solid var(--line);border-left:4px solid #aeb6c2;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}.theme-card.seed{border-left-color:#0f8b78}.theme-card.repair{border-left-color:#5c78d5}.theme-card.good{border-left-color:#17a66d}.theme-card.hot{border-left-color:#d39220}.theme-card.bad{border-left-color:#d83048}.theme-card>summary{display:block;padding:13px 14px}.theme-card-head{display:flex;align-items:flex-start;gap:10px}.theme-title{font-weight:750;font-size:14px}.theme-reason{font-size:10px;color:var(--muted);margin-top:2px}.theme-phase{font-size:9px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--surface3);color:var(--muted)}.theme-phase.seed{background:#dff3ef;color:#087664}.theme-phase.repair{background:#e5eafa;color:#4763bd}.theme-phase.good{background:var(--greenBg);color:var(--green)}.theme-phase.hot{background:var(--amberBg);color:var(--amber)}.theme-phase.bad{background:var(--redBg);color:var(--red)}.theme-kpis{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:9px;font:10px var(--mono);color:var(--muted)}.theme-detail{padding:0 14px 13px;border-top:1px solid var(--line)}.theme-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.theme-detail-grid>div{padding:8px;background:var(--surface2);border-radius:9px;text-align:center}.theme-detail-grid b{display:block;font:700 13px var(--mono)}.theme-detail-grid span{font-size:8px;color:var(--faint)}.theme-leader{display:flex;align-items:center;gap:7px;padding:8px 5px;border-bottom:1px solid var(--line);cursor:pointer}.theme-leader:last-of-type{border-bottom:0}.theme-leader:hover{background:var(--surface2)}
@@ -260,7 +262,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-alerts{display:grid;gap:7px;margin:10px 0 12px}.theme-alert{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.theme-alert.transition{border-left:4px solid var(--blue)}.theme-alert.acceleration{border-left:4px solid var(--green)}.theme-alert.deceleration{border-left:4px solid var(--amber)}.theme-alert b{font-size:12px}.theme-alert span{font-size:10px;color:var(--muted)}.theme-alert .delta{margin-left:auto;font:700 11px var(--mono)}
 .history-status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:9px 11px;margin:8px 0;background:#f5f8f8;border:1px solid #dce8e6;border-radius:11px;font-size:10px;color:var(--muted)}.history-status b{color:#087664}.history-status .method{margin-left:auto;font-size:9px;color:var(--faint)}
 .theme-history-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid var(--line)}.history-trend{font-size:9px;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--surface3);color:var(--muted)}.history-trend.accel{background:var(--greenBg);color:var(--green)}.history-trend.slow{background:var(--amberBg);color:var(--amber)}.history-trend.transition{background:var(--blueBg);color:var(--blue)}.history-deltas{display:flex;gap:5px;font:9px var(--mono);color:var(--muted)}.history-deltas span{padding:3px 5px;background:var(--surface2);border-radius:6px}.theme-spark{width:88px;height:26px;margin-left:auto}.theme-spark .axis{stroke:#dfe5e7;stroke-width:1}.theme-spark .line{fill:none;stroke:var(--blue);stroke-width:2;vector-effect:non-scaling-stroke}
-@media(max-width:640px){.history-status .method{width:100%;margin-left:0}.theme-spark{width:72px}.theme-alert{align-items:flex-start}.theme-alert .delta{margin-left:0}}
+@media(max-width:640px){.history-status .method{width:100%;margin-left:0}.theme-spark{width:72px}.theme-alert{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:10px;row-gap:3px;padding:10px 11px}.theme-alert>div{min-width:0}.theme-alert>div>br{display:none}.theme-alert b{display:block;line-height:1.3;word-break:normal;overflow-wrap:break-word}.theme-alert>div>span{display:block;margin-top:4px;line-height:1.35}.theme-alert .delta{margin:0;align-self:start;white-space:nowrap;padding-top:1px}}
 </style>
 <style id="vantage-frame-handoff-style">
 .frame-mini{width:30px;height:28px;padding:0;border-radius:8px;border:1px solid #b9d8d2;background:#e8f7f4;color:#087565;font:800 12px "Inter",sans-serif;display:grid;place-items:center;flex:none}.frame-mini:hover{background:#d9f1ec;color:#075d52}.frame-action{background:#162b43!important;border-color:#162b43!important;color:#fff!important}.handoff-note{display:flex;gap:7px;align-items:center;font-size:10px;color:var(--muted);margin-top:8px}.handoff-note b{color:var(--blue)}
@@ -370,7 +372,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.4</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.5</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -460,16 +462,17 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.4-stock-focus-20260814';
+const FRONTEND_BUILD='vantage-ui73.5-final-mobile-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.4-stock-focus';
+document.documentElement.dataset.mobileLayout='v73.5-final-mobile';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
  ranking:{jp:null,us:null},watch:null,signals:null,backtest:null,events:null,positions:null,margin:null,
  themeContext:{},globalRisk:null,
- watchSort:localStorage.getItem('vantage_watch_sort')||'board'
+ watchSort:localStorage.getItem('vantage_watch_sort')||'board',
+ watchFilter:localStorage.getItem('vantage_watch_filter')||'all'
 };
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -848,7 +851,8 @@ async function loadThemeRadar(){
   const macro={...(state.stage.us?.macro||{}),...(state.stage.jp?.macro||{})};
   if($('theme-fresh'))$('theme-fresh').innerHTML=`${freshnessBadge(state.stage.jp,'JP')} ${freshnessBadge(state.stage.us,'US')}`;
   const scopeLabel=scope==='global'?'世界横断・日米均衡':scope==='jp'?'日本詳細':'米国詳細';
-  let html=`<div class="theme-hero"><div><div class="theme-eyebrow">NEXT MOMENTUM · ${esc(scopeLabel)}</div><h2>${focus.length?focus.map(x=>esc(x.name)).join(' / '):'発芽・修復テーマを監視中'}</h2><p>個別の高値突破ではなく、テーマ内の反転初動・市場差RS・参加銘柄の広がりを先に捉えます。日本は実行市場、米国は先行市場として分離して確認します。</p></div><div class="theme-cycle"><span>発芽</span><span>拡大</span><span>過熱</span><span>崩壊</span><span>修復</span></div></div>`;
+  const focusTitle=focus.length?`<h2 class="theme-focus-title">${focus.map(x=>`<span>${esc(x.name)}</span>`).join('')}</h2>`:'<h2 class="theme-focus-title empty"><span>発芽・修復テーマを監視中</span></h2>';
+  let html=`<div class="theme-hero"><div><div class="theme-eyebrow">NEXT MOMENTUM · ${esc(scopeLabel)}</div>${focusTitle}<p>個別の高値突破ではなく、テーマ内の反転初動・市場差RS・参加銘柄の広がりを先に捉えます。日本は実行市場、米国は先行市場として分離して確認します。</p></div><div class="theme-cycle"><span>発芽</span><span>拡大</span><span>過熱</span><span>崩壊</span><span>修復</span></div></div>`;
   html+=`<div class="global-gate ${risk.kind}"><b>${esc(risk.label)}</b><span>${esc(risk.detail)} · スコア ${risk.score}/${risk.seen}</span></div>`;
   if(scope==='global')html+=themeAlertPanel(history);
   html+=`<div class="pulse-grid">${macroPulse('S&P500',macro['S&P500'])}${macroPulse('SOX',macro['SOX'])}${macroPulse('KOSPI',macro['韓国KOSPI'])}${macroPulse('KOSDAQ',macro['韓国KOSDAQ'])}${macroPulse('日経平均',macro['日経平均'])}${macroPulse('VIX',macro['VIX'])}</div>`;
@@ -1184,10 +1188,24 @@ async function addSelectedExplorer(){
  try{const d=await api('/api/stocklist?market=jp',{method:'POST',body:{action:'batch_add',items}});if(!d?.ok)throw new Error(d?.error||'追加できませんでした');toast((d.added||[]).length+'銘柄を追加'+((d.skipped||[]).length?' / 見送り'+d.skipped.length:'') );await loadExplorer()}catch(e){toast(e.message)}
 }
 
+function isHeldWatch(w){
+ const key=String(w?.symbol||'').toUpperCase();
+ return Boolean(w?.held)||(state.positions?.positions||[]).some(p=>String(p?.symbol||'').toUpperCase()===key);
+}
+window.setMonitorFilter=function(v){
+ state.watchFilter=v==='held'?'held':'all';
+ localStorage.setItem('vantage_watch_filter',state.watchFilter);
+ if(state.watchView!=='list'){setWatchView('list');return}
+ renderWatch();
+ document.querySelectorAll('.v55-kpi.key-watch,.v55-kpi.key-held').forEach(b=>b.classList.remove('is-active'));
+ document.querySelector(state.watchFilter==='held'?'.v55-kpi.key-held':'.v55-kpi.key-watch')?.classList.add('is-active');
+};
 function setWatchSort(v){state.watchSort=v;localStorage.setItem('vantage_watch_sort',v);renderWatch()}
 function sortWatch(items){
  const bm=boardMap(),rank={A:0,B:1,C:2,D:3,E:4};
  return items.slice().sort((a,b)=>{
+  const heldDiff=Number(isHeldWatch(b))-Number(isHeldWatch(a));
+  if(heldDiff)return heldDiff;
   if(state.watchSort==='added')return new Date(b.added_at||0)-new Date(a.added_at||0);
   if(state.watchSort==='market'){const d=String(a.market).localeCompare(String(b.market));if(d)return d}
   const ar=rank[bm.get(String(a.symbol).toUpperCase())?.entry_lane]??9,br=rank[bm.get(String(b.symbol).toUpperCase())?.entry_lane]??9;
@@ -1652,24 +1670,34 @@ const finite = v => v != null && Number.isFinite(Number(v));
 
   window.renderWatch = function(){
     if($('watch-sort'))$('watch-sort').value=state.watchSort;
-    const all=sortWatch(state.watch?.items||[]),bm=boardMap();
-    const jpCount=all.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=all.length-jpCount;
-    const items=all.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
+    const watchItems=state.watch?.items||[],bm=boardMap();
+    let scopeRows;
+    if(state.watchFilter==='held'){
+      const bySymbol=new Map(watchItems.map(w=>[String(w.symbol||'').toUpperCase(),w]));
+      scopeRows=(state.positions?.positions||[]).map(pos=>{
+        const key=String(pos.symbol||'').toUpperCase(),watched=bySymbol.get(key);
+        return watched||{id:'',symbol:pos.symbol,name:pos.name||code(pos.symbol),market:pos.market||marketOf(pos.symbol),status:'tracking',held:true,_positionOnly:true};
+      });
+      scopeRows=sortWatch(scopeRows);
+    }else{
+      scopeRows=sortWatch(watchItems);
+    }
+    const jpCount=scopeRows.filter(w=>(w.market||marketOf(w.symbol))==='jp').length,usCount=scopeRows.length-jpCount;
+    const items=scopeRows.filter(w=>(w.market||marketOf(w.symbol))===state.watchMarket);
     const enriched=items.map(w=>({w,r:currentWatchData(w,bm)}));
 
-    let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国 ${usCount}</button></div></div>`;
-    if(!items.length){$('watch-list').innerHTML=html+'<div class="empty">この市場のウォッチは空です</div>';return}
+    let html=`<div class="watch-filter-caption">${state.watchFilter==='held'?'実保有のみ表示':'ウォッチ全体・保有を上位表示'}</div><div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国 ${usCount}</button></div></div>`;
+    if(!items.length){$('watch-list').innerHTML=html+`<div class="empty">${state.watchFilter==='held'?'この市場の実保有はありません':'この市場のウォッチは空です'}</div>`;return}
 
     html+=enriched.map(({w,r})=>{
-      const m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'判定待ち',ds=watchDataState(r),status=w.status||'tracking';
+      const held=isHeldWatch(w),m=w.market||marketOf(w.symbol),lane=r.entry_lane||'D',laneLabel=r.entry_lane||'判定待ち',ds=watchDataState(r),status=w.status||'tracking';
       const chg=finite(r.change_pct)?pct(r.change_pct):'—',chgClass=finite(r.change_pct)?cls(r.change_pct):'muted';
       const stageText=r.long_stage||r.stage||r.stage_code||'日足レジーム待ち';
       const setup=r.setup_label?`<span>${esc(r.setup_label)}</span>`:'';
-      return `<details class="compact-row ${w.held?'is-held':'is-watch'}"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
+      return `<details class="compact-row ${held?'is-held':'is-watch'}"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small>${w._positionOnly?'':`<button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button>`}</summary>`+
         `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-current-line"><b>現在データ</b>　騰落率 ${finite(r.change_pct)?pct(r.change_pct):'—'} / 出来高 ${finite(r.effective_vol_ratio??r.vol_ratio)?num(r.effective_vol_ratio??r.vol_ratio)+'x':'—'} / 25MA ${pct(r.div25)} / 5日市場差RS ${pct(r.rs5)} / ${esc(watchTimeText(r,w))}</div>${marginSupplyHtml(r)}<div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格と判定は現在データ欄を参照。場中価格は遅延する場合があります。'}</div>`+
         `${w.signal_snapshot?`<div class="watch-history-note"><b>登録時スナップショット（現在値ではない）</b><br>${esc(dateText(w.signal_at||w.added_at))} / 騰落率 ${pct(w.signal_snapshot.change_pct)} / 出来高 ${num(w.signal_snapshot.effective_vol_ratio??w.signal_snapshot.vol_ratio)}x / 25MA ${pct(w.signal_snapshot.div25)} / 市場差RS5 ${pct(w.signal_snapshot.rs5)} / 判定 ${esc(w.signal_snapshot.entry_lane||'—')}</div>`:''}${w.legacy_status?`<div class="watch-history-note">旧状態「${esc(w.legacy_status)}」は管理用の追跡中へ移行済みです。実保有は保有☑だけを参照します。</div>`:''}`+
-        `<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
-        `<div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${w.held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div></div></details>`;
+        `${w._positionOnly?`<div class="data-separation">実保有として登録されています。ウォッチ管理へ追加すると、押し待ち・メモ・個別更新も使えます。</div><div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','hold')">FRAMEで判定</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="addWatchFromCandidate('${attr(w.symbol)}','${attr(w.name)}','${m}')">ウォッチへ追加</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">保有解除</button></div>`:`<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div><div class="actions"><button class="frame-action" onclick="openFrame('${attr(w.symbol)}','${attr(w.name)}','${m}','watch')">FRAMEで判定</button><button onclick="saveWatch('${attr(w.id)}')">保存</button><button onclick="openChart('${attr(w.symbol)}')">チャート</button><button onclick="toggleHeld('${attr(w.symbol)}','${attr(w.name)}','${m}')">${held?'保有解除':'保有☑'}</button><button class="primary" onclick="refreshWatch('${attr(w.id)}',this)">価格・判定を更新</button><button class="danger" onclick="deleteWatch('${attr(w.id)}')">削除</button></div>`}</div></details>`;
     }).join('');
     $('watch-list').innerHTML=html;
   };
@@ -1958,11 +1986,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.4"></script>
-<script src="./reliability-sync.js?build=v73.4"></script>
-<script src="./event-resilience.js?build=v73.4"></script>
-<script src="./navigation.js?build=v73.4"></script>
-<script src="./events-ui.js?build=v73.4"></script>
+<script src="./frame-sync.js?build=v73.5"></script>
+<script src="./reliability-sync.js?build=v73.5"></script>
+<script src="./event-resilience.js?build=v73.5"></script>
+<script src="./navigation.js?build=v73.5"></script>
+<script src="./events-ui.js?build=v73.5"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

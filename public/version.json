@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui73.4-stock-focus-20260814",
-  "ui_version": "v73.4",
+  "frontend_build": "vantage-ui73.5-final-mobile-20260814",
+  "ui_version": "v73.5",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-08-14T19:05:00+09:00",
+  "generated_at": "2026-08-14T19:27:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
-  "smoke_mode": "stock-focus-theme-runtime-monitor-contrast"
+  "smoke_mode": "three-tab-mobile-theme-watch-filter-held-first"
 }
