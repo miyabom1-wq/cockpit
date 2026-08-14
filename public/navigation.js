@@ -110,8 +110,6 @@ function relabelShell(){
   const footer=qs('footer');
   if(footer)footer.textContent='VANTAGE · Today / Candidates / Monitor';
 
-  const version=qs('.ui-version');
-  if(version)version.textContent='UI v55';
 }
 
 function ensureMoreButton(){

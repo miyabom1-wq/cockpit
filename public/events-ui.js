@@ -307,6 +307,4 @@ installStyle();
 patchMoreIconFallback();
 new MutationObserver(()=>patchMoreIconFallback()).observe(document.body,{childList:true,subtree:true});
 if(typeof state!=='undefined'&&state.events?.events?.length)queueMicrotask(()=>window.renderEvents());
-const version=document.querySelector('.ui-version');
-if(version)version.textContent='UI v62';
 })();

@@ -60,6 +60,4 @@ if(typeof baseLoadMargin==='function')window.loadMarginSupply=async function(for
   return out;
 };
 
-const version=document.querySelector('.ui-version');
-if(version)version.textContent='UI v53';
 })();

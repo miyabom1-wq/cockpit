@@ -24,7 +24,7 @@ self.addEventListener('push',event=>{
  catch{data={body:event.data?event.data.text():''}}
  event.waitUntil(self.registration.showNotification(data.title||'VANTAGE',{
   body:data.body||'',
-  icon:'./icon-v45-192.png',
+  icon:'./icon-192.png',
   badge:'./icon-badge.png',
   tag:data.tag||'vantage-index',
   renotify:true,

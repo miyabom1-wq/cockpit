@@ -1,0 +1,16 @@
+# Dependencies / local tooling
+node_modules/
+worker/node_modules/
+.wrangler/
+worker/.wrangler/
+
+# Local backups and generated archives
+_backup*/
+*.zip
+
+# Local secrets / OS files
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db

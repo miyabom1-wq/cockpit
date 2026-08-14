@@ -79,6 +79,4 @@ window.loadEvents=async function(force=false){
   }
 };
 
-const version=document.querySelector('.ui-version');
-if(version)version.textContent='UI v54';
 })();
