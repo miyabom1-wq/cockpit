@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui73.7-final-context-backtest-20260814",
-  "ui_version": "v73.7",
+  "frontend_build": "vantage-ui73.7.2-final-backtest-mobile-macro-20260814",
+  "ui_version": "v73.7.2",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-08-14T20:20:00+09:00",
+  "generated_at": "2026-08-14T21:20:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
-  "smoke_mode": "three-tab-today-levels-schedule-held-first-backtest-eligibility"
+  "smoke_mode": "three-tab-today-levels-paired-mobile-macro-backtest-simulation-safe"
 }

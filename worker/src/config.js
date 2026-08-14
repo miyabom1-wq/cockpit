@@ -2,7 +2,7 @@ export const APP_VERSION = 'v71.0.0';
 export const BUILD_ID = '20260731-unified-worker-assets-origin-access';
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
 export const ENGINE_VERSION = 'engine-v51.0.0';
-export const BACKTEST_VERSION = 'registered-bt-v7-eligibility-resilience';
+export const BACKTEST_VERSION = 'registered-bt-v8-simulation-safe';
 export const DEPLOYED_AT = '2026-07-31T01:30:00.000+09:00';
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 

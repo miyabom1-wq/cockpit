@@ -190,7 +190,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .today-context.good{border-left:4px solid #2f9a72}.today-context.warn{border-left:4px solid #c38b2c}.today-context.bad{border-left:4px solid #c94b5e}
 .today-context-main{min-width:0;flex:1}.today-context-main b{display:block;font-size:14px;line-height:1.3}.today-context-main span{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
 .today-context-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.today-context-state.good{background:var(--greenBg);color:var(--green)}.today-context-state.warn{background:var(--amberBg);color:var(--amber)}.today-context-state.bad{background:var(--redBg);color:var(--red)}
-.today-macro{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.today-macro{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
 .today-macro-item{min-width:0;padding:10px 10px 9px;border:1px solid #dce5e8;border-radius:13px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(20,42,54,.025);text-align:left;color:var(--text)}.today-macro-item:hover{background:#fff;border-color:#c9d8dc}.today-macro-item:active{transform:none;background:#f7fafb}
 .today-macro-name{display:block;font-size:9px;font-weight:750;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-macro-value{display:flex;align-items:baseline;gap:7px;margin-top:3px;min-width:0}.today-macro-price{min-width:0;overflow:hidden;text-overflow:ellipsis;font:800 15px var(--mono);letter-spacing:-.03em;color:var(--text);white-space:nowrap}.today-macro-move{margin-left:auto;flex:0 0 auto;font:800 11px var(--mono);line-height:1.25;white-space:nowrap}.today-macro-5d{display:block;margin-top:2px;font:8px var(--mono);color:var(--faint);white-space:nowrap}
 .today-schedule{overflow:hidden;border:1px solid #d8e3e6;border-radius:16px;background:rgba(255,255,255,.95);box-shadow:0 5px 18px rgba(20,42,54,.04)}
@@ -378,7 +378,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.7</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.7.2</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -460,10 +460,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.7-final-context-backtest-20260814';
+const FRONTEND_BUILD='vantage-ui73.7.2-final-backtest-mobile-macro-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.7-final-context-backtest';
+document.documentElement.dataset.mobileLayout='v73.7.2-final-backtest-mobile-macro';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -1012,8 +1012,12 @@ function todayMacroPriceText(key,x){
 function todayMacroHtml(st){
  const macro=st?.macro||{};
  const defs=[
-  ['日経','日経平均'],['日経先物','日経先物（CME円建て）'],['SOX','SOX'],['S&P500','S&P500'],['Nasdaq','Nasdaq'],
-  ['KOSPI','韓国KOSPI'],['KOSDAQ','韓国KOSDAQ'],['VIX','VIX'],['USD/JPY','ドル円'],['米10年','米10年債']
+  ['日経','日経平均'],['日経先物','日経先物（CME円建て）'],
+  ['S&P500','S&P500'],['NASDAQ','Nasdaq'],
+  ['KOSPI','韓国KOSPI'],['KOSDAQ','韓国KOSDAQ'],
+  ['SOX','SOX'],['VIX','VIX'],
+  ['USD/JPY','ドル円'],['米10年','米10年債'],
+  ['GOLD','金'],['BTC','BTC']
  ];
  const items=defs.map(([label,key])=>{
   const x=macro[key];if(!x)return'';
@@ -1271,7 +1275,7 @@ function ruleCard(rule,research=false){
  const v=rule.validation||{},t=rule.test||{},h=rule.holdout||{};
  return `<div class="rule-card"><div class="rule-head"><span class="badge ${rule.strategy==='A'||rule.strategy==='C_A'?'A':'B'}">${rule.strategy.replace('_','→')}</span><span class="rule-name">${rule.market==='jp'?'日本':'米国'} ${research?'検証中':'厳選ルール'}</span><span class="${research?'badge C':'strict-badge'}">${research?'最終未確認':'最終試験合格'}</span></div><div class="rule-conditions">${esc((rule.labels||[]).join(' ＋ '))}</div><div class="rule-split"><div><div class="k">検証</div><div class="v">${num(v.win_rate,1)}% / n=${v.trades||0}</div></div><div><div class="k">最終試験</div><div class="v">${num(t.win_rate,1)}% / n=${t.trades||0}</div></div><div><div class="k">最終期待値</div><div class="v ${cls(t.expectancy)}">${pct(t.expectancy)}</div></div></div><div class="selective-stats"><span>PF ${num(t.profit_factor)}</span><span>中央値 ${pct(t.median_return)}</span><span>95%CI ${t.win_rate_ci_low??'—'}〜${t.win_rate_ci_high??'—'}%</span><span>検証+最終 ${num(h.win_rate,1)}%</span></div></div>`;
 }
-function btErrorLabel(k){return({rate_limit:'Yahoo制限',provider_access:'取得元拒否',provider_empty:'取得元一時空',not_found:'銘柄・データなし',network:'通信失敗',symbol_mismatch:'銘柄不一致',history_short:'履歴不足',worker_limit:'Worker制限',analysis:'分析エラー'})[k]||k}
+function btErrorLabel(k){return({rate_limit:'Yahoo制限',provider_access:'取得元拒否',provider_empty:'取得元一時空',not_found:'銘柄・データなし',network:'通信失敗',symbol_mismatch:'銘柄不一致',history_short:'履歴不足',worker_limit:'Worker制限',analysis_bug:'内部計算エラー',analysis:'分析エラー'})[k]||k}
 function renderBacktest(){
  const d=state.backtest||{},p=d.progress||{},total=p.total||0,excluded=p.excluded||0,success=p.success??Math.max(0,(p.done||0)-(p.failed??p.errors??0)-excluded),failed=p.failed??p.errors??0,retrying=p.retrying||0,pending=p.pending??Math.max(0,total-success-failed-excluded-retrying),resolved=success+failed+excluded,rate=total?Math.min(100,resolved/total*100):0;
  const statusMap={complete:'完了',failed:'集計失敗',running:'自動集計中'},status=statusMap[d.status]||'自動集計中',usable=d.result_usable===true;
@@ -2006,11 +2010,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.7"></script>
-<script src="./reliability-sync.js?build=v73.7"></script>
-<script src="./event-resilience.js?build=v73.7"></script>
-<script src="./navigation.js?build=v73.7"></script>
-<script src="./events-ui.js?build=v73.7"></script>
+<script src="./frame-sync.js?build=v73.7.2"></script>
+<script src="./reliability-sync.js?build=v73.7.2"></script>
+<script src="./event-resilience.js?build=v73.7.2"></script>
+<script src="./navigation.js?build=v73.7.2"></script>
+<script src="./events-ui.js?build=v73.7.2"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

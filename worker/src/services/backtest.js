@@ -99,26 +99,91 @@ async function benchmark(env,market){
   return{primary,secondary};
 }
 
-function simulate(prepared,index,maxHold){
-  const rows=prepared.rows,signal=rows[index],next=rows[index+1];if(!next)return{status:'no_next'};
-  const gap=(next.open/signal.close-1)*100;if(gap>GAP)return{status:'gap_skip',gap_pct:round(gap)};
-  const trigger=signal.high,stop=signal.low;let entry=null,ambiguous=false;
-  if(next.open>=trigger)entry=next.open;
-  else if(next.high>=trigger){if(next.low<=stop)ambiguous=true;else entry=trigger;}
-  else return{status:'not_triggered'};
-  if(ambiguous)return{status:'ambiguous'};if(!(stop>0&&entry>stop))return{status:'invalid_stop'};
+export function simulateBacktestTrade(prepared,index,maxHold){
+  const rows=prepared?.rows||[];
+  const signal=rows[index],next=rows[index+1];
+  if(!signal||!next)return{status:'no_next'};
+
+  const gap=(Number(next.open)/Number(signal.close)-1)*100;
+  if(gap>GAP)return{status:'gap_skip',gap_pct:round(gap)};
+
+  const trigger=Number(signal.high),stop=Number(signal.low);
+  let entry=null,ambiguous=false;
+
+  if(Number(next.open)>=trigger)entry=Number(next.open);
+  else if(Number(next.high)>=trigger){
+    if(Number(next.low)<=stop)ambiguous=true;
+    else entry=trigger;
+  }else return{status:'not_triggered'};
+
+  if(ambiguous)return{status:'ambiguous'};
+  if(!(finite(stop)&&finite(entry)&&stop>0&&entry>stop))return{status:'invalid_stop'};
+
   let maxHigh=entry,minLow=entry,exit=null,exitIndex=null,reason='time',pendingMa=false;
   for(let j=index+1;j<rows.length&&j<=index+maxHold;j++){
-    const r=rows[j];
-    if(pendingMa){exit=r.open;exitIndex=j;reason='ma5_next_open';break;}
-    maxHigh=Math.max(maxHigh,r.high);minLow=Math.min(minLow,r.low);
-    if(r.open<=stop){exit=r.open;exitIndex=j;reason='gap_stop';break;}
-    if(r.low<=stop){exit=stop;exitIndex=j;reason='stop';break;}
-    const ma5=prepared.sma5[j];if(j>index+1&&finite(ma5)&&r.close<ma5){if(j+1<rows.length){pendingMa=true;continue;}exit=r.close;exitIndex=j;reason='ma5_last_close';break;}
-    if(j===index+maxHold||j===rows.length-1){exit=r.close;exitIndex=j;reason='time';break;}
+    const row=rows[j];
+    if(!row)break;
+
+    if(pendingMa){
+      exit=Number(row.open);
+      exitIndex=j;
+      reason='ma5_next_open';
+      break;
+    }
+
+    maxHigh=Math.max(maxHigh,Number(row.high));
+    minLow=Math.min(minLow,Number(row.low));
+
+    if(Number(row.open)<=stop){
+      exit=Number(row.open);
+      exitIndex=j;
+      reason='gap_stop';
+      break;
+    }
+    if(Number(row.low)<=stop){
+      exit=stop;
+      exitIndex=j;
+      reason='stop';
+      break;
+    }
+
+    // The holding-period limit wins over scheduling an MA5 exit
+    // for a date outside the allowed test window.
+    const atTimeLimit=j===index+maxHold||j===rows.length-1;
+    if(atTimeLimit){
+      exit=Number(row.close);
+      exitIndex=j;
+      reason='time';
+      break;
+    }
+
+    const ma5=prepared?.sma5?.[j];
+    if(j>index+1&&finite(ma5)&&Number(row.close)<Number(ma5)){
+      pendingMa=true;
+    }
   }
-  if(!finite(exit))return{status:'open'};const ret=(exit/entry-1)*100-COST;
-  return{status:'trade',entry_date:next.date,exit_date:rows[exitIndex].date,entry:round(entry,4),exit:round(exit,4),stop:round(stop,4),return_pct:round(ret),mfe_pct:round((maxHigh/entry-1)*100),mae_pct:round((minLow/entry-1)*100),hold_days:exitIndex-(index+1)+1,exit_reason:reason,gap_pct:round(gap)};
+
+  // shared finite(null) is true because Number(null) === 0.
+  // Validate the index itself before dereferencing rows[exitIndex].
+  if(!finite(exit)||!Number.isInteger(exitIndex)||!rows[exitIndex]){
+    return{status:'open'};
+  }
+
+  const ret=(Number(exit)/Number(entry)-1)*100-COST;
+  return{
+    status:'trade',
+    entry_date:next.date,
+    exit_date:rows[exitIndex].date,
+    entry:round(entry,4),
+    exit:round(exit,4),
+    stop:round(stop,4),
+    return_pct:round(ret),
+    mfe_pct:round((maxHigh/entry-1)*100),
+    mae_pct:round((minLow/entry-1)*100),
+    hold_days:exitIndex-(index+1)+1,
+    exit_reason:reason,
+    gap_pct:round(gap)
+  };
 }
 
 function metric(trades){
@@ -133,7 +198,7 @@ export function backtestSeries(rows,benchRows,meta){
   for(let i=200;i<p.rows.length-1;i++){
     const a=analyzePreparedAt(p,i,{symbol:meta.symbol,name:meta.name,market:meta.market,benchmarkMap:bm,secondaryBenchmarkMap:secondaryBm,expectedDate:p.rows[i].date,closeConfirmed:true,requireCloseConfirmed:true,snapshotId:`BT-${p.rows[i].date}`,source:'Yahoo Finance'});if(!a)continue;
     const signals=[];if(a.entry_lane==='A'&&prev!=='A')signals.push('A');if(a.entry_lane==='B'&&prev!=='B')signals.push('B');if(prev==='C'&&a.entry_lane==='A')signals.push('C_A');if(prev==='C'&&a.entry_lane==='B')signals.push('C_B');
-    const b=bm.get(a.date)||{};for(const key of signals){const sim=simulate(p,i,STRATEGIES[key].max_hold);pools[key].push({symbol:meta.symbol,name:meta.name,market:meta.market,strategy:key,signal_date:a.date,features:{market_regime:regimeFromBench(b),vol_ratio:a.vol_ratio,rs5:a.rs5,div25:a.div25,close_pos:a.close_pos,setup:a.setup_code},...sim});}prev=a.entry_lane;
+    const b=bm.get(a.date)||{};for(const key of signals){const sim=simulateBacktestTrade(p,i,STRATEGIES[key].max_hold);pools[key].push({symbol:meta.symbol,name:meta.name,market:meta.market,strategy:key,signal_date:a.date,features:{market_regime:regimeFromBench(b),vol_ratio:a.vol_ratio,rs5:a.rs5,div25:a.div25,close_pos:a.close_pos,setup:a.setup_code},...sim});}prev=a.entry_lane;
   }
   const strategies={};for(const [k,trades] of Object.entries(pools)){const recent=trades.filter(x=>x.signal_date>=new Date(Date.now()-365*86400000).toISOString().slice(0,10));strategies[k]={...STRATEGIES[k],metrics:metric(trades),recent_metrics:metric(recent),trades};}
   return{version:BACKTEST_VERSION,engine_version:ENGINE_VERSION,symbol:meta.symbol,name:meta.name,market:meta.market,history_start:p.rows[0]?.date||null,history_end:p.rows.at(-1)?.date||null,history_days:p.rows.length,strategies,generated_at:nowIso()};
@@ -165,6 +230,7 @@ export function classifyBacktestError(error){
   if(/取得元空データ|指数取得不完全|provider empty|empty provider/.test(text))return'provider_empty';
   if(/履歴不足|insufficient history/.test(text))return'history_short';
   if(/cpu|memory|subrequest|limit exceeded/.test(text))return'worker_limit';
+  if(/cannot read properties|cannot set properties|referenceerror|typeerror/.test(text))return'analysis_bug';
   return'analysis';
 }
 function retryableCategory(category){return['rate_limit','provider_access','provider_empty','network','worker_limit'].includes(category);}
