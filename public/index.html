@@ -150,8 +150,6 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 @media(max-width:640px){.bt-grid{grid-template-columns:1fr}.bt-main{gap:5px}.bt-card{padding:13px}.bt-symbol{grid-template-columns:1fr auto auto}.bt-symbol .bt-n{display:none}}
 
 /* v73.3 mobile hierarchy: one tap per level, no duplicate daily panels */
-.today-events{display:flex;width:100%;align-items:center;gap:10px;margin:10px 0 12px;padding:10px 12px;border:1px solid #d8e4e7;border-radius:13px;background:#f8fbfb;color:var(--text);text-align:left;box-shadow:none}
-.today-events:hover{background:#f2f8f7}.today-events-badge{flex:0 0 auto;font:800 10px var(--mono);color:#08796d;background:#e1f3ef;border-radius:999px;padding:4px 7px}.today-events-main{flex:1;min-width:0}.today-events-main b{display:block;font-size:11px}.today-events-main span{display:block;margin-top:2px;font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.today-events-more{flex:0 0 auto;color:var(--faint);font-size:18px}
 .macro-freshness>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none}.macro-freshness>summary::-webkit-details-marker{display:none}.macro-freshness>summary span{margin-left:auto;color:var(--faint);font-size:9px}.macro-freshness-detail{margin-top:6px;padding-top:6px;border-top:1px solid rgba(100,120,130,.14)}
 .theme-leaders-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:11px 1px 6px;padding-top:10px;border-top:1px solid var(--line);font-size:11px;font-weight:800;color:var(--muted)}.theme-leaders-head span:last-child{font-weight:600;color:var(--faint)}
 .watch-tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.watch-tools #watch-sort{width:100%;min-width:0;margin:0}.watch-tools .primary{white-space:nowrap}
@@ -183,6 +181,21 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
   #watch-list .compact-head>.watch-inline-update{order:3;flex:0 0 auto;margin-left:auto}
   #watch-list .watch-quote b{font-size:15px}#watch-list .watch-quote span{font-size:12px}
   .v55-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.v55-kpi{min-width:0;padding:10px}.v55-kpi b{font-size:18px}.v55-kpi span{font-size:10px;line-height:1.35}
+}
+
+
+/* v73.4 stock-focus UI: individual-stock decisions first */
+.stock-daily{margin:10px 0 12px;padding:14px;border:1px solid #d9e2e7;border-left:4px solid #7b95a3;border-radius:16px;background:rgba(255,255,255,.94);box-shadow:0 5px 18px rgba(20,42,54,.04)}
+.stock-daily.good{border-left-color:#2f9a72}.stock-daily.warn{border-left-color:#c38b2c}.stock-daily.bad{border-left-color:#c94b5e}
+.stock-daily-head{display:flex;align-items:flex-start;gap:12px}.stock-daily-head>div{min-width:0;flex:1}.stock-daily-eyebrow{display:block;font-size:9px;font-weight:800;letter-spacing:.08em;color:var(--faint);margin-bottom:3px}.stock-daily-head b{display:block;font-size:17px;line-height:1.25}.stock-daily-head small{display:block;margin-top:4px;font-size:10px;color:var(--muted)}
+.stock-daily-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.stock-daily-state.good{background:var(--greenBg);color:var(--green)}.stock-daily-state.warn{background:var(--amberBg);color:var(--amber)}.stock-daily-state.bad{background:var(--redBg);color:var(--red)}
+.stock-daily-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:12px}.stock-daily-metric{min-width:0;padding:9px 10px;border:1px solid #e1e6ea;border-radius:12px;background:#f8fafb}.stock-daily-metric span{display:block;font-size:9px;color:var(--faint);white-space:nowrap}.stock-daily-metric b{display:block;margin-top:2px;font:800 18px "Inter",var(--mono)}.stock-daily-metric.priority b{color:#176d8e}.stock-daily-metric.dip b{color:#257c5d}.stock-daily-metric.hot b{color:#b17819}.stock-daily-metric.risk b{color:#bf3e51}
+.stock-daily-alerts{display:grid;gap:5px;margin-top:9px;padding-top:8px;border-top:1px solid #e9edf0}.stock-daily-alerts span{font-size:10px;color:var(--muted);line-height:1.45}.stock-daily-alerts b{margin-right:5px;color:var(--text)}
+#watch-list .compact-row.is-watch{border-left:3px solid #8cb6c8}
+#watch-list .compact-row.is-held{border-left:4px solid #3f9b73;background:linear-gradient(90deg,rgba(222,243,233,.45),rgba(255,255,255,.96) 34%)}
+#watch-list .compact-row.is-held[open]{background:#fbfefc}
+@media(max-width:720px){
+ .stock-daily{padding:12px 11px}.stock-daily-head b{font-size:16px}.stock-daily-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.stock-daily-metric{padding:8px 9px}.stock-daily-metric b{font-size:17px}
 }
 
 </style>
@@ -357,7 +370,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.3</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.4</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -447,10 +460,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.3-clean-hierarchy-20260814';
+const FRONTEND_BUILD='vantage-ui73.4-stock-focus-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.3-clean-hierarchy';
+document.documentElement.dataset.mobileLayout='v73.4-stock-focus';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -537,16 +550,6 @@ function eventTimeLabel(e={}){
   .trim();
  if(date&&detail)return date+' \u30fb '+detail;
  return date||detail||dateText(e.time);
-}
-function eventsWithinHours(hours=24){
- const now=Date.now(),limit=now+hours*3600000;
- return (state.events?.events||[]).filter(e=>{const t=new Date(e.time).getTime();return Number.isFinite(t)&&t>=now&&t<=limit}).sort((a,b)=>new Date(a.time)-new Date(b.time));
-}
-function todayEventDigest(){
- const rows=eventsWithinHours(24);if(!rows.length)return'';
- const labels=rows.slice(0,3).map(e=>String(e.name||'予定').replace(/\s+(?:決算予定|決算)\s*$/,'').trim()).filter(Boolean);
- const preview=labels.join(' / ')+(rows.length>3?` / ほか${rows.length-3}件`:'');
- return `<button class="today-events" onclick="switchTab('watch');setWatchView('events')"><span class="today-events-badge">24h</span><span class="today-events-main"><b>直近24時間 ${rows.length}件</b><span>${esc(preview)}</span></span><span class="today-events-more">›</span></button>`;
 }
 function snapshotPayload(r){if(!r)return null;const keys=['symbol','name','market','date','price','change_pct','price_time','entry_lane','entry_label','entry_quality','effective_vol_ratio','vol_ratio','div25','rs5','rs20','long_stage','stage','stage_code','setup_label','snapshot_id'],o={};for(const k of keys)if(r[k]!=null)o[k]=r[k];return Object.keys(o).length?o:null}
 function currentWatchData(w,bm){return bm.get(String(w?.symbol||'').toUpperCase())||w?.current_data||w?.stage_data||{}}
@@ -793,13 +796,16 @@ function scoreSparkline(values){if(!values.length)return'';const w=88,h=26,p=2,m
 function themeHistoryLine(group){const h=group.history;if(!h)return'<div class="theme-history-line"><span class="history-trend">履歴蓄積中</span></div>';const ch=h.change||{},trend=h.transition?'transition':ch.label==='加速'?'accel':['失速','鈍化'].includes(ch.label)?'slow':'';return `<div class="theme-history-line"><span class="history-trend ${trend}">${esc(h.transition||ch.label||'蓄積中')}</span><div class="history-deltas">${historyDelta(ch.d1,'1D')}${historyDelta(ch.d3,'3D')}${historyDelta(ch.d5,'5D')}</div>${scoreSparkline(group.series||[])}</div>`}
 function themeAlertPanel(data){if(!data)return'';const days=Number(data.history_days||0),items=data.alerts||[];let html=`<div class="history-status"><b>テーマ履歴 ${days}日</b><span>${days<5?'1・3・5日変化を蓄積中':'局面転換と加速・失速を判定中'}</span><span class="method">市場差RS・広がり・出来高・候補レーンの代理指標</span></div>`;if(items.length)html+=`<div class="theme-alerts">${items.slice(0,5).map(x=>`<div class="theme-alert ${x.type}"><div><b>${esc(x.theme)}</b><br><span>${esc(x.label)}</span></div><span class="delta ${Number(x.change?.d1)>=0?'up':'down'}">1D ${x.change?.d1==null?'—':(Number(x.change.d1)>=0?'+':'')+Number(x.change.d1).toFixed(1)}</span></div>`).join('')}</div>`;return html}
 function confidenceClass(v){return Number(v)>=75?'high':Number(v)>=55?'mid':'low'}
+function themeLeaderRow(r,theme){
+ const m=marketOf(r.symbol),name=r.name||code(r.symbol),margin=m==='jp'?marginBadgeHtml(r):'',supply=m==='jp'?marginSupplyHtml(r):'';
+ return `<details class="v52-theme-leader"><summary><span class="market-chip ${m}">${m==='jp'?'JP':'US'}</span><span class="badge ${r.entry_lane||'D'}">${esc(r.entry_lane||'D')}</span><span class="name grow1">${esc(name)}</span><span class="code">${esc(code(r.symbol))}</span>${margin}<span class="${cls(r.rs5)} num">市場差 ${pct(r.rs5)}</span><button class="frame-mini" title="FRAMEで判定" onclick="event.preventDefault();event.stopPropagation();openFrame('${attr(r.symbol)}','${attr(name)}','${m}','theme')">F</button></summary><div class="v52-theme-leader-body">${quoteHtml(r,m)}<div class="meta"><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span><span>RSI ${r.rsi14??r.rsi??'—'}</span><span>${esc(r.long_stage||r.stage||r.stage_code||'—')}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}</div>${supply}<div class="actions"><button onclick="openChart('${attr(r.symbol)}')">チャート</button><button class="primary" onclick="openFrame('${attr(r.symbol)}','${attr(name)}','${m}','theme')">FRAMEで判定</button></div><div class="note">${esc(theme)}の先導候補。銘柄行をタップすると詳細を開閉できます。</div></div></details>`;
+}
 function themeCard(group){
  const p=group.phase,leaders=[...group.rows].sort((a,b)=>(Number(b.rs5)||-99)-(Number(a.rs5)||-99)).slice(0,8);
  const desktop=window.innerWidth>720,open=desktop&&['GERMINATION','RECOVERY'].includes(p.code);
- themeSeq+=1;
  const regional=`<div class="region-line"><span>伝播 <b>${esc(p.propagation)}</b></span><span>範囲 <b>${esc(p.coverage)}</b></span>${p.jp?`<span>JP ${p.jp.n}銘柄 / 市場差5日 ${pct(p.jp.rs5)}</span>`:''}${p.us?`<span>US ${p.us.n}銘柄 / 市場差5日 ${pct(p.us.rs5)}</span>`:''}</div>`;
  const confidence=`<div class="confidence-row"><span class="confidence-pill ${confidenceClass(p.confidence)}">分析確度 ${num(p.confidence,0)}%</span><span>JP確度 ${num(p.jp_confidence,0)}%</span><span>US確度 ${num(p.us_confidence,0)}%</span></div>`;
- const leaderRows=leaders.map((r,i)=>inlineThemeLeader(r,group.name,i)).join('');
+ const leaderRows=leaders.map(r=>themeLeaderRow(r,group.name)).join('');
  return `<details class="theme-card v52-theme-card ${p.kind}" ${open?'open':''}><summary><div class="theme-card-head"><div class="grow1"><div class="theme-title">${esc(group.name)}</div><div class="theme-reason">${esc(p.reason)}</div></div>${phaseBadge(p)}</div><div class="theme-kpis"><span>市場差RS5 <b class="${cls(p.rs5)}">${pct(p.rs5)}</b></span><span>市場差RS20 <b class="${cls(p.rs20)}">${pct(p.rs20)}</b></span><span>A/B <b>${p.a+p.b}/${p.n}</b></span><span>広がり <b>${num(p.breadth,0)}%</b></span></div>${regional}${confidence}${themeHistoryLine(group)}</summary><div class="theme-detail"><div class="theme-detail-grid"><div><b>${num(p.vol)}x</b><span>平均出来高比</span></div><div><b>${p.c}</b><span>押し目監視</span></div><div><b>${num((p.overheatERate||0)*100,0)}% / ${num((p.weakERate||0)*100,0)}%</b><span>E 過熱 / 弱化</span></div><div><b>${num(p.improving,0)}%</b><span>市場差RS改善率</span></div></div><div class="theme-leaders-head"><span>先導銘柄</span><span>${leaders.length}件</span></div>${leaderRows}</div></details>`;
 }
 async function ensureGlobalThemeData(){
@@ -985,20 +991,21 @@ function momentumState(nt){
 }
 function renderSummary(m){
  const st=state.stage[m],nt=state.notrade[m];if(!st)return;
- const ms=marketState(st,m),mm=momentumState(nt),macro=st.macro||{};
- const hot=nt?.summary||{};
+ const ms=marketState(st,m),mm=momentumState(nt),hot=nt?.summary||{};
+ const rows=state.momentum?.[m]?.rows||state.momentum?.[m]?.board||[];
+ const laneCount=lane=>rows.filter(r=>String(r?.entry_lane||'').toUpperCase()===lane).length;
+ const ab=laneCount('A')+laneCount('B');
+ const dips=Number.isFinite(Number(hot.healthy_dips))?Number(hot.healthy_dips):laneCount('C');
+ const rsiHot=Number.isFinite(Number(hot.rsi_hot))?Number(hot.rsi_hot):rows.filter(r=>Number(r?.rsi14??r?.rsi)>=78).length;
+ const supplyWarn=m==='jp'?Object.values(st.stocks||{}).filter(r=>r?.margin_add_blocked||Number(r?.supply_score??r?.margin_supply?.score)<=-7).length:null;
+ const tails=Number.isFinite(Number(hot.shooting_stars))?Number(hot.shooting_stars):0;
  const recKind=mm.kind==='bad'?'bad':mm.kind==='warn'?'warn':'good';
- const recIcon=icon(recKind==='bad'?'stop':recKind==='warn'?'alert':'check',20);
- const recTitle=nt?.recLevel==='stress'?'新規A/Bを抑制・価格発見を優先':recKind==='bad'?'新規エントリーは見送り':recKind==='warn'?'選別して確認':'通常監視';
+ const headline=nt?.recLevel==='stress'?'新規候補は抑制':recKind==='bad'?'新規候補は見送り':recKind==='warn'?'候補を選別':'候補抽出は通常';
+ const context=m==='jp'?'日本株':'米国株';
  let html=gateHtml(m);
- html+=`<div class="notrade ${recKind}"><div class="notrade-head"><span class="notrade-icon">${recIcon}</span><span class="notrade-title">${recTitle}</span><span class="notrade-sub">市場 ${ms.label} / モメンタム ${mm.label}</span></div>`+
-  `<div class="summary-chips"><span>拡張過大 <b>${hot.extreme_pct??'—'}%</b></span><span>RSI過熱 <b>${hot.rsi_hot??'—'}件</b></span><span>健全な押し目 <b>${hot.healthy_dips??'—'}件</b></span><span>上ヒゲ <b>${hot.shooting_stars??'—'}件</b></span></div>`;
- if(nt?.signals?.length)html+=`<div class="warnline">${nt.signals.slice(0,3).map(x=>esc(x.label)+'：'+esc(x.detail)).join('<br>')}</div>`;
- html+='</div>';
- html+=todayEventDigest();
- const mf=macroFreshness(macro);html+=`<div class="section-title">マクロ / 指数</div><details class="macro-freshness ${mf.mixed?'mixed':''}"><summary><b>${esc(mf.label)}</b><span>基準日</span></summary><div class="macro-freshness-detail">${esc(mf.detail)}</div></details><div class="item-list macro-list">`+
-  Object.entries(macro).filter(([,v])=>v).map(([k,v])=>`<div class="macro-row" onclick="openMacroChart('${attr(k)}')"><div><div class="macro-name">${esc(k)}</div><div class="macro-sub">${v.ret5!=null?'5日 '+pct(v.ret5):''}</div><div class="macro-basis">${esc(macroBasis(v))}</div></div><div class="macro-price">${num(v.price)}</div><div class="macro-chg ${cls(v.change_pct)}">${pct(v.change_pct)}</div></div>`).join('')+
-  '</div>';
+ html+=`<section class="stock-daily ${recKind}"><div class="stock-daily-head"><div><span class="stock-daily-eyebrow">${context}・個別株環境</span><b>${headline}</b><small>市場 ${esc(ms.label)} · モメンタム ${esc(mm.label)}</small></div><span class="stock-daily-state ${recKind}">${esc(mm.label)}</span></div><div class="stock-daily-grid"><div class="stock-daily-metric priority"><span>A/B候補</span><b>${ab}</b></div><div class="stock-daily-metric dip"><span>押し目監視</span><b>${dips}</b></div><div class="stock-daily-metric hot"><span>RSI過熱</span><b>${rsiHot}</b></div><div class="stock-daily-metric ${m==='jp'&&supplyWarn?'risk':''}"><span>${m==='jp'?'需給警戒':'上ヒゲ'}</span><b>${m==='jp'?supplyWarn:tails}</b></div></div>`;
+ if(nt?.signals?.length)html+=`<div class="stock-daily-alerts">${nt.signals.slice(0,2).map(x=>`<span><b>${esc(x.label)}</b>${esc(x.detail)}</span>`).join('')}</div>`;
+ html+='</section>';
  $('stage-summary').innerHTML=html;
 }
 function openMacroChart(name){
@@ -1658,7 +1665,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
       const chg=finite(r.change_pct)?pct(r.change_pct):'—',chgClass=finite(r.change_pct)?cls(r.change_pct):'muted';
       const stageText=r.long_stage||r.stage||r.stage_code||'日足レジーム待ち';
       const setup=r.setup_label?`<span>${esc(r.setup_label)}</span>`:'';
-      return `<details class="compact-row"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
+      return `<details class="compact-row ${w.held?'is-held':'is-watch'}"><summary class="compact-head"><span class="name grow1">${esc(w.name)}</span><span class="code">${esc(code(w.symbol))}</span><span class="badge ${lane}">${esc(laneLabel)}</span><span class="watch-status ${status}">${watchStatusLabel(status)}</span>${w.held?'<span class="badge held">保有</span>':''}<span class="watch-quote"><b>${watchPriceText(r,m)}</b><span class="${chgClass}">${chg}</span></span><small class="watch-quote-time">${esc(watchTimeText(r,w))}</small><button class="watch-inline-update" onclick="event.preventDefault();event.stopPropagation();refreshWatch('${attr(w.id)}',this)">更新</button></summary>`+
         `<div class="watch-detail"><div class="meta"><span class="watch-data-state ${ds.kind}">${ds.label}</span><span>${esc(stageText)}</span>${setup}<span>${esc(watchTimeText(r,w))}</span></div><div class="watch-current-line"><b>現在データ</b>　騰落率 ${finite(r.change_pct)?pct(r.change_pct):'—'} / 出来高 ${finite(r.effective_vol_ratio??r.vol_ratio)?num(r.effective_vol_ratio??r.vol_ratio)+'x':'—'} / 25MA ${pct(r.div25)} / 5日市場差RS ${pct(r.rs5)} / ${esc(watchTimeText(r,w))}</div>${marginSupplyHtml(r)}<div class="watch-refresh-note">${w.stage_refresh_note?esc(w.stage_refresh_note):'価格と判定は現在データ欄を参照。場中価格は遅延する場合があります。'}</div>`+
         `${w.signal_snapshot?`<div class="watch-history-note"><b>登録時スナップショット（現在値ではない）</b><br>${esc(dateText(w.signal_at||w.added_at))} / 騰落率 ${pct(w.signal_snapshot.change_pct)} / 出来高 ${num(w.signal_snapshot.effective_vol_ratio??w.signal_snapshot.vol_ratio)}x / 25MA ${pct(w.signal_snapshot.div25)} / 市場差RS5 ${pct(w.signal_snapshot.rs5)} / 判定 ${esc(w.signal_snapshot.entry_lane||'—')}</div>`:''}${w.legacy_status?`<div class="watch-history-note">旧状態「${esc(w.legacy_status)}」は管理用の追跡中へ移行済みです。実保有は保有☑だけを参照します。</div>`:''}`+
         `<div class="data-separation">以下はユーザーの管理状態と登録時メモです。現在の株価・騰落率ではありません。</div><div class="formgrid"><select id="ws-${attr(w.id)}"><option value="tracking" ${status==='tracking'?'selected':''}>追跡中</option><option value="waiting" ${status==='waiting'?'selected':''}>押し待ち</option><option value="skip" ${status==='skip'?'selected':''}>見送り</option></select><textarea id="wm-${attr(w.id)}" placeholder="登録時メモ／押し目条件／決算前後の方針">${esc(w.memo||'')}</textarea></div>`+
@@ -1808,13 +1815,6 @@ window.openSettings=async function(){
 };
 
 
-let themeSeq=0;
-function inlineThemeLeader(r,theme,index){
- const m=marketOf(r.symbol),name=preferredLocalName(r.symbol,r.name),id=`theme-inline-${safeId(r.symbol)}-${themeSeq}-${index}`;
- const margin=m==='jp'?marginBadgeHtml(r):'';
- const supply=m==='jp'?marginSupplyHtml(r):'';
- return `<details class="v52-theme-leader"><summary><span class="market-chip ${m}">${m==='jp'?'JP':'US'}</span><span class="badge ${r.entry_lane||'D'}">${esc(r.entry_lane||'D')}</span><span class="name grow1">${esc(name)}</span><span class="code">${esc(code(r.symbol))}</span>${margin}<span class="${cls(r.rs5)} num">市場差 ${pct(r.rs5)}</span><button class="frame-mini" title="FRAMEで判定" onclick="event.preventDefault();event.stopPropagation();openFrame('${attr(r.symbol)}','${attr(name)}','${m}','theme')">F</button></summary><div id="${id}" class="v52-theme-leader-body">${quoteHtml(r,m)}<div class="meta"><span>出来高 ${num(r.effective_vol_ratio??r.vol_ratio)}x</span><span>25MA ${pct(r.div25)}</span><span>RSI ${r.rsi14??r.rsi??'—'}</span><span>${esc(r.long_stage||r.stage||r.stage_code||'—')}</span>${r.setup_label?`<span>${esc(r.setup_label)}</span>`:''}</div>${supply}<div class="actions"><button onclick="openChart('${attr(r.symbol)}')">チャート</button><button class="primary" onclick="openFrame('${attr(r.symbol)}','${attr(name)}','${m}','theme')">FRAMEで判定</button></div><div class="note">${esc(theme)}の先導候補。詳細はこの場で開閉できます。</div></div></details>`;
-}
 const originalOpenFrame=window.openFrame;
 if(typeof originalOpenFrame==='function')window.openFrame=function(symbol,name,market,source){return originalOpenFrame.call(this,symbol,preferredLocalName(symbol,name),market,source)};
 
@@ -1958,11 +1958,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.3"></script>
-<script src="./reliability-sync.js?build=v73.3"></script>
-<script src="./event-resilience.js?build=v73.3"></script>
-<script src="./navigation.js?build=v73.3"></script>
-<script src="./events-ui.js?build=v73.3"></script>
+<script src="./frame-sync.js?build=v73.4"></script>
+<script src="./reliability-sync.js?build=v73.4"></script>
+<script src="./event-resilience.js?build=v73.4"></script>
+<script src="./navigation.js?build=v73.4"></script>
+<script src="./events-ui.js?build=v73.4"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

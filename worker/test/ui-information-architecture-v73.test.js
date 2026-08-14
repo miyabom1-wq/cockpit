@@ -6,13 +6,15 @@ import { fileURLToPath } from 'node:url';
 const here=path.dirname(fileURLToPath(import.meta.url));
 const publicRoot=path.resolve(here,'../../public');
 
-test('Today stays focused on market risk instead of duplicating candidate and monitor tabs',()=>{
+test('Today stays focused on individual-stock context instead of duplicating candidate and monitor tabs',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const nav=fs.readFileSync(path.join(publicRoot,'navigation.js'),'utf8');
   assert.doesNotMatch(nav,/renderTodayOverview|v55-today-overview|上位テーマ|A・B候補/);
   assert.doesNotMatch(html,/次の重要日程|class="focus-strip"|v52-margin-overview/);
-  assert.match(html,/todayEventDigest\(\)/);
-  assert.match(html,/直近24時間/);
+  assert.doesNotMatch(html,/todayEventDigest\(\)/);
+  assert.match(html,/個別株環境/);
+  assert.match(html,/A\/B候補/);
+  assert.doesNotMatch(html,/マクロ \/ 指数/);
   assert.doesNotMatch(html,/section-title\">地合い/);
   assert.match(html,/\.role-note\{display:none\}/);
   assert.match(html,/時刻未確認\|時刻未公表\|時間未公表/);

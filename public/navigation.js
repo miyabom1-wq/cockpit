@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 
-const NAV_BUILD='v73.3-clean-hierarchy-20260814';
+const NAV_BUILD='v73.4-stock-focus-20260814';
 if(window.__vantageNavigationBuild===NAV_BUILD)return;
 window.__vantageNavigationBuild=NAV_BUILD;
 
@@ -25,6 +25,11 @@ function installStyle(){
     .v55-kpi:hover{border-color:var(--accent,#2563eb)}
     .v55-kpi b{display:block;font-size:20px;line-height:1.2}
     .v55-kpi span{display:block;font-size:11px;color:var(--muted,#667085);margin-top:4px}
+    .v55-kpi.key-watch{background:linear-gradient(180deg,#f7fbfd,#eef7fa);border-color:#c9dde6}.v55-kpi.key-watch b{color:#176d8e}
+    .v55-kpi.key-held{background:linear-gradient(180deg,#f8fdf9,#edf8f1);border-color:#c9e2d2}.v55-kpi.key-held b{color:#26785a}
+    .v55-kpi.key-signal{background:#f8f7fc;border-color:#ded8ec}.v55-kpi.key-signal b{color:#6b5791}
+    .v55-kpi.key-event{background:#fffaf0;border-color:#eadcbd}.v55-kpi.key-event b{color:#9b6b18}
+    .v55-kpi.key-supply{background:#fff7f8;border-color:#ecd6da}.v55-kpi.key-supply b{color:#b74658}
     .v55-monitor-summary{margin-bottom:12px}
     .v55-context{display:none;align-items:center;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line,#dfe3e8);border-radius:13px;background:var(--card,#fff)}
     .v55-context.show{display:flex}
@@ -64,7 +69,7 @@ function relabelShell(){
   }
 
   const stageNote=qs('#tab-stage .role-note');
-  if(stageNote)stageNote.innerHTML='<b>今日</b><span>地合い・直近リスク・指数を上から確認します。候補選びは「候補」、保有と日程は「監視」に分けています。</span>';
+  if(stageNote)stageNote.innerHTML='<b>今日</b><span>個別株の候補が出やすい環境か、押し目・過熱・需給だけを短く確認します。</span>';
   const themeNote=qs('#tab-themes .role-note');
   if(themeNote)themeNote.innerHTML='<b>候補</b><span>テーマから銘柄へ絞り、FRAMEへ送る候補を選びます。</span>';
   const watchNote=qs('#tab-watch .role-note');
@@ -325,11 +330,11 @@ async function renderMonitorSummary(){
 
     root.innerHTML=`
       <div class="v55-kpi-grid">
-        <button class="v55-kpi" onclick="returnToV55Monitor()"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
-        <button class="v55-kpi" onclick="returnToV55Monitor()"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
-        <button class="v55-kpi" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
-        <button class="v55-kpi" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日以内イベント</span></button>
-        <button class="v55-kpi" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒（全体）</span></button>
+        <button class="v55-kpi key-watch" onclick="returnToV55Monitor()"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
+        <button class="v55-kpi key-held" onclick="returnToV55Monitor()"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
+        <button class="v55-kpi key-signal" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
+        <button class="v55-kpi key-event" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日以内イベント</span></button>
+        <button class="v55-kpi key-supply" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒</span></button>
       </div>
     `;
   }catch(error){
