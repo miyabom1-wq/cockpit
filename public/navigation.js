@@ -1,12 +1,11 @@
 (()=>{
 'use strict';
 
-const PATCH='v55-simplified-workflow-20260724';
-if(window.__vantageV55Patch===PATCH)return;
-window.__vantageV55Patch=PATCH;
+const NAV_BUILD='v73.3-clean-hierarchy-20260814';
+if(window.__vantageNavigationBuild===NAV_BUILD)return;
+window.__vantageNavigationBuild=NAV_BUILD;
 
 let internalNavigation=false;
-let todayBusy=false;
 let monitorBusy=false;
 
 const qs=(s,r=document)=>r.querySelector(s);
@@ -21,32 +20,11 @@ function installStyle(){
     .v55-candidate-nav{display:flex;gap:8px;align-items:center;margin:12px 0;flex-wrap:wrap}
     .v55-candidate-nav .segment{margin:0;flex:1;min-width:210px}
     .v55-candidate-nav select{min-width:150px}
-    .v55-overview{display:grid;gap:14px;margin-top:14px}
-    .v55-section{background:var(--card,#fff);border:1px solid var(--line,#dfe3e8);border-radius:16px;overflow:hidden}
-    .v55-section-head{display:flex;align-items:center;gap:10px;padding:14px 14px 10px}
-    .v55-section-head h3{font-size:15px;margin:0;flex:1}
-    .v55-section-head small{color:var(--muted,#667085)}
-    .v55-section-body{padding:0 12px 12px}
     .v55-kpi-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:12px 0}
     .v55-kpi{border:1px solid var(--line,#dfe3e8);border-radius:13px;padding:11px;background:var(--card,#fff);cursor:pointer;text-align:left}
     .v55-kpi:hover{border-color:var(--accent,#2563eb)}
     .v55-kpi b{display:block;font-size:20px;line-height:1.2}
     .v55-kpi span{display:block;font-size:11px;color:var(--muted,#667085);margin-top:4px}
-    .v55-theme-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-    .v55-theme-card{border:1px solid var(--line,#dfe3e8);border-radius:13px;padding:11px;cursor:pointer}
-    .v55-theme-card:hover{border-color:var(--accent,#2563eb)}
-    .v55-theme-top{display:flex;align-items:center;gap:8px}
-    .v55-theme-name{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-    .v55-theme-meta{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted,#667085);margin-top:7px}
-    .v55-candidate-list,.v55-event-list{display:grid;gap:7px}
-    .v55-candidate-row,.v55-event-row{display:flex;align-items:center;gap:9px;border:1px solid var(--line,#dfe3e8);border-radius:12px;padding:10px;cursor:pointer}
-    .v55-candidate-row:hover,.v55-event-row:hover{border-color:var(--accent,#2563eb)}
-    .v55-candidate-main,.v55-event-main{min-width:0;flex:1}
-    .v55-candidate-name,.v55-event-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .v55-candidate-meta,.v55-event-meta{font-size:11px;color:var(--muted,#667085);margin-top:3px;display:flex;gap:7px;flex-wrap:wrap}
-    .v55-price{font-weight:700;white-space:nowrap}
-    .v55-frame{width:30px;height:30px;border-radius:10px;padding:0;display:grid;place-items:center;font-weight:800}
-    .v55-empty{padding:14px;text-align:center;color:var(--muted,#667085);font-size:12px}
     .v55-monitor-summary{margin-bottom:12px}
     .v55-context{display:none;align-items:center;gap:10px;margin:0 0 12px;padding:10px 12px;border:1px solid var(--line,#dfe3e8);border-radius:13px;background:var(--card,#fff)}
     .v55-context.show{display:flex}
@@ -61,9 +39,12 @@ function installStyle(){
     .v55-hidden{display:none!important}
     @media(max-width:820px){
       .workflow-bar{display:none}
-      .v55-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .v55-kpi:last-child{grid-column:1/-1}
-      .v55-theme-grid{grid-template-columns:1fr}
+      .v55-kpi-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+      .v55-kpi:nth-child(1),.v55-kpi:nth-child(2){grid-column:span 3}
+      .v55-kpi:nth-child(n+3){grid-column:span 2}
+      .v55-kpi{min-width:0;padding:10px}
+      .v55-kpi b{font-size:18px}
+      .v55-kpi span{font-size:10px;line-height:1.35}
       .v55-more-grid{grid-template-columns:1fr}
       .v55-candidate-nav{align-items:stretch}
       .v55-candidate-nav .segment{width:100%}
@@ -83,7 +64,7 @@ function relabelShell(){
   }
 
   const stageNote=qs('#tab-stage .role-note');
-  if(stageNote)stageNote.innerHTML='<b>今日</b><span>市場・重要日程・上位テーマ・有力候補を一画面で確認します。</span>';
+  if(stageNote)stageNote.innerHTML='<b>今日</b><span>地合い・直近リスク・指数を上から確認します。候補選びは「候補」、保有と日程は「監視」に分けています。</span>';
   const themeNote=qs('#tab-themes .role-note');
   if(themeNote)themeNote.innerHTML='<b>候補</b><span>テーマから銘柄へ絞り、FRAMEへ送る候補を選びます。</span>';
   const watchNote=qs('#tab-watch .role-note');
@@ -303,15 +284,6 @@ window.openV55More=function(){
   openModal();
 };
 
-function flattenBoard(momentum,lanes=['A','B']){
-  const out=[];
-  for(const lane of momentum?.board||[]){
-    if(!lanes.includes(lane.key))continue;
-    for(const row of lane.rows||[])out.push(row);
-  }
-  return out;
-}
-
 function eventRows(events){
   const now=Date.now();
   const limit=now+10*86400000;
@@ -321,140 +293,6 @@ function eventRows(events){
       return Number.isFinite(time)&&time>=now&&time<=limit;
     })
     .sort((a,b)=>new Date(a.time)-new Date(b.time));
-}
-
-function themeLeaders(jp,us){
-  if(typeof themeName!=='function'||typeof balancedThemePhase!=='function')return[];
-  const groups=new Map();
-  const add=(row,market)=>{
-    const name=themeName(row);
-    if(!groups.has(name))groups.set(name,{jp:[],us:[]});
-    groups.get(name)[market].push(row);
-  };
-  for(const row of jp?.rows||[])add(row,'jp');
-  for(const row of us?.rows||[])add(row,'us');
-
-  return [...groups].map(([name,group])=>({
-    name,
-    phase:balancedThemePhase(group.jp,group.us)
-  }))
-    .filter(item=>item.phase&&item.phase.code!=='WAIT')
-    .sort((a,b)=>{
-      const pa=typeof themePriority==='function'?themePriority(a.phase.code):9;
-      const pb=typeof themePriority==='function'?themePriority(b.phase.code):9;
-      return pa-pb||(Number(b.phase.rs5)||-99)-(Number(a.phase.rs5)||-99);
-    })
-    .slice(0,3);
-}
-
-function compactCandidate(row){
-  const market=marketOf(row.symbol);
-  const price=quoteFinite(row.price)
-    ?market==='jp'?`${num(row.price,0)}円`:`$${num(row.price,2)}`
-    :'—';
-  return `
-    <div class="v55-candidate-row" onclick="openCandidate('${attr(row.symbol)}')">
-      <span class="badge ${attr(row.entry_lane||'D')}">${esc(row.entry_quality||row.entry_lane||'D')}</span>
-      <div class="v55-candidate-main">
-        <div class="v55-candidate-name">${esc(row.name||row.symbol)} <span class="code">${esc(code(row.symbol))}</span></div>
-        <div class="v55-candidate-meta">
-          <span>RS5 ${pct(row.rs5)}</span>
-          <span>出来高 ${num(row.effective_vol_ratio??row.vol_ratio)}x</span>
-          ${market==='jp'&&row.margin_supply?`<span>${esc(row.margin_supply.label||'需給')}</span>`:''}
-        </div>
-      </div>
-      <span class="v55-price">${price}</span>
-      <button class="v55-frame" onclick="event.stopPropagation();openFrame('${attr(row.symbol)}','${attr(row.name||row.symbol)}','${market}','today')" title="FRAMEで判定">F</button>
-    </div>
-  `;
-}
-
-function compactEvent(event){
-  const symbols=(event.symbols||[]).map(code).join(' / ');
-  return `
-    <div class="v55-event-row" onclick="openV55Area('events')">
-      <span class="badge C">${esc(event.category==='earnings'?'決算':'日程')}</span>
-      <div class="v55-event-main">
-        <div class="v55-event-name">${esc(event.name)}</div>
-        <div class="v55-event-meta"><span>${esc(eventTimeLabel(event))}</span>${symbols?`<span>${esc(symbols)}</span>`:''}</div>
-      </div>
-    </div>
-  `;
-}
-
-async function renderTodayOverview(){
-  const root=document.getElementById('v55-today-overview');
-  if(!root||todayBusy)return;
-  todayBusy=true;
-  root.innerHTML='<div class="loading">今日の確認項目を集約中…</div>';
-
-  try{
-    const [events,jp,us]=await Promise.all([
-      state.events?Promise.resolve(state.events):api('/api/events').catch(()=>({events:[]})),
-      state.momentum.jp?Promise.resolve(state.momentum.jp):api('/api/momentum?market=jp').catch(()=>null),
-      state.momentum.us?Promise.resolve(state.momentum.us):api('/api/momentum?market=us').catch(()=>null)
-    ]);
-
-    if(jp)state.momentum.jp=jp;
-    if(us)state.momentum.us=us;
-    state.events=events;
-
-    const current=state.market==='us'?us:jp;
-    const candidates=flattenBoard(current,['A','B'])
-      .sort((a,b)=>(Number(b.entry_score)||0)-(Number(a.entry_score)||0))
-      .slice(0,5);
-    const themes=themeLeaders(jp,us);
-    const near=eventRows(events).slice(0,5);
-
-    root.innerHTML=`
-      <div class="v55-overview">
-        <section class="v55-section">
-          <div class="v55-section-head">
-            <h3>上位テーマ</h3>
-            <small>日米横断</small>
-            <button class="small" onclick="switchTab('themes');setV55CandidateMode('theme')">すべて見る</button>
-          </div>
-          <div class="v55-section-body">
-            ${themes.length?`<div class="v55-theme-grid">${themes.map(item=>`
-              <div class="v55-theme-card" onclick="switchTab('themes');setV55CandidateMode('theme')">
-                <div class="v55-theme-top"><span class="v55-theme-name">${esc(item.name)}</span>${phaseBadge(item.phase)}</div>
-                <div class="v55-theme-meta">
-                  <span>RS5 ${pct(item.phase.rs5)}</span>
-                  <span>${esc(item.phase.propagation||'判定待ち')}</span>
-                  <span>確度 ${item.phase.confidence||0}%</span>
-                </div>
-              </div>`).join('')}</div>`:'<div class="v55-empty">明確な上位テーマはありません。</div>'}
-          </div>
-        </section>
-
-        <section class="v55-section">
-          <div class="v55-section-head">
-            <h3>${state.market==='jp'?'日本株':'米国株'} A・B候補</h3>
-            <small>上位5件</small>
-            <button class="small primary" onclick="switchTab('themes');setThemeScope('${state.market}');setV55CandidateMode('stocks')">候補をすべて見る</button>
-          </div>
-          <div class="v55-section-body">
-            ${candidates.length?`<div class="v55-candidate-list">${candidates.map(compactCandidate).join('')}</div>`:'<div class="v55-empty">現在のA・B候補はありません。</div>'}
-          </div>
-        </section>
-
-        <section class="v55-section">
-          <div class="v55-section-head">
-            <h3>10日以内の重要日程</h3>
-            <small>決算・手動・公式確認</small>
-            <button class="small" onclick="openV55Area('events')">イベント管理</button>
-          </div>
-          <div class="v55-section-body">
-            ${near.length?`<div class="v55-event-list">${near.map(compactEvent).join('')}</div>`:'<div class="v55-empty">確認済みの日程はありません。未取得を意味する場合があります。</div>'}
-          </div>
-        </section>
-      </div>
-    `;
-  }catch(error){
-    root.innerHTML=`<div class="note down">今日の集約表示に失敗しました：${esc(error.message)}</div>`;
-  }finally{
-    todayBusy=false;
-  }
 }
 
 async function renderMonitorSummary(){
@@ -491,7 +329,7 @@ async function renderMonitorSummary(){
         <button class="v55-kpi" onclick="returnToV55Monitor()"><b>${(positions.positions||[]).length}</b><span>実保有</span></button>
         <button class="v55-kpi" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
         <button class="v55-kpi" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日以内イベント</span></button>
-        <button class="v55-kpi" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>信用需給警戒</span></button>
+        <button class="v55-kpi" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒（全体）</span></button>
       </div>
     `;
   }catch(error){
@@ -499,15 +337,6 @@ async function renderMonitorSummary(){
   }finally{
     monitorBusy=false;
   }
-}
-
-function ensureTodayRoot(){
-  if(document.getElementById('v55-today-overview'))return;
-  const stage=document.getElementById('stage-summary');
-  if(!stage)return;
-  const root=document.createElement('div');
-  root.id='v55-today-overview';
-  stage.insertAdjacentElement('afterend',root);
 }
 
 function installWrappers(){
@@ -520,7 +349,6 @@ function installWrappers(){
         setWatchContext(state.watchView);
         if(state.watchView==='list')renderMonitorSummary();
       },0);
-      if(tab==='stage')setTimeout(renderTodayOverview,0);
       return out;
     };
   }
@@ -544,14 +372,6 @@ function installWrappers(){
     };
   }
 
-  const originalLoadStage=window.loadStage;
-  if(typeof originalLoadStage==='function'){
-    window.loadStage=async function(){
-      const out=await originalLoadStage.apply(this,arguments);
-      if(state.tab==='stage')await renderTodayOverview();
-      return out;
-    };
-  }
 
   const originalLoadWatch=window.loadWatch;
   if(typeof originalLoadWatch==='function'){
@@ -569,12 +389,10 @@ function boot(){
   ensureMoreButton();
   ensureCandidateNav();
   ensureWatchShell();
-  ensureTodayRoot();
   installWrappers();
   syncCandidateNav(state.themeView||'radar');
   setWatchContext(state.watchView||'list');
   setTimeout(()=>{
-    if(state.tab==='stage')renderTodayOverview();
     if(state.tab==='watch'&&state.watchView==='list')renderMonitorSummary();
   },400);
 }

@@ -1,8 +1,8 @@
 (()=>{
 'use strict';
-const PATCH='v62-home-event-date-20260726';
-if(window.__vantageV59Patch===PATCH)return;
-window.__vantageV59Patch=PATCH;
+const EVENTS_UI_BUILD='v73.3-compact-event-time-20260814';
+if(window.__vantageEventsUiBuild===EVENTS_UI_BUILD)return;
+window.__vantageEventsUiBuild=EVENTS_UI_BUILD;
 
 function installStyle(){
   if(document.getElementById('v59-style'))return;

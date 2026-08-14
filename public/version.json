@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui73.2-mobile-polish-20260814",
-  "ui_version": "v73.2",
+  "frontend_build": "vantage-ui73.3-clean-hierarchy-20260814",
+  "ui_version": "v73.3",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-08-14T18:15:00+09:00",
+  "generated_at": "2026-08-14T18:25:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
-  "smoke_mode": "unified-origin-auth-recovery"
+  "smoke_mode": "clean-hierarchy-auth-recovery"
 }
