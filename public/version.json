@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui73.6-final-flow-20260814",
-  "ui_version": "v73.6",
+  "frontend_build": "vantage-ui73.6.1-final-compact-macro-20260814",
+  "ui_version": "v73.6.1",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-08-14T19:52:00+09:00",
+  "generated_at": "2026-08-14T20:15:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
-  "smoke_mode": "three-tab-today-schedule-mobile-polish-held-first"
+  "smoke_mode": "three-tab-today-schedule-compact-macro-held-first"
 }

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const here=path.dirname(fileURLToPath(import.meta.url));
 const publicRoot=path.resolve(here,'../../public');
 
-test('three tabs keep distinct roles and Today shows schedule instead of candidate counts',()=>{
+test('three tabs keep distinct roles and Today shows schedule plus compact market snapshot',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const nav=fs.readFileSync(path.join(publicRoot,'navigation.js'),'utf8');
   assert.match(html,/data-tab="stage"[\s\S]*?<span>今日<\/span>/);
@@ -22,6 +22,15 @@ test('three tabs keep distinct roles and Today shows schedule instead of candida
   assert.match(html,/今日の予定/);
   assert.match(html,/24h/);
   assert.doesNotMatch(body,/A\/B候補|押し目監視|RSI過熱|需給警戒/);
+  assert.match(body,/todayMacroHtml\(st\)/);
+  assert.match(html,/function todayMacroHtml\(st\)/);
+  assert.match(html,/class=\"today-macro\"/);
+  assert.match(html,/\['日経','日経平均'\]/);
+  assert.match(html,/\['SOX','SOX'\]/);
+  assert.match(html,/\['KOSPI','韓国KOSPI'\]/);
+  assert.match(html,/\['S&P','S&P500'\]/);
+  assert.match(html,/\['VIX','VIX'\]/);
+  assert.match(html,/\['USD\/JPY','ドル円'\]/);
   assert.doesNotMatch(body,/macro-list|マクロ \/ 指数/);
   assert.match(nav,/予定・地合いの例外・データ更新/);
 });

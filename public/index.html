@@ -190,6 +190,9 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .today-context.good{border-left:4px solid #2f9a72}.today-context.warn{border-left:4px solid #c38b2c}.today-context.bad{border-left:4px solid #c94b5e}
 .today-context-main{min-width:0;flex:1}.today-context-main b{display:block;font-size:14px;line-height:1.3}.today-context-main span{display:block;margin-top:2px;font-size:10px;color:var(--muted)}
 .today-context-state{flex:0 0 auto;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:800;background:var(--surface2);color:var(--muted)}.today-context-state.good{background:var(--greenBg);color:var(--green)}.today-context-state.warn{background:var(--amberBg);color:var(--amber)}.today-context-state.bad{background:var(--redBg);color:var(--red)}
+.today-macro{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.today-macro-item{min-width:0;padding:8px 8px 7px;border:1px solid #dce5e8;border-radius:12px;background:rgba(255,255,255,.88);box-shadow:none;text-align:left;color:var(--text)}.today-macro-item:hover{background:#fff;border-color:#c9d8dc}.today-macro-item:active{transform:none;background:#f7fafb}
+.today-macro-name{display:block;font-size:9px;font-weight:750;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-macro-move{display:block;margin-top:2px;font:800 13px var(--mono);line-height:1.25}.today-macro-5d{display:block;margin-top:1px;font:8px var(--mono);color:var(--faint);white-space:nowrap}
 .today-schedule{overflow:hidden;border:1px solid #d8e3e6;border-radius:16px;background:rgba(255,255,255,.95);box-shadow:0 5px 18px rgba(20,42,54,.04)}
 .today-schedule-head{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid #e7ecef}.today-schedule-head b{font-size:13px}.today-schedule-head span{font-size:9px;color:var(--muted)}.today-schedule-head .today-schedule-count{margin-left:auto;font:800 9px var(--mono);color:#087664;background:#e2f3ef;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-schedule-head button{padding:4px 7px;font-size:9px}
 .today-event-list{display:grid}.today-event{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center;padding:10px 13px;border-bottom:1px solid #edf0f2}.today-event:last-child{border-bottom:0}.today-event-main{min-width:0}.today-event-name{font-size:12px;font-weight:750;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.today-event-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:3px;font-size:9px;color:var(--muted)}.today-event-horizon{font:800 9px var(--mono);color:#52636d;background:#f0f4f5;border-radius:999px;padding:4px 7px;white-space:nowrap}.today-event-horizon.soon{color:#9b6b18;background:#fff3d9}.today-schedule-empty{padding:14px 13px;font-size:11px;color:var(--muted)}.today-schedule-more{display:block;width:100%;padding:8px 12px;border:0;border-top:1px solid #edf0f2;border-radius:0;background:#f8fafb;color:var(--muted);font-size:10px;text-align:center;box-shadow:none}
@@ -199,7 +202,7 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 .theme-focus-line{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px}.theme-focus-name{white-space:nowrap}.theme-focus-sep{opacity:.58;font-weight:500}
 .theme-alert{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center!important}.theme-alert>div{min-width:0}.theme-alert .delta{margin-left:0!important;min-width:76px;text-align:right;white-space:nowrap}
 @media(max-width:720px){
- .today-context{padding:10px 11px}.today-context-main b{font-size:13px}.today-context-main span{font-size:9px}.today-schedule-head{padding:10px 11px}.today-event{padding:9px 11px}.today-event-name{font-size:11px}.today-event-meta{font-size:9px}.today-schedule-head .today-schedule-count{font-size:8px}
+ .today-context{padding:10px 11px}.today-context-main b{font-size:13px}.today-context-main span{font-size:9px}.today-macro{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.today-macro-item{padding:7px 7px 6px;border-radius:11px}.today-macro-name{font-size:8px}.today-macro-move{font-size:12px}.today-macro-5d{font-size:7px}.today-schedule-head{padding:10px 11px}.today-event{padding:9px 11px}.today-event-name{font-size:11px}.today-event-meta{font-size:9px}.today-schedule-head .today-schedule-count{font-size:8px}
  .theme-focus-line{gap:4px 8px;font-size:18px!important;line-height:1.3!important}.theme-focus-sep{display:none}
  .theme-alert{grid-template-columns:minmax(0,1fr) 72px}.theme-alert .delta{min-width:72px;text-align:right}
 }
@@ -375,7 +378,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.6</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.6.1</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -457,10 +460,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.6-final-flow-20260814';
+const FRONTEND_BUILD='vantage-ui73.6.1-final-compact-macro-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
-document.documentElement.dataset.mobileLayout='v73.6-final-flow';
+document.documentElement.dataset.mobileLayout='v73.6.1-final-compact-macro';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -998,6 +1001,21 @@ function todayEventHorizon(e){
  const days=Math.ceil(diff/86400000);
  return days+'日';
 }
+function todayMacroHtml(st){
+ const macro=st?.macro||{};
+ const defs=[
+  ['日経','日経平均'],['SOX','SOX'],['KOSPI','韓国KOSPI'],
+  ['S&P','S&P500'],['VIX','VIX'],['USD/JPY','ドル円']
+ ];
+ const items=defs.map(([label,key])=>{
+  const x=macro[key];if(!x)return'';
+  const d=Number(x.change_pct),r5=Number(x.ret5);
+  const move=Number.isFinite(d)?pct(d):'—';
+  const five=Number.isFinite(r5)?`5D ${pct(r5)}`:'5D —';
+  return `<button type="button" class="today-macro-item" onclick="openMacroChart('${attr(key)}')" title="${attr(key)}をTradingViewで開く"><span class="today-macro-name">${esc(label)}</span><span class="today-macro-move ${Number.isFinite(d)?cls(d):''}">${move}</span><span class="today-macro-5d">${five}</span></button>`;
+ }).filter(Boolean).join('');
+ return items?`<section class="today-macro" aria-label="主要市場スナップ">${items}</section>`:'';
+}
 function todayScheduleHtml(m){
  const now=Date.now(),limit=now+10*86400000;
  const rows=(state.events?.events||[])
@@ -1020,6 +1038,7 @@ function renderSummary(m){
  let html='<div class="today-brief">';
  html+=gateHtml(m);
  html+=`<section class="today-context ${kind}"><div class="today-context-main"><b>${context} · ${headline}</b><span>市場 ${esc(ms.label)} · モメンタム ${esc(mm.label)}</span></div><span class="today-context-state ${kind}">${esc(mm.label)}</span></section>`;
+ html+=todayMacroHtml(st);
  html+=todayScheduleHtml(m);
  html+='</div>';
  $('stage-summary').innerHTML=html;

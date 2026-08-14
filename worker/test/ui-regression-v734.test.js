@@ -17,13 +17,14 @@ test('candidate theme renderer has no out-of-scope helper dependency',()=>{
   assert.ok(helperAt>=0&&cardAt>helperAt,'theme leader helper must be in the same global scope before themeCard');
 });
 
-test('Today prioritizes useful daily context and upcoming events',()=>{
+test('Today prioritizes daily context, compact macro, and upcoming events',()=>{
   const html=fs.readFileSync(path.join(publicRoot,'index.html'),'utf8');
   const start=html.indexOf('function renderSummary(m)');
   const end=html.indexOf('function openMacroChart',start);
   assert.ok(start>=0&&end>start);
   const body=html.slice(start,end);
   assert.match(body,/today-context/);
+  assert.match(body,/todayMacroHtml\(st\)/);
   assert.match(body,/todayScheduleHtml\(m\)/);
   assert.match(html,/10日以内に登録対象の予定はありません/);
   assert.doesNotMatch(body,/stock-daily-grid|A\/B候補|押し目監視|RSI過熱/);
