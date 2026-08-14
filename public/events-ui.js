@@ -130,12 +130,8 @@ function timeLabel(event){
     .replace(/(?:\u6642\u523b\u672a\u78ba\u8a8d|\u6642\u523b\u672a\u516c\u8868|\u6642\u9593\u672a\u516c\u8868)/g,'')
     .replace(/^[\s\u30fb\u00b7-]+|[\s\u30fb\u00b7-]+$/g,'')
     .trim();
-
   if(cleaned)return date?date+' \u30fb '+cleaned:cleaned;
-
-  const source=srcInfo(event);
-  if(source.cls==='jpx')return date?date+' \u30fb \u6642\u9593\u672a\u516c\u8868':'\u6642\u9593\u672a\u516c\u8868';
-  if(source.cls==='provider')return date?date+' \u30fb \u53c2\u8003\u65e5\u7a0b':'\u53c2\u8003\u65e5\u7a0b';
+  // A date-only source should look like a date, not an error/warning state.
   return date;
 }
 function marketOf(event){
@@ -145,10 +141,9 @@ function marketOf(event){
 function dText(event){
   const diff=new Date(event.time).getTime()-Date.now();
   if(!Number.isFinite(diff))return'';
-  const days=Math.ceil(diff/86400000);
-  if(days<=0)return'当日';
-  if(days===1)return'D-1';
-  return `D-${days}`;
+  if(diff<0)return'完了';
+  if(diff<=86400000)return'24h以内';
+  return Math.ceil(diff/86400000)+'日';
 }
 function cleanName(event){
   return String(event?.name||'\u30a4\u30d9\u30f3\u30c8')
@@ -247,7 +242,7 @@ function coveragePanel(cov){
       <span class="v59-pill">米国 ${us.found||0}/${us.total||0}</span>
     </div>
     <div class="v59-note">
-      決算は日付単位で折りたたみ表示に変更しました。JPX公式は日付のみ公開の銘柄が多いため、時刻欄は「時間未公表」と表示します。FOMCなどの手動イベントは決算から分離して一般イベント側に表示します。
+      決算は日付単位で折りたたみ表示します。時刻が公表されていない予定は日付のみを表示し、右側は24時間以内・残り日数で確認できます。FOMCなどの手動イベントは一般イベント側に分けて表示します。
     </div>
     ${missingRows.length?`
     <details class="v59-details">

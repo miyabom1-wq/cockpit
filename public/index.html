@@ -150,50 +150,53 @@ footer{border:0;color:#98a0ac;letter-spacing:.04em}
 
 @media(max-width:640px){.bt-grid{grid-template-columns:1fr}.bt-main{gap:5px}.bt-card{padding:13px}.bt-symbol{grid-template-columns:1fr auto auto}.bt-symbol .bt-n{display:none}}
 
-/* v73.1 mobile readability hotfix */
+/* v73.2 mobile polish: keep the pre-v73 visual language, fix only readability */
 @media(max-width:720px){
-  .theme-card{margin:8px 0}
-  .theme-card>summary{padding:13px 13px}
+  .theme-card{margin:7px 0}
+  .theme-card>summary{padding:12px 13px}
   .theme-title{font-size:15px;line-height:1.35}
   .theme-reason{font-size:10px;line-height:1.45}
   .theme-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px}
-  .theme-kpis span{min-width:0;padding:6px 7px}
+  .theme-kpis span{min-width:0;padding:5px 7px}
   .region-line,.confidence-row{font-size:9px;line-height:1.5}
   .theme-detail{padding:8px 11px 11px}
   .theme-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-  .v52-theme-leader>summary{
-    display:grid;
-    grid-template-columns:auto auto minmax(0,1fr) auto;
-    grid-template-areas:
-      \"market lane name frame\"
-      \"code code rs rs\"
-      \"supply supply supply supply\";
-    gap:6px 7px;
-    align-items:center;
-    padding:10px 10px;
-  }
-  .v52-theme-leader>summary .market-chip{grid-area:market}
-  .v52-theme-leader>summary>.badge{grid-area:lane}
+
+  /* Theme leaders: never let Japanese names collapse to one character per line. */
+  .v52-theme-leader>summary{display:flex;align-items:center;gap:6px 7px;flex-wrap:wrap;padding:9px 10px}
+  .v52-theme-leader>summary .market-chip{flex:0 0 auto}
+  .v52-theme-leader>summary>.badge{flex:0 0 auto}
   .v52-theme-leader>summary .name{
-    grid-area:name;
-    min-width:0;
-    width:auto;
-    white-space:normal;
-    word-break:normal;
-    overflow-wrap:anywhere;
-    line-height:1.35;
-    font-size:13px;
+    flex:1 1 160px;min-width:160px;width:auto;
+    white-space:normal;word-break:normal;overflow-wrap:break-word;
+    line-height:1.35;font-size:13px
   }
-  .v52-theme-leader>summary .code{grid-area:code;justify-self:start}
-  .v52-theme-leader>summary .supply-badge{grid-area:supply;justify-self:start;margin-left:0}
-  .v52-theme-leader>summary .num{grid-area:rs;justify-self:end;white-space:nowrap}
-  .v52-theme-leader>summary .frame-mini{grid-area:frame;margin-left:0;justify-self:end}
+  .v52-theme-leader>summary .frame-mini{flex:0 0 auto;margin-left:auto}
+  .v52-theme-leader>summary .code{order:2;flex:0 0 auto}
+  .v52-theme-leader>summary .supply-badge{order:2;flex:0 1 auto;margin-left:0}
+  .v52-theme-leader>summary .num{order:2;flex:0 0 auto;margin-left:auto;white-space:nowrap}
   .v73-leaders{margin-top:8px;border-top:1px solid var(--line)}
-  .v73-leaders>summary{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 2px 7px;font-size:12px;font-weight:800;color:var(--muted);
+  .v73-leaders>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 2px 7px;font-size:12px;font-weight:800;color:var(--muted)}
+  .v73-leaders>summary span{font-weight:600;color:var(--faint);white-space:nowrap}
+
+  /* Monitor cards: title + quote on the first line, state chips below. */
+  #watch-list .compact-row{padding:10px 11px}
+  #watch-list .compact-head{display:flex;align-items:center;gap:6px 7px;flex-wrap:wrap}
+  #watch-list .compact-head>.name{
+    flex:1 1 180px;min-width:180px;
+    white-space:normal;word-break:normal;overflow-wrap:break-word;
+    font-size:15px;line-height:1.35
   }
-  .v73-leaders>summary span{font-weight:600;color:var(--faint)}
+  #watch-list .compact-head>.watch-quote{flex:0 0 auto;margin-left:auto}
+  #watch-list .compact-head>.code,
+  #watch-list .compact-head>.badge,
+  #watch-list .compact-head>.watch-status,
+  #watch-list .compact-head>.frame-sync-chip{order:2;flex:0 0 auto}
+  #watch-list .compact-head>.watch-quote-time{order:3;flex:1 1 auto;width:auto;text-align:left;margin-top:2px}
+  #watch-list .compact-head>.watch-inline-update{order:3;flex:0 0 auto;margin-left:auto}
+  #watch-list .watch-quote b{font-size:15px}
+  #watch-list .watch-quote span{font-size:12px}
+
   .v55-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
   .v55-kpi{min-width:0;padding:10px}
   .v55-kpi b{font-size:18px}
@@ -380,7 +383,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.1</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.2</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -470,9 +473,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.1-mobile-auth-hotfix-20260814';
+const FRONTEND_BUILD='vantage-ui73.2-mobile-polish-20260814';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
+document.documentElement.dataset.mobileLayout='v73.2-readable-names';
 const state={
  tab:'stage',market:'jp',themeScope:localStorage.getItem('vantage_theme_scope')||'global',themeView:'radar',watchView:'list',
  stage:{jp:null,us:null},notrade:{jp:null,us:null},momentum:{jp:null,us:null},
@@ -2011,11 +2015,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.1"></script>
-<script src="./reliability-sync.js?build=v73.1"></script>
-<script src="./event-resilience.js?build=v73.1"></script>
-<script src="./navigation.js?build=v73.1"></script>
-<script src="./events-ui.js?build=v73.1"></script>
+<script src="./frame-sync.js?build=v73.2"></script>
+<script src="./reliability-sync.js?build=v73.2"></script>
+<script src="./event-resilience.js?build=v73.2"></script>
+<script src="./navigation.js?build=v73.2"></script>
+<script src="./events-ui.js?build=v73.2"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>
