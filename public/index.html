@@ -831,8 +831,38 @@ async function ensureGlobalThemeData(){
 }
 function themeGroupsForScope(scope){
  const groups=new Map(),add=(r,m)=>{const name=themeName(r);if(!groups.has(name))groups.set(name,{name,jp:[],us:[],rows:[]});const g=groups.get(name);g[m].push(r);g.rows.push(r)};
- if(scope!=='us')for(const r of state.momentum.jp?.rows||[])add(r,'jp');if(scope!=='jp')for(const r of state.momentum.us?.rows||[])add(r,'us');
- return[...groups.values()].map(g=>({...g,phase:scope==='global'?balancedThemePhase(g.jp,g.us):themePhase(g[scope])}));
+ for(const r of state.momentum.jp?.rows||[])add(r,'jp');
+ for(const r of state.momentum.us?.rows||[])add(r,'us');
+
+ return[...groups.values()]
+  .filter(g=>scope==='global'||(g[scope]||[]).length>0)
+  .map(g=>{
+   const canonical=balancedThemePhase(g.jp,g.us);
+   if(scope==='global')return{...g,phase:canonical};
+
+   const rows=g[scope]||[];
+   const local=themePhase(rows);
+   const phase={
+    ...canonical,
+    n:local?.n??canonical.n,
+    a:local?.a??canonical.a,
+    b:local?.b??canonical.b,
+    c:local?.c??canonical.c,
+    e:local?.e??canonical.e,
+    rs5:local?.rs5??canonical.rs5,
+    rs20:local?.rs20??canonical.rs20,
+    vol:local?.vol??canonical.vol,
+    breadth:local?.breadth??canonical.breadth,
+    hot:local?.hot??canonical.hot,
+    improving:local?.improving??canonical.improving,
+    abRate:local?.abRate??canonical.abRate,
+    bcRate:local?.bcRate??canonical.bcRate,
+    eRate:local?.eRate??canonical.eRate,
+    overheatERate:local?.overheatERate??canonical.overheatERate,
+    weakERate:local?.weakERate??canonical.weakERate
+   };
+   return{...g,rows,phase,canonical_phase:canonical,local_phase:local};
+  });
 }
 async function loadThemeRadar(){
  $('theme-radar').innerHTML='<div class="loading">市場横断でテーマの資金流入を集計中…</div>';
