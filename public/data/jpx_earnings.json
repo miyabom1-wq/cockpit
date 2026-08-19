@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-08-18T08:58:23.397244Z",
+  "generated_at": "2026-08-19T08:59:34.255506Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
       "label": "",
-      "events": 16,
+      "events": 10,
       "bytes": 241194
     },
     {
@@ -17,78 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "4651.T",
-      "code": "4651",
-      "name": "サニックスホールディングス",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2027-03-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8951.T",
-      "code": "8951",
-      "name": "日本ビルファンド投資法人",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8955.T",
-      "code": "8955",
-      "name": "日本プライムリアルティ投資法人",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8964.T",
-      "code": "8964",
-      "name": "三井不動産商業ファンド投資法人",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9284.T",
-      "code": "9284",
-      "name": "カナディアン・ソーラー・インフラ投資法人",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9439.T",
-      "code": "9439",
-      "name": "エム・エイチ・グループ",
-      "date": "2026-08-17",
-      "time": "2026-08-17T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "3487.T",
       "code": "3487",
@@ -2901,8 +2829,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 240,
-    "unique_future_events": 240,
+    "raw_rows": 234,
+    "unique_future_events": 234,
     "warnings": []
   }
 }
