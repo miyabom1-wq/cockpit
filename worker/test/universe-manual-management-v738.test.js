@@ -11,7 +11,8 @@ test('registered stocks can be searched by code/ticker and manually added',()=>{
   assert.match(html,/function normalizeUniverseLookupInput\(raw,mode='auto'\)/);
   assert.match(html,/placeholder="5803 \/ 285A \/ MU \/ NVDA"/);
   assert.match(html,/\/api\/lookup\?symbol=/);
-  assert.match(html,/action:'add',symbol:x\.symbol,name:x\.name,pinned:true/);
+  assert.match(html,/action:'add',symbol:x\.symbol,name,pinned:true/);
+  assert.match(html,/window\.resolveJapaneseName\(x\.symbol,name\)/);
   assert.match(html,/action:'promote',symbol:x\.symbol/);
 });
 

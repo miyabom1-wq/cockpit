@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.5-registered-analysis-20260821';
+const BUILD='vantage-ui73.8.9-universe-finish-20260821';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

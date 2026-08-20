@@ -1,9 +1,9 @@
 {
-  "frontend_build": "vantage-ui73.8.5-registered-analysis-20260821",
-  "ui_version": "v73.8.5",
+  "frontend_build": "vantage-ui73.8.9-universe-finish-20260821",
+  "ui_version": "v73.8.9",
   "backend_required": "v71.0.0",
-  "generated_at": "2026-08-21T07:35:00+09:00",
+  "generated_at": "2026-08-21T08:10:00+09:00",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",
-  "smoke_mode": "registered-stock-analysis-to-frame-watch"
+  "smoke_mode": "universe-canonical-refresh-name-layout"
 }

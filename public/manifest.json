@@ -1,8 +1,8 @@
 {
   "name": "VANTAGE — Market & Theme Radar",
   "short_name": "VANTAGE",
-  "description": "今日の市場水準と予定、テーマ・候補探索、登録銘柄の個別分析・FRAME連携と保有優先ウォッチを整理する分析レーダー",
-  "start_url": "./?build=vantage-ui73.8.5-registered-analysis-20260821",
+  "description": "登録銘柄の直接分析、登録済み判定、追加後即時反映、日本株名統一、PC/スマホのカード配置を仕上げた分析レーダー",
+  "start_url": "./?build=vantage-ui73.8.9-universe-finish-20260821",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
