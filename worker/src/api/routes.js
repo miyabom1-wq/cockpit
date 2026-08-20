@@ -2,12 +2,12 @@ import { APP_VERSION, BUILD_ID, KV_SCHEMA_VERSION, ENGINE_VERSION, BACKTEST_VERS
 import { json } from './http.js';
 import { ensureSchema } from '../storage/kv-schema.js';
 import { migrateLegacyData, exportUserData } from '../storage/migration.js';
-import { handleStockListAction } from '../storage/stocklist.js';
+import { handleStockListAction, getStockList } from '../storage/stocklist.js';
 import { lookupSymbol } from '../data/yahoo.js';
 import { getEventDashboard, mutateEvent, syncRegisteredEventBatch } from '../services/events.js';
 import { getPositions, mutatePosition } from '../services/positions.js';
 import { getWatchlist, mutateWatchlist } from '../services/watchlist.js';
-import { getStage, getMomentum, getNoTrade, getReentry, runStageBatch } from '../services/stage.js';
+import { getStage, getMomentum, getNoTrade, getReentry, runStageBatch, analyzeRegisteredSymbolNow } from '../services/stage.js';
 import { getSignalLog, mutateSignalLog, captureSignalLog, syncConfirmedSignalLogs } from '../services/signal-log.js';
 import { getBacktestDashboard, getBacktestSymbol, runBacktestStep } from '../services/backtest.js';
 import { getRanking, getEnrichedRanking, getExplorer } from '../services/ranking.js';
@@ -32,6 +32,15 @@ export async function route(request,env){
   if(p==='/api/positions')return request.method==='GET'?json(await getPositions(env),200,request):json(await mutatePosition(env,await request.json()),200,request);
   if(p==='/api/discipline-state')return request.method==='GET'?json((await getPositions(env)).state,200,request):json(await mutatePosition(env,await request.json()),200,request);
   if(p==='/api/watchlist')return request.method==='GET'?json(await getWatchlist(env),200,request):json(await mutateWatchlist(env,await request.json()),200,request);
+  if(p==='/api/stock-analysis'){
+    const market=url.searchParams.get('market')==='us'?'us':'jp',symbol=String(url.searchParams.get('symbol')||'').toUpperCase();
+    if(!symbol)return json({ok:false,error:'symbol required'},400,request);
+    const list=await getStockList(env,market),item=list.find(x=>String(x.symbol).toUpperCase()===symbol);
+    if(!item)return json({ok:false,error:'登録銘柄ではありません'},404,request);
+    const row=await analyzeRegisteredSymbolNow(env,item.symbol,item.name,market,{refresh:url.searchParams.get('refresh')==='1'});
+    if(!row)return json({ok:false,error:'分析データを取得できませんでした'},502,request);
+    return json({ok:true,market,symbol:item.symbol,name:item.name,source:row.analysis_source||'stage',row},200,request);
+  }
   if(p==='/api/stage')return json(await getStage(env,url.searchParams.get('market')||'jp'),200,request);
   if(p==='/api/momentum')return json(await getMomentum(env,url.searchParams.get('market')||'jp'),200,request);
   if(p==='/api/notrade')return json(await getNoTrade(env,url.searchParams.get('market')||'jp'),200,request);

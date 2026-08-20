@@ -260,5 +260,17 @@ export async function analyzeSymbolNow(env,symbol,name,market){
   const result=await analyzeSymbolsNow(env,[{symbol,name}],market,{label:'WATCH',cacheTtl:30});
   const a=result.items[0]||null;if(a)a.focus_tier='watch';return a;
 }
+export async function analyzeRegisteredSymbolNow(env,symbol,name,market,{refresh=false}={}){
+  const m=market==='us'?'us':'jp',key=String(symbol||'').toUpperCase(),stage=await getStage(env,m);
+  if(!refresh&&stage.stocks?.[key])return{...stage.stocks[key],analysis_source:'stage'};
+  const a=await analyzeSymbolNow(env,key,name||key,m);
+  if(!a)return null;
+  const peers=Object.values(stage.stocks||{}).filter(x=>String(x?.symbol||'').toUpperCase()!==key);
+  const ranking=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(m)),null);
+  deriveContext([...peers,a],ranking,m);
+  applyRiskGate([a],stage.risk_gate||evaluateRiskGate(m,stage.macro||{}));
+  a.analysis_source='on_demand';
+  return a;
+}
 export function scheduleSnapshotOptions(market,label,kind,tradeDate){return{snapshotId:snapshotId(market,tradeDate,kind,label),kind,tradeDate,parts:partsFor(market)};}
 export function marketParts(market){return partsFor(market);}

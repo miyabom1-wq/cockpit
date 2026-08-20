@@ -21,7 +21,7 @@ export function json(data,status=200,request=null){
 
 const PRIVATE_READS=new Set([
   '/api/export','/api/watchlist','/api/positions','/api/discipline-state',
-  '/api/events','/api/signal-log','/api/stocklist','/api/push/key'
+  '/api/events','/api/signal-log','/api/stocklist','/api/stock-analysis','/api/push/key'
 ]);
 
 const WRITE_GETS=new Set([
