@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-08-19T08:59:34.255506Z",
+  "generated_at": "2026-08-20T09:00:34.154639Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
       "label": "",
-      "events": 10,
+      "events": 7,
       "bytes": 241194
     },
     {
@@ -17,42 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "3487.T",
-      "code": "3487",
-      "name": "CREロジスティクスファンド投資法人",
-      "date": "2026-08-18",
-      "time": "2026-08-18T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6327.T",
-      "code": "6327",
-      "name": "北川精機",
-      "date": "2026-08-18",
-      "time": "2026-08-18T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7532.T",
-      "code": "7532",
-      "name": "パン・パシフィック・インターナショナルホールディングス",
-      "date": "2026-08-18",
-      "time": "2026-08-18T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "3076.T",
       "code": "3076",
@@ -2829,8 +2793,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 234,
-    "unique_future_events": 234,
+    "raw_rows": 231,
+    "unique_future_events": 231,
     "warnings": []
   }
 }
