@@ -1,8 +1,8 @@
 {
   "name": "VANTAGE — Market & Theme Radar",
   "short_name": "VANTAGE",
-  "description": "今日の市場水準と予定、テーマ・候補探索、保有優先ウォッチを3タブで整理し、FRAMEへ売買判断候補を渡す分析レーダー",
-  "start_url": "./?build=vantage-ui73.7.2-final-backtest-mobile-macro-20260814",
+  "description": "今日の市場水準と予定、テーマ・候補探索、手動編集できる登録銘柄と保有優先ウォッチを整理する分析レーダー",
+  "start_url": "./?build=vantage-ui73.8.4-manual-universe-20260821",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
