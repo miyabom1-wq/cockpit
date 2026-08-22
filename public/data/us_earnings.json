@@ -1,80 +1,10 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-08-21T20:46:40.672601Z",
+  "generated_at": "2026-08-22T20:45:51.364405Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
   "events": [
-    {
-      "symbol": "BEKE",
-      "name": "KE Holdings Inc",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "$0.25",
-      "market_cap": "$19,195,980,139"
-    },
-    {
-      "symbol": "BJ",
-      "name": "BJ's Wholesale Club Holdings, Inc.",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$1.16",
-      "market_cap": "$11,658,461,013"
-    },
-    {
-      "symbol": "BXBL",
-      "name": "BOXABL, Inc.",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$1,021,516,841"
-    },
-    {
-      "symbol": "GITS",
-      "name": "Global Interactive Technologies, Inc. Common Stock",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$6,099,185"
-    },
-    {
-      "symbol": "LNAI",
-      "name": "Lunai Bioworks Inc.",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$9,974,558"
-    },
-    {
-      "symbol": "NB",
-      "name": "NioCorp Developments Ltd.",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.03)",
-      "market_cap": "$624,568,436"
-    },
-    {
-      "symbol": "PXS",
-      "name": "Pyxis Tankers Inc.",
-      "date": "2026-08-21",
-      "time": "2026-08-21T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$53,019,717"
-    },
     {
       "symbol": "AIV",
       "name": "Apartment Investment and Management Company",
@@ -5677,8 +5607,8 @@
     }
   ],
   "stats": {
-    "requested_weekdays": 86,
-    "events": 567,
+    "requested_weekdays": 85,
+    "events": 560,
     "failed_dates": 0,
     "failures": []
   }
