@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-08-21T09:02:44.592013Z",
+  "generated_at": "2026-08-24T09:08:52.656103Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
       "label": "",
-      "events": 5,
+      "events": 2,
       "bytes": 241194
     },
     {
@@ -17,42 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "3296.T",
-      "code": "3296",
-      "name": "日本リート投資法人",
-      "date": "2026-08-20",
-      "time": "2026-08-20T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8987.T",
-      "code": "8987",
-      "name": "ジャパンエクセレント投資法人",
-      "date": "2026-08-21",
-      "time": "2026-08-21T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9285.T",
-      "code": "9285",
-      "name": "東京インフラ・エネルギー投資法人",
-      "date": "2026-08-21",
-      "time": "2026-08-21T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "7590.T",
       "code": "7590",
@@ -2817,8 +2781,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 233,
-    "unique_future_events": 233,
+    "raw_rows": 230,
+    "unique_future_events": 230,
     "warnings": []
   }
 }
