@@ -1454,7 +1454,7 @@ async function copyAI(btn){
   };
   const [jp,us,njp,nus,mjp,mus,w,sig,bt,ev,pos]=specs.map((_,i)=>pick(i));
   state.stage.jp=jp;state.stage.us=us;state.notrade.jp=njp;state.notrade.us=nus;state.momentum.jp=mjp;state.momentum.us=mus;state.watch=w;state.positions=pos;state.events=ev;
-  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、地合い・市場差RS・出来高・短期セットアップを使った確認順の整理。','注意: ウォッチの登録時メモと現在データは分離して記載。重要日程は公式確認・ウォッチ／シグナル対象の自動取得・手動登録を併記。指数ごとの基準日は独立。'];
+  const out=['# VANTAGE モメンタム分析用','目的: 自動売買ではなく、まず現在の市場構造・資金フロー・レジーム・テーマ循環を深く分析し、その後に候補と保有の確認順を整理する。','注意: ウォッチの登録時メモと現在データは分離して記載。重要日程は公式確認・ウォッチ／シグナル対象の自動取得・手動登録を併記。指数ごとの基準日は独立。'];
   if(failures.length)out.push(`\n## 取得警告\n- ${failures.join('\n- ')}\n- 取得できた項目だけでコピーを作成しました。`);
   for(const [label,m,st,nt,mom] of [['日本','jp',jp,njp,mjp],['米国','us',us,nus,mus]]){
    const ms=marketState(st,m),mm=momentumState(nt),gate=st.risk_gate||mom.risk_gate||nt.risk_gate||{};
@@ -1490,7 +1490,7 @@ async function copyAI(btn){
   const covered=new Set();for(const e of future)for(const sym of e.symbols||[])covered.add(String(sym).toUpperCase());for(const e of near)out.push(`- ${e.name}: ${eventTimeLabel(e)}${(e.symbols||[]).length?' / 関連 '+e.symbols.map(code).join('・'):''}`);if(later.length)out.push(`- 10日超の確認済み日程: ${later.map(e=>e.name+' '+eventTimeLabel(e)).join(' / ')}`)
   const prioritySymbols=new Set([...heldSymbols]);for(const mom of [mjp,mus])for(const lane of mom.board||[])if(['A','B'].includes(lane.key))for(const r of lane.rows||[])prioritySymbols.add(String(r.symbol).toUpperCase());
   const uncovered=[...prioritySymbols].filter(sym=>!covered.has(sym));if(uncovered.length)out.push(`- 10日以内の日程未確認（保有・A/B）: ${uncovered.map(code).join('、')}。企業IR・証券会社で別途確認必須。`);
-  out.push('\n## 依頼\nA/Bを中心に3〜5本へ絞り、エントリー候補・押し待ち・見送りを分けてください。環境ゲートで停止中のA/Bを新規候補に昇格させないでください。日足トレンドレジームと短期セットアップを混同せず、現在データと登録時メモを混同せず、市場差RS・出来高・重要日程・実保有との矛盾も指摘してください。市場ごとの基準日を尊重し、休場差による遅行調整を同じショックとして二重評価しないでください。25MA乖離+8%以上を『過熱控えめ』と表現しないでください。');
+  out.push('\n## 依頼\n個別銘柄の選定や保有判断より先に、現在の市場全体で「何が起きているか」を深く分析してください。出力は次の順序を優先してください。\n1. 市場構造: 日米指数、SOX、KOSPI/KOSDAQ、VIX、ドル円、市場差RS、出来高から、全面リスクオフ・局所的デレバレッジ・セクターローテーション・通常調整などを区別し、根拠と反証材料を示す。\n2. 資金フローとテーマ循環: 世界横断テーマを比較し、どこから資金が抜け、どこへ移っているかを分析する。調整・崩壊・修復・発芽を区別し、特に先行市場と遅行市場の関係を読む。\n3. 現在位置: 急落初期、投げ、価格発見、底固め、反転前夜、再加速など、現在がどの局面に近いかをデータから推論する。断定できない場合は複数仮説を残す。\n4. 今後のシナリオ: 強気・中立・弱気の主要シナリオを示し、それぞれの成立条件・否定条件を具体化する。\n5. 監視条件: 次に相場観を変更するシグナルを、SOX、市場差RS、出来高、25MA、VIX、韓国市場など取得済みデータに即して具体的に示す。\n6. 候補: その後にA/B/Cを確認する。A/Bがなければ無理に3〜5本へ絞らず「新規候補なし」とする。環境ゲート停止中のA/Bを新規候補へ昇格させない。\n7. 保有: 最後に扱う。個別保有株を長く列挙するより、現在の市場環境に対するポートフォリオ全体のテーマ集中、共通リスク、相関、矛盾を優先して評価する。必要な銘柄だけ個別に触れる。\n\n日足トレンドレジームと短期セットアップを混同せず、現在データと登録時メモも混同しないでください。市場ごとの基準日を尊重し、休場差による遅行調整を同じショックとして二重評価しないでください。25MA乖離+8%以上を「過熱控えめ」と表現しないでください。データが足りない論点は推測で埋めず、何が不足しているか明示してください。');
   const text=out.join('\n');
   await copyTextReliably(text);
   const done=`コピー済 ${text.length.toLocaleString('ja-JP')}字${failures.length?`・警告${failures.length}件`:''}`;
