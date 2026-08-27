@@ -1,58 +1,22 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-08-26T09:06:32.674136Z",
+  "generated_at": "2026-08-27T19:09:11.664648Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
       "label": "",
-      "events": 2,
+      "events": 0,
       "bytes": 241194
     },
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
       "label": "",
-      "events": 228,
+      "events": 227,
       "bytes": 31328
     }
   ],
   "events": [
-    {
-      "symbol": "7590.T",
-      "code": "7590",
-      "name": "タカショー",
-      "date": "2026-08-25",
-      "time": "2026-08-25T14:59:00.000Z",
-      "period": "2027-01-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8963.T",
-      "code": "8963",
-      "name": "インヴィンシブル投資法人",
-      "date": "2026-08-25",
-      "time": "2026-08-25T14:59:00.000Z",
-      "period": "2026-06-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8985.T",
-      "code": "8985",
-      "name": "ジャパン・ホテル・リート投資法人",
-      "date": "2026-08-26",
-      "time": "2026-08-26T14:59:00.000Z",
-      "period": "2026-12-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan06_0807.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2590.T",
       "code": "2590",
@@ -2781,8 +2745,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 230,
-    "unique_future_events": 230,
+    "raw_rows": 227,
+    "unique_future_events": 227,
     "warnings": []
   }
 }
