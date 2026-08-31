@@ -1,6 +1,6 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-08-30T22:51:50.482304Z",
+  "generated_at": "2026-08-31T23:57:43.165668Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
@@ -13,7 +13,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$364,544,608"
+      "market_cap": "$370,354,080"
     },
     {
       "symbol": "BLRX",
@@ -23,7 +23,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0",
-      "market_cap": "$12,056,494"
+      "market_cap": "$11,357,567"
     },
     {
       "symbol": "CANG",
@@ -33,7 +33,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.90)",
-      "market_cap": "$106,246,896"
+      "market_cap": "$91,478,984"
     },
     {
       "symbol": "CBAT",
@@ -43,7 +43,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.06)",
-      "market_cap": "$76,545,680"
+      "market_cap": "$82,449,488"
     },
     {
       "symbol": "CHRN",
@@ -53,7 +53,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.06)",
-      "market_cap": "$3,019,792,640"
+      "market_cap": "$2,729,245,950"
     },
     {
       "symbol": "CURR",
@@ -63,7 +63,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$396,355,040"
+      "market_cap": "$378,389,952"
     },
     {
       "symbol": "FRGT",
@@ -73,17 +73,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$852,466"
-    },
-    {
-      "symbol": "GASS",
-      "name": "StealthGas, Inc.",
-      "date": "2026-08-31",
-      "time": "2026-08-31T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$352,520,288"
+      "market_cap": "$829,581"
     },
     {
       "symbol": "GRFS",
@@ -93,17 +83,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.27",
-      "market_cap": "$5,376,679,400"
-    },
-    {
-      "symbol": "LX",
-      "name": "LexinFintech Holdings Ltd.",
-      "date": "2026-08-31",
-      "time": "2026-08-31T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$190,330,464"
+      "market_cap": "$5,287,297,000"
     },
     {
       "symbol": "PXS",
@@ -113,7 +93,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$55,485,752"
+      "market_cap": "$55,074,744"
     },
     {
       "symbol": "SAIC",
@@ -123,7 +103,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$2.25",
-      "market_cap": "$5,452,018,700"
+      "market_cap": "$5,325,188,100"
     },
     {
       "symbol": "SSL",
@@ -133,17 +113,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$7,539,245,100"
-    },
-    {
-      "symbol": "SY",
-      "name": "So-Young International Inc.",
-      "date": "2026-08-31",
-      "time": "2026-08-31T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$232,701,040"
+      "market_cap": "$7,675,613,700"
     },
     {
       "symbol": "AAME",
@@ -153,7 +123,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$32,023,648"
+      "market_cap": "$28,760,092"
     },
     {
       "symbol": "ALPS",
@@ -163,7 +133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$68,215,808"
+      "market_cap": "$64,047,480"
     },
     {
       "symbol": "AREC",
@@ -173,7 +143,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.09)",
-      "market_cap": "$271,707,040"
+      "market_cap": "$256,731,056"
     },
     {
       "symbol": "BRLS",
@@ -183,7 +153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$23,824,270"
+      "market_cap": "$22,751,104"
     },
     {
       "symbol": "BRTX",
@@ -193,7 +163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.15)",
-      "market_cap": "$5,248,503"
+      "market_cap": "$5,072,704"
     },
     {
       "symbol": "CRDO",
@@ -203,7 +173,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.91",
-      "market_cap": "$45,149,426,000"
+      "market_cap": "$43,741,794,000"
     },
     {
       "symbol": "CSHR",
@@ -213,7 +183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$790,681,280"
+      "market_cap": "$788,045,630"
     },
     {
       "symbol": "DELL",
@@ -223,7 +193,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$4.72",
-      "market_cap": "$306,075,468,000"
+      "market_cap": "$295,692,796,000"
     },
     {
       "symbol": "ELME",
@@ -233,7 +203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$148,392,672"
+      "market_cap": "$149,281,248"
     },
     {
       "symbol": "FLYE",
@@ -243,7 +213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$2,775,056"
+      "market_cap": "$2,791,380"
     },
     {
       "symbol": "GTEN",
@@ -263,7 +233,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.07)",
-      "market_cap": "$7,568,409,100"
+      "market_cap": "$7,578,543,100"
     },
     {
       "symbol": "HMR",
@@ -273,7 +243,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.10",
-      "market_cap": "$80,819,040"
+      "market_cap": "$83,178,720"
     },
     {
       "symbol": "IRS",
@@ -283,7 +253,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$1,209,709,310"
+      "market_cap": "$1,187,006,980"
     },
     {
       "symbol": "MDB",
@@ -293,7 +263,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$35,436,700,000"
+      "market_cap": "$35,922,506,000"
     },
     {
       "symbol": "MDT",
@@ -303,7 +273,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.38",
-      "market_cap": "$115,159,876,000"
+      "market_cap": "$116,772,651,000"
     },
     {
       "symbol": "MMED",
@@ -313,7 +283,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.09",
-      "market_cap": "$5,489,137,200"
+      "market_cap": "$5,655,133,700"
     },
     {
       "symbol": "NIO",
@@ -323,7 +293,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.07)",
-      "market_cap": "$10,924,707,800"
+      "market_cap": "$10,949,765,100"
     },
     {
       "symbol": "PANW",
@@ -333,7 +303,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.51",
-      "market_cap": "$312,022,761,000"
+      "market_cap": "$302,845,854,000"
     },
     {
       "symbol": "RGS",
@@ -343,7 +313,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$67,467,008"
+      "market_cap": "$67,779,352"
     },
     {
       "symbol": "RZLV",
@@ -353,7 +323,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$1,177,151,740"
+      "market_cap": "$1,189,163,520"
     },
     {
       "symbol": "SEGG",
@@ -363,7 +333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$8,898,400"
+      "market_cap": "$9,224,348"
     },
     {
       "symbol": "SHPH",
@@ -373,7 +343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,985,590"
+      "market_cap": "$3,636,338"
     },
     {
       "symbol": "SPWH",
@@ -383,7 +353,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.11)",
-      "market_cap": "$44,482,568"
+      "market_cap": "$45,262,960"
     },
     {
       "symbol": "UPXI",
@@ -393,7 +363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$84,837,472"
+      "market_cap": "$79,328,544"
     },
     {
       "symbol": "YEXT",
@@ -403,7 +373,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.10",
-      "market_cap": "$677,677,250"
+      "market_cap": "$692,714,500"
     },
     {
       "symbol": "ZENA",
@@ -413,7 +383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.21)",
-      "market_cap": "$161,518,368"
+      "market_cap": "$146,912,992"
     },
     {
       "symbol": "ZEPP",
@@ -423,7 +393,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$76,404,552"
+      "market_cap": "$73,911,504"
     },
     {
       "symbol": "AACG",
@@ -433,17 +403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$65,085,320"
-    },
-    {
-      "symbol": "AEXA",
-      "name": "American Exceptionalism Acquisition Corp. A",
-      "date": "2026-09-02",
-      "time": "2026-09-02T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": ""
+      "market_cap": "$62,993,744"
     },
     {
       "symbol": "AGX",
@@ -453,7 +413,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$2.67",
-      "market_cap": "$6,448,292,900"
+      "market_cap": "$5,856,400,400"
     },
     {
       "symbol": "AI",
@@ -463,7 +423,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.63)",
-      "market_cap": "$1,605,790,980"
+      "market_cap": "$1,636,880,900"
     },
     {
       "symbol": "ANAB",
@@ -473,7 +433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.22)",
-      "market_cap": "$1,696,269,820"
+      "market_cap": "$1,666,365,310"
     },
     {
       "symbol": "ATCH",
@@ -483,7 +443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.01)",
-      "market_cap": "$28,729,548"
+      "market_cap": "$28,383,772"
     },
     {
       "symbol": "AVGO",
@@ -493,7 +453,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$2.83",
-      "market_cap": "$1,767,631,360,000"
+      "market_cap": "$1,754,548,010,000"
     },
     {
       "symbol": "BF.A",
@@ -503,7 +463,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$12,728,894,500"
+      "market_cap": "$12,733,483,000"
     },
     {
       "symbol": "BF.B",
@@ -513,7 +473,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.38",
-      "market_cap": "$12,728,894,500"
+      "market_cap": "$12,733,483,000"
     },
     {
       "symbol": "CHPT",
@@ -523,7 +483,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($1.58)",
-      "market_cap": "$150,983,184"
+      "market_cap": "$144,249,808"
     },
     {
       "symbol": "CLGN",
@@ -533,7 +493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$5,477,708"
+      "market_cap": "$6,769,138"
     },
     {
       "symbol": "COE",
@@ -543,7 +503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$94,374,920"
+      "market_cap": "$92,212,288"
     },
     {
       "symbol": "CXM",
@@ -553,7 +513,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$1,859,776,380"
+      "market_cap": "$1,911,306,750"
     },
     {
       "symbol": "DAKT",
@@ -562,8 +522,18 @@
       "time": "2026-09-02T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$0.36",
-      "market_cap": "$947,277,250"
+      "eps_forecast": "$0.35",
+      "market_cap": "$932,302,460"
+    },
+    {
+      "symbol": "DOMO",
+      "name": "Domo, Inc.",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jul/2026",
+      "eps_forecast": "",
+      "market_cap": "$174,281,168"
     },
     {
       "symbol": "FCEL",
@@ -573,7 +543,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.35)",
-      "market_cap": "$1,544,715,010"
+      "market_cap": "$1,419,986,560"
     },
     {
       "symbol": "FIVE",
@@ -582,8 +552,18 @@
       "time": "2026-09-02T12:00:00.000Z",
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$1.32",
-      "market_cap": "$13,656,845,300"
+      "eps_forecast": "$1.34",
+      "market_cap": "$13,375,392,800"
+    },
+    {
+      "symbol": "GASS",
+      "name": "StealthGas, Inc.",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$352,892,160"
     },
     {
       "symbol": "GAUZ",
@@ -593,7 +573,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$10,367,422"
+      "market_cap": "$8,995,060"
     },
     {
       "symbol": "GIII",
@@ -603,7 +583,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.25",
-      "market_cap": "$1,407,055,620"
+      "market_cap": "$1,411,696,510"
     },
     {
       "symbol": "GOLD",
@@ -613,7 +593,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.96",
-      "market_cap": "$1,333,621,120"
+      "market_cap": "$1,321,149,180"
     },
     {
       "symbol": "GURE",
@@ -623,7 +603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$6,202,276"
+      "market_cap": "$7,072,771"
     },
     {
       "symbol": "HPE",
@@ -633,7 +613,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$72,049,910,000"
+      "market_cap": "$69,269,086,000"
     },
     {
       "symbol": "HTT",
@@ -643,7 +623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$413,054,112"
+      "market_cap": "$408,395,616"
     },
     {
       "symbol": "LKSP",
@@ -663,7 +643,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.47)",
-      "market_cap": "$630,688,700"
+      "market_cap": "$645,941,570"
     },
     {
       "symbol": "MTRX",
@@ -673,7 +653,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.17",
-      "market_cap": "$306,940,288"
+      "market_cap": "$304,689,600"
     },
     {
       "symbol": "NBP",
@@ -683,7 +663,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.14)",
-      "market_cap": "$218,071,392"
+      "market_cap": "$212,302,320"
     },
     {
       "symbol": "NEWP",
@@ -693,7 +673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0",
-      "market_cap": "$1,361,803,140"
+      "market_cap": "$1,300,835,970"
     },
     {
       "symbol": "NTAP",
@@ -703,7 +683,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.72",
-      "market_cap": "$37,410,099,000"
+      "market_cap": "$36,699,734,000"
     },
     {
       "symbol": "NTSK",
@@ -713,7 +693,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.26)",
-      "market_cap": "$6,107,325,400"
+      "market_cap": "$6,095,207,900"
     },
     {
       "symbol": "OLLI",
@@ -723,7 +703,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.14",
-      "market_cap": "$4,323,014,700"
+      "market_cap": "$4,378,027,500"
     },
     {
       "symbol": "PHR",
@@ -733,7 +713,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.10",
-      "market_cap": "$733,089,020"
+      "market_cap": "$751,014,460"
     },
     {
       "symbol": "PTN",
@@ -743,7 +723,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$18,664,596"
+      "market_cap": "$18,646,802"
     },
     {
       "symbol": "PVH",
@@ -753,7 +733,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$3.08",
-      "market_cap": "$3,511,592,190"
+      "market_cap": "$3,494,532,350"
     },
     {
       "symbol": "REX",
@@ -763,7 +743,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$1,349,787,650"
+      "market_cap": "$1,361,974,660"
     },
     {
       "symbol": "RYDE",
@@ -773,7 +753,27 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$115,831,448"
+      "market_cap": "$119,994,672"
+    },
+    {
+      "symbol": "SA",
+      "name": "Seabridge Gold, Inc.",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$3,496,472,580"
+    },
+    {
+      "symbol": "SJ",
+      "name": "Scienjoy Holding Corporation",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$42,462,768"
     },
     {
       "symbol": "SNOW",
@@ -783,7 +783,17 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.51)",
-      "market_cap": "$114,069,529,000"
+      "market_cap": "$113,684,799,000"
+    },
+    {
+      "symbol": "TCOM",
+      "name": "Trip.com Group Limited",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "$0.84",
+      "market_cap": "$28,557,131,800"
     },
     {
       "symbol": "TGS",
@@ -793,7 +803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.63",
-      "market_cap": "$4,298,265,600"
+      "market_cap": "$4,238,044,670"
     },
     {
       "symbol": "TLYS",
@@ -803,7 +813,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.17",
-      "market_cap": "$117,075,536"
+      "market_cap": "$120,734,144"
     },
     {
       "symbol": "WOOF",
@@ -813,7 +823,17 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$876,294,850"
+      "market_cap": "$873,061,310"
+    },
+    {
+      "symbol": "YB",
+      "name": "Yuanbao Inc.",
+      "date": "2026-09-02",
+      "time": "2026-09-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$621,621,890"
     },
     {
       "symbol": "YQ",
@@ -823,7 +843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$23,014,060"
+      "market_cap": "$22,416,996"
     },
     {
       "symbol": "YSG",
@@ -833,7 +853,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$283,473,504"
+      "market_cap": "$285,350,816"
     },
     {
       "symbol": "AMBA",
@@ -843,7 +863,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.30)",
-      "market_cap": "$3,121,660,160"
+      "market_cap": "$3,098,409,980"
     },
     {
       "symbol": "AMBR",
@@ -853,7 +873,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$102,760,024"
+      "market_cap": "$98,989,016"
     },
     {
       "symbol": "AOUT",
@@ -863,7 +883,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.29)",
-      "market_cap": "$129,573,760"
+      "market_cap": "$129,823,904"
     },
     {
       "symbol": "ASAN",
@@ -873,7 +893,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.11)",
-      "market_cap": "$2,344,284,930"
+      "market_cap": "$2,348,895,230"
     },
     {
       "symbol": "BBCP",
@@ -883,7 +903,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$475,209,952"
+      "market_cap": "$464,123,392"
     },
     {
       "symbol": "BRC",
@@ -893,7 +913,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$4,403,632,600"
+      "market_cap": "$4,393,267,700"
     },
     {
       "symbol": "BTTC",
@@ -903,7 +923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$5,069,459"
+      "market_cap": "$4,728,981"
     },
     {
       "symbol": "CAN",
@@ -913,7 +933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.10)",
-      "market_cap": "$341,096,640"
+      "market_cap": "$292,588,544"
     },
     {
       "symbol": "CIEN",
@@ -923,7 +943,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.45",
-      "market_cap": "$56,599,937,000"
+      "market_cap": "$53,569,286,000"
     },
     {
       "symbol": "CMMB",
@@ -933,7 +953,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$19,708,054"
+      "market_cap": "$19,635,598"
     },
     {
       "symbol": "CPB",
@@ -943,7 +963,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$6,942,241,300"
+      "market_cap": "$6,975,044,100"
     },
     {
       "symbol": "CPRT",
@@ -953,7 +973,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.39",
-      "market_cap": "$30,329,583,600"
+      "market_cap": "$30,542,520,300"
     },
     {
       "symbol": "CRESY",
@@ -963,7 +983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$795,780,670"
+      "market_cap": "$784,432,640"
     },
     {
       "symbol": "CRMT",
@@ -973,7 +993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$20,012,668"
+      "market_cap": "$20,619,112"
     },
     {
       "symbol": "CURV",
@@ -983,7 +1003,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.03)",
-      "market_cap": "$222,925,648"
+      "market_cap": "$226,906,464"
     },
     {
       "symbol": "DAVA",
@@ -993,7 +1013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$178,737,808"
+      "market_cap": "$174,391,600"
     },
     {
       "symbol": "DLTH",
@@ -1003,7 +1023,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.05)",
-      "market_cap": "$140,607,664"
+      "market_cap": "$139,847,616"
     },
     {
       "symbol": "DOCU",
@@ -1013,7 +1033,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.44",
-      "market_cap": "$12,182,265,900"
+      "market_cap": "$12,220,454,900"
     },
     {
       "symbol": "DOO",
@@ -1023,7 +1043,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.46)",
-      "market_cap": "$4,582,334,000"
+      "market_cap": "$4,566,984,700"
     },
     {
       "symbol": "EGAN",
@@ -1033,7 +1053,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0",
-      "market_cap": "$205,326,608"
+      "market_cap": "$203,130,592"
     },
     {
       "symbol": "EONR",
@@ -1043,7 +1063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$26,108,460"
+      "market_cap": "$26,083,476"
     },
     {
       "symbol": "GCO",
@@ -1053,7 +1073,17 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($1.34)",
-      "market_cap": "$366,307,968"
+      "market_cap": "$369,973,280"
+    },
+    {
+      "symbol": "GROW",
+      "name": "U.S. Global Investors, Inc.",
+      "date": "2026-09-03",
+      "time": "2026-09-03T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$41,305,972"
     },
     {
       "symbol": "GWRE",
@@ -1063,7 +1093,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.49",
-      "market_cap": "$16,742,022,100"
+      "market_cap": "$17,138,322,400"
     },
     {
       "symbol": "HUBG",
@@ -1073,7 +1103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.52",
-      "market_cap": "$2,444,917,250"
+      "market_cap": "$2,422,290,430"
     },
     {
       "symbol": "IOT",
@@ -1083,7 +1113,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.02",
-      "market_cap": "$24,398,071,800"
+      "market_cap": "$23,984,347,100"
     },
     {
       "symbol": "IPST",
@@ -1093,7 +1123,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,398,632"
+      "market_cap": "$2,994,549"
     },
     {
       "symbol": "ITP",
@@ -1103,7 +1133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,060,562"
+      "market_cap": "$3,175,927"
     },
     {
       "symbol": "LE",
@@ -1113,7 +1143,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.10",
-      "market_cap": "$365,508,896"
+      "market_cap": "$370,427,456"
     },
     {
       "symbol": "LND",
@@ -1123,7 +1153,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$380,955,584"
+      "market_cap": "$392,250,752"
     },
     {
       "symbol": "LULU",
@@ -1133,7 +1163,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.79",
-      "market_cap": "$12,470,365,200"
+      "market_cap": "$13,100,389,400"
     },
     {
       "symbol": "MAMA",
@@ -1143,7 +1173,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$744,886,590"
+      "market_cap": "$761,625,600"
     },
     {
       "symbol": "MOMO",
@@ -1153,7 +1183,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$843,637,630"
+      "market_cap": "$845,115,140"
     },
     {
       "symbol": "NX",
@@ -1163,7 +1193,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.68",
-      "market_cap": "$903,862,340"
+      "market_cap": "$891,921,090"
     },
     {
       "symbol": "OXM",
@@ -1173,7 +1203,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.32",
-      "market_cap": "$570,361,600"
+      "market_cap": "$572,004,030"
     },
     {
       "symbol": "PATH",
@@ -1183,7 +1213,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.04",
-      "market_cap": "$9,497,144,300"
+      "market_cap": "$9,403,882,500"
     },
     {
       "symbol": "PDEX",
@@ -1193,7 +1223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.67",
-      "market_cap": "$207,082,352"
+      "market_cap": "$199,723,040"
     },
     {
       "symbol": "PL",
@@ -1203,7 +1233,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.18)",
-      "market_cap": "$7,541,477,400"
+      "market_cap": "$7,120,922,600"
     },
     {
       "symbol": "REBN",
@@ -1213,7 +1243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$11,006,030"
+      "market_cap": "$10,348,953"
     },
     {
       "symbol": "SMXT",
@@ -1223,7 +1253,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$14,321,489"
+      "market_cap": "$13,847,268"
     },
     {
       "symbol": "SNYR",
@@ -1233,7 +1263,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.01)",
-      "market_cap": "$1,564,488"
+      "market_cap": "$1,537,668"
     },
     {
       "symbol": "SWBI",
@@ -1243,7 +1273,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$586,054,590"
+      "market_cap": "$573,051,140"
     },
     {
       "symbol": "TTC",
@@ -1253,7 +1283,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.30",
-      "market_cap": "$9,470,577,700"
+      "market_cap": "$9,430,581,200"
     },
     {
       "symbol": "VBNK",
@@ -1263,7 +1293,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.35",
-      "market_cap": "$657,410,300"
+      "market_cap": "$638,814,780"
     },
     {
       "symbol": "VFS",
@@ -1273,7 +1303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.26)",
-      "market_cap": "$7,369,538,600"
+      "market_cap": "$7,205,770,800"
     },
     {
       "symbol": "VSXY",
@@ -1283,7 +1313,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.78",
-      "market_cap": "$7,131,202,000"
+      "market_cap": "$6,983,347,700"
     },
     {
       "symbol": "WLY",
@@ -1293,7 +1323,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$2,743,264,510"
+      "market_cap": "$2,726,512,380"
     },
     {
       "symbol": "WLYB",
@@ -1303,7 +1333,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$2,743,264,510"
+      "market_cap": "$2,726,512,380"
     },
     {
       "symbol": "YRD",
@@ -1313,7 +1343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$94,487,536"
+      "market_cap": "$91,862,880"
     },
     {
       "symbol": "ZGN",
@@ -1323,7 +1353,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,659,776,260"
+      "market_cap": "$3,683,924,480"
     },
     {
       "symbol": "ZS",
@@ -1333,17 +1363,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.06",
-      "market_cap": "$30,288,193,500"
-    },
-    {
-      "symbol": "ZUMZ",
-      "name": "Zumiez Inc.",
-      "date": "2026-09-03",
-      "time": "2026-09-03T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "($0.12)",
-      "market_cap": "$297,625,888"
+      "market_cap": "$29,791,746,000"
     },
     {
       "symbol": "BMRA",
@@ -1353,7 +1373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "May/2026",
       "eps_forecast": "",
-      "market_cap": "$9,416,345"
+      "market_cap": "$9,595,704"
     },
     {
       "symbol": "CELU",
@@ -1363,7 +1383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$60,786,520"
+      "market_cap": "$45,734,616"
     },
     {
       "symbol": "ENLV",
@@ -1373,7 +1393,17 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.31)",
-      "market_cap": "$25,791,056"
+      "market_cap": "$23,605,374"
+    },
+    {
+      "symbol": "GITS",
+      "name": "Global Interactive Technologies, Inc. Common Stock",
+      "date": "2026-09-04",
+      "time": "2026-09-04T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$7,238,190"
     },
     {
       "symbol": "HTLM",
@@ -1383,7 +1413,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$152,477,712"
+      "market_cap": "$153,814,064"
     },
     {
       "symbol": "HURC",
@@ -1393,17 +1423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$145,846,768"
-    },
-    {
-      "symbol": "IBIO",
-      "name": "iBio, Inc.",
-      "date": "2026-09-04",
-      "time": "2026-09-04T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.07)",
-      "market_cap": "$69,549,984"
+      "market_cap": "$148,502,064"
     },
     {
       "symbol": "IMMP",
@@ -1413,7 +1433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$56,050,728"
+      "market_cap": "$56,080,164"
     },
     {
       "symbol": "IMPP",
@@ -1423,7 +1443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$228,781,104"
+      "market_cap": "$234,658,880"
     },
     {
       "symbol": "KNOP",
@@ -1433,7 +1453,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.03)",
-      "market_cap": "$356,799,616"
+      "market_cap": "$366,897,728"
     },
     {
       "symbol": "KT",
@@ -1443,7 +1463,27 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$9,450,926,100"
+      "market_cap": "$9,465,392,100"
+    },
+    {
+      "symbol": "LNAI",
+      "name": "Lunai Bioworks Inc.",
+      "date": "2026-09-04",
+      "time": "2026-09-04T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$10,745,319"
+    },
+    {
+      "symbol": "NB",
+      "name": "NioCorp Developments Ltd.",
+      "date": "2026-09-04",
+      "time": "2026-09-04T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "($0.03)",
+      "market_cap": "$601,274,500"
     },
     {
       "symbol": "NRT",
@@ -1453,7 +1493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$79,130,976"
+      "market_cap": "$82,899,120"
     },
     {
       "symbol": "PLCE",
@@ -1463,7 +1503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$54,480,816"
+      "market_cap": "$54,925,556"
     },
     {
       "symbol": "VIRC",
@@ -1473,7 +1513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$94,062,664"
+      "market_cap": "$92,961,600"
     },
     {
       "symbol": "ABM",
@@ -1483,7 +1523,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.01",
-      "market_cap": "$2,762,090,500"
+      "market_cap": "$2,765,019,650"
     },
     {
       "symbol": "AVO",
@@ -1493,7 +1533,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$1,105,763,970"
+      "market_cap": "$1,127,843,970"
     },
     {
       "symbol": "AXR",
@@ -1503,7 +1543,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$122,205,288"
+      "market_cap": "$122,897,512"
     },
     {
       "symbol": "BIOX",
@@ -1513,7 +1553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$25,550,532"
+      "market_cap": "$25,923,578"
     },
     {
       "symbol": "BRZE",
@@ -1523,7 +1563,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.21)",
-      "market_cap": "$4,178,745,340"
+      "market_cap": "$4,232,680,450"
     },
     {
       "symbol": "CASY",
@@ -1533,7 +1573,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$6.59",
-      "market_cap": "$28,248,811,500"
+      "market_cap": "$27,956,103,200"
     },
     {
       "symbol": "CGNT",
@@ -1543,7 +1583,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.01",
-      "market_cap": "$666,581,440"
+      "market_cap": "$650,323,330"
     },
     {
       "symbol": "GME",
@@ -1553,7 +1593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$8,188,615,700"
+      "market_cap": "$8,018,112,500"
     },
     {
       "symbol": "GMHS",
@@ -1563,7 +1603,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$41,688,264"
+      "market_cap": "$41,734,120"
     },
     {
       "symbol": "INNV",
@@ -1573,7 +1613,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.07",
-      "market_cap": "$1,497,172,350"
+      "market_cap": "$1,474,097,280"
     },
     {
       "symbol": "KFY",
@@ -1583,7 +1623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.35",
-      "market_cap": "$4,347,296,800"
+      "market_cap": "$4,431,007,200"
     },
     {
       "symbol": "MIND",
@@ -1593,7 +1633,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$40,446,296"
+      "market_cap": "$39,446,500"
     },
     {
       "symbol": "NTRB",
@@ -1603,7 +1643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$56,160,640"
+      "market_cap": "$54,215,684"
     },
     {
       "symbol": "ORCL",
@@ -1613,17 +1653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.40",
-      "market_cap": "$437,658,780,000"
-    },
-    {
-      "symbol": "SKIL",
-      "name": "Skillsoft Corp.",
-      "date": "2026-09-08",
-      "time": "2026-09-08T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$0.54",
-      "market_cap": "$59,454,716"
+      "market_cap": "$434,519,048,000"
     },
     {
       "symbol": "TTAN",
@@ -1633,7 +1663,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.09)",
-      "market_cap": "$9,600,812,000"
+      "market_cap": "$9,527,356,400"
     },
     {
       "symbol": "UNFI",
@@ -1643,7 +1673,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.62",
-      "market_cap": "$2,860,134,660"
+      "market_cap": "$2,771,776,510"
     },
     {
       "symbol": "WDH",
@@ -1653,7 +1683,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$357,361,728"
+      "market_cap": "$356,607,200"
     },
     {
       "symbol": "AEO",
@@ -1663,7 +1693,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.21",
-      "market_cap": "$2,796,798,980"
+      "market_cap": "$2,826,962,180"
     },
     {
       "symbol": "ALZN",
@@ -1673,7 +1703,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.56)",
-      "market_cap": "$8,034,829"
+      "market_cap": "$8,010,700"
     },
     {
       "symbol": "ANIX",
@@ -1683,7 +1713,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.08)",
-      "market_cap": "$122,483,024"
+      "market_cap": "$118,400,256"
     },
     {
       "symbol": "ASO",
@@ -1693,7 +1723,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$2.07",
-      "market_cap": "$2,643,843,070"
+      "market_cap": "$2,697,799,170"
     },
     {
       "symbol": "AVAV",
@@ -1703,7 +1733,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.32",
-      "market_cap": "$7,739,267,600"
+      "market_cap": "$7,518,697,500"
     },
     {
       "symbol": "CHWY",
@@ -1713,7 +1743,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.18",
-      "market_cap": "$9,334,872,100"
+      "market_cap": "$9,523,207,200"
     },
     {
       "symbol": "CNM",
@@ -1723,7 +1753,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.91",
-      "market_cap": "$8,464,566,300"
+      "market_cap": "$8,325,232,100"
     },
     {
       "symbol": "COO",
@@ -1733,7 +1763,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.11",
-      "market_cap": "$13,839,373,300"
+      "market_cap": "$13,880,330,200"
     },
     {
       "symbol": "CULP",
@@ -1743,7 +1773,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.44",
-      "market_cap": "$43,565,732"
+      "market_cap": "$43,756,532"
     },
     {
       "symbol": "DXLG",
@@ -1753,7 +1783,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$34,313,536"
+      "market_cap": "$34,274,844"
     },
     {
       "symbol": "GLOO",
@@ -1763,7 +1793,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.11)",
-      "market_cap": "$324,759,520"
+      "market_cap": "$327,642,016"
     },
     {
       "symbol": "JILL",
@@ -1773,7 +1803,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$296,486,560"
+      "market_cap": "$296,038,016"
     },
     {
       "symbol": "KEQU",
@@ -1783,7 +1813,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$108,989,472"
+      "market_cap": "$108,444,088"
     },
     {
       "symbol": "LAKE",
@@ -1793,7 +1823,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.02)",
-      "market_cap": "$117,936,512"
+      "market_cap": "$117,048,288"
     },
     {
       "symbol": "LMNR",
@@ -1803,7 +1833,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.13",
-      "market_cap": "$245,870,016"
+      "market_cap": "$249,859,056"
     },
     {
       "symbol": "LSAK",
@@ -1813,7 +1843,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$391,233,376"
+      "market_cap": "$395,523,232"
     },
     {
       "symbol": "NAVN",
@@ -1823,7 +1853,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.12)",
-      "market_cap": "$7,777,450,000"
+      "market_cap": "$7,248,440,800"
     },
     {
       "symbol": "NNOX",
@@ -1833,7 +1863,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$66,203,068"
+      "market_cap": "$65,197,136"
     },
     {
       "symbol": "ODD",
@@ -1843,7 +1873,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0",
-      "market_cap": "$849,283,710"
+      "market_cap": "$813,023,420"
     },
     {
       "symbol": "PPIH",
@@ -1853,7 +1883,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$221,181,904"
+      "market_cap": "$216,468,992"
     },
     {
       "symbol": "SAIL",
@@ -1863,7 +1893,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$11,598,892,000"
+      "market_cap": "$11,247,239,200"
     },
     {
       "symbol": "SIG",
@@ -1873,7 +1903,17 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.69",
-      "market_cap": "$3,218,749,440"
+      "market_cap": "$3,252,572,930"
+    },
+    {
+      "symbol": "SKIL",
+      "name": "Skillsoft Corp.",
+      "date": "2026-09-09",
+      "time": "2026-09-09T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Jul/2026",
+      "eps_forecast": "$0.54",
+      "market_cap": "$62,144,976"
     },
     {
       "symbol": "SUNB",
@@ -1883,7 +1923,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.98",
-      "market_cap": "$30,182,965,200"
+      "market_cap": "$29,994,475,500"
     },
     {
       "symbol": "VNCE",
@@ -1893,7 +1933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.27",
-      "market_cap": "$100,337,368"
+      "market_cap": "$97,125,544"
     },
     {
       "symbol": "WLTH",
@@ -1903,7 +1943,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.09",
-      "market_cap": "$1,405,489,020"
+      "market_cap": "$1,381,591,300"
     },
     {
       "symbol": "ADBE",
@@ -1913,7 +1953,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$4.86",
-      "market_cap": "$114,937,127,000"
+      "market_cap": "$115,879,199,000"
     },
     {
       "symbol": "AENT",
@@ -1923,7 +1963,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.02",
-      "market_cap": "$279,368,384"
+      "market_cap": "$279,878,176"
     },
     {
       "symbol": "CAL",
@@ -1932,8 +1972,8 @@
       "time": "2026-09-10T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$0.38",
-      "market_cap": "$421,215,392"
+      "eps_forecast": "$0.37",
+      "market_cap": "$419,200,000"
     },
     {
       "symbol": "CMCM",
@@ -1943,7 +1983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$93,215,760"
+      "market_cap": "$102,880,264"
     },
     {
       "symbol": "CMND",
@@ -1953,7 +1993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$2,688,847"
+      "market_cap": "$2,614,570"
     },
     {
       "symbol": "DBI",
@@ -1963,7 +2003,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.25",
-      "market_cap": "$277,750,624"
+      "market_cap": "$278,766,176"
     },
     {
       "symbol": "DSGX",
@@ -1973,7 +2013,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.57",
-      "market_cap": "$6,896,420,900"
+      "market_cap": "$6,997,406,700"
     },
     {
       "symbol": "ENGN",
@@ -1983,7 +2023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.47)",
-      "market_cap": "$127,949,880"
+      "market_cap": "$122,255,776"
     },
     {
       "symbol": "EVI",
@@ -1993,7 +2033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$189,175,968"
+      "market_cap": "$184,671,776"
     },
     {
       "symbol": "FEIM",
@@ -2003,7 +2043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$700,077,180"
+      "market_cap": "$662,389,120"
     },
     {
       "symbol": "FIZZ",
@@ -2013,7 +2053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$3,039,585,020"
+      "market_cap": "$3,049,882,370"
     },
     {
       "symbol": "FLWS",
@@ -2023,17 +2063,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.72)",
-      "market_cap": "$239,728,320"
-    },
-    {
-      "symbol": "HOFT",
-      "name": "Hooker Furnishings Corporation",
-      "date": "2026-09-10",
-      "time": "2026-09-10T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "($0.02)",
-      "market_cap": "$144,582,608"
+      "market_cap": "$239,087,344"
     },
     {
       "symbol": "HSCS",
@@ -2043,17 +2073,17 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.78)",
-      "market_cap": "$12,166,412"
+      "market_cap": "$11,815,458"
     },
     {
       "symbol": "IBEX",
       "name": "IBEX Limited",
       "date": "2026-09-10",
       "time": "2026-09-10T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$498,744,576"
+      "market_cap": "$510,393,088"
     },
     {
       "symbol": "KMTS",
@@ -2063,7 +2093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.61)",
-      "market_cap": "$1,512,546,560"
+      "market_cap": "$1,502,584,060"
     },
     {
       "symbol": "LOVE",
@@ -2073,7 +2103,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.39)",
-      "market_cap": "$235,239,376"
+      "market_cap": "$234,068,304"
     },
     {
       "symbol": "M",
@@ -2083,7 +2113,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.37",
-      "market_cap": "$5,920,984,600"
+      "market_cap": "$5,789,465,600"
     },
     {
       "symbol": "MCFT",
@@ -2093,7 +2123,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.56",
-      "market_cap": "$393,647,744"
+      "market_cap": "$388,926,560"
     },
     {
       "symbol": "OCC",
@@ -2103,7 +2133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.20",
-      "market_cap": "$122,166,952"
+      "market_cap": "$119,607,096"
     },
     {
       "symbol": "REF",
@@ -2113,7 +2143,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.20",
-      "market_cap": "$935,800,320"
+      "market_cap": "$954,898,300"
     },
     {
       "symbol": "RFIL",
@@ -2123,7 +2153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.18",
-      "market_cap": "$117,736,224"
+      "market_cap": "$112,853,152"
     },
     {
       "symbol": "RH",
@@ -2133,7 +2163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.42",
-      "market_cap": "$2,736,860,420"
+      "market_cap": "$2,825,505,790"
     },
     {
       "symbol": "SHOE",
@@ -2143,7 +2173,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.32",
-      "market_cap": "$375,774,112"
+      "market_cap": "$371,701,408"
     },
     {
       "symbol": "TEN",
@@ -2153,7 +2183,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$1,268,070,780"
+      "market_cap": "$1,281,025,660"
     },
     {
       "symbol": "UROY",
@@ -2163,7 +2193,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$634,269,250"
+      "market_cap": "$623,283,070"
     },
     {
       "symbol": "VRA",
@@ -2173,7 +2203,27 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.08)",
-      "market_cap": "$94,983,760"
+      "market_cap": "$94,130,616"
+    },
+    {
+      "symbol": "ZUMZ",
+      "name": "Zumiez Inc.",
+      "date": "2026-09-10",
+      "time": "2026-09-10T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Jul/2026",
+      "eps_forecast": "($0.12)",
+      "market_cap": "$306,736,864"
+    },
+    {
+      "symbol": "HOFT",
+      "name": "Hooker Furnishings Corporation",
+      "date": "2026-09-11",
+      "time": "2026-09-11T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Jul/2026",
+      "eps_forecast": "($0.02)",
+      "market_cap": "$143,615,856"
     },
     {
       "symbol": "IHT",
@@ -2183,7 +2233,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$12,035,628"
+      "market_cap": "$12,223,684"
     },
     {
       "symbol": "JVA",
@@ -2193,7 +2243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$19,751,752"
+      "market_cap": "$19,580,496"
     },
     {
       "symbol": "KR",
@@ -2203,7 +2253,17 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$1.05",
-      "market_cap": "$34,878,009,000"
+      "market_cap": "$35,362,001,000"
+    },
+    {
+      "symbol": "MNY",
+      "name": "MoneyHero Limited",
+      "date": "2026-09-11",
+      "time": "2026-09-11T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "($0.02)",
+      "market_cap": "$39,541,120"
     },
     {
       "symbol": "RENT",
@@ -2213,17 +2273,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$121,247,008"
-    },
-    {
-      "symbol": "TPET",
-      "name": "Trio Petroleum Corp.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "",
-      "market_cap": "$9,566,244"
+      "market_cap": "$120,575,280"
     },
     {
       "symbol": "BNR",
@@ -2233,7 +2283,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$105,463,432"
+      "market_cap": "$107,467,232"
     },
     {
       "symbol": "CODA",
@@ -2243,7 +2293,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$117,658,264"
+      "market_cap": "$112,807,536"
     },
     {
       "symbol": "DLNG",
@@ -2253,17 +2303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$138,251,648"
-    },
-    {
-      "symbol": "GROW",
-      "name": "U.S. Global Investors, Inc.",
-      "date": "2026-09-14",
-      "time": "2026-09-14T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$41,554,056"
+      "market_cap": "$140,070,736"
     },
     {
       "symbol": "HAIN",
@@ -2273,7 +2313,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.03)",
-      "market_cap": "$64,098,024"
+      "market_cap": "$66,056,524"
     },
     {
       "symbol": "HITI",
@@ -2283,7 +2323,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.01",
-      "market_cap": "$222,350,640"
+      "market_cap": "$221,102,896"
     },
     {
       "symbol": "VZLA",
@@ -2293,7 +2333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0",
-      "market_cap": "$1,462,506,240"
+      "market_cap": "$1,412,718,850"
     },
     {
       "symbol": "EPM",
@@ -2303,7 +2343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.02",
-      "market_cap": "$128,700,440"
+      "market_cap": "$130,857,432"
     },
     {
       "symbol": "ESP",
@@ -2313,7 +2353,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$189,671,824"
+      "market_cap": "$186,316,384"
     },
     {
       "symbol": "CBRL",
@@ -2323,7 +2363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.20",
-      "market_cap": "$1,230,894,850"
+      "market_cap": "$1,244,082,300"
     },
     {
       "symbol": "DSWL",
@@ -2333,7 +2373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$47,814,568"
+      "market_cap": "$48,688,256"
     },
     {
       "symbol": "HERE",
@@ -2343,7 +2383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$101,699,232"
+      "market_cap": "$102,786,920"
     },
     {
       "symbol": "LUXE",
@@ -2352,8 +2392,8 @@
       "time": "2026-09-16T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.15)",
-      "market_cap": "$1,063,719,170"
+      "eps_forecast": "($0.17)",
+      "market_cap": "$1,050,081,790"
     },
     {
       "symbol": "MANU",
@@ -2363,7 +2403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,883,097,860"
+      "market_cap": "$3,810,677,760"
     },
     {
       "symbol": "PLUR",
@@ -2383,7 +2423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.13)",
-      "market_cap": "$479,535,808"
+      "market_cap": "$444,870,560"
     },
     {
       "symbol": "SANG",
@@ -2393,7 +2433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.06)",
-      "market_cap": "$129,273,408"
+      "market_cap": "$129,632,776"
     },
     {
       "symbol": "YI",
@@ -2413,17 +2453,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$364,908,544"
-    },
-    {
-      "symbol": "DRI",
-      "name": "Darden Restaurants, Inc.",
-      "date": "2026-09-17",
-      "time": "2026-09-17T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Aug/2026",
-      "eps_forecast": "$2.07",
-      "market_cap": "$24,085,280,800"
+      "market_cap": "$350,585,024"
     },
     {
       "symbol": "FDS",
@@ -2433,7 +2463,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$4.30",
-      "market_cap": "$10,828,641,300"
+      "market_cap": "$10,989,041,700"
     },
     {
       "symbol": "IH",
@@ -2443,7 +2473,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$70,535,752"
+      "market_cap": "$63,891,080"
     },
     {
       "symbol": "IPHA",
@@ -2453,7 +2483,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$209,151,792"
+      "market_cap": "$208,213,888"
     },
     {
       "symbol": "LEN",
@@ -2463,7 +2493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.31",
-      "market_cap": "$20,502,585,300"
+      "market_cap": "$20,796,477,400"
     },
     {
       "symbol": "LEN.B",
@@ -2473,7 +2503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$20,502,585,300"
+      "market_cap": "$20,796,477,400"
     },
     {
       "symbol": "RSSS",
@@ -2483,7 +2513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$72,721,104"
+      "market_cap": "$73,050,160"
     },
     {
       "symbol": "SCHL",
@@ -2493,17 +2523,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($3.40)",
-      "market_cap": "$741,711,940"
-    },
-    {
-      "symbol": "MNY",
-      "name": "MoneyHero Limited",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.02)",
-      "market_cap": "$37,972,628"
+      "market_cap": "$738,867,200"
     },
     {
       "symbol": "TRT",
@@ -2513,7 +2533,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$105,980,040"
+      "market_cap": "$102,137,248"
     },
     {
       "symbol": "ABVX",
@@ -2523,7 +2543,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($1.08)",
-      "market_cap": "$9,840,605,200"
+      "market_cap": "$9,758,815,200"
     },
     {
       "symbol": "CSBR",
@@ -2533,7 +2553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$69,745,712"
+      "market_cap": "$68,495,296"
     },
     {
       "symbol": "HYFT",
@@ -2543,7 +2563,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.05)",
-      "market_cap": "$66,330,848"
+      "market_cap": "$64,929,496"
     },
     {
       "symbol": "ISPR",
@@ -2563,7 +2583,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.33",
-      "market_cap": "$15,317,263,400"
+      "market_cap": "$14,996,281,300"
     },
     {
       "symbol": "MSB",
@@ -2573,7 +2593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$309,501,024"
+      "market_cap": "$314,486,656"
     },
     {
       "symbol": "OPTT",
@@ -2583,7 +2603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$48,327,836"
+      "market_cap": "$46,193,740"
     },
     {
       "symbol": "PLAY",
@@ -2593,7 +2613,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.19",
-      "market_cap": "$319,360,224"
+      "market_cap": "$327,013,728"
     },
     {
       "symbol": "PMCB",
@@ -2603,7 +2623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$5,799,398"
+      "market_cap": "$5,528,859"
     },
     {
       "symbol": "RLGT",
@@ -2613,7 +2633,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$407,903,808"
+      "market_cap": "$408,372,128"
     },
     {
       "symbol": "USAU",
@@ -2623,7 +2643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.23)",
-      "market_cap": "$272,516,416"
+      "market_cap": "$263,592,304"
     },
     {
       "symbol": "VALU",
@@ -2633,7 +2653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$345,503,168"
+      "market_cap": "$343,720,288"
     },
     {
       "symbol": "YYAI",
@@ -2643,7 +2663,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$4,393,542"
+      "market_cap": "$4,116,826"
     },
     {
       "symbol": "AIR",
@@ -2653,7 +2673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$5,471,176,200"
+      "market_cap": "$5,362,075,100"
     },
     {
       "symbol": "AYTU",
@@ -2663,7 +2683,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.22)",
-      "market_cap": "$24,042,386"
+      "market_cap": "$24,149,718"
     },
     {
       "symbol": "AZO",
@@ -2673,7 +2693,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$55.08",
-      "market_cap": "$47,871,328,000"
+      "market_cap": "$48,355,049,000"
     },
     {
       "symbol": "MLKN",
@@ -2683,7 +2703,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.35",
-      "market_cap": "$1,600,214,910"
+      "market_cap": "$1,575,690,500"
     },
     {
       "symbol": "NAII",
@@ -2693,7 +2713,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$14,370,274"
+      "market_cap": "$13,554,495"
     },
     {
       "symbol": "WOR",
@@ -2703,7 +2723,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.76",
-      "market_cap": "$2,827,478,780"
+      "market_cap": "$2,804,483,330"
     },
     {
       "symbol": "CTAS",
@@ -2713,7 +2733,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.35",
-      "market_cap": "$81,694,614,000"
+      "market_cap": "$81,706,623,000"
     },
     {
       "symbol": "FUL",
@@ -2723,7 +2743,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.46",
-      "market_cap": "$3,065,882,370"
+      "market_cap": "$3,030,920,700"
     },
     {
       "symbol": "GIS",
@@ -2732,8 +2752,8 @@
       "time": "2026-09-23T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Aug/2026",
-      "eps_forecast": "$0.73",
-      "market_cap": "$21,620,416,500"
+      "eps_forecast": "$0.72",
+      "market_cap": "$22,213,855,200"
     },
     {
       "symbol": "KBH",
@@ -2743,7 +2763,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.88",
-      "market_cap": "$3,354,868,220"
+      "market_cap": "$3,363,451,650"
     },
     {
       "symbol": "SFIX",
@@ -2753,7 +2773,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.06)",
-      "market_cap": "$412,285,888"
+      "market_cap": "$419,624,320"
     },
     {
       "symbol": "THO",
@@ -2763,7 +2783,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.95",
-      "market_cap": "$3,972,498,180"
+      "market_cap": "$4,009,458,940"
     },
     {
       "symbol": "UEC",
@@ -2773,7 +2793,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($0.04)",
-      "market_cap": "$6,740,161,500"
+      "market_cap": "$6,136,417,300"
     },
     {
       "symbol": "WS",
@@ -2783,7 +2803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.16",
-      "market_cap": "$1,748,487,940"
+      "market_cap": "$1,735,241,860"
     },
     {
       "symbol": "ASTC",
@@ -2793,7 +2813,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$15,006,084"
+      "market_cap": "$15,069,311"
     },
     {
       "symbol": "BB",
@@ -2803,7 +2823,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$5,055,803,400"
+      "market_cap": "$4,780,650,500"
     },
     {
       "symbol": "BTOC",
@@ -2813,7 +2833,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$13,087,607"
+      "market_cap": "$13,860,139"
     },
     {
       "symbol": "CNXC",
@@ -2823,7 +2843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$2.40",
-      "market_cap": "$1,716,446,210"
+      "market_cap": "$1,792,719,100"
     },
     {
       "symbol": "COST",
@@ -2833,7 +2853,17 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$6.51",
-      "market_cap": "$414,501,896,000"
+      "market_cap": "$419,295,920,000"
+    },
+    {
+      "symbol": "DRI",
+      "name": "Darden Restaurants, Inc.",
+      "date": "2026-09-24",
+      "time": "2026-09-24T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Aug/2026",
+      "eps_forecast": "$2.05",
+      "market_cap": "$24,598,632,400"
     },
     {
       "symbol": "JBL",
@@ -2843,7 +2873,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$3.86",
-      "market_cap": "$32,716,625,900"
+      "market_cap": "$31,588,067,300"
     },
     {
       "symbol": "KMX",
@@ -2853,7 +2883,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.68",
-      "market_cap": "$8,889,311,200"
+      "market_cap": "$8,814,098,400"
     },
     {
       "symbol": "LGCY",
@@ -2863,7 +2893,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.12",
-      "market_cap": "$137,780,688"
+      "market_cap": "$141,196,736"
     },
     {
       "symbol": "LPTH",
@@ -2873,7 +2903,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.02)",
-      "market_cap": "$865,865,920"
+      "market_cap": "$705,125,060"
     },
     {
       "symbol": "PZG",
@@ -2883,7 +2913,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$128,676,576"
+      "market_cap": "$123,529,512"
     },
     {
       "symbol": "RAVE",
@@ -2893,7 +2923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$44,197,968"
+      "market_cap": "$44,482,200"
     },
     {
       "symbol": "SNX",
@@ -2903,7 +2933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$4.38",
-      "market_cap": "$20,799,670,300"
+      "market_cap": "$20,307,124,200"
     },
     {
       "symbol": "TBN",
@@ -2913,7 +2943,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.25)",
-      "market_cap": "$1,315,829,500"
+      "market_cap": "$1,294,915,710"
     },
     {
       "symbol": "DTSS",
@@ -2923,7 +2953,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$10,387,357"
+      "market_cap": "$10,152,231"
     },
     {
       "symbol": "IVA",
@@ -2933,7 +2963,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.20)",
-      "market_cap": "$1,157,772,930"
+      "market_cap": "$1,111,698,300"
     },
     {
       "symbol": "LITS",
@@ -2943,7 +2973,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$31,882,648"
+      "market_cap": "$31,257,748"
     },
     {
       "symbol": "MITQ",
@@ -2953,7 +2983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$5,766,816"
+      "market_cap": "$5,944,761"
     },
     {
       "symbol": "AIAI",
@@ -2963,7 +2993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$281,944,416"
+      "market_cap": "$286,890,816"
     },
     {
       "symbol": "BNTC",
@@ -2973,7 +3003,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.25)",
-      "market_cap": "$435,269,408"
+      "market_cap": "$428,398,560"
     },
     {
       "symbol": "EBF",
@@ -2983,7 +3013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$543,153,920"
+      "market_cap": "$544,418,820"
     },
     {
       "symbol": "INM",
@@ -2993,7 +3023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$4,739,110"
+      "market_cap": "$4,573,407"
     },
     {
       "symbol": "MSS",
@@ -3003,7 +3033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "$0.57",
-      "market_cap": "$1,338,606"
+      "market_cap": "$1,368,542"
     },
     {
       "symbol": "NCPL",
@@ -3013,7 +3043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$4,226,878"
+      "market_cap": "$5,427,607"
     },
     {
       "symbol": "PBM",
@@ -3023,7 +3053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$16,439,754"
+      "market_cap": "$16,058,321"
     },
     {
       "symbol": "INTG",
@@ -3033,7 +3063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$75,100,976"
+      "market_cap": "$76,067,944"
     },
     {
       "symbol": "IPX",
@@ -3053,17 +3083,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$7,533,959,200"
-    },
-    {
-      "symbol": "NKE",
-      "name": "Nike, Inc.",
-      "date": "2026-09-29",
-      "time": "2026-09-29T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Aug/2026",
-      "eps_forecast": "$0.44",
-      "market_cap": "$57,025,692,000"
+      "market_cap": "$7,558,706,200"
     },
     {
       "symbol": "PAYX",
@@ -3073,7 +3093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.33",
-      "market_cap": "$44,986,769,000"
+      "market_cap": "$45,185,950,000"
     },
     {
       "symbol": "TMQ",
@@ -3083,7 +3103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.01)",
-      "market_cap": "$652,978,500"
+      "market_cap": "$625,339,200"
     },
     {
       "symbol": "MU",
@@ -3093,7 +3113,7 @@
       "timing": "after_hours",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$31.17",
-      "market_cap": "$1,056,423,080,000"
+      "market_cap": "$1,053,565,710,000"
     },
     {
       "symbol": "ACN",
@@ -3103,7 +3123,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$3.19",
-      "market_cap": "$125,078,061,000"
+      "market_cap": "$126,566,613,000"
     },
     {
       "symbol": "ANGO",
@@ -3113,7 +3133,27 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.10)",
-      "market_cap": "$652,225,090"
+      "market_cap": "$655,118,340"
+    },
+    {
+      "symbol": "AYI",
+      "name": "Acuity Inc.",
+      "date": "2026-10-01",
+      "time": "2026-10-01T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Aug/2026",
+      "eps_forecast": "$5.32",
+      "market_cap": "$10,033,198,100"
+    },
+    {
+      "symbol": "NKE",
+      "name": "Nike, Inc.",
+      "date": "2026-10-01",
+      "time": "2026-10-01T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Aug/2026",
+      "eps_forecast": "$0.44",
+      "market_cap": "$58,746,548,000"
     },
     {
       "symbol": "PBK",
@@ -3123,7 +3163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.01)",
-      "market_cap": "$23,689,140"
+      "market_cap": "$21,261,160"
     },
     {
       "symbol": "VRAX",
@@ -3133,7 +3173,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($1.75)",
-      "market_cap": "$2,343,145"
+      "market_cap": "$2,247,506"
     },
     {
       "symbol": "ADXN",
@@ -3143,7 +3183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$6,559,295"
+      "market_cap": "$6,542,258"
     },
     {
       "symbol": "AEHR",
@@ -3153,7 +3193,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$2,950,845,950"
+      "market_cap": "$2,636,058,620"
     },
     {
       "symbol": "AMST",
@@ -3163,7 +3203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$7,139,338"
+      "market_cap": "$6,942,842"
     },
     {
       "symbol": "BTLN",
@@ -3173,7 +3213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$21,019,640"
+      "market_cap": "$20,277,540"
     },
     {
       "symbol": "CCL",
@@ -3183,7 +3223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.36",
-      "market_cap": "$34,172,745,700"
+      "market_cap": "$33,912,512,500"
     },
     {
       "symbol": "FEAM",
@@ -3193,7 +3233,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.28)",
-      "market_cap": "$70,575,880"
+      "market_cap": "$67,669,816"
     },
     {
       "symbol": "FKWL",
@@ -3203,7 +3243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$28,989,328"
+      "market_cap": "$29,578,544"
     },
     {
       "symbol": "IDT",
@@ -3213,7 +3253,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$1,712,200,830"
+      "market_cap": "$1,715,682,300"
     },
     {
       "symbol": "IXHL",
@@ -3223,7 +3263,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "$0.13",
-      "market_cap": "$44,149,204"
+      "market_cap": "$43,550,976"
     },
     {
       "symbol": "JEF",
@@ -3233,7 +3273,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.87",
-      "market_cap": "$10,237,364,200"
+      "market_cap": "$10,285,799,400"
     },
     {
       "symbol": "MARPS",
@@ -3243,7 +3283,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$9,080,000"
+      "market_cap": "$8,720,000"
     },
     {
       "symbol": "MTN",
@@ -3253,7 +3293,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "($5.31)",
-      "market_cap": "$5,152,964,100"
+      "market_cap": "$5,057,466,400"
     },
     {
       "symbol": "NEOV",
@@ -3263,7 +3303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.10)",
-      "market_cap": "$208,964,528"
+      "market_cap": "$196,603,248"
     },
     {
       "symbol": "NEUP",
@@ -3273,7 +3313,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.56)",
-      "market_cap": "$20,375,156"
+      "market_cap": "$20,321,112"
     },
     {
       "symbol": "NNVC",
@@ -3283,7 +3323,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.11)",
-      "market_cap": "$32,675,012"
+      "market_cap": "$31,653,918"
     },
     {
       "symbol": "NTWK",
@@ -3293,7 +3333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$47,743,184"
+      "market_cap": "$49,049,592"
     },
     {
       "symbol": "POCI",
@@ -3303,7 +3343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$48,485,768"
+      "market_cap": "$48,157,424"
     },
     {
       "symbol": "PPCB",
@@ -3313,7 +3353,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$7,814,179"
+      "market_cap": "$4,730,557"
     },
     {
       "symbol": "PRGS",
@@ -3323,7 +3363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.16",
-      "market_cap": "$1,854,605,180"
+      "market_cap": "$1,835,739,260"
     },
     {
       "symbol": "STZ",
@@ -3333,7 +3373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$3.63",
-      "market_cap": "$22,445,410,300"
+      "market_cap": "$22,319,034,400"
     },
     {
       "symbol": "TRAK",
@@ -3343,7 +3383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$144,479,840"
+      "market_cap": "$150,840,592"
     },
     {
       "symbol": "ARTW",
@@ -3353,7 +3393,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$15,084,019"
+      "market_cap": "$14,979,992"
     },
     {
       "symbol": "AXIL",
@@ -3363,7 +3403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$43,255,800"
+      "market_cap": "$43,494,592"
     },
     {
       "symbol": "MKC",
@@ -3373,7 +3413,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.75",
-      "market_cap": "$14,663,163,900"
+      "market_cap": "$14,875,556,900"
     },
     {
       "symbol": "MKC.V",
@@ -3383,7 +3423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$14,663,163,900"
+      "market_cap": "$14,875,556,900"
     },
     {
       "symbol": "PENG",
@@ -3393,7 +3433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.61",
-      "market_cap": "$2,687,679,490"
+      "market_cap": "$2,537,026,050"
     },
     {
       "symbol": "SAR",
@@ -3403,7 +3443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.47",
-      "market_cap": "$294,763,200"
+      "market_cap": "$293,315,904"
     },
     {
       "symbol": "VLGEA",
@@ -3413,17 +3453,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$644,360,960"
-    },
-    {
-      "symbol": "AYI",
-      "name": "Acuity Inc.",
-      "date": "2026-10-07",
-      "time": "2026-10-07T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Aug/2026",
-      "eps_forecast": "$5.32",
-      "market_cap": "$10,230,772,700"
+      "market_cap": "$651,765,700"
     },
     {
       "symbol": "CAG",
@@ -3433,7 +3463,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.31",
-      "market_cap": "$7,690,683,400"
+      "market_cap": "$7,724,288,000"
     },
     {
       "symbol": "CALM",
@@ -3443,7 +3473,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$3,741,542,660"
+      "market_cap": "$3,763,123,970"
     },
     {
       "symbol": "CTRM",
@@ -3453,7 +3483,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$23,189,650"
+      "market_cap": "$22,609,908"
     },
     {
       "symbol": "NG",
@@ -3463,7 +3493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.07)",
-      "market_cap": "$4,000,284,160"
+      "market_cap": "$3,844,139,520"
     },
     {
       "symbol": "RBNE",
@@ -3473,7 +3503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$3,623,848"
+      "market_cap": "$3,490,618"
     },
     {
       "symbol": "RPM",
@@ -3483,7 +3513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.96",
-      "market_cap": "$13,502,267,400"
+      "market_cap": "$13,623,621,600"
     },
     {
       "symbol": "SXTC",
@@ -3493,7 +3523,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$4,572,307"
+      "market_cap": "$3,964,428"
     },
     {
       "symbol": "TAYD",
@@ -3503,7 +3533,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$196,080,912"
+      "market_cap": "$193,500,896"
     },
     {
       "symbol": "TORO",
@@ -3523,7 +3553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.25)",
-      "market_cap": "$7,997,912,600"
+      "market_cap": "$7,385,827,300"
     },
     {
       "symbol": "APOG",
@@ -3533,7 +3563,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.59",
-      "market_cap": "$847,670,080"
+      "market_cap": "$841,618,300"
     },
     {
       "symbol": "BYRN",
@@ -3543,7 +3573,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.14)",
-      "market_cap": "$82,070,480"
+      "market_cap": "$81,728,520"
     },
     {
       "symbol": "DAL",
@@ -3553,7 +3583,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.03",
-      "market_cap": "$53,359,534,000"
+      "market_cap": "$52,655,874,000"
     },
     {
       "symbol": "EDUC",
@@ -3563,7 +3593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$11,593,951"
+      "market_cap": "$11,679,201"
     },
     {
       "symbol": "HELE",
@@ -3573,7 +3603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.32",
-      "market_cap": "$673,606,400"
+      "market_cap": "$666,618,820"
     },
     {
       "symbol": "IPW",
@@ -3583,7 +3613,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$1,775,608"
+      "market_cap": "$1,831,976"
     },
     {
       "symbol": "LEVI",
@@ -3593,7 +3623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.36",
-      "market_cap": "$8,101,104,100"
+      "market_cap": "$8,193,468,400"
     },
     {
       "symbol": "NEOG",
@@ -3603,7 +3633,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.04",
-      "market_cap": "$2,560,564,480"
+      "market_cap": "$2,543,116,030"
     },
     {
       "symbol": "NRIX",
@@ -3613,7 +3643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.56)",
-      "market_cap": "$2,789,132,800"
+      "market_cap": "$2,720,118,020"
     },
     {
       "symbol": "ODC",
@@ -3623,7 +3653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$1,325,972,480"
+      "market_cap": "$1,328,435,460"
     },
     {
       "symbol": "PEP",
@@ -3633,7 +3663,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.31",
-      "market_cap": "$190,702,649,000"
+      "market_cap": "$192,545,260,000"
     },
     {
       "symbol": "PKE",
@@ -3643,7 +3673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$709,307,010"
+      "market_cap": "$705,174,270"
     },
     {
       "symbol": "TLRY",
@@ -3653,7 +3683,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.18)",
-      "market_cap": "$531,577,728"
+      "market_cap": "$533,454,784"
     },
     {
       "symbol": "GLDG",
@@ -3663,7 +3693,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.02)",
-      "market_cap": "$243,803,104"
+      "market_cap": "$232,356,160"
     },
     {
       "symbol": "HIFS",
@@ -3673,7 +3703,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$640,290,240"
+      "market_cap": "$634,921,730"
     },
     {
       "symbol": "HOVR",
@@ -3683,7 +3713,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.08)",
-      "market_cap": "$120,954,768"
+      "market_cap": "$118,281,728"
     },
     {
       "symbol": "TKLF",
@@ -3693,7 +3723,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$7,470,858"
+      "market_cap": "$7,153,400"
     },
     {
       "symbol": "AERO",
@@ -3703,7 +3733,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.37",
-      "market_cap": "$2,208,977,660"
+      "market_cap": "$2,137,484,930"
     },
     {
       "symbol": "FAST",
@@ -3713,7 +3743,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.33",
-      "market_cap": "$58,677,289,000"
+      "market_cap": "$57,122,431,000"
     },
     {
       "symbol": "RMCF",
@@ -3723,7 +3753,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$11,044,317"
+      "market_cap": "$10,572,337"
     },
     {
       "symbol": "ACI",
@@ -3733,7 +3763,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.31",
-      "market_cap": "$5,935,533,100"
+      "market_cap": "$6,081,131,000"
     },
     {
       "symbol": "BLK",
@@ -3743,7 +3773,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$14.24",
-      "market_cap": "$180,820,705,000"
+      "market_cap": "$180,342,161,000"
     },
     {
       "symbol": "C",
@@ -3753,7 +3783,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.68",
-      "market_cap": "$222,562,320,000"
+      "market_cap": "$222,931,354,000"
     },
     {
       "symbol": "DPZ",
@@ -3763,7 +3793,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.32",
-      "market_cap": "$10,984,955,900"
+      "market_cap": "$11,578,607,600"
     },
     {
       "symbol": "EQBK",
@@ -3773,7 +3803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.32",
-      "market_cap": "$1,024,064,510"
+      "market_cap": "$1,021,799,360"
     },
     {
       "symbol": "ERIC",
@@ -3783,7 +3813,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.14",
-      "market_cap": "$33,983,225,900"
+      "market_cap": "$33,544,949,800"
     },
     {
       "symbol": "FBK",
@@ -3793,7 +3823,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.21",
-      "market_cap": "$2,880,240,130"
+      "market_cap": "$2,891,235,330"
     },
     {
       "symbol": "FNGR",
@@ -3803,7 +3833,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$10,631,217"
+      "market_cap": "$24,401,524"
     },
     {
       "symbol": "FOXX",
@@ -3813,7 +3843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$19,292,866"
+      "market_cap": "$19,011,218"
     },
     {
       "symbol": "GS",
@@ -3823,7 +3853,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$15.62",
-      "market_cap": "$303,071,592,000"
+      "market_cap": "$301,068,321,000"
     },
     {
       "symbol": "HWC",
@@ -3833,7 +3863,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.65",
-      "market_cap": "$6,016,729,600"
+      "market_cap": "$6,022,345,200"
     },
     {
       "symbol": "JNJ",
@@ -3843,7 +3873,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.95",
-      "market_cap": "$640,478,740,000"
+      "market_cap": "$645,949,230,000"
     },
     {
       "symbol": "JPM",
@@ -3853,7 +3883,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.83",
-      "market_cap": "$941,582,710,000"
+      "market_cap": "$950,620,520,000"
     },
     {
       "symbol": "KARO",
@@ -3863,7 +3893,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.57",
-      "market_cap": "$2,072,631,550"
+      "market_cap": "$2,076,029,700"
     },
     {
       "symbol": "QNME",
@@ -3873,7 +3903,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$10,507,291"
+      "market_cap": "$12,187,356"
     },
     {
       "symbol": "RCON",
@@ -3883,7 +3913,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$36,685,640"
+      "market_cap": "$33,541,158"
     },
     {
       "symbol": "SGLY",
@@ -3893,7 +3923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$7,574,517"
+      "market_cap": "$7,943,568"
     },
     {
       "symbol": "SOTK",
@@ -3903,7 +3933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.05",
-      "market_cap": "$79,055,120"
+      "market_cap": "$76,854,776"
     },
     {
       "symbol": "TGL",
@@ -3913,7 +3943,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$4,926,177"
+      "market_cap": "$4,945,725"
     },
     {
       "symbol": "UNTY",
@@ -3923,7 +3953,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.50",
-      "market_cap": "$585,482,300"
+      "market_cap": "$590,302,720"
     },
     {
       "symbol": "WFC",
@@ -3933,7 +3963,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.84",
-      "market_cap": "$256,949,223,000"
+      "market_cap": "$262,150,504,000"
     },
     {
       "symbol": "AZZ",
@@ -3943,7 +3973,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.79",
-      "market_cap": "$4,199,396,860"
+      "market_cap": "$4,157,324,540"
     },
     {
       "symbol": "BSET",
@@ -3953,7 +3983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.13",
-      "market_cap": "$163,208,368"
+      "market_cap": "$162,255,968"
     },
     {
       "symbol": "NXTT",
@@ -3963,7 +3993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$10,178,167"
+      "market_cap": "$8,867,231"
     },
     {
       "symbol": "RELL",
@@ -3973,7 +4003,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.09",
-      "market_cap": "$267,407,280"
+      "market_cap": "$263,245,296"
     },
     {
       "symbol": "RGP",
@@ -3983,7 +4013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.22)",
-      "market_cap": "$146,729,840"
+      "market_cap": "$146,385,408"
     },
     {
       "symbol": "ALOY",
@@ -3993,7 +4023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$787,838,850"
+      "market_cap": "$717,471,490"
     },
     {
       "symbol": "BNY",
@@ -4003,7 +4033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.25",
-      "market_cap": "$110,080,508,000"
+      "market_cap": "$110,256,923,000"
     },
     {
       "symbol": "CBSH",
@@ -4013,7 +4043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.09",
-      "market_cap": "$8,326,237,700"
+      "market_cap": "$8,324,803,600"
     },
     {
       "symbol": "CMC",
@@ -4023,7 +4053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.97",
-      "market_cap": "$7,606,529,000"
+      "market_cap": "$7,481,523,700"
     },
     {
       "symbol": "CNS",
@@ -4033,7 +4063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.89",
-      "market_cap": "$4,248,961,280"
+      "market_cap": "$4,254,103,550"
     },
     {
       "symbol": "CSX",
@@ -4043,7 +4073,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.54",
-      "market_cap": "$95,476,556,000"
+      "market_cap": "$94,994,915,000"
     },
     {
       "symbol": "CWBC",
@@ -4053,7 +4083,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.65",
-      "market_cap": "$705,408,000"
+      "market_cap": "$700,524,420"
     },
     {
       "symbol": "FNB",
@@ -4063,7 +4093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.43",
-      "market_cap": "$6,526,987,800"
+      "market_cap": "$6,498,747,900"
     },
     {
       "symbol": "GBCI",
@@ -4073,7 +4103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.80",
-      "market_cap": "$6,155,119,100"
+      "market_cap": "$6,104,336,400"
     },
     {
       "symbol": "IBKR",
@@ -4082,8 +4112,8 @@
       "time": "2026-10-15T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.65",
-      "market_cap": "$43,744,698,000"
+      "eps_forecast": "$0.67",
+      "market_cap": "$43,423,011,000"
     },
     {
       "symbol": "IIIN",
@@ -4093,7 +4123,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.47",
-      "market_cap": "$593,136,700"
+      "market_cap": "$590,232,960"
     },
     {
       "symbol": "INDB",
@@ -4103,7 +4133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.81",
-      "market_cap": "$3,904,161,020"
+      "market_cap": "$3,887,108,350"
     },
     {
       "symbol": "INFY",
@@ -4113,7 +4143,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.21",
-      "market_cap": "$48,270,684,000"
+      "market_cap": "$48,879,141,000"
     },
     {
       "symbol": "KEY",
@@ -4123,7 +4153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.46",
-      "market_cap": "$23,498,170,400"
+      "market_cap": "$23,380,787,200"
     },
     {
       "symbol": "LBRT",
@@ -4133,7 +4163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.10",
-      "market_cap": "$3,143,066,620"
+      "market_cap": "$3,103,900,670"
     },
     {
       "symbol": "MAN",
@@ -4143,7 +4173,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.01",
-      "market_cap": "$2,893,111,550"
+      "market_cap": "$2,901,482,500"
     },
     {
       "symbol": "MRSH",
@@ -4153,7 +4183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.96",
-      "market_cap": "$90,670,137,000"
+      "market_cap": "$91,929,977,000"
     },
     {
       "symbol": "MTB",
@@ -4163,7 +4193,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.98",
-      "market_cap": "$34,469,274,000"
+      "market_cap": "$34,268,534,800"
     },
     {
       "symbol": "OZK",
@@ -4173,7 +4203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.45",
-      "market_cap": "$5,593,450,500"
+      "market_cap": "$5,588,924,900"
     },
     {
       "symbol": "PULM",
@@ -4183,7 +4213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$5,551,473"
+      "market_cap": "$5,514,950"
     },
     {
       "symbol": "SCHW",
@@ -4193,7 +4223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.67",
-      "market_cap": "$186,854,719,000"
+      "market_cap": "$190,503,617,000"
     },
     {
       "symbol": "SFNC",
@@ -4213,7 +4243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.92",
-      "market_cap": "$20,475,664,400"
+      "market_cap": "$20,269,791,200"
     },
     {
       "symbol": "TRV",
@@ -4223,7 +4253,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$6.77",
-      "market_cap": "$77,033,013,000"
+      "market_cap": "$77,151,904,000"
     },
     {
       "symbol": "TSM",
@@ -4233,7 +4263,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.45",
-      "market_cap": "$2,216,193,430,000"
+      "market_cap": "$2,165,469,480,000"
     },
     {
       "symbol": "USB",
@@ -4243,7 +4273,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.32",
-      "market_cap": "$97,222,410,000"
+      "market_cap": "$97,331,470,000"
     },
     {
       "symbol": "WABC",
@@ -4253,7 +4283,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,345,762,430"
+      "market_cap": "$1,342,064,640"
     },
     {
       "symbol": "WAFD",
@@ -4263,7 +4293,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.83",
-      "market_cap": "$2,677,147,650"
+      "market_cap": "$2,670,488,060"
     },
     {
       "symbol": "WIT",
@@ -4273,7 +4303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.04",
-      "market_cap": "$17,826,390,000"
+      "market_cap": "$18,024,460,300"
     },
     {
       "symbol": "ALLY",
@@ -4283,17 +4313,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.43",
-      "market_cap": "$13,001,494,500"
-    },
-    {
-      "symbol": "ALV",
-      "name": "Autoliv, Inc.",
-      "date": "2026-10-16",
-      "time": "2026-10-16T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$2.21",
-      "market_cap": "$9,002,318,800"
+      "market_cap": "$12,831,142,900"
     },
     {
       "symbol": "ATLO",
@@ -4303,7 +4323,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.68",
-      "market_cap": "$278,382,432"
+      "market_cap": "$279,888,160"
     },
     {
       "symbol": "AXP",
@@ -4313,7 +4333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.58",
-      "market_cap": "$225,661,534,000"
+      "market_cap": "$225,013,236,000"
     },
     {
       "symbol": "BANF",
@@ -4323,7 +4343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.93",
-      "market_cap": "$3,709,301,500"
+      "market_cap": "$3,714,341,380"
     },
     {
       "symbol": "BVC",
@@ -4333,7 +4353,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$2,111,760,000"
+      "market_cap": "$2,184,000,000"
     },
     {
       "symbol": "BVFL",
@@ -4343,7 +4363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$180,932,096"
+      "market_cap": "$180,847,392"
     },
     {
       "symbol": "CCTG",
@@ -4353,7 +4373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$9,233,168"
+      "market_cap": "$9,011,811"
     },
     {
       "symbol": "CLPS",
@@ -4363,7 +4383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$31,825,494"
+      "market_cap": "$32,122,928"
     },
     {
       "symbol": "DOGZ",
@@ -4373,7 +4393,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$14,800,871"
+      "market_cap": "$14,945,978"
     },
     {
       "symbol": "HBAN",
@@ -4383,17 +4403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$34,064,193,500"
-    },
-    {
-      "symbol": "HCWC",
-      "name": "Healthy Choice Wellness Corp.",
-      "date": "2026-10-16",
-      "time": "2026-10-16T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$8,390,349"
+      "market_cap": "$34,185,418,800"
     },
     {
       "symbol": "HDB",
@@ -4403,7 +4413,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$115,245,015,000"
+      "market_cap": "$118,426,313,000"
     },
     {
       "symbol": "IBN",
@@ -4413,7 +4423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$106,900,480,000"
+      "market_cap": "$106,972,078,000"
     },
     {
       "symbol": "MCBS",
@@ -4423,7 +4433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,011,516,290"
+      "market_cap": "$1,011,372,420"
     },
     {
       "symbol": "PBAM",
@@ -4433,7 +4443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.09",
-      "market_cap": "$503,424,000"
+      "market_cap": "$505,704,512"
     },
     {
       "symbol": "RBCAA",
@@ -4443,7 +4453,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,844,432,130"
+      "market_cap": "$1,863,280,900"
     },
     {
       "symbol": "RF",
@@ -4453,7 +4463,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.67",
-      "market_cap": "$25,898,657,800"
+      "market_cap": "$25,839,022,100"
     },
     {
       "symbol": "SLB",
@@ -4463,7 +4473,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.62",
-      "market_cap": "$81,642,717,000"
+      "market_cap": "$85,085,929,000"
     },
     {
       "symbol": "STT",
@@ -4473,7 +4483,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.59",
-      "market_cap": "$53,119,078,000"
+      "market_cap": "$53,108,093,000"
     },
     {
       "symbol": "TFC",
@@ -4483,7 +4493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.11",
-      "market_cap": "$61,447,799,000"
+      "market_cap": "$61,606,609,000"
     },
     {
       "symbol": "AGNC",
@@ -4493,7 +4503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.39",
-      "market_cap": "$12,969,166,800"
+      "market_cap": "$12,921,747,500"
     },
     {
       "symbol": "BOKF",
@@ -4503,7 +4513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.54",
-      "market_cap": "$8,403,449,900"
+      "market_cap": "$8,354,228,700"
     },
     {
       "symbol": "BTSG",
@@ -4513,7 +4523,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.46",
-      "market_cap": "$12,049,932,300"
+      "market_cap": "$11,699,713,000"
     },
     {
       "symbol": "CCK",
@@ -4523,7 +4533,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.25",
-      "market_cap": "$12,761,958,400"
+      "market_cap": "$12,881,595,400"
     },
     {
       "symbol": "CLBK",
@@ -4533,7 +4543,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.13",
-      "market_cap": "$1,221,517,310"
+      "market_cap": "$1,202,788,740"
     },
     {
       "symbol": "CLF",
@@ -4543,7 +4553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.25",
-      "market_cap": "$6,749,488,600"
+      "market_cap": "$6,629,675,500"
     },
     {
       "symbol": "COSO",
@@ -4553,7 +4563,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.62",
-      "market_cap": "$326,834,560"
+      "market_cap": "$328,627,712"
     },
     {
       "symbol": "DX",
@@ -4563,7 +4573,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$3,201,353,220"
+      "market_cap": "$3,203,834,880"
     },
     {
       "symbol": "FITB",
@@ -4573,7 +4583,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.08",
-      "market_cap": "$49,743,057,000"
+      "market_cap": "$49,461,920,000"
     },
     {
       "symbol": "FLXS",
@@ -4583,7 +4593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.25",
-      "market_cap": "$336,095,616"
+      "market_cap": "$334,704,416"
     },
     {
       "symbol": "FUNC",
@@ -4593,7 +4603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.16",
-      "market_cap": "$278,805,728"
+      "market_cap": "$278,547,552"
     },
     {
       "symbol": "HBCP",
@@ -4603,7 +4613,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.51",
-      "market_cap": "$546,859,710"
+      "market_cap": "$546,544,900"
     },
     {
       "symbol": "HBT",
@@ -4613,7 +4623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.78",
-      "market_cap": "$1,298,616,060"
+      "market_cap": "$1,301,525,250"
     },
     {
       "symbol": "ISTR",
@@ -4623,7 +4633,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.75",
-      "market_cap": "$416,892,800"
+      "market_cap": "$417,306,112"
     },
     {
       "symbol": "PAC",
@@ -4633,7 +4643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.68",
-      "market_cap": "$12,783,966,200"
+      "market_cap": "$12,350,197,800"
     },
     {
       "symbol": "PEBK",
@@ -4643,7 +4653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$236,700,976"
+      "market_cap": "$239,213,264"
     },
     {
       "symbol": "PFBC",
@@ -4653,7 +4663,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.68",
-      "market_cap": "$1,484,770,940"
+      "market_cap": "$1,486,350,210"
     },
     {
       "symbol": "RBB",
@@ -4663,7 +4673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.57",
-      "market_cap": "$443,874,880"
+      "market_cap": "$444,466,944"
     },
     {
       "symbol": "RLI",
@@ -4673,7 +4683,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.54",
-      "market_cap": "$5,893,660,200"
+      "market_cap": "$5,901,919,700"
     },
     {
       "symbol": "SFBS",
@@ -4683,7 +4693,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$2,361,305,600"
+      "market_cap": "$2,361,852,420"
     },
     {
       "symbol": "SMMT",
@@ -4693,7 +4703,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "($0.28)",
-      "market_cap": "$11,431,751,700"
+      "market_cap": "$10,953,102,300"
     },
     {
       "symbol": "STLD",
@@ -4703,7 +4713,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.71",
-      "market_cap": "$33,802,496,000"
+      "market_cap": "$33,634,084,900"
     },
     {
       "symbol": "WASH",
@@ -4713,7 +4723,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.87",
-      "market_cap": "$759,920,960"
+      "market_cap": "$752,863,420"
     },
     {
       "symbol": "WRB",
@@ -4722,8 +4732,8 @@
       "time": "2026-10-19T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$1.12",
-      "market_cap": "$25,369,690,100"
+      "eps_forecast": "$1.13",
+      "market_cap": "$25,406,812,200"
     },
     {
       "symbol": "WTFC",
@@ -4733,7 +4743,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.24",
-      "market_cap": "$10,320,944,100"
+      "market_cap": "$10,318,919,700"
     },
     {
       "symbol": "ZION",
@@ -4743,7 +4753,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.62",
-      "market_cap": "$9,911,692,300"
+      "market_cap": "$9,892,718,600"
     },
     {
       "symbol": "ACU",
@@ -4753,7 +4763,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.71",
-      "market_cap": "$240,419,040"
+      "market_cap": "$241,760,880"
     },
     {
       "symbol": "ADC",
@@ -4773,7 +4783,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$82,349,448"
+      "market_cap": "$81,500,480"
     },
     {
       "symbol": "BCPC",
@@ -4783,7 +4793,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.53",
-      "market_cap": "$5,669,825,000"
+      "market_cap": "$5,688,313,900"
     },
     {
       "symbol": "BFC",
@@ -4793,7 +4803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.63",
-      "market_cap": "$1,683,349,380"
+      "market_cap": "$1,693,991,550"
     },
     {
       "symbol": "BHB",
@@ -4803,7 +4813,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.93",
-      "market_cap": "$657,900,990"
+      "market_cap": "$660,583,550"
     },
     {
       "symbol": "BMI",
@@ -4813,7 +4823,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.21",
-      "market_cap": "$4,004,532,990"
+      "market_cap": "$3,930,906,370"
     },
     {
       "symbol": "BWB",
@@ -4833,7 +4843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.63",
-      "market_cap": "$1,694,067,710"
+      "market_cap": "$1,693,028,990"
     },
     {
       "symbol": "CATY",
@@ -4843,7 +4853,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.43",
-      "market_cap": "$4,144,262,400"
+      "market_cap": "$4,127,584,000"
     },
     {
       "symbol": "CB",
@@ -4852,8 +4862,8 @@
       "time": "2026-10-20T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$6.35",
-      "market_cap": "$130,519,949,000"
+      "eps_forecast": "$6.22",
+      "market_cap": "$131,141,091,000"
     },
     {
       "symbol": "CBU",
@@ -4863,7 +4873,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.18",
-      "market_cap": "$3,319,011,330"
+      "market_cap": "$3,323,220,480"
     },
     {
       "symbol": "CCBG",
@@ -4873,7 +4883,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.95",
-      "market_cap": "$875,858,560"
+      "market_cap": "$878,596,670"
     },
     {
       "symbol": "CHMG",
@@ -4883,7 +4893,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.83",
-      "market_cap": "$392,853,536"
+      "market_cap": "$393,432,128"
     },
     {
       "symbol": "COF",
@@ -4893,7 +4903,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.38",
-      "market_cap": "$132,923,761,000"
+      "market_cap": "$132,310,278,000"
     },
     {
       "symbol": "DGX",
@@ -4903,7 +4913,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.85",
-      "market_cap": "$26,998,427,600"
+      "market_cap": "$26,794,235,900"
     },
     {
       "symbol": "DHR",
@@ -4913,7 +4923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.96",
-      "market_cap": "$151,620,026,000"
+      "market_cap": "$151,894,196,000"
     },
     {
       "symbol": "EFX",
@@ -4923,7 +4933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.21",
-      "market_cap": "$22,364,424,200"
+      "market_cap": "$22,833,188,900"
     },
     {
       "symbol": "ELV",
@@ -4933,7 +4943,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.79",
-      "market_cap": "$86,554,706,000"
+      "market_cap": "$85,539,758,000"
     },
     {
       "symbol": "EQT",
@@ -4942,8 +4952,8 @@
       "time": "2026-10-20T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.50",
-      "market_cap": "$34,259,511,300"
+      "eps_forecast": "$0.49",
+      "market_cap": "$34,134,407,200"
     },
     {
       "symbol": "EWBC",
@@ -4953,7 +4963,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.68",
-      "market_cap": "$17,763,588,100"
+      "market_cap": "$17,734,813,700"
     },
     {
       "symbol": "FSBW",
@@ -4963,7 +4973,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.11",
-      "market_cap": "$335,713,728"
+      "market_cap": "$336,893,056"
     },
     {
       "symbol": "FULT",
@@ -4973,7 +4983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.55",
-      "market_cap": "$4,534,220,800"
+      "market_cap": "$4,519,902,200"
     },
     {
       "symbol": "FVCB",
@@ -4982,8 +4992,8 @@
       "time": "2026-10-20T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.38",
-      "market_cap": "$330,386,624"
+      "eps_forecast": "$0.39",
+      "market_cap": "$329,484,928"
     },
     {
       "symbol": "GATX",
@@ -4993,7 +5003,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$6,298,932,200"
+      "market_cap": "$6,269,280,300"
     },
     {
       "symbol": "GCBC",
@@ -5003,7 +5013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$589,592,580"
+      "market_cap": "$593,508,420"
     },
     {
       "symbol": "GE",
@@ -5013,7 +5023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.99",
-      "market_cap": "$355,603,808,000"
+      "market_cap": "$355,448,160,000"
     },
     {
       "symbol": "GLXY",
@@ -5023,7 +5033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "($0.13)",
-      "market_cap": "$9,885,585,400"
+      "market_cap": "$9,072,535,600"
     },
     {
       "symbol": "GM",
@@ -5033,7 +5043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.37",
-      "market_cap": "$75,618,771,000"
+      "market_cap": "$75,697,742,000"
     },
     {
       "symbol": "GPC",
@@ -5043,7 +5053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.10",
-      "market_cap": "$18,845,429,800"
+      "market_cap": "$18,957,094,900"
     },
     {
       "symbol": "HAFC",
@@ -5053,7 +5063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.81",
-      "market_cap": "$923,574,270"
+      "market_cap": "$923,277,820"
     },
     {
       "symbol": "HAL",
@@ -5063,7 +5073,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$29,567,797,200"
+      "market_cap": "$30,142,656,500"
     },
     {
       "symbol": "HWH",
@@ -5073,7 +5083,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$59,155,536"
+      "market_cap": "$54,993,840"
     },
     {
       "symbol": "ISRG",
@@ -5083,7 +5093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.13",
-      "market_cap": "$129,677,771,000"
+      "market_cap": "$131,631,399,000"
     },
     {
       "symbol": "KO",
@@ -5093,7 +5103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.86",
-      "market_cap": "$383,185,027,000"
+      "market_cap": "$385,766,556,000"
     },
     {
       "symbol": "KREF",
@@ -5103,7 +5113,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.02",
-      "market_cap": "$445,778,176"
+      "market_cap": "$444,606,624"
     },
     {
       "symbol": "LMT",
@@ -5113,7 +5123,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$7.28",
-      "market_cap": "$130,602,181,000"
+      "market_cap": "$130,131,370,000"
     },
     {
       "symbol": "MANH",
@@ -5123,7 +5133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.03",
-      "market_cap": "$13,046,320,100"
+      "market_cap": "$13,018,334,200"
     },
     {
       "symbol": "MAT",
@@ -5133,7 +5143,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.95",
-      "market_cap": "$4,262,643,970"
+      "market_cap": "$4,325,497,900"
     },
     {
       "symbol": "MBWM",
@@ -5143,7 +5153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.36",
-      "market_cap": "$1,032,747,840"
+      "market_cap": "$1,040,785,790"
     },
     {
       "symbol": "MCRI",
@@ -5153,7 +5163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.91",
-      "market_cap": "$2,215,581,950"
+      "market_cap": "$2,196,763,390"
     },
     {
       "symbol": "MLI",
@@ -5163,7 +5173,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$14,195,421,200"
+      "market_cap": "$13,890,191,400"
     },
     {
       "symbol": "MMM",
@@ -5173,7 +5183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.40",
-      "market_cap": "$92,226,642,000"
+      "market_cap": "$89,911,050,000"
     },
     {
       "symbol": "MTDR",
@@ -5183,7 +5193,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.61",
-      "market_cap": "$7,021,814,300"
+      "market_cap": "$6,978,500,100"
     },
     {
       "symbol": "NBHC",
@@ -5193,7 +5203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.87",
-      "market_cap": "$1,835,029,380"
+      "market_cap": "$1,835,920,130"
     },
     {
       "symbol": "NDAQ",
@@ -5203,7 +5213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.02",
-      "market_cap": "$55,534,404,000"
+      "market_cap": "$55,512,044,000"
     },
     {
       "symbol": "NFLX",
@@ -5213,7 +5223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$332,448,956,000"
+      "market_cap": "$340,277,166,000"
     },
     {
       "symbol": "NOC",
@@ -5223,7 +5233,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$7.26",
-      "market_cap": "$77,442,818,000"
+      "market_cap": "$77,505,323,000"
     },
     {
       "symbol": "NPB",
@@ -5233,7 +5243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.62",
-      "market_cap": "$591,695,300"
+      "market_cap": "$589,274,560"
     },
     {
       "symbol": "OMC",
@@ -5243,7 +5253,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.70",
-      "market_cap": "$24,112,267,300"
+      "market_cap": "$24,219,263,000"
     },
     {
       "symbol": "ORRF",
@@ -5253,7 +5263,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.10",
-      "market_cap": "$829,566,460"
+      "market_cap": "$825,337,540"
     },
     {
       "symbol": "PCAR",
@@ -5263,7 +5273,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.61",
-      "market_cap": "$66,606,219,000"
+      "market_cap": "$65,974,583,000"
     },
     {
       "symbol": "PEBO",
@@ -5273,7 +5283,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.92",
-      "market_cap": "$1,424,393,980"
+      "market_cap": "$1,425,472,260"
     },
     {
       "symbol": "PEGA",
@@ -5283,7 +5293,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.32",
-      "market_cap": "$5,900,493,300"
+      "market_cap": "$5,946,526,700"
     },
     {
       "symbol": "PFSI",
@@ -5293,7 +5303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.79",
-      "market_cap": "$3,823,116,290"
+      "market_cap": "$3,812,206,340"
     },
     {
       "symbol": "PM",
@@ -5303,7 +5313,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.24",
-      "market_cap": "$296,884,699,000"
+      "market_cap": "$299,082,318,000"
     },
     {
       "symbol": "PMT",
@@ -5313,7 +5323,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.30",
-      "market_cap": "$813,598,020"
+      "market_cap": "$814,470,080"
     },
     {
       "symbol": "PNR",
@@ -5323,7 +5333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.08",
-      "market_cap": "$9,913,517,100"
+      "market_cap": "$9,844,872,200"
     },
     {
       "symbol": "RTX",
@@ -5333,7 +5343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.75",
-      "market_cap": "$285,832,544,000"
+      "market_cap": "$285,333,881,000"
     },
     {
       "symbol": "SMBK",
@@ -5343,7 +5353,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.96",
-      "market_cap": "$865,011,780"
+      "market_cap": "$868,944,380"
     },
     {
       "symbol": "TRST",
@@ -5353,7 +5363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$976,540,860"
+      "market_cap": "$972,794,820"
     },
     {
       "symbol": "TXN",
@@ -5363,7 +5373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.37",
-      "market_cap": "$243,417,039,000"
+      "market_cap": "$236,202,377,000"
     },
     {
       "symbol": "VICR",
@@ -5373,7 +5383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.71",
-      "market_cap": "$9,389,174,800"
+      "market_cap": "$8,656,538,600"
     },
     {
       "symbol": "VMI",
@@ -5383,7 +5393,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.72",
-      "market_cap": "$9,276,563,500"
+      "market_cap": "$9,194,517,500"
     },
     {
       "symbol": "WAL",
@@ -5393,7 +5403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.37",
-      "market_cap": "$8,587,329,000"
+      "market_cap": "$8,567,690,800"
     },
     {
       "symbol": "WCN",
@@ -5403,7 +5413,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.51",
-      "market_cap": "$42,267,570,000"
+      "market_cap": "$42,352,239,000"
     },
     {
       "symbol": "WFRD",
@@ -5413,7 +5423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.20",
-      "market_cap": "$6,592,910,300"
+      "market_cap": "$6,723,377,700"
     },
     {
       "symbol": "ABT",
@@ -5423,7 +5433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.43",
-      "market_cap": "$193,093,468,000"
+      "market_cap": "$194,616,214,000"
     },
     {
       "symbol": "ALP",
@@ -5433,7 +5443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "($0.10)",
-      "market_cap": "$13,669,658"
+      "market_cap": "$13,111,713"
     },
     {
       "symbol": "AMX",
@@ -5443,7 +5453,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.46",
-      "market_cap": "$70,729,122,000"
+      "market_cap": "$69,766,005,000"
     },
     {
       "symbol": "ASML",
@@ -5453,7 +5463,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$12.59",
-      "market_cap": "$668,703,520,000"
+      "market_cap": "$653,730,050,000"
     },
     {
       "symbol": "BAC",
@@ -5463,7 +5473,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.18",
-      "market_cap": "$427,746,427,000"
+      "market_cap": "$435,788,087,000"
     },
     {
       "symbol": "BANR",
@@ -5473,7 +5483,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.57",
-      "market_cap": "$2,384,721,150"
+      "market_cap": "$2,395,936,000"
     },
     {
       "symbol": "BCTX",
@@ -5483,7 +5493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$32,352,752"
+      "market_cap": "$32,450,694"
     },
     {
       "symbol": "BSVN",
@@ -5493,7 +5503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.05",
-      "market_cap": "$498,583,296"
+      "market_cap": "$497,344,928"
     },
     {
       "symbol": "CCEL",
@@ -5503,7 +5513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
-      "market_cap": "$34,105,008"
+      "market_cap": "$32,250,600"
     },
     {
       "symbol": "CFG",
@@ -5513,7 +5523,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.40",
-      "market_cap": "$29,558,186,000"
+      "market_cap": "$29,360,234,500"
     },
     {
       "symbol": "CTBI",
@@ -5523,7 +5533,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.65",
-      "market_cap": "$1,386,214,910"
+      "market_cap": "$1,392,755,330"
     },
     {
       "symbol": "EPAC",
@@ -5533,7 +5543,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.52",
-      "market_cap": "$1,917,661,700"
+      "market_cap": "$1,923,286,910"
     },
     {
       "symbol": "FHN",
@@ -5543,7 +5553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.53",
-      "market_cap": "$11,569,638,400"
+      "market_cap": "$11,678,607,400"
     },
     {
       "symbol": "FR",
@@ -5553,7 +5563,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$8,271,225,900"
+      "market_cap": "$8,211,568,100"
     },
     {
       "symbol": "GSBC",
@@ -5563,7 +5573,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.39",
-      "market_cap": "$855,781,250"
+      "market_cap": "$859,486,400"
     },
     {
       "symbol": "HOMB",
@@ -5573,7 +5583,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.63",
-      "market_cap": "$5,935,472,600"
+      "market_cap": "$5,925,470,200"
     },
     {
       "symbol": "JBHT",
@@ -5583,7 +5593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.12",
-      "market_cap": "$24,736,256,000"
+      "market_cap": "$24,514,617,300"
     },
     {
       "symbol": "LOOP",
@@ -5593,7 +5603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.05)",
-      "market_cap": "$26,947,868"
+      "market_cap": "$25,264,230"
     },
     {
       "symbol": "MMLP",
@@ -5603,7 +5613,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$86,856,800"
+      "market_cap": "$88,030,544"
     },
     {
       "symbol": "MS",
@@ -5613,7 +5623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.01",
-      "market_cap": "$337,451,876,000"
+      "market_cap": "$337,310,515,000"
     },
     {
       "symbol": "NTRP",
@@ -5623,7 +5633,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "($0.24)",
-      "market_cap": "$20,667,958"
+      "market_cap": "$23,685,180"
     },
     {
       "symbol": "PGR",
@@ -5633,7 +5643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.98",
-      "market_cap": "$126,535,565,000"
+      "market_cap": "$127,111,127,000"
     },
     {
       "symbol": "PLBC",
@@ -5643,7 +5653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.46",
-      "market_cap": "$425,822,176"
+      "market_cap": "$430,275,968"
     },
     {
       "symbol": "PLD",
@@ -5653,7 +5663,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.57",
-      "market_cap": "$134,484,582,000"
+      "market_cap": "$133,394,293,000"
     },
     {
       "symbol": "PNC",
@@ -5663,7 +5673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.98",
-      "market_cap": "$97,146,774,000"
+      "market_cap": "$96,632,136,000"
     },
     {
       "symbol": "PNFP",
@@ -5673,7 +5683,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.61",
-      "market_cap": "$15,259,354,100"
+      "market_cap": "$15,275,976,700"
     },
     {
       "symbol": "REXR",
@@ -5683,7 +5693,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.60",
-      "market_cap": "$8,277,319,200"
+      "market_cap": "$8,279,548,900"
     },
     {
       "symbol": "SLG",
@@ -5693,7 +5703,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.50",
-      "market_cap": "$4,097,958,660"
+      "market_cap": "$4,076,703,740"
     },
     {
       "symbol": "SYF",
@@ -5703,7 +5713,17 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.38",
-      "market_cap": "$29,738,559,500"
+      "market_cap": "$29,039,091,700"
+    },
+    {
+      "symbol": "T",
+      "name": "AT&T Inc.",
+      "date": "2026-10-21",
+      "time": "2026-10-21T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.62",
+      "market_cap": "$178,230,559,000"
     },
     {
       "symbol": "TFIN",
@@ -5713,7 +5733,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$1,718,495,100"
+      "market_cap": "$1,717,061,380"
     },
     {
       "symbol": "UAL",
@@ -5723,7 +5743,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.01",
-      "market_cap": "$36,479,971,000"
+      "market_cap": "$35,898,966,000"
     },
     {
       "symbol": "WINA",
@@ -5733,7 +5753,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,204,202,750"
+      "market_cap": "$1,211,458,940"
     },
     {
       "symbol": "AAL",
@@ -5743,7 +5763,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "($0.26)",
-      "market_cap": "$9,082,227,700"
+      "market_cap": "$9,029,270,500"
     },
     {
       "symbol": "AB",
@@ -5753,7 +5773,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.87",
-      "market_cap": "$3,405,622,270"
+      "market_cap": "$3,432,614,140"
     },
     {
       "symbol": "ACNB",
@@ -5763,7 +5783,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.48",
-      "market_cap": "$656,163,900"
+      "market_cap": "$656,062,210"
     },
     {
       "symbol": "AHG",
@@ -5773,7 +5793,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jun/2026",
       "eps_forecast": "",
-      "market_cap": "$839,570,110"
+      "market_cap": "$734,024,130"
     },
     {
       "symbol": "ALK",
@@ -5783,7 +5803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.46",
-      "market_cap": "$4,709,651,500"
+      "market_cap": "$4,723,043,800"
     },
     {
       "symbol": "ALLE",
@@ -5793,7 +5813,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.48",
-      "market_cap": "$13,582,075,900"
+      "market_cap": "$13,391,593,500"
     },
     {
       "symbol": "AMAL",
@@ -5803,7 +5823,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.10",
-      "market_cap": "$1,453,446,140"
+      "market_cap": "$1,455,838,210"
     },
     {
       "symbol": "AMBP",
@@ -5813,7 +5833,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.09",
-      "market_cap": "$3,090,106,880"
+      "market_cap": "$3,072,175,870"
     },
     {
       "symbol": "AN",
@@ -5823,7 +5843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.67",
-      "market_cap": "$6,570,834,900"
+      "market_cap": "$6,615,136,800"
     },
     {
       "symbol": "ASB",
@@ -5833,7 +5853,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.76",
-      "market_cap": "$5,816,569,300"
+      "market_cap": "$5,839,231,500"
     },
     {
       "symbol": "ASPS",
@@ -5843,7 +5863,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$63,667,648"
+      "market_cap": "$62,811,132"
     },
     {
       "symbol": "AUB",
@@ -5853,7 +5873,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.96",
-      "market_cap": "$5,831,132,200"
+      "market_cap": "$5,806,853,600"
     },
     {
       "symbol": "AUBN",
@@ -5873,7 +5893,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.38",
-      "market_cap": "$442,541,984"
+      "market_cap": "$441,343,776"
     },
     {
       "symbol": "AVBH",
@@ -5883,7 +5903,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.88",
-      "market_cap": "$349,933,664"
+      "market_cap": "$347,736,992"
     },
     {
       "symbol": "BC",
@@ -5893,7 +5913,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.35",
-      "market_cap": "$5,028,280,300"
+      "market_cap": "$4,966,074,900"
     },
     {
       "symbol": "BCML",
@@ -5903,7 +5923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.59",
-      "market_cap": "$327,385,120"
+      "market_cap": "$330,770,336"
     },
     {
       "symbol": "BFH",
@@ -5913,7 +5933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.40",
-      "market_cap": "$4,150,433,540"
+      "market_cap": "$4,062,453,500"
     },
     {
       "symbol": "BFST",
@@ -5923,7 +5943,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.76",
-      "market_cap": "$1,016,532,860"
+      "market_cap": "$1,015,881,860"
     },
     {
       "symbol": "BHRB",
@@ -5933,7 +5953,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.06",
-      "market_cap": "$1,445,795,330"
+      "market_cap": "$1,447,612,160"
     },
     {
       "symbol": "BKR",
@@ -5943,7 +5963,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.59",
-      "market_cap": "$61,654,987,000"
+      "market_cap": "$61,952,791,000"
     },
     {
       "symbol": "BPOP",
@@ -5963,7 +5983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.41",
-      "market_cap": "$528,701,184"
+      "market_cap": "$530,614,464"
     },
     {
       "symbol": "BWMX",
@@ -5973,7 +5993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.72",
-      "market_cap": "$628,602,050"
+      "market_cap": "$622,679,300"
     },
     {
       "symbol": "BX",
@@ -5983,7 +6003,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.36",
-      "market_cap": "$107,819,794,000"
+      "market_cap": "$106,881,507,000"
     },
     {
       "symbol": "BY",
@@ -5993,7 +6013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.81",
-      "market_cap": "$1,728,832,380"
+      "market_cap": "$1,730,639,870"
     },
     {
       "symbol": "BYD",
@@ -6003,7 +6023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.74",
-      "market_cap": "$5,784,823,800"
+      "market_cap": "$5,773,925,900"
     },
     {
       "symbol": "CARE",
@@ -6013,7 +6033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.54",
-      "market_cap": "$710,353,980"
+      "market_cap": "$697,498,880"
     },
     {
       "symbol": "CASS",
@@ -6023,7 +6043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.80",
-      "market_cap": "$727,773,440"
+      "market_cap": "$725,468,350"
     },
     {
       "symbol": "CBFV",
@@ -6033,7 +6053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$189,898,800"
+      "market_cap": "$191,016,736"
     },
     {
       "symbol": "CBRE",
@@ -6043,7 +6063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.86",
-      "market_cap": "$42,631,274,000"
+      "market_cap": "$43,673,747,000"
     },
     {
       "symbol": "CFFI",
@@ -6053,7 +6073,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$294,603,200"
+      "market_cap": "$298,342,656"
     },
     {
       "symbol": "CIVB",
@@ -6063,7 +6083,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.70",
-      "market_cap": "$570,385,920"
+      "market_cap": "$571,425,660"
     },
     {
       "symbol": "CLST",
@@ -6073,7 +6093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$70,147,624"
+      "market_cap": "$70,591,744"
     },
     {
       "symbol": "CNP",
@@ -6083,7 +6103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.50",
-      "market_cap": "$25,881,120,800"
+      "market_cap": "$25,848,184,800"
     },
     {
       "symbol": "COUR",
@@ -6093,7 +6113,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.07",
-      "market_cap": "$1,689,516,030"
+      "market_cap": "$1,710,668,030"
     },
     {
       "symbol": "CRS",
@@ -6102,8 +6122,8 @@
       "time": "2026-10-22T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$2.93",
-      "market_cap": "$24,312,440,800"
+      "eps_forecast": "$2.94",
+      "market_cap": "$23,611,187,200"
     },
     {
       "symbol": "CUBI",
@@ -6113,7 +6133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.14",
-      "market_cap": "$2,669,933,570"
+      "market_cap": "$2,654,731,010"
     },
     {
       "symbol": "CYH",
@@ -6133,7 +6153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.68",
-      "market_cap": "$457,159,744"
+      "market_cap": "$458,056,512"
     },
     {
       "symbol": "DAR",
@@ -6143,7 +6163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.73",
-      "market_cap": "$9,687,521,300"
+      "market_cap": "$10,149,883,900"
     },
     {
       "symbol": "DCOM",
@@ -6153,7 +6173,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.87",
-      "market_cap": "$1,783,926,400"
+      "market_cap": "$1,787,017,340"
     },
     {
       "symbol": "DECK",
@@ -6163,7 +6183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.80",
-      "market_cap": "$11,776,640,000"
+      "market_cap": "$11,971,713,000"
     },
     {
       "symbol": "DLR",
@@ -6173,7 +6193,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.98",
-      "market_cap": "$71,083,950,000"
+      "market_cap": "$68,630,610,000"
     },
     {
       "symbol": "DOC",
@@ -6183,7 +6203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.43",
-      "market_cap": "$14,631,768,100"
+      "market_cap": "$14,452,491,300"
     },
     {
       "symbol": "DOV",
@@ -6193,7 +6213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.86",
-      "market_cap": "$27,181,162,500"
+      "market_cap": "$26,758,266,900"
     },
     {
       "symbol": "DOW",
@@ -6203,7 +6223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.78",
-      "market_cap": "$21,908,594,700"
+      "market_cap": "$22,038,616,100"
     },
     {
       "symbol": "EBC",
@@ -6213,7 +6233,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.50",
-      "market_cap": "$5,119,801,300"
+      "market_cap": "$5,093,522,400"
     },
     {
       "symbol": "EFSI",
@@ -6223,7 +6243,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.83",
-      "market_cap": "$225,231,424"
+      "market_cap": "$224,744,368"
     },
     {
       "symbol": "EGP",
@@ -6243,7 +6263,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.19",
-      "market_cap": "$5,908,383,200"
+      "market_cap": "$5,794,349,100"
     },
     {
       "symbol": "ESQ",
@@ -6253,7 +6273,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.81",
-      "market_cap": "$1,381,374,980"
+      "market_cap": "$1,359,949,950"
     },
     {
       "symbol": "F",
@@ -6263,7 +6283,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.41",
-      "market_cap": "$54,638,572,000"
+      "market_cap": "$54,364,402,000"
     },
     {
       "symbol": "FBP",
@@ -6273,7 +6293,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$4,230,437,630"
+      "market_cap": "$4,276,238,080"
     },
     {
       "symbol": "FCN",
@@ -6283,7 +6303,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.65",
-      "market_cap": "$4,196,683,260"
+      "market_cap": "$4,245,003,520"
     },
     {
       "symbol": "FCNCA",
@@ -6293,7 +6313,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$45.82",
-      "market_cap": "$24,394,719,200"
+      "market_cap": "$24,777,895,900"
     },
     {
       "symbol": "FCX",
@@ -6303,7 +6323,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.73",
-      "market_cap": "$112,612,491,000"
+      "market_cap": "$109,783,540,000"
     },
     {
       "symbol": "FFBC",
@@ -6313,7 +6333,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$3,435,633,410"
+      "market_cap": "$3,445,080,580"
     },
     {
       "symbol": "FFIN",
@@ -6323,7 +6343,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.52",
-      "market_cap": "$4,739,840,500"
+      "market_cap": "$4,785,705,500"
     },
     {
       "symbol": "FISI",
@@ -6333,7 +6353,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.05",
-      "market_cap": "$806,384,260"
+      "market_cap": "$807,172,480"
     },
     {
       "symbol": "FIX",
@@ -6343,7 +6363,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$12.06",
-      "market_cap": "$56,838,136,000"
+      "market_cap": "$53,450,682,000"
     },
     {
       "symbol": "FRST",
@@ -6353,7 +6373,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.44",
-      "market_cap": "$395,049,216"
+      "market_cap": "$397,281,120"
     },
     {
       "symbol": "FSV",
@@ -6363,7 +6383,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.76",
-      "market_cap": "$6,151,651,300"
+      "market_cap": "$6,171,642,900"
     },
     {
       "symbol": "FTI",
@@ -6373,7 +6393,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.86",
-      "market_cap": "$29,929,986,000"
+      "market_cap": "$29,741,746,200"
     },
     {
       "symbol": "GTX",
@@ -6383,7 +6403,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.48",
-      "market_cap": "$5,115,514,400"
+      "market_cap": "$4,971,914,200"
     },
     {
       "symbol": "HAS",
@@ -6392,8 +6412,8 @@
       "time": "2026-10-22T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$1.86",
-      "market_cap": "$13,283,567,600"
+      "eps_forecast": "$1.89",
+      "market_cap": "$13,290,619,900"
     },
     {
       "symbol": "HFBL",
@@ -6403,7 +6423,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$77,874,168"
+      "market_cap": "$77,614,592"
     },
     {
       "symbol": "HFWA",
@@ -6413,7 +6433,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$1,172,639,870"
+      "market_cap": "$1,173,049,090"
     },
     {
       "symbol": "HON",
@@ -6423,7 +6443,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.15",
-      "market_cap": "$69,850,407,000"
+      "market_cap": "$68,912,267,000"
     },
     {
       "symbol": "HTH",
@@ -6433,7 +6453,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.64",
-      "market_cap": "$2,209,537,020"
+      "market_cap": "$2,205,527,040"
     },
     {
       "symbol": "IMAX",
@@ -6443,7 +6463,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.49",
-      "market_cap": "$2,848,499,460"
+      "market_cap": "$2,762,945,790"
     },
     {
       "symbol": "INTC",
@@ -6453,7 +6473,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.28",
-      "market_cap": "$486,702,055,000"
+      "market_cap": "$472,855,183,000"
     },
     {
       "symbol": "IRDM",
@@ -6463,7 +6483,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.29",
-      "market_cap": "$5,047,952,900"
+      "market_cap": "$4,937,753,600"
     },
     {
       "symbol": "ITGR",
@@ -6473,7 +6493,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.65",
-      "market_cap": "$4,259,203,580"
+      "market_cap": "$4,260,223,490"
     },
     {
       "symbol": "KN",
@@ -6483,7 +6503,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.30",
-      "market_cap": "$2,985,945,090"
+      "market_cap": "$2,923,595,520"
     },
     {
       "symbol": "KNSL",
@@ -6493,7 +6513,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.87",
-      "market_cap": "$8,696,802,300"
+      "market_cap": "$8,669,696,000"
     },
     {
       "symbol": "KRNY",
@@ -6502,8 +6522,8 @@
       "time": "2026-10-22T12:00:00.000Z",
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.18",
-      "market_cap": "$649,943,100"
+      "eps_forecast": "$0.17",
+      "market_cap": "$637,606,530"
     },
     {
       "symbol": "LADR",
@@ -6513,7 +6533,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.20",
-      "market_cap": "$1,247,085,950"
+      "market_cap": "$1,245,817,220"
     },
     {
       "symbol": "LAZ",
@@ -6523,7 +6543,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.60",
-      "market_cap": "$4,211,813,630"
+      "market_cap": "$4,252,742,910"
     },
     {
       "symbol": "LNN",
@@ -6533,7 +6553,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.97",
-      "market_cap": "$1,161,896,830"
+      "market_cap": "$1,158,032,640"
     },
     {
       "symbol": "LYG",
@@ -6543,7 +6563,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.15",
-      "market_cap": "$90,033,766,000"
+      "market_cap": "$88,231,461,000"
     },
     {
       "symbol": "MAYS",
@@ -6553,7 +6573,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Jul/2026",
       "eps_forecast": "",
-      "market_cap": "$85,116,312"
+      "market_cap": "$85,267,496"
     },
     {
       "symbol": "MBLY",
@@ -6563,7 +6583,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0",
-      "market_cap": "$7,320,115,200"
+      "market_cap": "$7,294,609,400"
     },
     {
       "symbol": "MCB",
@@ -6573,7 +6593,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,136,628,220"
+      "market_cap": "$1,137,992,060"
     },
     {
       "symbol": "MGRC",
@@ -6583,7 +6603,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.80",
-      "market_cap": "$2,778,419,200"
+      "market_cap": "$2,742,513,410"
     },
     {
       "symbol": "MHK",
@@ -6593,7 +6613,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.56",
-      "market_cap": "$8,792,411,100"
+      "market_cap": "$8,798,508,000"
     },
     {
       "symbol": "MRBK",
@@ -6603,7 +6623,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.50",
-      "market_cap": "$230,827,072"
+      "market_cap": "$230,469,200"
     },
     {
       "symbol": "MRP",
@@ -6613,7 +6633,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$5,064,461,800"
+      "market_cap": "$5,082,726,900"
     },
     {
       "symbol": "MRTN",
@@ -6623,7 +6643,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$1,180,827,780"
+      "market_cap": "$1,172,661,500"
     },
     {
       "symbol": "MSM",
@@ -6633,7 +6653,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$1.36",
-      "market_cap": "$6,813,806,600"
+      "market_cap": "$6,656,878,600"
     },
     {
       "symbol": "MTX",
@@ -6643,7 +6663,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.57",
-      "market_cap": "$2,250,298,110"
+      "market_cap": "$2,243,761,150"
     },
     {
       "symbol": "MXL",
@@ -6653,7 +6673,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.32",
-      "market_cap": "$5,751,761,900"
+      "market_cap": "$5,598,490,600"
     },
     {
       "symbol": "MYFW",
@@ -6663,7 +6683,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.58",
-      "market_cap": "$301,351,872"
+      "market_cap": "$300,082,400"
     },
     {
       "symbol": "NECB",
@@ -6673,7 +6693,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.82",
-      "market_cap": "$363,010,976"
+      "market_cap": "$363,836,928"
     },
     {
       "symbol": "NEM",
@@ -6683,7 +6703,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.88",
-      "market_cap": "$139,392,958,000"
+      "market_cap": "$134,851,535,000"
     },
     {
       "symbol": "NIC",
@@ -6693,7 +6713,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.07",
-      "market_cap": "$3,592,327,420"
+      "market_cap": "$3,599,243,260"
     },
     {
       "symbol": "NKSH",
@@ -6703,7 +6723,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.98",
-      "market_cap": "$259,284,240"
+      "market_cap": "$260,813,184"
     },
     {
       "symbol": "NOK",
@@ -6713,7 +6733,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.08",
-      "market_cap": "$60,810,318,000"
+      "market_cap": "$58,628,268,000"
     },
     {
       "symbol": "NSC",
@@ -6723,7 +6743,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.52",
-      "market_cap": "$78,147,994,000"
+      "market_cap": "$78,316,446,000"
     },
     {
       "symbol": "NXT",
@@ -6733,7 +6753,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.85",
-      "market_cap": "$13,591,930,900"
+      "market_cap": "$12,963,770,400"
     },
     {
       "symbol": "OMAB",
@@ -6743,7 +6763,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.94",
-      "market_cap": "$4,960,828,900"
+      "market_cap": "$4,858,976,800"
     },
     {
       "symbol": "OPBK",
@@ -6753,7 +6773,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.53",
-      "market_cap": "$226,527,776"
+      "market_cap": "$225,930,464"
     },
     {
       "symbol": "ORC",
@@ -6763,7 +6783,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$1,345,327,230"
+      "market_cap": "$1,335,346,940"
     },
     {
       "symbol": "ORI",
@@ -6773,7 +6793,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.76",
-      "market_cap": "$10,198,126,600"
+      "market_cap": "$10,157,082,600"
     },
     {
       "symbol": "PCB",
@@ -6783,7 +6803,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.74",
-      "market_cap": "$386,577,664"
+      "market_cap": "$386,086,112"
     },
     {
       "symbol": "PCG",
@@ -6793,7 +6813,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.46",
-      "market_cap": "$48,107,983,000"
+      "market_cap": "$44,489,834,000"
     },
     {
       "symbol": "PECO",
@@ -6803,7 +6823,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.70",
-      "market_cap": "$5,047,614,000"
+      "market_cap": "$5,028,309,000"
     },
     {
       "symbol": "PHM",
@@ -6813,7 +6833,7 @@
       "timing": "pre_market",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.65",
-      "market_cap": "$23,759,609,900"
+      "market_cap": "$24,097,024,000"
     },
     {
       "symbol": "PINE",
@@ -6823,7 +6843,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.53",
-      "market_cap": "$346,070,784"
+      "market_cap": "$344,132,512"
     },
     {
       "symbol": "POOL",
@@ -6833,7 +6853,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.35",
-      "market_cap": "$6,761,559,600"
+      "market_cap": "$6,834,604,000"
     },
     {
       "symbol": "R",
@@ -6843,7 +6863,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.16",
-      "market_cap": "$9,513,474,000"
+      "market_cap": "$9,427,960,800"
     },
     {
       "symbol": "RCI",
@@ -6853,7 +6873,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.93",
-      "market_cap": "$20,315,666,400"
+      "market_cap": "$20,185,612,300"
     },
     {
       "symbol": "RMBI",
@@ -6863,7 +6883,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$267,306,784"
+      "market_cap": "$266,468,832"
     },
     {
       "symbol": "ROP",
@@ -6873,7 +6893,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$5.79",
-      "market_cap": "$41,804,411,000"
+      "market_cap": "$42,151,551,000"
     },
     {
       "symbol": "SAH",
@@ -6883,7 +6903,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.82",
-      "market_cap": "$2,506,737,660"
+      "market_cap": "$2,519,067,390"
     },
     {
       "symbol": "SAM",
@@ -6893,7 +6913,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$4.30",
-      "market_cap": "$1,882,760,060"
+      "market_cap": "$1,884,715,520"
     },
     {
       "symbol": "SHBI",
@@ -6903,7 +6923,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.54",
-      "market_cap": "$769,564,670"
+      "market_cap": "$772,234,500"
     },
     {
       "symbol": "SLM",
@@ -6913,7 +6933,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$5,031,340,000"
+      "market_cap": "$4,963,679,200"
     },
     {
       "symbol": "SMPL",
@@ -6923,7 +6943,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "$0.38",
-      "market_cap": "$903,182,140"
+      "market_cap": "$966,873,730"
     },
     {
       "symbol": "SPFI",
@@ -6933,7 +6953,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.97",
-      "market_cap": "$821,761,790"
+      "market_cap": "$822,515,330"
     },
     {
       "symbol": "SRCE",
@@ -6943,7 +6963,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.83",
-      "market_cap": "$2,082,716,670"
+      "market_cap": "$2,080,910,590"
     },
     {
       "symbol": "SSNC",
@@ -6953,7 +6973,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.59",
-      "market_cap": "$19,586,652,200"
+      "market_cap": "$19,574,919,200"
     },
     {
       "symbol": "STBA",
@@ -6963,7 +6983,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.98",
-      "market_cap": "$1,757,632,130"
+      "market_cap": "$1,755,868,800"
     },
     {
       "symbol": "STM",
@@ -6973,7 +6993,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.40",
-      "market_cap": "$45,823,271,000"
+      "market_cap": "$44,073,882,000"
     },
     {
       "symbol": "TCBK",
@@ -6983,7 +7003,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.08",
-      "market_cap": "$1,722,042,370"
+      "market_cap": "$1,720,124,420"
     },
     {
       "symbol": "THRM",
@@ -6993,7 +7013,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.68",
-      "market_cap": "$1,239,880,700"
+      "market_cap": "$1,214,241,790"
     },
     {
       "symbol": "TMUS",
@@ -7003,7 +7023,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.80",
-      "market_cap": "$190,667,375,000"
+      "market_cap": "$194,550,448,000"
     },
     {
       "symbol": "TRU",
@@ -7013,7 +7033,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.06",
-      "market_cap": "$16,222,772,200"
+      "market_cap": "$16,414,371,800"
     },
     {
       "symbol": "TSCO",
@@ -7023,7 +7043,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.41",
-      "market_cap": "$18,080,092,200"
+      "market_cap": "$18,090,514,400"
     },
     {
       "symbol": "TXT",
@@ -7033,7 +7053,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.52",
-      "market_cap": "$14,163,122,200"
+      "market_cap": "$14,281,793,500"
     },
     {
       "symbol": "UBSI",
@@ -7043,7 +7063,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.93",
-      "market_cap": "$6,468,735,000"
+      "market_cap": "$6,483,718,100"
     },
     {
       "symbol": "UNP",
@@ -7053,7 +7073,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$3.43",
-      "market_cap": "$182,779,216,000"
+      "market_cap": "$182,624,748,000"
     },
     {
       "symbol": "USCB",
@@ -7063,7 +7083,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.55",
-      "market_cap": "$411,795,936"
+      "market_cap": "$414,197,632"
     },
     {
       "symbol": "UTMD",
@@ -7073,7 +7093,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$228,598,128"
+      "market_cap": "$231,686,432"
     },
     {
       "symbol": "UVE",
@@ -7083,7 +7103,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.03",
-      "market_cap": "$1,207,002,500"
+      "market_cap": "$1,208,672,260"
     },
     {
       "symbol": "VABK",
@@ -7093,7 +7113,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$251,299,056"
+      "market_cap": "$251,190,560"
     },
     {
       "symbol": "VC",
@@ -7103,7 +7123,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.40",
-      "market_cap": "$2,695,704,320"
+      "market_cap": "$2,723,467,780"
     },
     {
       "symbol": "VLO",
@@ -7113,7 +7133,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$15",
-      "market_cap": "$99,792,781,000"
+      "market_cap": "$101,454,119,000"
     },
     {
       "symbol": "VLY",
@@ -7123,7 +7143,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.33",
-      "market_cap": "$7,708,843,000"
+      "market_cap": "$7,692,265,000"
     },
     {
       "symbol": "VRSN",
@@ -7133,7 +7153,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.41",
-      "market_cap": "$26,614,118,400"
+      "market_cap": "$26,361,278,500"
     },
     {
       "symbol": "VTMX",
@@ -7143,7 +7163,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.41",
-      "market_cap": "$3,051,478,270"
+      "market_cap": "$3,001,062,400"
     },
     {
       "symbol": "WKC",
@@ -7153,7 +7173,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.96",
-      "market_cap": "$1,833,274,110"
+      "market_cap": "$1,813,324,930"
     },
     {
       "symbol": "WRLD",
@@ -7163,7 +7183,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
-      "market_cap": "$886,237,380"
+      "market_cap": "$878,309,950"
     },
     {
       "symbol": "WSBF",
@@ -7183,7 +7203,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$1.67",
-      "market_cap": "$4,006,014,460"
+      "market_cap": "$4,000,394,500"
     },
     {
       "symbol": "WST",
@@ -7193,7 +7213,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$2.18",
-      "market_cap": "$24,356,347,900"
+      "market_cap": "$23,749,707,800"
     },
     {
       "symbol": "WTBA",
@@ -7203,7 +7223,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.65",
-      "market_cap": "$483,701,440"
+      "market_cap": "$485,405,792"
     },
     {
       "symbol": "WU",
@@ -7213,7 +7233,7 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.35",
-      "market_cap": "$2,248,647,420"
+      "market_cap": "$2,258,003,710"
     },
     {
       "symbol": "XPRO",
@@ -7223,12 +7243,302 @@
       "timing": "unspecified",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "$0.16",
-      "market_cap": "$2,049,052,800"
+      "market_cap": "$1,996,890,880"
+    },
+    {
+      "symbol": "ALV",
+      "name": "Autoliv, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$2.21",
+      "market_cap": "$8,940,066,800"
+    },
+    {
+      "symbol": "BAH",
+      "name": "Booz Allen Hamilton Holding Corporation",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.43",
+      "market_cap": "$9,050,241,000"
+    },
+    {
+      "symbol": "COFS",
+      "name": "ChoiceOne Financial Services, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.93",
+      "market_cap": "$498,916,160"
+    },
+    {
+      "symbol": "CORZ",
+      "name": "Core Scientific, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0",
+      "market_cap": "$5,305,330,700"
+    },
+    {
+      "symbol": "E",
+      "name": "ENI S.p.A.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.55",
+      "market_cap": "$83,090,334,000"
+    },
+    {
+      "symbol": "EAF",
+      "name": "GrafTech International Ltd.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "($1.44)",
+      "market_cap": "$193,342,928"
+    },
+    {
+      "symbol": "FCAP",
+      "name": "First Capital, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$208,637,712"
+    },
+    {
+      "symbol": "FHB",
+      "name": "First Hawaiian, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.60",
+      "market_cap": "$3,138,143,490"
+    },
+    {
+      "symbol": "FLG",
+      "name": "Flagstar Bank, N.A.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.09",
+      "market_cap": "$5,582,998,500"
+    },
+    {
+      "symbol": "GD",
+      "name": "General Dynamics Corporation",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$4.13",
+      "market_cap": "$102,627,754,000"
+    },
+    {
+      "symbol": "GLXG",
+      "name": "Galaxy Payroll Group Limited",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$6,439,032"
+    },
+    {
+      "symbol": "GNTX",
+      "name": "Gentex Corporation",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.52",
+      "market_cap": "$4,776,191,000"
+    },
+    {
+      "symbol": "GRC",
+      "name": "Gorman-Rupp Company (The)",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.67",
+      "market_cap": "$2,012,988,670"
+    },
+    {
+      "symbol": "HCA",
+      "name": "HCA Healthcare, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$6.80",
+      "market_cap": "$90,458,653,000"
+    },
+    {
+      "symbol": "ITW",
+      "name": "Illinois Tool Works Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$2.98",
+      "market_cap": "$79,772,484,000"
+    },
+    {
+      "symbol": "IZM",
+      "name": "ICZOOM Group Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Jun/2026",
+      "eps_forecast": "",
+      "market_cap": "$2,908,383"
+    },
+    {
+      "symbol": "KOF",
+      "name": "Coca Cola Femsa S.A.B. de C.V.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.85",
+      "market_cap": "$5,912,792,600"
+    },
+    {
+      "symbol": "LOAN",
+      "name": "Manhattan Bridge Capital, Inc",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$46,558,948"
+    },
+    {
+      "symbol": "NWG",
+      "name": "NatWest Group plc",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.50",
+      "market_cap": "$75,658,822,000"
+    },
+    {
+      "symbol": "PDLB",
+      "name": "Ponce Financial Group, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$9.40",
+      "market_cap": "$494,642,560"
+    },
+    {
+      "symbol": "PG",
+      "name": "Procter & Gamble Company (The)",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.89",
+      "market_cap": "$334,206,992,000"
+    },
+    {
+      "symbol": "PW",
+      "name": "Power REIT",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$2,808,468"
+    },
+    {
+      "symbol": "RDY",
+      "name": "Dr. Reddy's Laboratories Ltd",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.16",
+      "market_cap": "$10,166,121,500"
+    },
+    {
+      "symbol": "SBSI",
+      "name": "Southside Bancshares, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.77",
+      "market_cap": "$950,278,400"
+    },
+    {
+      "symbol": "SIFY",
+      "name": "Sify Technologies Limited",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0",
+      "market_cap": "$1,043,058,430"
+    },
+    {
+      "symbol": "SNY",
+      "name": "Sanofi",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.71",
+      "market_cap": "$109,309,444,000"
+    },
+    {
+      "symbol": "TMP",
+      "name": "Tompkins Financial Corporation",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.91",
+      "market_cap": "$1,406,648,060"
+    },
+    {
+      "symbol": "TV",
+      "name": "Grupo Televisa S.A.B.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.03",
+      "market_cap": "$1,703,371,520"
+    },
+    {
+      "symbol": "VRTS",
+      "name": "Virtus Investment Partners, Inc.",
+      "date": "2026-10-23",
+      "time": "2026-10-23T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$6.20",
+      "market_cap": "$1,116,055,680"
     }
   ],
   "stats": {
-    "requested_weekdays": 86,
-    "events": 722,
+    "requested_weekdays": 87,
+    "events": 753,
     "failed_dates": 0,
     "failures": []
   }
