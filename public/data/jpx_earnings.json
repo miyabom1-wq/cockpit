@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-08-28T20:14:36.083825Z",
+  "generated_at": "2026-08-31T16:13:43.915808Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,23 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
       "label": "",
-      "events": 226,
+      "events": 225,
       "bytes": 31328
     }
   ],
   "events": [
-    {
-      "symbol": "4707.T",
-      "code": "4707",
-      "name": "キタック",
-      "date": "2026-08-28",
-      "time": "2026-08-28T14:59:00.000Z",
-      "period": "2026-10-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "3031.T",
       "code": "3031",
@@ -2733,8 +2721,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 226,
-    "unique_future_events": 226,
+    "raw_rows": 225,
+    "unique_future_events": 225,
     "warnings": []
   }
 }
