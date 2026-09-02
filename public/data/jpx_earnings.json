@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-01T13:33:18.421014Z",
+  "generated_at": "2026-09-02T12:49:41.314710Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,71 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
       "label": "",
-      "events": 225,
+      "events": 220,
       "bytes": 31328
     }
   ],
   "events": [
-    {
-      "symbol": "3031.T",
-      "code": "3031",
-      "name": "ラクーンホールディングス",
-      "date": "2026-08-31",
-      "time": "2026-08-31T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3329.T",
-      "code": "3329",
-      "name": "東和フードサービス",
-      "date": "2026-08-31",
-      "time": "2026-08-31T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4369.T",
-      "code": "4369",
-      "name": "トリケミカル研究所",
-      "date": "2026-08-31",
-      "time": "2026-08-31T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "436A.T",
-      "code": "436A",
-      "name": "サイバーソリューションズ",
-      "date": "2026-08-31",
-      "time": "2026-08-31T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4666.T",
-      "code": "4666",
-      "name": "パーク24",
-      "date": "2026-08-31",
-      "time": "2026-08-31T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2593.T",
       "code": "2593",
@@ -2721,8 +2661,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 225,
-    "unique_future_events": 225,
+    "raw_rows": 220,
+    "unique_future_events": 220,
     "warnings": []
   }
 }
