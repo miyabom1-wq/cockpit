@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-02T12:49:41.314710Z",
+  "generated_at": "2026-09-03T12:53:15.397533Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,47 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
       "label": "",
-      "events": 220,
+      "events": 217,
       "bytes": 31328
     }
   ],
   "events": [
-    {
-      "symbol": "2593.T",
-      "code": "2593",
-      "name": "伊藤園",
-      "date": "2026-09-01",
-      "time": "2026-09-01T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4750.T",
-      "code": "4750",
-      "name": "ダイサン",
-      "date": "2026-09-01",
-      "time": "2026-09-01T14:59:00.000Z",
-      "period": "2027-04-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7865.T",
-      "code": "7865",
-      "name": "ピープル",
-      "date": "2026-09-01",
-      "time": "2026-09-01T14:59:00.000Z",
-      "period": "2027-01-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0821.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "8057.T",
       "code": "8057",
@@ -2661,8 +2625,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 220,
-    "unique_future_events": 220,
+    "raw_rows": 217,
+    "unique_future_events": 217,
     "warnings": []
   }
 }
