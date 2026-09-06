@@ -397,7 +397,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.8.10</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.8.11</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -477,10 +477,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="./theme-catalog.js?build=v73.8.10"></script>
+<script src="./theme-catalog.js?build=v73.8.11"></script>
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.8.10-review-complete-20260906';
+const FRONTEND_BUILD='vantage-ui73.8.11-watch-access-20260906';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
 document.documentElement.dataset.mobileLayout='v73.8.9-universe-finish';
@@ -2039,7 +2039,7 @@ window.openSettings=async function(){
   <div class="v52-settings-card"><h3>登録銘柄</h3><p>VANTAGEが日々分析している日本株・米国株の一覧です。</p><div class="actions"><button class="primary" onclick="openRegisteredStocks()">登録銘柄一覧</button><button onclick="closeModal();openStockEditor()">追加・固定・削除</button></div></div>
   <div class="v52-settings-card"><h3>信用需給</h3><p>週次信用残、日々公表、特別周知、信用規制をまとめて確認します。</p><div class="actions"><button onclick="openMarginDashboard()">信用需給を開く</button></div></div>
   <div class="v52-settings-card"><h3>通知</h3><p>対応端末ではプッシュ通知を有効化できます。</p><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト通知</button></div></div>
-  <div class="v52-settings-card"><h3>アクセスキー</h3><p>保有・ウォッチ・登録銘柄などの個人情報の閲覧と更新に使用します。設定済みのキーは引き続き使えます。未設定の端末ではここに保存してください。キーがなくても市場データのAIコピーは動作します。</p><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="アクセスキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></div>
+  <div class="v52-settings-card"><h3>接続設定</h3><p>VANTAGEの画面からの閲覧・監視銘柄の追加・削除は、キーの入力なしで利用できます。</p><details><summary>外部ツール用キー（通常は設定不要）</summary><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="アクセスキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></details></div>
   <div class="v52-settings-card settings-wide"><div class="settings-head"><div><h3>システム状態</h3><p>バックエンド、日米データ、登録銘柄管理の状態を確認します。</p></div><button onclick="checkSystemStatus()">再確認</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>
  </div>`;
  openModal();
@@ -2195,11 +2195,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.8.10"></script>
-<script src="./reliability-sync.js?build=v73.8.10"></script>
-<script src="./event-resilience.js?build=v73.8.10"></script>
-<script src="./navigation.js?build=v73.8.10"></script>
-<script src="./events-ui.js?build=v73.8.10"></script>
+<script src="./frame-sync.js?build=v73.8.11"></script>
+<script src="./reliability-sync.js?build=v73.8.11"></script>
+<script src="./event-resilience.js?build=v73.8.11"></script>
+<script src="./navigation.js?build=v73.8.11"></script>
+<script src="./events-ui.js?build=v73.8.11"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

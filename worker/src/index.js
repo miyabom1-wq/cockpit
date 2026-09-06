@@ -27,7 +27,7 @@ import {
   recordSchedulerFailure
 } from './services/system-health.js';
 
-const SCHEDULER_MARKER_VERSION='v73.8.10';
+const SCHEDULER_MARKER_VERSION='v73.8.11';
 const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
 
@@ -290,7 +290,7 @@ export default{
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders(request)});
     const methods=allowedMethods(new URL(request.url).pathname);
     if(!methods.includes(request.method))return new Response(JSON.stringify({ok:false,error:'method not allowed'}),{status:405,headers:{'Content-Type':'application/json',Allow:methods.join(', '),...corsHeaders(request)}});
-    if(!authorized(request,env))return json({ok:false,error:'認証キーが未設定、または一致しません。設定のアクセスキーを確認してください。'},403,request);
+    if(!authorized(request,env))return json({ok:false,error:'接続元を確認できません。VANTAGEの画面を開き直してください。外部ツールからの接続には専用キーが必要です。'},403,request);
     try{
       await initializeStorage(env);
       return await route(request,env);

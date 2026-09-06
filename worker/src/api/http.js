@@ -54,8 +54,21 @@ export function requiresAuthorization(request,url){
   return PRIVATE_READS.has(url.pathname)||WRITE_GETS.has(url.pathname)||url.searchParams.get('refresh')==='1';
 }
 
+// Browser-origin compatibility is not user identity authentication. The owner
+// explicitly chose keyless use of the existing application. External API
+// clients can continue to authenticate with WRITE_TOKEN.
+function fromFrontend(request){
+  const ownOrigin=new URL(request.url).origin;
+  const allowed=origin=>origin===ownOrigin||origin===FRONTEND_ORIGIN;
+  const origin=request.headers.get('Origin');
+  if(origin)return allowed(origin);
+  const referer=request.headers.get('Referer');
+  if(referer){try{if(!allowed(new URL(referer).origin))return false;}catch{return false;}}
+  return request.headers.get('Sec-Fetch-Site')==='same-origin'||Boolean(referer);
+}
+
 export function authorized(request,env){
   const url=new URL(request.url);
   if(!requiresAuthorization(request,url))return true;
-  return suppliedTokenMatches(request,env);
+  return fromFrontend(request)||suppliedTokenMatches(request,env);
 }

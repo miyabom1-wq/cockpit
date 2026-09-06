@@ -15,9 +15,9 @@ import {simulateBacktestTrade,backtestSeries} from '../src/services/backtest.js'
 import {KEYS} from '../src/storage/kv-schema.js';
 import {MockKV,syntheticRows,yahooResult} from './helpers.js';
 
-test('private reads fail closed without a matching token, including spoofed browser headers',()=>{
+test('requests without frontend context require a matching API token',()=>{
   for(const path of ['/api/export','/api/watchlist','/api/positions','/api/universe']){
-    for(const headers of [{},{Origin:'https://example.com'},{Origin:'https://miyabom1-wq.github.io'},{Origin:'http://localhost:8787'},{Referer:'https://example.com/'},{'Sec-Fetch-Site':'same-origin'}]){
+    for(const headers of [{},{Origin:'https://unrelated.example'},{Origin:'http://localhost:8787'},{Referer:'https://unrelated.example/'}]){
       const request=new Request('https://example.com'+path,{headers});
       assert.equal(authorized(request,{WRITE_TOKEN:'secret'}),false,path);
       assert.equal(authorized(request,{}),false,path+' without configured token');

@@ -12,11 +12,11 @@ test('universe dashboard exposes guarded rotation configuration',async()=>{const
 test('legacy non-default manual symbols are migrated as pinned',async()=>{const kv=new MockKV({'stocklist:jp':JSON.stringify([{symbol:'9999.T',name:'手動銘柄'}])}),env={COCKPIT_KV:kv,WRITE_TOKEN:'test-key'};const res=await worker.fetch(new Request('https://example.com/api/stocklist?market=jp',{headers:{Origin:'https://miyabom1-wq.github.io','X-Vantage-Key':'test-key'}}),env,{}),d=await res.json();assert.equal(d.list[0].source,'legacy_manual');assert.equal(d.list[0].pinned,true);});
 
 
-test('official frontend still needs the token for write actions',async()=>{
+test('unrelated websites cannot write without an API token',async()=>{
   const env={COCKPIT_KV:new MockKV(),WRITE_TOKEN:'secret'};
   const res=await worker.fetch(new Request('https://example.com/api/watchlist',{
     method:'POST',
-    headers:{Origin:'https://miyabom1-wq.github.io','Content-Type':'application/json'},
+    headers:{Origin:'https://unrelated.example','Content-Type':'application/json'},
     body:JSON.stringify({action:'add',symbol:'1111.T'})
   }),env,{});
   assert.equal(res.status,403);
