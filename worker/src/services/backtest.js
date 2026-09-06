@@ -103,6 +103,8 @@ export function simulateBacktestTrade(prepared,index,maxHold){
   const rows=prepared?.rows||[];
   const signal=rows[index],next=rows[index+1];
   if(!signal||!next)return{status:'no_next'};
+  const validPrices=row=>['open','high','low','close'].every(key=>finite(row[key])&&Number(row[key])>0);
+  if(!validPrices(signal)||!validPrices(next))return{status:'invalid_data'};
 
   const gap=(Number(next.open)/Number(signal.close)-1)*100;
   if(gap>GAP)return{status:'gap_skip',gap_pct:round(gap)};
@@ -123,6 +125,7 @@ export function simulateBacktestTrade(prepared,index,maxHold){
   for(let j=index+1;j<rows.length&&j<=index+maxHold;j++){
     const row=rows[j];
     if(!row)break;
+    if(!validPrices(row))return{status:'invalid_data'};
 
     if(pendingMa){
       exit=Number(row.open);
@@ -163,8 +166,7 @@ export function simulateBacktestTrade(prepared,index,maxHold){
     }
   }
 
-  // shared finite(null) is true because Number(null) === 0.
-  // Validate the index itself before dereferencing rows[exitIndex].
+  // A trade can remain open when no exit row exists in the requested window.
   if(!finite(exit)||!Number.isInteger(exitIndex)||!rows[exitIndex]){
     return{status:'open'};
   }

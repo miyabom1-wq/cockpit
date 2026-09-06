@@ -45,11 +45,11 @@ export function normalizeYahooDaily(result) {
       }
     }
     const close=Number(closes[i])*priceFactor;
-    const open=finite(q.open?.[i])?Number(q.open[i])*priceFactor:close;
-    const high=finite(q.high?.[i])?Number(q.high[i])*priceFactor:Math.max(open,close);
-    const low=finite(q.low?.[i])?Number(q.low[i])*priceFactor:Math.min(open,close);
-    const volume=finite(q.volume?.[i])?Math.max(0,Number(q.volume[i])*volumeFactor):0;
-    if(!(close>0&&open>0&&high>0&&low>0)) continue;
+    const open=finite(q.open?.[i])?Number(q.open[i])*priceFactor:null;
+    const high=finite(q.high?.[i])?Number(q.high[i])*priceFactor:null;
+    const low=finite(q.low?.[i])?Number(q.low[i])*priceFactor:null;
+    const volume=finite(q.volume?.[i])?Number(q.volume[i])*volumeFactor:null;
+    if(!(close>0)) continue;
     rows.push({
       time:Number(ts[i]),date:isoDate(Number(ts[i])*1000),open,high,low,close,volume,
       adj_close:finite(adj[i])?Number(adj[i]):null,

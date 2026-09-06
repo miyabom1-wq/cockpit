@@ -1,21 +1,11 @@
+import '../../../public/theme-catalog.js';
 import { LIMITS } from '../config.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { getStockList, saveStockList } from '../storage/stocklist.js';
 import { getExplorer, getEnrichedRanking, getRanking } from './ranking.js';
 import { parseJson, nowIso, finite, round, jstDate } from '../utils.js';
 
-const IMPORTANT_THEMES=[
-  ['メモリ・ストレージ',['285A.T','MU','SNDK','WDC','STX']],
-  ['半導体装置',['8035.T','6857.T','6146.T','7735.T','6920.T','6525.T','6315.T','AMAT','LRCX','KLAC','ASML']],
-  ['AI半導体・ロジック',['NVDA','AVGO','AMD','TSM','ARM','MRVL','QCOM','CRDO','ALAB','6526.T','6723.T']],
-  ['半導体材料',['4063.T','3436.T','4004.T','4062.T','4183.T','6890.T']],
-  ['電線・AI物理',['5803.T','5801.T','5802.T','VRT','ETN','GEV']],
-  ['電力・原子力',['9501.T','9502.T','9503.T','CEG','VST','CCJ']],
-  ['ネットワーク・光',['ANET','CIEN','COHR','LITE']],
-  ['メガテック・AIソフト',['GOOGL','AMZN','META','MSFT','AAPL','ORCL','PLTR','NOW']],
-  ['防衛・重工',['7011.T','7012.T','7013.T','6503.T']],
-  ['金融',['8306.T','8316.T','8411.T','8766.T','HOOD']]
-].map(([name,symbols])=>[name,new Set(symbols)]);
+const IMPORTANT_THEMES=globalThis.VantageThemes.important.map(name=>[name]);
 
 const DEFAULT_CONFIG=Object.freeze({
   mode:'guarded_auto',
@@ -29,11 +19,7 @@ const DEFAULT_CONFIG=Object.freeze({
   us_lead_target:LIMITS.usLead
 });
 
-function themeName(symbol,fallback='その他'){
-  const s=String(symbol||'').toUpperCase();
-  for(const [name,set] of IMPORTANT_THEMES)if(set.has(s))return name;
-  return fallback||'その他';
-}
+function themeName(symbol,fallback,override){return globalThis.VantageThemes.themeName({symbol,theme:fallback,theme_override:override});}
 function tierFor(market,index){if(market==='jp')return index<LIMITS.jpCore?'core':'radar';return index<LIMITS.usLead?'lead':'archive';}
 function laneValue(lane){return({A:26,B:22,C:10,D:-5,E:-22})[lane]??-2;}
 function rankPoints(rank,market){const r=Number(rank);if(!finite(r))return 0;if(r<=20)return 34;if(r<=50)return 27;if(r<=100)return 20;if(r<=200)return market==='jp'?12:7;if(r<=300)return market==='jp'?6:0;return 0;}
@@ -58,7 +44,7 @@ export function scoreUniverseItem({item={},analysis={},rank=null,presence=0,mark
   return round(Math.max(-50,Math.min(160,score)),1);
 }
 export function buildThemeCoverage(jpList=[],usList=[]){
-  const count=(list,name)=>list.filter(x=>themeName(x.symbol,x.theme)===name).length;
+  const count=(list,name)=>list.filter(x=>themeName(x.symbol,x.theme,x.theme_override)===name).length;
   return IMPORTANT_THEMES.map(([name])=>{const jp=count(jpList,name),us=count(usList,name),total=jp+us;return{name,jp,us,total,status:total===0?'missing':total<2?'thin':'covered'};});
 }
 function compactAnalysis(x={}){return{entry_lane:x.entry_lane??null,rs5:x.rs5??null,rs20:x.rs20??null,vol_ratio:x.effective_vol_ratio??x.vol_ratio??null,stage_code:x.stage_code??null,div25:x.div25??null,rsi14:x.rsi14??x.rsi??null,new_entry:Boolean(x.new_entry),rank_change:x.rank_change??null};}
@@ -68,9 +54,9 @@ function proposalReasonDrop(x){const xs=[];if(!x.rank)xs.push('ランキング�
 export function buildRotationProposal({market,stocklist,stageRows=[],ranking,rankingHistory,candidates=[],protectedSymbols=[],config=DEFAULT_CONFIG,targetCount}={}){
   const m=market==='us'?'us':'jp',protectedSet=new Set(protectedSymbols),stageMap=new Map((stageRows||[]).map(x=>[x.symbol,x]));
   const historyDays=(rankingHistory?.snapshots||[]).length,limit=Math.min(10,historyDays||10),target=Math.max(1,Number(targetCount)||stocklist.length);
-  const current=(stocklist||[]).map((item,index)=>{const a=stageMap.get(item.symbol)||{},rank=latestRank(ranking,item.symbol),presence=persistence(rankingHistory,item.symbol,limit),score=scoreUniverseItem({item,analysis:a,rank,presence,market:m});return{...item,index,tier:tierFor(m,index),theme:themeName(item.symbol,a.theme),rank,presence,score,analysis:compactAnalysis(a),protected_reason:protectedReason(item,protectedSet)};});
+  const current=(stocklist||[]).map((item,index)=>{const a=stageMap.get(item.symbol)||{},rank=latestRank(ranking,item.symbol),presence=persistence(rankingHistory,item.symbol,limit),score=scoreUniverseItem({item,analysis:a,rank,presence,market:m});return{...item,index,tier:tierFor(m,index),theme:themeName(item.symbol,a.theme,item.theme_override),rank,presence,score,analysis:compactAnalysis(a),protected_reason:protectedReason(item,protectedSet)};});
   const registered=new Set(current.map(x=>x.symbol));
-  const candidateRows=(candidates||[]).filter(x=>x?.symbol&&!registered.has(x.symbol)).map(x=>{const rank=x.rank??latestRank(ranking,x.symbol),presence=persistence(rankingHistory,x.symbol,limit),analysis=compactAnalysis(x),score=scoreUniverseItem({item:x,analysis:{...x,...analysis},rank,presence,market:m,candidate:true});return{symbol:x.symbol,name:x.name||x.symbol,market:m,theme:themeName(x.symbol,x.theme),rank,presence,score,analysis,reason:proposalReasonCandidate({rank,presence,analysis})};}).filter(x=>x.score>=Number(config.candidate_min_score||58)).sort((a,b)=>b.score-a.score);
+  const candidateRows=(candidates||[]).filter(x=>x?.symbol&&!registered.has(x.symbol)).map(x=>{const rank=x.rank??latestRank(ranking,x.symbol),presence=persistence(rankingHistory,x.symbol,limit),analysis=compactAnalysis(x),score=scoreUniverseItem({item:x,analysis:{...x,...analysis},rank,presence,market:m,candidate:true});return{symbol:x.symbol,name:x.name||x.symbol,market:m,theme:themeName(x.symbol,x.theme,x.theme_override),rank,presence,score,analysis,reason:proposalReasonCandidate({rank,presence,analysis})};}).filter(x=>x.score>=Number(config.candidate_min_score||58)).sort((a,b)=>b.score-a.score);
   const counts=new Map();for(const x of current)counts.set(x.theme,(counts.get(x.theme)||0)+1);
   const removable=current.filter(x=>!x.protected_reason).filter(x=>m==='jp'?(current.length<=LIMITS.jpCore||x.tier==='radar'):true).filter(x=>{
     const floor=Math.max(1,Number(config.theme_minimum||2));if((counts.get(x.theme)||0)<=floor)return false;
@@ -86,8 +72,9 @@ export function buildRotationProposal({market,stocklist,stageRows=[],ranking,ran
     const d=removable.find(x=>{if(usedDrop.has(x.symbol)||c.score-x.score<Number(config.score_advantage||18))return false;const used=themeDropCount.get(x.theme)||0,after=(counts.get(x.theme)||0)-used-1+(c.theme===x.theme?1:0);return after>=floor;});if(!d)continue;
     usedDrop.add(d.symbol);themeDropCount.set(d.theme,(themeDropCount.get(d.theme)||0)+1);drops.push({...d,action:m==='us'?'demote':'remove',reason:proposalReasonDrop(d)});adds.push({...c,action:'replace',replacement:d.symbol});
   }
-  const canApply=historyDays>=Number(config.min_history_days||7)&&Boolean(adds.length)&&(config.mode!=='off');
-  return{market:m,generated_at:nowIso(),history_days:historyDays,target_count:target,current_count:current.length,active_count:m==='jp'?Math.min(current.length,LIMITS.jpMax):Math.min(current.length,LIMITS.usLead),protected_count:current.filter(x=>x.protected_reason).length,can_apply:canApply,blocked_reason:historyDays<Number(config.min_history_days||7)?`ランキング履歴${config.min_history_days}日未満`:adds.length?'': '入れ替え条件を満たす候補なし',adds,drops,current,candidate_count:candidateRows.length};
+  const rankingBlocked=ranking?.is_stale||!!ranking?.cache_warning;
+  const canApply=!rankingBlocked&&historyDays>=Number(config.min_history_days||7)&&Boolean(adds.length)&&(config.mode!=='off');
+  return{market:m,generated_at:nowIso(),history_days:historyDays,target_count:target,current_count:current.length,active_count:m==='jp'?Math.min(current.length,LIMITS.jpMax):Math.min(current.length,LIMITS.usLead),protected_count:current.filter(x=>x.protected_reason).length,can_apply:canApply,blocked_reason:rankingBlocked?'ランキング更新待ち':historyDays<Number(config.min_history_days||7)?`ランキング履歴${config.min_history_days}日未満`:adds.length?'': '入れ替え条件を満たす候補なし',adds,drops,current,candidate_count:candidateRows.length};
 }
 async function readConfig(env){return{...DEFAULT_CONFIG,...parseJson(await env.COCKPIT_KV.get(KEYS.universeConfig),{})};}
 async function readState(env){return parseJson(await env.COCKPIT_KV.get(KEYS.universeState),{proposal:null,history:[],last_auto_at:null});}

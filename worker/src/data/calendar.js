@@ -99,3 +99,12 @@ export function isUsDst(date = new Date()) {
   const cur=Date.UTC(y,date.getUTCMonth(),date.getUTCDate());
   return cur>=start&&cur<end;
 }
+
+export function expectedConfirmedTradingDate(market,now=new Date()){
+  const zone=market==='us'?'America/New_York':'Asia/Tokyo';
+  const parts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:zone,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now).map(x=>[x.type,x.value]));
+  const date=new Date(parts.year+'-'+parts.month+'-'+parts.day+'T00:00:00Z');
+  const readyMinute=market==='us'?17*60:16*60+30;
+  if(Number(parts.hour)*60+Number(parts.minute)<readyMinute)date.setUTCDate(date.getUTCDate()-1);
+  return previousTradingDate(market,date);
+}

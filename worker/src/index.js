@@ -1,4 +1,4 @@
-import { corsHeaders, json, authorized } from './api/http.js';
+import { corsHeaders, json, authorized, allowedMethods } from './api/http.js';
 import { route } from './api/routes.js';
 import { ensureSchema, KEYS } from './storage/kv-schema.js';
 import { migrateLegacyData } from './storage/migration.js';
@@ -16,7 +16,7 @@ import { runBacktestStep } from './services/backtest.js';
 import { evaluateIndexTriggers, sendPushToAll } from './services/push.js';
 import { isTradingDay, isUsDst } from './data/calendar.js';
 import { jstDate } from './utils.js';
-import { KV_SCHEMA_VERSION } from './config.js';
+import { KV_SCHEMA_VERSION, ENGINE_VERSION } from './config.js';
 import { captureThemeSnapshot } from './services/theme-history.js';
 import { maybeAutoRotateUniverse } from './services/universe-manager.js';
 import { getMarginDataset } from './services/margin-supply.js';
@@ -27,7 +27,7 @@ import {
   recordSchedulerFailure
 } from './services/system-health.js';
 
-const SCHEDULER_MARKER_VERSION='v70';
+const SCHEDULER_MARKER_VERSION='v73.8.10';
 const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
 
@@ -47,7 +47,7 @@ async function snapshotReady(env,node){
 
 async function currentCloseReady(env,market,tradeDate){
   const s=await getStage(env,market);
-  return s.complete&&s.trade_date===tradeDate&&s.kind==='confirmed'&&Number(s.close_verification?.ratio||0)>=90;
+  return s.complete&&(!s.engine_version||s.engine_version===ENGINE_VERSION)&&s.trade_date===tradeDate&&s.kind==='confirmed'&&Number(s.close_verification?.ratio||0)>=90;
 }
 
 async function pushIndex(env){
@@ -288,7 +288,9 @@ export async function scheduledStage(env,now=new Date()){
 export default{
   async fetch(request,env){
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders(request)});
-    if(!authorized(request,env))return json({ok:false,error:'write access denied'},403,request);
+    const methods=allowedMethods(new URL(request.url).pathname);
+    if(!methods.includes(request.method))return new Response(JSON.stringify({ok:false,error:'method not allowed'}),{status:405,headers:{'Content-Type':'application/json',Allow:methods.join(', '),...corsHeaders(request)}});
+    if(!authorized(request,env))return json({ok:false,error:'認証キーが未設定、または一致しません。設定のアクセスキーを確認してください。'},403,request);
     try{
       await initializeStorage(env);
       return await route(request,env);

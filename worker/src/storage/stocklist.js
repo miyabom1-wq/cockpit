@@ -9,7 +9,7 @@ export function focusTier(market,index){
 function cleanItem(it,market){
   const symbol=normalizeSymbol(it?.symbol,market);if(!symbol)return null;
   const known=Object.prototype.hasOwnProperty.call(DEFAULT_STOCKS[market]||{},symbol),hasSource=Boolean(it?.source),source=String(it?.source||(known?'seed':'legacy_manual')).slice(0,40),pinned=it?.pinned!=null?Boolean(it.pinned):(!hasSource&&!known);
-  return{symbol,name:String(it?.name||symbol).trim().slice(0,80),added_at:it?.added_at||nowIso(),source,pinned,...(it?.auto_added_at?{auto_added_at:it.auto_added_at}:{})};
+  return{symbol,...(typeof it?.theme_override==='string'&&it.theme_override.trim()?{theme_override:it.theme_override.trim().slice(0,40)}:{}),name:String(it?.name||symbol).trim().slice(0,80),added_at:it?.added_at||nowIso(),source,pinned,...(it?.auto_added_at?{auto_added_at:it.auto_added_at}:{})};
 }
 export async function getStockList(env,market){
   const m=market==='us'?'us':'jp',raw=await env.COCKPIT_KV.get(KEYS.stocklist(m));
@@ -32,6 +32,13 @@ export async function handleStockListAction(env,market,body={}){
   }
   if(action==='delete'){
     const symbol=normalizeSymbol(body.symbol,m),before=list.length;list=list.filter(x=>x.symbol!==symbol);if(list.length!==before)await saveStockList(env,m,list);return{ok:true,removed:before-list.length,count:list.length};
+  }
+  if(action==='theme'){
+    const symbol=normalizeSymbol(body.symbol,m),item=list.find(x=>x.symbol===symbol);
+    if(!item)return{ok:false,error:'銘柄が見つかりません'};
+    if(typeof body.theme!=='string'||body.theme.length>40||/[\x00-\x1f]/.test(body.theme))return{ok:false,error:'テーマは40文字以内で指定してください'};
+    if(body.theme.trim())item.theme_override=body.theme.trim();else delete item.theme_override;
+    await saveStockList(env,m,list);return{ok:true,symbol,theme_override:item.theme_override||null};
   }
   if(action==='pin'){
     const symbol=normalizeSymbol(body.symbol,m),x=list.find(x=>x.symbol===symbol);if(!x)return{ok:false,error:'not found'};x.pinned=body.pinned==null?!x.pinned:Boolean(body.pinned);await saveStockList(env,m,list);return{ok:true,symbol,pinned:x.pinned};

@@ -255,9 +255,9 @@ export async function evaluateIndexTriggers(env) {
     const c = wti.change_pct;
     triggers.push({ key: 'wti_move', title: `${c > 0 ? '🛢' : '⚠'} WTI原油 ${c > 0 ? '急騰' : '急落'}`, body: `${c > 0 ? '+' : ''}${c}%` });
   }
-  // 米10年債（旧auto-alerts: 4.5%超え/4.0%割れ）。^TNXは10倍表記なので÷10
-  if (tnx && tnx.price != null) {
-    const y = tnx.price > 20 ? tnx.price / 10 : tnx.price;
+  // Yahoo chart ^TNX uses percentage points, matching the market dashboard.
+  if (tnx && tnx.price != null && Number.isFinite(Number(tnx.price))) {
+    const y = Number(tnx.price);
     if (y >= 4.5) triggers.push({ key: 'tnx_high', title: '⚠ 米10年債 4.5%超え', body: `利回り${y.toFixed(2)}%。金利上昇圧` });
     else if (y <= 4.0) triggers.push({ key: 'tnx_low', title: '⚡ 米10年債 4.0%割れ', body: `利回り${y.toFixed(2)}%。金利低下` });
   }

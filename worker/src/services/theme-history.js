@@ -1,27 +1,11 @@
+import '../../../public/theme-catalog.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { finite, jstDate, nowIso, parseJson, round } from '../utils.js';
 
 const MAX_HISTORY=90;
-const THEME_BUCKETS=[
-  ['メモリ・ストレージ',['285A.T','MU','SNDK','WDC','STX']],
-  ['半導体装置',['8035.T','6857.T','6146.T','7735.T','6920.T','6525.T','6315.T','AMAT','LRCX','KLAC','ASML']],
-  ['AI半導体・ロジック',['NVDA','AVGO','AMD','TSM','ARM','MRVL','QCOM','CRDO','ALAB','6526.T','6723.T']],
-  ['半導体材料',['4063.T','3436.T','4004.T','4062.T','4183.T','6890.T']],
-  ['電線・AI物理',['5803.T','5801.T','5802.T','VRT','ETN','GEV']],
-  ['電力・原子力',['9501.T','9502.T','9503.T','CEG','VST','CCJ']],
-  ['ネットワーク・光',['ANET','CIEN','COHR','LITE']],
-  ['メガテック・AIソフト',['GOOGL','AMZN','META','MSFT','AAPL','ORCL','PLTR','NOW']],
-  ['防衛・重工',['7011.T','7012.T','7013.T','6503.T']],
-  ['金融',['8306.T','8316.T','8411.T','8766.T','HOOD']]
-].map(([name,symbols])=>[name,new Set(symbols)]);
-
-function themeName(row){
-  const symbol=String(row?.symbol||'').toUpperCase();
-  for(const [name,set] of THEME_BUCKETS)if(set.has(symbol))return name;
-  return row?.theme||'その他';
-}
+const themeName=globalThis.VantageThemes.themeName;
 function average(rows,key){
-  const xs=rows.map(x=>Number(x?.[key])).filter(Number.isFinite);
+  const xs=rows.map(x=>x?.[key]).filter(finite).map(Number);
   return xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;
 }
 function stats(rows=[]){
@@ -120,7 +104,7 @@ function macroRisk(jpStage,usStage){
 }
 export function buildThemeSnapshotFromStages(jpStage={},usStage={},date=jstDate()){
   const groups=new Map();
-  const add=(row,market)=>{const name=themeName(row);if(!groups.has(name))groups.set(name,{jp:[],us:[]});groups.get(name)[market].push(row);};
+  const add=(row,market)=>{const name=themeName(row);if(name==='未分類')return;if(!groups.has(name))groups.set(name,{jp:[],us:[]});groups.get(name)[market].push(row);};
   for(const row of stageRows(jpStage))add(row,'jp');
   for(const row of stageRows(usStage))add(row,'us');
   const themes={};

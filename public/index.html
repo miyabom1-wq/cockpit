@@ -397,7 +397,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.8.9</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.8.10</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -477,9 +477,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="./theme-catalog.js?build=v73.8.10"></script>
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.8.9-universe-finish-20260821';
+const FRONTEND_BUILD='vantage-ui73.8.10-review-complete-20260906';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
 document.documentElement.dataset.mobileLayout='v73.8.9-universe-finish';
@@ -521,12 +522,12 @@ const dateText=v=>{if(!v)return'—';const d=new Date(v);return Number.isNaN(d.g
 const dateOnly=v=>{if(!v)return'—';const s=String(v);if(/^\d{4}-\d{2}-\d{2}$/.test(s)){const [y,m,d]=s.split('-').map(Number);return `${m}/${d}`;}const x=new Date(v);return Number.isNaN(x.getTime())?'—':x.toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'});}
 function freshnessText(st){
  if(!st||!st.complete)return'更新待ち';const confirmed=st.kind==='confirmed'||String(st.freshness||'').includes('確定');
- const parts=[confirmed?'確定終値':'場中暫定'];const basis=st.trade_date||st.close_verification?.trade_date;if(basis)parts.push('基準 '+dateOnly(basis));
+ const parts=[st.is_stale?'更新遅延':confirmed?'確定終値':'場中暫定'];const basis=st.trade_date||st.close_verification?.trade_date;if(basis)parts.push('基準 '+dateOnly(basis));
  const time=st.price_time||st.updated_at;if(time)parts.push('更新 '+dateText(time));
  const cv=st.close_verification;if(confirmed&&cv)parts.push(Number(cv.ratio||0)>=90?'確認済み':'一部確認待ち');
  return parts.join(' · ');
 }
-function freshnessKind(st){if(!st||!st.complete)return'wait';const confirmed=st.kind==='confirmed'||String(st.freshness||'').includes('確定');const cv=st.close_verification;if(confirmed&&cv&&Number(cv.ratio||0)<90)return'warn';return confirmed?'good':'live';}
+function freshnessKind(st){if(!st||!st.complete)return'wait';if(st.is_stale)return'warn';const confirmed=st.kind==='confirmed'||String(st.freshness||'').includes('確定');const cv=st.close_verification;if(confirmed&&cv&&Number(cv.ratio||0)<90)return'warn';return confirmed?'good':'live';}
 function freshnessBadge(st,label=''){return `<span class="fresh-state ${freshnessKind(st)}"><i></i>${label?esc(label)+' ':''}${esc(freshnessText(st))}</span>`;}
 const quoteFinite=v=>v!=null&&Number.isFinite(Number(v));
 function quotePriceText(r,m=marketOf(r?.symbol)){
@@ -618,14 +619,14 @@ function writeHeaders(){
 }
 const PRIVATE_READ_PATHS=new Set([
  '/api/export','/api/watchlist','/api/positions','/api/discipline-state',
- '/api/events','/api/signal-log','/api/stocklist','/api/stock-analysis','/api/push/key'
+ '/api/events','/api/signal-log','/api/stocklist','/api/stock-analysis','/api/push/key','/api/universe'
 ]);
 async function api(path,opt={}){
  const options={...opt};
  if(options.body&&typeof options.body!=='string')options.body=JSON.stringify(options.body);
  const method=String(options.method||'GET').toUpperCase();
  const pathname=new URL(path,'https://vantage.local').pathname;
- const needsKey=Boolean(options.write||method!=='GET'||PRIVATE_READ_PATHS.has(pathname));
+ const needsKey=Boolean(localStorage.getItem('vantage_write_key'));
  if(needsKey){
   const key=localStorage.getItem('vantage_write_key');
   if(key)options.headers={'X-Vantage-Key':key,...(options.headers||{})};
@@ -734,19 +735,7 @@ function loadManageView(){
  return loadWatch();
 }
 
-const THEME_BUCKETS=[
- ['メモリ・ストレージ',['285A.T','MU','SNDK','WDC','STX']],
- ['半導体装置',['8035.T','6857.T','6146.T','7735.T','6920.T','6525.T','6315.T','AMAT','LRCX','KLAC','ASML']],
- ['AI半導体・ロジック',['NVDA','AVGO','AMD','TSM','ARM','MRVL','QCOM','CRDO','ALAB','6526.T','6723.T']],
- ['半導体材料',['4063.T','3436.T','4004.T','4062.T','4183.T','6890.T']],
- ['電線・AI物理',['5803.T','5801.T','5802.T','VRT','ETN','GEV']],
- ['電力・原子力',['9501.T','9502.T','9503.T','CEG','VST','CCJ']],
- ['ネットワーク・光',['ANET','CIEN','COHR','LITE']],
- ['メガテック・AIソフト',['GOOGL','AMZN','META','MSFT','AAPL','ORCL','PLTR','NOW']],
- ['防衛・重工',['7011.T','7012.T','7013.T','6503.T']],
- ['金融',['8306.T','8316.T','8411.T','8766.T','HOOD']]
-].map(([name,symbols])=>[name,new Set(symbols)]);
-function themeName(r){const s=String(r?.symbol||'').toUpperCase();for(const [name,set] of THEME_BUCKETS)if(set.has(s))return name;return r?.theme||'その他'}
+function themeName(r){return globalThis.VantageThemes.themeName(r)}
 function average(rows,key){const xs=rows.map(x=>Number(x?.[key])).filter(Number.isFinite);return xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null}
 function themeStats(rows){
  const n=rows.length;if(!n)return null;const count=k=>rows.filter(x=>x.entry_lane===k).length,a=count('A'),b=count('B'),c=count('C'),e=count('E');
@@ -855,7 +844,7 @@ function themeGroupsForScope(scope){
  for(const r of state.momentum.us?.rows||[])add(r,'us');
 
  return[...groups.values()]
-  .filter(g=>scope==='global'||(g[scope]||[]).length>0)
+  .filter(g=>g.name!=='未分類'&&(scope==='global'||(g[scope]||[]).length>0))
   .map(g=>{
    const canonical=balancedThemePhase(g.jp,g.us);
    if(scope==='global')return{...g,phase:canonical};
@@ -1052,8 +1041,8 @@ function todayEventHorizon(e){
  return days+'日';
 }
 function todayMacroPriceText(key,x){
- const p=Number(x?.price);if(!Number.isFinite(p))return'—';
- if(key==='米10年債')return (p/10).toFixed(2)+'%';
+ if(!quoteFinite(x?.price))return'—';const p=Number(x.price);
+ if(key==='米10年債')return p.toFixed(2)+'%';
  if(key==='ドル円')return p.toLocaleString('ja-JP',{minimumFractionDigits:2,maximumFractionDigits:2});
  if(key==='VIX')return p.toFixed(2);
  const digits=Math.abs(p)>=10000?0:Math.abs(p)>=1000?1:2;
@@ -1237,6 +1226,7 @@ function rankMoveLabel(it){
 function renderRanking(d,m){
  const st=state.stage[m]||{},stageTrade=st.close_verification?.trade_date||jstDateKey(st.updated_at),rankTrade=d.ranking_trade_date||jstDateKey(d.ranking_updated_at||d.updated_at);
  let html='<div class="toolbar"><button class="small" onclick="loadRanking(true)">元ランキングを再取得</button>'+(m==='jp'?'<button class="small primary" onclick="setThemeView(\'discover\')">追加候補を見る</button>':'')+'</div>';
+ if(d.cache_warning||d.is_stale)html+=`<div class="status-error">ランキング更新待ち。前回取得分を表示しています。${esc(d.cache_warning||'')}</div>`;
  if(stageTrade&&rankTrade&&stageTrade!==rankTrade)html+=`<div class="note">ランキング基準日 ${esc(rankTrade)} / 分析基準日 ${esc(stageTrade)}。場中や休場日は前営業日のランキングを参考表示します。再取得ボタンは元ランキング自体を更新します。</div>`;
  html+=`<div class="note">売買代金上位${d.ranking_count||100}銘柄を取得し、画面には上位50を表示。順位変化は履歴${d.history_days||0}日分から計算します。</div>`;
  html+=(d.items||[]).slice(0,50).map(it=>`<div class="rank-row" onclick="openChart('${attr(it.symbol)}')"><div class="rank-head"><span class="rank-no">${it.rank}</span>${rankMoveLabel(it)}<span class="name grow1">${esc(it.name)}</span><span class="code">${esc(code(it.symbol))}</span>${it.registered?'<span class="badge">登録済</span>':`<button class="small primary" onclick="event.stopPropagation();registerStock('${attr(it.symbol)}','${attr(it.name)}','${m}')">＋</button>`}</div>${quoteHtml(it,m)}<div class="meta">${marginBadgeHtml(it)}<span>売買代金 ${turnoverText(it.value,m)}</span><span>${esc(it.stage||'未分析')}</span>${it.vol_ratio!=null?`<span>出来高 ${num(it.vol_ratio)}x</span>`:''}${it.div25!=null?`<span>25MA ${pct(it.div25)}</span>`:''}${it.ret5!=null?`<span>5日 ${pct(it.ret5)}</span>`:''}${it.rsi!=null?`<span>RSI ${it.rsi}</span>`:''}</div></div>`).join('');
@@ -1469,7 +1459,7 @@ async function copyAI(btn){
   out.push('\n## 世界横断テーマ段階（日米50:50・母数補正）');
   const globalGroups=new Map(),put=(r,m)=>{const name=themeName(r);if(!globalGroups.has(name))globalGroups.set(name,{jp:[],us:[]});globalGroups.get(name)[m].push(r)};
   for(const r of mjp.rows||[])put(r,'jp');for(const r of mus.rows||[])put(r,'us');
-  const ranked=[...globalGroups].map(([name,g])=>({name,phase:balancedThemePhase(g.jp,g.us)})).sort((a,b)=>themePriority(a.phase.code)-themePriority(b.phase.code)||(b.phase.rs5??-99)-(a.phase.rs5??-99)).slice(0,8);
+  const ranked=[...globalGroups].filter(([name])=>name!=='未分類').map(([name,g])=>({name,phase:balancedThemePhase(g.jp,g.us)})).sort((a,b)=>themePriority(a.phase.code)-themePriority(b.phase.code)||(b.phase.rs5??-99)-(a.phase.rs5??-99)).slice(0,8);
   for(const x of ranked)out.push(`- ${x.name}: ${x.phase.label} / 市場差RS5 ${pct(x.phase.rs5)} / 市場差RS20 ${pct(x.phase.rs20)} / 伝播 ${x.phase.propagation} / 確度 ${x.phase.confidence||0}% / JP ${x.phase.jp?.n||0}・US ${x.phase.us?.n||0}`);
   const heldSymbols=new Set((pos.positions||[]).map(p=>String(p.symbol).toUpperCase()));
   out.push('\n## 保有☑');if(!(pos.positions||[]).length)out.push('- なし');for(const p of pos.positions||[])out.push(`- ${p.name||p.symbol}(${p.symbol})`);
@@ -1740,10 +1730,13 @@ async function checkSystemStatus(){
   const u=uni?.config||{},proposal=uni?.proposal||{};
   const uniText=u.mode==='guarded_auto'?'週次・安全自動':u.mode==='proposal'?'提案のみ':'停止';
   const scheduler=health.scheduler||{};
-  const cronAlive=scheduler.alive!==false;
+  const cronAlive=scheduler.alive===true;
+  const failures=Object.entries(scheduler.node_errors||{});
+  const datasetLabels={ranking_jp:'日本ランキング',ranking_us:'米国ランキング',earnings_jp:'日本決算日程',earnings_us:'米国決算日程',margin:'信用需給'};
+  const datasetCards=Object.entries(health.datasets||{}).map(([key,d])=>statusCard(datasetLabels[key]||key,d.last_error?'更新失敗・前回分を表示':!d.available?'取得待ち':d.stale?'更新待ち':'取得済み',`基準 ${d.trade_date||'—'} / 更新 ${dateText(d.updated_at)}${d.last_error?' / '+d.last_error:''}`,d.last_error||d.stale||!d.available?'warn':'good')).join('');
   const cronText=scheduler.last_cron_at?`最終 ${dateText(scheduler.last_cron_at)}・${scheduler.age_minutes??'—'}分前`:'実行記録待ち';
   const cronDetail=scheduler.last_error?`最終エラー ${scheduler.last_error}`:`成功 ${scheduler.counters?.successes||0}・再試行 ${scheduler.counters?.retries||0}`;
-  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'}`,'good')}${statusCard('自動更新',cronAlive?'稼働中':'停止を検知',`${cronText} / ${cronDetail}`,cronAlive?'good':'bad')}${statusCard('日本株',freshnessText(jp),`確定率 ${jp.close_verification?.ratio??0}%`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`確定率 ${us.close_verification?.ratio??0}%`,freshnessKind(us))}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line"><b>自動回復：</b>失敗したバッチだけを再試行し、後続バッチは停止しません。日本株は夜間、米国株は引け後午前中まで未完了分を回収します。</div>`;
+  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'} / 作成 ${dateText(health.build_time)} / ${String(health.source_commit||'未記録').slice(0,8)}`,'good')}${statusCard('自動更新',cronAlive?(failures.length?'稼働中・未解決 '+failures.length+'件':'稼働中'):'実行記録を確認',`${cronText} / ${cronDetail}`,cronAlive?(failures.length?'warn':'good'):'bad')}${statusCard('日本株',freshnessText(jp),`確定率 ${jp.close_verification?.ratio??0}%`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`確定率 ${us.close_verification?.ratio??0}%`,freshnessKind(us))}${datasetCards}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line">${failures.map(([key,e])=>`<div>${esc(key)} · ${esc(dateText(e.at))} · ${esc(e.error||'再試行待ち')}</div>`).join('')}<b>自動回復：</b>失敗したバッチだけを再試行し、後続バッチは停止しません。日本株は夜間、米国株は引け後午前中まで未完了分を回収します。</div>`;
  }catch(e){
   root.innerHTML=`<div class="status-error">接続確認に失敗しました。${esc(e.message)}</div>`;
  }
@@ -1776,9 +1769,14 @@ async function recalcStage(){
 async function openStockEditor(){
  try{const d=await api('/api/stocklist?market='+state.market);$('modal-title').textContent='銘柄編集 '+d.count+'/'+d.max;
  const tierLabel=x=>x.focus_tier==='core'?'コア':x.focus_tier==='radar'?'レーダー':x.focus_tier==='lead'?'リード':'保管';
- $('modal-body').innerHTML=`<div class="note">日本は先頭80銘柄がコア、81〜160銘柄がレーダー。米国は先頭40銘柄だけを海外リードとして自動更新します。昇格すると境界の最後の銘柄が自動で下位枠へ移ります。</div><div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map((x,i)=>{const upper=x.focus_tier==='core'||x.focus_tier==='lead';const moveLabel=upper?(state.market==='jp'?'レーダーへ':'保管へ'):(state.market==='jp'?'コアへ':'リードへ');const act=upper?'demote':'promote';return `<div class="row"><span class="tier-badge">${tierLabel(x)}</span><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span><div class="meta"><span>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加':'既存'}</span>${x.pinned?'<span class="pin-state">固定</span>':''}</div></div><button class="small" onclick="pinStock('${attr(x.symbol)}',${!x.pinned})">${x.pinned?'固定解除':'固定'}</button><button class="small" onclick="moveStock('${attr(x.symbol)}','${act}')">${moveLabel}</button><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`}).join('')}</div>`;}catch(e){toast(e.message)}
+ $('modal-body').innerHTML=`<div class="note">「未分類」の銘柄はテーマ集計から除外されます。各銘柄のテーマ名を押すと分類を指定できます。日本は先頭80銘柄がコア、81〜160銘柄がレーダー。米国は先頭40銘柄だけを海外リードとして自動更新します。昇格すると境界の最後の銘柄が自動で下位枠へ移ります。</div><div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map((x,i)=>{const upper=x.focus_tier==='core'||x.focus_tier==='lead';const moveLabel=upper?(state.market==='jp'?'レーダーへ':'保管へ'):(state.market==='jp'?'コアへ':'リードへ');const act=upper?'demote':'promote';return `<div class="row"><span class="tier-badge">${tierLabel(x)}</span><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span><div class="meta"><span>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加':'既存'}</span>${x.pinned?'<span class="pin-state">固定</span>':''}</div></div><button class="small" onclick="editStockTheme('${attr(x.symbol)}')">${esc(themeName(x))}</button><button class="small" onclick="pinStock('${attr(x.symbol)}',${!x.pinned})">${x.pinned?'固定解除':'固定'}</button><button class="small" onclick="moveStock('${attr(x.symbol)}','${act}')">${moveLabel}</button><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`}).join('')}</div>`;}catch(e){toast(e.message)}
 }
 async function addStock(){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'add',symbol:$('sl-symbol').value,name:$('sl-name').value}});openStockEditor()}catch(e){toast(e.message)}}
+async function editStockTheme(symbol){
+ const d=await api('/api/stocklist?market='+state.market),item=(d.list||[]).find(x=>x.symbol===symbol);
+ const value=prompt(symbol+' のテーマ（空欄で自動分類に戻す）\n候補: '+globalThis.VantageThemes.names.join('、'),item?.theme_override||'');if(value===null)return;
+ try{const result=await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'theme',symbol,theme:value}});if(!result.ok)throw Error(result.error);state.themeContext={};state.momentum={};toast('テーマを保存しました');await openStockEditor()}catch(e){toast(e.message)}
+}
 async function pinStock(symbol,pinned){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'pin',symbol,pinned}});toast(pinned?'自動削除から保護しました':'固定を解除しました');openStockEditor()}catch(e){toast(e.message)}}
 async function moveStock(symbol,action){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action,symbol}});toast(action==='promote'?'上位枠へ移動':'下位枠へ移動');openStockEditor()}catch(e){toast(e.message)}}
 async function deleteStock(symbol){if(!confirm(symbol+'を削除しますか？'))return;try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'delete',symbol}});openStockEditor()}catch(e){toast(e.message)}}
@@ -2041,7 +2039,7 @@ window.openSettings=async function(){
   <div class="v52-settings-card"><h3>登録銘柄</h3><p>VANTAGEが日々分析している日本株・米国株の一覧です。</p><div class="actions"><button class="primary" onclick="openRegisteredStocks()">登録銘柄一覧</button><button onclick="closeModal();openStockEditor()">追加・固定・削除</button></div></div>
   <div class="v52-settings-card"><h3>信用需給</h3><p>週次信用残、日々公表、特別周知、信用規制をまとめて確認します。</p><div class="actions"><button onclick="openMarginDashboard()">信用需給を開く</button></div></div>
   <div class="v52-settings-card"><h3>通知</h3><p>対応端末ではプッシュ通知を有効化できます。</p><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト通知</button></div></div>
-  <div class="v52-settings-card"><h3>書き込みキー</h3><p>更新操作と、保有・ウォッチなどの非公開情報をAIコピーへ含める際に使用します。キーがなくても市場データのAIコピーは動作します。</p><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="書き込みキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></div>
+  <div class="v52-settings-card"><h3>アクセスキー</h3><p>保有・ウォッチ・登録銘柄などの個人情報の閲覧と更新に使用します。設定済みのキーは引き続き使えます。未設定の端末ではここに保存してください。キーがなくても市場データのAIコピーは動作します。</p><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="アクセスキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></div>
   <div class="v52-settings-card settings-wide"><div class="settings-head"><div><h3>システム状態</h3><p>バックエンド、日米データ、登録銘柄管理の状態を確認します。</p></div><button onclick="checkSystemStatus()">再確認</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>
  </div>`;
  openModal();
@@ -2197,11 +2195,11 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.8.9"></script>
-<script src="./reliability-sync.js?build=v73.8.9"></script>
-<script src="./event-resilience.js?build=v73.8.9"></script>
-<script src="./navigation.js?build=v73.8.9"></script>
-<script src="./events-ui.js?build=v73.8.9"></script>
+<script src="./frame-sync.js?build=v73.8.10"></script>
+<script src="./reliability-sync.js?build=v73.8.10"></script>
+<script src="./event-resilience.js?build=v73.8.10"></script>
+<script src="./navigation.js?build=v73.8.10"></script>
+<script src="./events-ui.js?build=v73.8.10"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

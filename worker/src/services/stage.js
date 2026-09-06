@@ -1,3 +1,4 @@
+import { expectedConfirmedTradingDate } from '../data/calendar.js';
 import { LIMITS, MARKET_INDICES, ENGINE_VERSION, BUILD_ID, themeOf } from '../config.js';
 import { fetchYahooChart } from '../data/yahoo.js';
 import { normalizeYahooDaily } from '../data/normalization.js';
@@ -75,7 +76,7 @@ async function analyzeOne(symbol,name,market,benchMap,secondaryBenchMap,opts){
     const p=prepareSeries(norm.rows),i=p.rows.length-1;
     const quoteNow=norm.meta.regular_market_time?new Date(norm.meta.regular_market_time*1000):new Date(),curve=opts.kind==='intraday'?marketVolumeCurveFraction(market,quoteNow):1,confirmed=confirmedByProvider(market,norm.meta,opts.tradeDate,opts.kind);
     const a=analyzePreparedAt(p,i,{symbol,name,market,benchmarkMap:benchMap,secondaryBenchmarkMap:secondaryBenchMap,expectedDate:opts.tradeDate,closeConfirmed:confirmed,requireCloseConfirmed:opts.kind==='confirmed',snapshotId:opts.snapshotId,source:'Yahoo Finance',context:{},volumeCurveFraction:curve,volumeCurveLabel:'市場共通U字カーブ（場中暫定）'});
-    if(a){a.price_time=norm.meta.regular_market_time?new Date(norm.meta.regular_market_time*1000).toISOString():null;a.market_state=norm.meta.market_state;a.provider_symbol=providerSymbol||symbol;a.focus_tier=opts.focusTier;a.source_adjustment=norm.meta.source_adjustment;if(a.audit?.data)a.audit.data.provider_symbol=a.provider_symbol;}
+    if(a){a.theme_override=opts.themeOverride||null;a.theme=globalThis.VantageThemes.themeName(a);a.price_time=norm.meta.regular_market_time?new Date(norm.meta.regular_market_time*1000).toISOString():null;a.market_state=norm.meta.market_state;a.provider_symbol=providerSymbol||symbol;a.focus_tier=opts.focusTier;a.source_adjustment=norm.meta.source_adjustment;if(a.audit?.data)a.audit.data.provider_symbol=a.provider_symbol;}
     return a;
   }catch(e){return{symbol,name,market,focus_tier:opts.focusTier,entry_lane:'D',entry_label:'データ取得失敗',entry_quality:'invalid',data_quality:{data_valid:false,stale:true,reasons:[e?.message||String(e)],expected_trade_date:opts.tradeDate,close_confirmed:false,snapshot_id:opts.snapshotId},audit:{data:{quality:{data_valid:false,reasons:[e?.message||String(e)]},snapshot_id:opts.snapshotId,engine:ENGINE_VERSION}}};}
 }
@@ -83,7 +84,7 @@ function deriveContext(stocks,ranking,market){
   const rsValues=stocks.map(x=>x.rs5),rankMap=new Map((ranking?.items||[]).map(x=>[x.symbol,x.rank]));
   const themeGroups=new Map();for(const s of stocks){const t=s.theme||themeOf(s.symbol);if(!themeGroups.has(t))themeGroups.set(t,[]);themeGroups.get(t).push(s);}
   for(const s of stocks){
-    const peers=(themeGroups.get(s.theme)||[]).filter(x=>x.symbol!==s.symbol&&finite(x.rs5)),themeRs=peers.length?peers.reduce((a,b)=>a+Number(b.rs5),0)/peers.length:null;
+    const peers=(s.theme==='未分類'?[]:themeGroups.get(s.theme)||[]).filter(x=>x.symbol!==s.symbol&&finite(x.rs5)),themeRs=peers.length?peers.reduce((a,b)=>a+Number(b.rs5),0)/peers.length:null;
     const context={turnover_rank:rankMap.get(s.symbol)||null,rs_percentile:percentile(s.rs5,rsValues),theme_rs:finite(themeRs)?round(themeRs):null,theme_peer_count:peers.length};
     const c=classifyCandidate(s,context);s.entry_lane=c.lane;s.entry_label=c.label;s.entry_quality=c.quality;s.entry_reason=c.reasons;s.risk_reason=c.risks;s.rs_percentile=context.rs_percentile;s.turnover_rank=context.turnover_rank;s.theme_rs=context.theme_rs;s.theme_peer_count=context.theme_peer_count;
     if(s.audit){s.audit.candidate={lane:c.lane,label:c.label,quality:c.quality,conditions:c.conditions,reasons:c.reasons,risks:c.risks};s.audit.relative_strength={market_rs5:s.rs5,market_rs20:s.rs20,secondary_rs5:s.secondary_rs5,secondary_rs20:s.secondary_rs20,secondary_name:market==='jp'?'TOPIX':'Nasdaq',registered_percentile:s.rs_percentile,theme_ex_self:s.theme_rs,theme_peer_count:s.theme_peer_count,turnover_rank:s.turnover_rank};}
@@ -189,7 +190,7 @@ export async function runStageBatch(env,batchKey,options={}){
 
   const slice=list.slice((part-1)*LIMITS.batchSize,part*LIMITS.batchSize);
   const benchmark=await getBenchmark(env,market,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
-  const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
+  const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,themeOverride:it.theme_override,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
 
   const freshness=batchFreshnessRatios(stocks,tradeDate);
   const sessionFloor=Number(options.minSessionRatio);
@@ -235,7 +236,10 @@ export async function runStageBatch(env,batchKey,options={}){
 export async function getStage(env,market){
   const m=market==='us'?'us':'jp',stage=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m)),{market:m,complete:false,stocks:{},macro:{},focus_counts:{}}),other=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m==='jp'?'us':'jp')),{macro:{}}),canonical=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}});
   const macro=mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{}),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{},rows=Object.values(stocks);if(m==='jp')await enrichRowsWithMargin(env,rows);applyRiskGate(rows,riskGate);
-  return{...stage,market:m,macro,risk_gate:riskGate,stocks};
+  const list=parseJson(await env.COCKPIT_KV.get(KEYS.stocklist(m)),[]),bySymbol=new Map((Array.isArray(list)?list:[]).map(x=>[x.symbol,x]));
+  for(const row of rows){row.theme_override=bySymbol.get(row.symbol)?.theme_override||null;row.theme=globalThis.VantageThemes.themeName(row);}
+  const expected_trade_date=expectedConfirmedTradingDate(m);
+  return{...stage,market:m,macro,risk_gate:riskGate,stocks,expected_trade_date,is_stale:!stage.trade_date||stage.trade_date<expected_trade_date};
 }
 export async function getMomentum(env,market){
   const m=market==='us'?'us':'jp',stored=parseJson(await env.COCKPIT_KV.get(KEYS.momentum(m)),{ready:false,market:m,rows:[],board:[]}),stage=await getStage(env,m);
@@ -253,7 +257,7 @@ export async function analyzeSymbolsNow(env,items,market,{label='WATCH',cacheTtl
   const m=market==='us'?'us':'jp',list=(items||[]).filter(x=>x?.symbol),date=expectedDateFor(m),kind=modeNow(m),id=snapshotId(m,date,kind,`${label}-${stableHash(list.map(x=>x.symbol).join('|')+Date.now())}`);
   if(!list.length)return{market:m,date,kind,snapshot_id:id,items:[]};
   const benchmark=await getBenchmark(env,m,id),benchMap=benchmarkValues(benchmark.rows),secondaryBenchMap=benchmarkValues(benchmark.secondary_rows||[]);
-  const rows=await Promise.all(list.map((it,idx)=>analyzeOne(it.symbol,it.name||it.symbol,m,benchMap,secondaryBenchMap,{kind,tradeDate:date,snapshotId:id,focusTier:it.focus_tier||'watch',cacheTtl,sequence:idx})));if(m==='jp')await enrichRowsWithMargin(env,rows);
+  const rows=await Promise.all(list.map((it,idx)=>analyzeOne(it.symbol,it.name||it.symbol,m,benchMap,secondaryBenchMap,{kind,tradeDate:date,snapshotId:id,themeOverride:it.theme_override,focusTier:it.focus_tier||'watch',cacheTtl,sequence:idx})));if(m==='jp')await enrichRowsWithMargin(env,rows);
   return{market:m,date,kind,snapshot_id:id,items:rows};
 }
 export async function analyzeSymbolNow(env,symbol,name,market){

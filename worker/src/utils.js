@@ -1,4 +1,4 @@
-export const finite = v => Number.isFinite(Number(v));
+export const finite = v => (typeof v === 'number' || (typeof v === 'string' && v.trim() !== '')) && Number.isFinite(Number(v));
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, Number(v)));
 export function round(v, digits = 2) {
   if (!finite(v)) return null;

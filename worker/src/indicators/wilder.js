@@ -2,7 +2,7 @@ import { finite } from '../utils.js';
 export function wilderRma(values, period) {
   const out=Array(values.length).fill(null);let seed=[],prev=null;
   for(let i=0;i<values.length;i++){
-    if(!finite(values[i]))continue;const v=Number(values[i]);
+    if(!finite(values[i])){seed=[];prev=null;continue;}const v=Number(values[i]);
     if(prev==null){seed.push(v);if(seed.length===period){prev=seed.reduce((a,b)=>a+b,0)/period;out[i]=prev;}}
     else{prev=(prev*(period-1)+v)/period;out[i]=prev;}
   }
@@ -17,14 +17,14 @@ export function rsiWilder(closes, period=14) {
   const ag=wilderRma(gains,period),al=wilderRma(losses,period),out=Array(closes.length).fill(null);
   for(let i=0;i<closes.length;i++){
     if(!finite(ag[i])||!finite(al[i]))continue;
-    if(Number(al[i])===0)out[i]=100;else{const rs=Number(ag[i])/Number(al[i]);out[i]=100-100/(1+rs);}
+    if(Number(al[i])===0)out[i]=Number(ag[i])===0?50:100;else{const rs=Number(ag[i])/Number(al[i]);out[i]=100-100/(1+rs);}
   }
   return out;
 }
 export function atrWilder(rows, period=14) {
   const tr=Array(rows.length).fill(null);
   for(let i=0;i<rows.length;i++){
-    const r=rows[i];if(!r)continue;
+    const r=rows[i];if(!r||![r.high,r.low,r.close].every(finite))continue;
     if(i===0||!finite(rows[i-1]?.close))tr[i]=Number(r.high)-Number(r.low);
     else tr[i]=Math.max(Number(r.high)-Number(r.low),Math.abs(Number(r.high)-Number(rows[i-1].close)),Math.abs(Number(r.low)-Number(rows[i-1].close)));
   }

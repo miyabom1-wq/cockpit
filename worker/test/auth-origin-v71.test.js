@@ -4,34 +4,34 @@ import { authorized, requiresAuthorization } from '../src/api/http.js';
 
 const env={WRITE_TOKEN:'rotated-secret'};
 
-test('official frontend can read private panels after token rotation',()=>{
+test('official frontend cannot bypass private panel authentication after token rotation',()=>{
   const req=new Request('https://cockpit-backend.miyab.workers.dev/api/watchlist',{
     headers:{Origin:'https://miyabom1-wq.github.io'}
   });
   assert.equal(requiresAuthorization(req,new URL(req.url)),true);
-  assert.equal(authorized(req,env),true);
+  assert.equal(authorized(req,env),false);
 });
 
-test('same-origin Worker frontend can read private panels after token rotation',()=>{
+test('same-origin Worker frontend cannot bypass private panel authentication after token rotation',()=>{
   const req=new Request('https://cockpit-backend.miyab.workers.dev/api/positions',{
     headers:{Origin:'https://cockpit-backend.miyab.workers.dev'}
   });
-  assert.equal(authorized(req,env),true);
+  assert.equal(authorized(req,env),false);
 });
 
 
-test('installed same-origin PWA can read private panels when Origin is omitted',()=>{
+test('installed same-origin PWA cannot bypass private panel authentication when Origin is omitted',()=>{
   const req=new Request('https://cockpit-backend.miyab.workers.dev/api/watchlist',{
     headers:{'Sec-Fetch-Site':'same-origin'}
   });
-  assert.equal(authorized(req,env),true);
+  assert.equal(authorized(req,env),false);
 });
 
-test('same-origin referer fallback can read private panels when Origin is omitted',()=>{
+test('same-origin referer fallback cannot bypass private panel authentication when Origin is omitted',()=>{
   const req=new Request('https://cockpit-backend.miyab.workers.dev/api/positions',{
     headers:{Referer:'https://cockpit-backend.miyab.workers.dev/'}
   });
-  assert.equal(authorized(req,env),true);
+  assert.equal(authorized(req,env),false);
 });
 
 test('write operations still require the token',()=>{

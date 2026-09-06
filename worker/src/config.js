@@ -1,9 +1,12 @@
-export const APP_VERSION = 'v71.0.0';
-export const BUILD_ID = '20260731-unified-worker-assets-origin-access';
+import '../../public/theme-catalog.js';
+export const APP_VERSION = 'v73.8.10';
+export const SOURCE_COMMIT = typeof __VANTAGE_SOURCE_COMMIT__==='string'?__VANTAGE_SOURCE_COMMIT__:'local-unbuilt';
+export const BUILD_TIME = typeof __VANTAGE_BUILD_TIME__==='string'?__VANTAGE_BUILD_TIME__:null;
+export const BUILD_ID = SOURCE_COMMIT;
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
-export const ENGINE_VERSION = 'engine-v51.0.0';
-export const BACKTEST_VERSION = 'registered-bt-v8-simulation-safe';
-export const DEPLOYED_AT = '2026-07-31T01:30:00.000+09:00';
+export const ENGINE_VERSION = 'engine-v52-null-safe';
+export const BACKTEST_VERSION = 'registered-bt-v9-null-safe';
+export const DEPLOYED_AT = BUILD_TIME;
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 
 export const LIMITS = Object.freeze({
@@ -59,18 +62,4 @@ export const MARKET_INDICES = Object.freeze({
   }
 });
 
-const THEMES = {
-  '285A.T':'半導体','8035.T':'半導体','6857.T':'半導体','6146.T':'半導体','7735.T':'半導体','6920.T':'半導体','6525.T':'半導体','6315.T':'半導体','3436.T':'半導体','6890.T':'半導体','6526.T':'半導体','6723.T':'半導体','6963.T':'半導体',
-  '4063.T':'半導体材料','4004.T':'半導体材料','4062.T':'半導体材料','4183.T':'半導体材料','5016.T':'非鉄・素材','5401.T':'鉄鋼',
-  '6981.T':'電子部品','6976.T':'電子部品','6762.T':'電子部品','6971.T':'電子部品','6594.T':'電子部品','6965.T':'電子部品',
-  '5803.T':'電線・AI物理','5801.T':'電線・AI物理','5802.T':'電線・AI物理','9984.T':'ハイテク・IT','6702.T':'ハイテク・IT','6701.T':'ハイテク・IT','3697.T':'ハイテク・IT',
-  '6954.T':'FA・機械','6506.T':'FA・機械','6861.T':'FA・機械','6273.T':'FA・機械','6324.T':'FA・機械','6645.T':'FA・機械',
-  '7011.T':'防衛・重工','7012.T':'防衛・重工','7013.T':'防衛・重工','6503.T':'防衛・重工',
-  '8058.T':'商社','8031.T':'商社','8001.T':'商社','8002.T':'商社','8053.T':'商社',
-  '8306.T':'金融','8316.T':'金融','8411.T':'金融','8766.T':'金融','9501.T':'電力','9503.T':'電力','9502.T':'電力',
-  '7203.T':'自動車','7267.T':'自動車','7201.T':'自動車','6902.T':'自動車','7974.T':'消費・娯楽','6758.T':'消費・娯楽','8136.T':'消費・娯楽','7832.T':'消費・娯楽','9227.T':'素材・化学',
-  'NVDA':'半導体','AVGO':'半導体','AMD':'半導体','TSM':'半導体','ARM':'半導体','MRVL':'半導体','QCOM':'半導体','MU':'半導体','SNDK':'半導体','AMAT':'半導体','LRCX':'半導体','KLAC':'半導体','ASML':'半導体',
-  'ANET':'ネットワーク','CIEN':'ネットワーク','COHR':'光通信','LITE':'光通信','VRT':'電力・AI物理','ETN':'電力・AI物理','GEV':'電力・AI物理','CEG':'電力','VST':'電力','CCJ':'原子力',
-  'GOOGL':'メガテック','AMZN':'メガテック','META':'メガテック','MSFT':'メガテック','AAPL':'メガテック','ORCL':'メガテック','PLTR':'AIソフト','NOW':'AIソフト','COIN':'暗号資産','HOOD':'金融','MSTR':'暗号資産'
-};
-export const themeOf = symbol => THEMES[String(symbol || '').toUpperCase()] || 'その他';
+export const themeOf = symbol => globalThis.VantageThemes.themeName({symbol});

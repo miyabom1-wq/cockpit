@@ -1,10 +1,14 @@
 name = "vantage-radar"
-main = "src/index.js"
+main = ".wrangler/release/index.js"
+no_bundle = true
 compatibility_date = "2026-07-01"
 
 kv_namespaces = [
   { binding = "COCKPIT_KV", id = "07e6a19d770f45a9b490491d34675d36" }
 ]
+
+[build]
+command = "node scripts/build.mjs"
 
 [triggers]
 crons = ["*/5 * * * *"]

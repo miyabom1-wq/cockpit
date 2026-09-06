@@ -13,7 +13,7 @@ test('Worker deployment includes the VANTAGE frontend as static assets',()=>{
   assert.match(toml,/run_worker_first\s*=\s*\[\s*"\/api\/\*"\s*\]/);
   const html=fs.readFileSync(path.resolve(workerRoot,'../public/index.html'),'utf8');
   assert.match(html,/UI v73/);
-  assert.match(html,/vantage-ui73\.8\.9-universe-finish-20260821/);
+  assert.match(html,/vantage-ui73\.8\.10-review-complete-20260906/);
   assert.match(html,/themeClassifier='v73-e-split'/);
   assert.doesNotMatch(html,/theme-fixes-v72\.js/);
   assert.doesNotMatch(html,/event-coverage-v56\.js|event-official-v57\.js|event-mobile-v58\.js/);
