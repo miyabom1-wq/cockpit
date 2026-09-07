@@ -1,7 +1,7 @@
 {
-  "frontend_build": "vantage-ui73.8.11-watch-access-20260906",
-  "ui_version": "v73.8.11",
-  "backend_required": "v73.8.11",
+  "frontend_build": "vantage-ui73.8.12-close-cadence-20260907",
+  "ui_version": "v73.8.12",
+  "backend_required": "v73.8.12",
   "generated_at": "2026-09-06T12:17:25.381Z",
   "network_mode": "cloudflare-worker-static-assets",
   "load_mode": "same-origin-worker-and-assets",

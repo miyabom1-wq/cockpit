@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.11-watch-access-20260906';
+const BUILD='vantage-ui73.8.12-close-cadence-20260907';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

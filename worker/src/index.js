@@ -27,9 +27,12 @@ import {
   recordSchedulerFailure
 } from './services/system-health.js';
 
-const SCHEDULER_MARKER_VERSION='v73.8.11';
+const SCHEDULER_MARKER_VERSION='v73.8.12';
 const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
+// A close snapshot is divided into batches.  Completing three batches per
+// five-minute invocation keeps a 100+ symbol list from waiting half an hour.
+const CONFIRMED_STAGE_BATCHES_PER_CRON=3;
 
 async function initializeStorage(env){
   const current=await env.COCKPIT_KV.get(KEYS.schema);
@@ -172,6 +175,7 @@ export async function scheduledStage(env,now=new Date()){
   await recordCronHeartbeat(env,{minute,eligible:nodes.filter(n=>eligible(minute,n)).length});
 
   const runtimeParts={};
+  let confirmedStageBatches=0;
   const ordered=[...nodes].sort((a,b)=>nodePriority(a)-nodePriority(b)||a.at-b.at||a.key.localeCompare(b.key));
   for(const sourceNode of ordered){
     if(!eligible(minute,sourceNode))continue;
@@ -273,7 +277,11 @@ export async function scheduledStage(env,now=new Date()){
         committed:result.committed,
         batch_freshness:result.batch_freshness,
       });
-      return{processed:1,node:node.key,result};
+      if(node.kind==='confirmed'){
+        confirmedStageBatches++;
+        if(confirmedStageBatches<CONFIRMED_STAGE_BATCHES_PER_CRON)continue;
+      }
+      return{processed:confirmedStageBatches||1,node:node.key,result};
     }catch(error){
       console.error('[scheduled]',node.key,error?.stack||error);
       await env.COCKPIT_KV.put(cooldownKey(node),error?.message||String(error),{expirationTtl:RETRY_COOLDOWN_SECONDS});

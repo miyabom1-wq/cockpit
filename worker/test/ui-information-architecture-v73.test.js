@@ -19,7 +19,7 @@ test('three tabs keep distinct roles and Today shows schedule plus compact marke
   const body=html.slice(start,end);
   assert.match(body,/todayScheduleHtml\(m\)/);
   assert.match(html,/function todayScheduleHtml\(m\)/);
-  assert.match(html,/今日の予定/);
+  assert.match(html,/直近の予定/);
   assert.match(html,/24h/);
   assert.doesNotMatch(body,/A\/B候補|押し目監視|RSI過熱|需給警戒/);
   assert.match(body,/todayMacroHtml\(st\)/);

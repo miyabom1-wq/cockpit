@@ -1,5 +1,5 @@
 import '../../public/theme-catalog.js';
-export const APP_VERSION = 'v73.8.11';
+export const APP_VERSION = 'v73.8.12';
 export const SOURCE_COMMIT = typeof __VANTAGE_SOURCE_COMMIT__==='string'?__VANTAGE_SOURCE_COMMIT__:'local-unbuilt';
 export const BUILD_TIME = typeof __VANTAGE_BUILD_TIME__==='string'?__VANTAGE_BUILD_TIME__:null;
 export const BUILD_ID = SOURCE_COMMIT;

@@ -44,3 +44,26 @@ test('a stale first batch is cooled down so the next batch can proceed',async()=
     globalThis.fetch=old;
   }
 });
+
+test('confirmed close recovery completes three batches in one cron run',async()=>{
+  const rows=syntheticRows(300,'2026-07-30');
+  const old=globalThis.fetch;
+  globalThis.fetch=async request=>{
+    const url=new URL(String(request));
+    const symbol=decodeURIComponent(url.pathname.split('/').at(-1));
+    return new Response(JSON.stringify({
+      chart:{result:[yahooResult(rows,symbol)],error:null}
+    }),{status:200,headers:{'content-type':'application/json'}});
+  };
+
+  try{
+    const kv=new MockKV({'stocklist:jp':JSON.stringify(stockList(61))});
+    const result=await scheduledStage({COCKPIT_KV:kv},new Date('2026-07-30T09:35:00.000Z'));
+    assert.equal(result.processed,3);
+    assert.equal(result.node,'jp_1800_recovery:b3');
+    const completed=[...kv.map.keys()].filter(k=>k.includes('stage:working:')&&/part:[123]$/.test(k));
+    assert.equal(completed.length,3);
+  }finally{
+    globalThis.fetch=old;
+  }
+});
