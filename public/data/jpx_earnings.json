@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-04T12:47:09.790559Z",
+  "generated_at": "2026-09-07T14:18:59.228349Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
       "label": "",
-      "events": 224,
+      "events": 212,
       "bytes": 31665
     },
     {
@@ -17,150 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "6654.T",
-      "code": "6654",
-      "name": "不二電機工業",
-      "date": "2026-09-03",
-      "time": "2026-09-03T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "1873.T",
-      "code": "1873",
-      "name": "日本ハウスホールディングス",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2910.T",
-      "code": "2910",
-      "name": "ロック・フィールド",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3172.T",
-      "code": "3172",
-      "name": "ティーライフ",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3662.T",
-      "code": "3662",
-      "name": "エイチームホールディングス",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3816.T",
-      "code": "3816",
-      "name": "大和コンピューター",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4627.T",
-      "code": "4627",
-      "name": "ナトコ",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7265.T",
-      "code": "7265",
-      "name": "エイケン工業",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7279.T",
-      "code": "7279",
-      "name": "ハイレックスコーポレーション",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8917.T",
-      "code": "8917",
-      "name": "ファースト住建",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9678.T",
-      "code": "9678",
-      "name": "カナモト",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9824.T",
-      "code": "9824",
-      "name": "泉州電業",
-      "date": "2026-09-04",
-      "time": "2026-09-04T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "3854.T",
       "code": "3854",
@@ -7749,8 +7605,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 644,
-    "unique_future_events": 644,
+    "raw_rows": 632,
+    "unique_future_events": 632,
     "warnings": []
   }
 }
