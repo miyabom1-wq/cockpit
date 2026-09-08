@@ -2,7 +2,7 @@ name: Update JP Margin Supply Data
 
 on:
   schedule:
-    - cron: '50 9 * * 1-5' # 18:50 JST on weekdays
+    - cron: '37 7-12 * * 1-5' # 16:37-21:37 JST; retry after JPX publication and scheduler delays
   workflow_dispatch:
   push:
     branches: [main]
