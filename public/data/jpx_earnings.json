@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-08T12:55:24.922086Z",
+  "generated_at": "2026-09-09T13:01:08.201013Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
       "label": "",
-      "events": 212,
+      "events": 210,
       "bytes": 31665
     },
     {
@@ -17,30 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "3854.T",
-      "code": "3854",
-      "name": "アイル",
-      "date": "2026-09-07",
-      "time": "2026-09-07T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7856.T",
-      "code": "7856",
-      "name": "萩原工業",
-      "date": "2026-09-07",
-      "time": "2026-09-07T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "1436.T",
       "code": "1436",
@@ -7605,8 +7581,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 632,
-    "unique_future_events": 632,
+    "raw_rows": 630,
+    "unique_future_events": 630,
     "warnings": []
   }
 }
