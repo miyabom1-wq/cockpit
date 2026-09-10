@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-09T13:01:08.201013Z",
+  "generated_at": "2026-09-10T12:58:21.641676Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
       "label": "",
-      "events": 210,
+      "events": 202,
       "bytes": 31665
     },
     {
@@ -17,102 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "1436.T",
-      "code": "1436",
-      "name": "グリーンエナジー&カンパニー",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2438.T",
-      "code": "2438",
-      "name": "アスカネット",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3071.T",
-      "code": "3071",
-      "name": "ストリーム",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4238.T",
-      "code": "4238",
-      "name": "ミライアル",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4880.T",
-      "code": "4880",
-      "name": "セルソース",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2026-10-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7435.T",
-      "code": "7435",
-      "name": "ナ・デックス",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9632.T",
-      "code": "9632",
-      "name": "スバル興業",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9636.T",
-      "code": "9636",
-      "name": "きんえい",
-      "date": "2026-09-08",
-      "time": "2026-09-08T14:59:00.000Z",
-      "period": "2027-01-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "1433.T",
       "code": "1433",
@@ -7581,8 +7485,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 630,
-    "unique_future_events": 630,
+    "raw_rows": 622,
+    "unique_future_events": 622,
     "warnings": []
   }
 }
