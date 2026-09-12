@@ -1,140 +1,10 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-09-11T22:42:28.320644Z",
+  "generated_at": "2026-09-12T22:25:34.425645Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
   "events": [
-    {
-      "symbol": "CELU",
-      "name": "Celularity Inc.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$41,537,456"
-    },
-    {
-      "symbol": "CMCM",
-      "name": "Cheetah Mobile Inc.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$104,283,176"
-    },
-    {
-      "symbol": "ENLV",
-      "name": "Enlivex Ltd.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.31)",
-      "market_cap": "$17,147,992"
-    },
-    {
-      "symbol": "HOFT",
-      "name": "Hooker Furnishings Corporation",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "($0.02)",
-      "market_cap": "$134,968,832"
-    },
-    {
-      "symbol": "HTLM",
-      "name": "HomesToLife Ltd",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$159,643,744"
-    },
-    {
-      "symbol": "IHT",
-      "name": "InnSuites Hospitality Trust",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "",
-      "market_cap": "$12,599,798"
-    },
-    {
-      "symbol": "JVA",
-      "name": "Coffee Holding Co., Inc.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "",
-      "market_cap": "$19,580,496"
-    },
-    {
-      "symbol": "KR",
-      "name": "Kroger Company (The)",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "$1.05",
-      "market_cap": "$34,890,265,000"
-    },
-    {
-      "symbol": "LNAI",
-      "name": "Lunai Bioworks Inc.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$11,040,022"
-    },
-    {
-      "symbol": "MNY",
-      "name": "MoneyHero Limited",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.02)",
-      "market_cap": "$37,323,904"
-    },
-    {
-      "symbol": "NB",
-      "name": "NioCorp Developments Ltd.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.03)",
-      "market_cap": "$554,686,660"
-    },
-    {
-      "symbol": "PLCE",
-      "name": "Children's Place, Inc. (The)",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jul/2026",
-      "eps_forecast": "",
-      "market_cap": "$54,036,072"
-    },
-    {
-      "symbol": "ZONE",
-      "name": "Zone Frontier Inc.",
-      "date": "2026-09-11",
-      "time": "2026-09-11T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$76,116,880"
-    },
     {
       "symbol": "AIV",
       "name": "Apartment Investment and Management Company",
@@ -30187,8 +30057,8 @@
     }
   ],
   "stats": {
-    "requested_weekdays": 86,
-    "events": 3018,
+    "requested_weekdays": 85,
+    "events": 3005,
     "failed_dates": 0,
     "failures": []
   }
