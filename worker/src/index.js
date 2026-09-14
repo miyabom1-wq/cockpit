@@ -27,12 +27,13 @@ import {
   recordSchedulerFailure
 } from './services/system-health.js';
 
-const SCHEDULER_MARKER_VERSION='v73.8.12';
+const SCHEDULER_MARKER_VERSION='v73.8.13';
 const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
-// A close snapshot is divided into batches.  Completing three batches per
-// five-minute invocation keeps a 100+ symbol list from waiting half an hour.
-const CONFIRMED_STAGE_BATCHES_PER_CRON=3;
+// Every market snapshot must cover the complete registered universe. Processing
+// three batches per five-minute invocation keeps 100+ symbol snapshots current
+// without allowing one incomplete generation to pin the published stage.
+const STAGE_BATCHES_PER_CRON=3;
 
 async function initializeStorage(env){
   const current=await env.COCKPIT_KV.get(KEYS.schema);
@@ -40,9 +41,14 @@ async function initializeStorage(env){
   return ensureSchema(env,current);
 }
 
+export function schedulerSnapshotLabel(node){
+  if(node?.kind==='confirmed')return`${node.market}_close`;
+  return String(node?.key||'').split(':')[0];
+}
+
 async function snapshotReady(env,node){
   const s=await getStage(env,node.market);
-  const expected=scheduleSnapshotOptions(node.market,node.key.split(':')[0],node.kind,node.tradeDate).snapshotId;
+  const expected=scheduleSnapshotOptions(node.market,schedulerSnapshotLabel(node),node.kind,node.tradeDate).snapshotId;
   return s.complete&&s.snapshot_id===expected&&(
     node.kind!=='confirmed'||(s.kind==='confirmed'&&Number(s.close_verification?.ratio||0)>=90)
   );
@@ -96,15 +102,16 @@ export function scheduleNodes(now=new Date()){
   const jpDate=date;
   const jpObj=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()));
   if(isTradingDay('jp',jpObj)){
-    add('jp','jp_0930',570,'intraday',jpDate,4);
-    add('jp','jp_1020',620,'intraday',jpDate,4);
-    add('jp','jp_1130',690,'intraday',jpDate,marketParts('jp'),'stage',{minSessionRatio:80});
-    add('jp','jp_1420',860,'intraday',jpDate,4);
-    add('jp','jp_1505',905,'intraday',jpDate,4);
-    add('jp','jp_1535',935,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});
-    add('jp','jp_1640_retry',1000,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});
-    add('jp','jp_1735_retry2',1055,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90});
-    add('jp','jp_1800_recovery',1080,'confirmed',jpDate,marketParts('jp'),'stage',{minConfirmedRatio:90,window:360});
+    const jpParts=marketParts('jp');
+    add('jp','jp_0930',570,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
+    add('jp','jp_1020',620,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
+    add('jp','jp_1130',690,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80,window:170});
+    add('jp','jp_1420',860,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
+    add('jp','jp_1505',905,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
+    add('jp','jp_1535',935,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
+    add('jp','jp_1640_retry',1000,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
+    add('jp','jp_1735_retry2',1055,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
+    add('jp','jp_1800_recovery',1080,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90,window:360});
     add('jp','jp_1305_explorer',785,'intraday',jpDate,1,'explorer');
     add('jp','jp_1755_explorer',1075,'confirmed',jpDate,1,'explorer');
     add('jp','jp_1820_universe',1100,'confirmed',jpDate,1,'universe');
@@ -175,7 +182,7 @@ export async function scheduledStage(env,now=new Date()){
   await recordCronHeartbeat(env,{minute,eligible:nodes.filter(n=>eligible(minute,n)).length});
 
   const runtimeParts={};
-  let confirmedStageBatches=0;
+  let stageBatches=0;
   const ordered=[...nodes].sort((a,b)=>nodePriority(a)-nodePriority(b)||a.at-b.at||a.key.localeCompare(b.key));
   for(const sourceNode of ordered){
     if(!eligible(minute,sourceNode))continue;
@@ -248,7 +255,7 @@ export async function scheduledStage(env,now=new Date()){
         continue;
       }
 
-      const opt=scheduleSnapshotOptions(node.market,node.key.split(':')[0],node.kind,node.tradeDate);
+      const opt=scheduleSnapshotOptions(node.market,schedulerSnapshotLabel(node),node.kind,node.tradeDate);
       opt.parts=node.parts;
       if(node.minSessionRatio)opt.minSessionRatio=node.minSessionRatio;
       if(node.minConfirmedRatio)opt.minConfirmedRatio=node.minConfirmedRatio;
@@ -266,7 +273,7 @@ export async function scheduledStage(env,now=new Date()){
           global_freshness:result.global_freshness,
           stale_parts:result.stale_parts,
         });
-        return{processed:0,retry:true,node:node.key,result};
+        return{processed:stageBatches,retry:true,node:node.key,result};
       }
 
       await markDone(env,node,{
@@ -277,20 +284,18 @@ export async function scheduledStage(env,now=new Date()){
         committed:result.committed,
         batch_freshness:result.batch_freshness,
       });
-      if(node.kind==='confirmed'){
-        confirmedStageBatches++;
-        if(confirmedStageBatches<CONFIRMED_STAGE_BATCHES_PER_CRON)continue;
-      }
-      return{processed:confirmedStageBatches||1,node:node.key,result};
+      stageBatches++;
+      if(stageBatches<STAGE_BATCHES_PER_CRON)continue;
+      return{processed:stageBatches,node:node.key,result};
     }catch(error){
       console.error('[scheduled]',node.key,error?.stack||error);
       await env.COCKPIT_KV.put(cooldownKey(node),error?.message||String(error),{expirationTtl:RETRY_COOLDOWN_SECONDS});
       await recordSchedulerFailure(env,node,error);
-      return{processed:0,error:error?.message||String(error),node:node.key};
+      return{processed:stageBatches,error:error?.message||String(error),node:node.key};
     }
   }
 
-  return{processed:0,node:null};
+  return{processed:stageBatches,node:null};
 }
 
 export default{
