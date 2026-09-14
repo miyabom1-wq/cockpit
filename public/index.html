@@ -1754,12 +1754,13 @@ async function recalcStage(){
  try{
   toast('再計算 1');
   const first=await api('/api/stage-run?batch='+state.market+'1',{write:true});
+  let last=first;
   const parts=Math.max(1,Number(first.parts)||1);
   for(let i=2;i<=parts;i++){
    toast('再計算 '+i+'/'+parts);
-   await api('/api/stage-run?batch='+state.market+i,{write:true});
+   last=await api('/api/stage-run?batch='+state.market+i,{write:true});
   }
-  await api('/api/ranking-enriched?market='+state.market+'&refresh=1',{write:true});
+  if(!last.committed)throw Error('新しいデータはまだ揃っていません。自動更新で再試行します。');
   toast('完了');
   closeModal();
   loadStage();
@@ -2041,7 +2042,7 @@ window.openSettings=async function(){
   <div class="v52-settings-card"><h3>信用需給</h3><p>週次信用残、日々公表、特別周知、信用規制をまとめて確認します。</p><div class="actions"><button onclick="openMarginDashboard()">信用需給を開く</button></div></div>
   <div class="v52-settings-card"><h3>通知</h3><p>対応端末ではプッシュ通知を有効化できます。</p><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト通知</button></div></div>
   <div class="v52-settings-card"><h3>接続設定</h3><p>VANTAGEの画面からの閲覧・監視銘柄の追加・削除は、キーの入力なしで利用できます。</p><details><summary>外部ツール用キー（通常は設定不要）</summary><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="アクセスキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></details></div>
-  <div class="v52-settings-card settings-wide"><div class="settings-head"><div><h3>システム状態</h3><p>バックエンド、日米データ、登録銘柄管理の状態を確認します。</p></div><button onclick="checkSystemStatus()">再確認</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>
+  <div class="v52-settings-card settings-wide"><div class="settings-head"><div><h3>システム状態</h3><p>バックエンド、日米データ、登録銘柄管理の状態を確認します。</p></div><button onclick="checkSystemStatus()">再確認</button><button onclick="recalcStage()">データを再取得</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>
  </div>`;
  openModal();
  await checkSystemStatus();

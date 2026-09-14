@@ -194,8 +194,8 @@ export async function runStageBatch(env,batchKey,options={}){
   const stocks=await Promise.all(slice.map((it,idx)=>analyzeOne(it.symbol,it.name,market,benchMap,secondaryBenchMap,{kind,tradeDate,snapshotId:id,themeOverride:it.theme_override,focusTier:focusTier(market,(part-1)*LIMITS.batchSize+idx)})));
 
   const freshness=batchFreshnessRatios(stocks,tradeDate);
-  const sessionFloor=Number(options.minSessionRatio);
-  const confirmedFloor=Number(options.minConfirmedRatio);
+  const sessionFloor=Number(options.minSessionRatio??(kind==='intraday'?80:0));
+  const confirmedFloor=Number(options.minConfirmedRatio??(kind==='confirmed'?90:0));
   const batchRetryRequired=
     freshnessBelowFloor(freshness,'session_ratio',sessionFloor)||
     freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor);

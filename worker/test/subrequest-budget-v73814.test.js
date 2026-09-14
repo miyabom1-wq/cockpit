@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {scheduledStage} from '../src/index.js';
 import {stageFreshness} from '../src/services/stage-freshness.js';
+import {runStageBatch} from '../src/services/stage.js';
 import {MockKV,syntheticRows,yahooResult} from './helpers.js';
 import {KEYS} from '../src/storage/kv-schema.js';
 
@@ -39,4 +40,16 @@ test('same-day lunch snapshot is stale after close deadline, including weekends'
   assert.equal(stageFreshness(stage,new Date('2026-09-14T04:00:00Z')).is_stale,false);
   assert.equal(stageFreshness({...stage,kind:'confirmed',close_verification:{ratio:100}},new Date('2026-09-14T14:00:00Z')).is_stale,false);
   assert.equal(stageFreshness({...stage,trade_date:'2026-09-11'},new Date('2026-09-12T14:00:00Z')).is_stale,true);
+});
+
+test('manual/default options cannot publish a stale close without a freshness floor',async()=>{
+  const old=globalThis.fetch,rows=syntheticRows(300,'2026-07-29');
+  globalThis.fetch=async request=>Response.json({chart:{result:[yahooResult(rows,decodeURIComponent(new URL(String(request)).pathname.split('/').at(-1)))]}});
+  try{
+    const kv=new MockKV({'stocklist:jp':JSON.stringify([{symbol:'2000.T',name:'Test'}])});
+    const result=await runStageBatch({COCKPIT_KV:kv},'jp1',{snapshotId:'manual-test',kind:'confirmed',tradeDate:'2026-07-30'});
+    assert.equal(result.committed,false);
+    assert.equal(result.retry_required,true);
+    assert.equal(await kv.get(KEYS.stage('jp')),null);
+  }finally{globalThis.fetch=old;}
 });
