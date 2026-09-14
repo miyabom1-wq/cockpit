@@ -1,4 +1,5 @@
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
+import { stageFreshness } from './stage-freshness.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { parseJson, nowIso } from '../utils.js';
 
@@ -101,8 +102,7 @@ function stageSummary(stage){
     updated_at:stage?.updated_at||null,
     age_minutes:Number.isFinite(updated)?Math.max(0,Math.round((Date.now()-updated)/60000)):null,
     snapshot_id:stage?.snapshot_id||null,
-    expected_trade_date:expectedConfirmedTradingDate(stage?.market||'jp'),
-    is_stale:!stage?.trade_date||stage.trade_date<expectedConfirmedTradingDate(stage?.market||'jp'),
+    ...stageFreshness(stage),
   };
 }
 

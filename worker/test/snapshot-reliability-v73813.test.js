@@ -37,7 +37,7 @@ function stockList(count){
   }));
 }
 
-test('JP intraday processing advances three full-universe batches per cron', async () => {
+test('JP intraday processing advances one bounded batch per cron', async () => {
   const rows = syntheticRows(300,'2026-07-30');
   const old = globalThis.fetch;
 
@@ -52,12 +52,12 @@ test('JP intraday processing advances three full-universe batches per cron', asy
   try {
     const kv = new MockKV({'stocklist:jp':JSON.stringify(stockList(61))});
     const result = await scheduledStage({COCKPIT_KV:kv}, new Date('2026-07-30T05:20:00.000Z'));
-    assert.equal(result.processed, 3);
-    assert.equal(result.node, 'jp_1420:b3');
+    assert.equal(result.processed, 1);
+    assert.equal(result.node, 'jp_1420:b1');
 
     const completed = [...kv.map.keys()]
       .filter(k=>k.includes('stage:working:') && /part:[123]$/.test(k));
-    assert.equal(completed.length, 3);
+    assert.equal(completed.length, 1);
   } finally {
     globalThis.fetch = old;
   }

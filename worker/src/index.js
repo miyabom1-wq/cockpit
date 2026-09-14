@@ -16,7 +16,7 @@ import { runBacktestStep } from './services/backtest.js';
 import { evaluateIndexTriggers, sendPushToAll } from './services/push.js';
 import { isTradingDay, isUsDst } from './data/calendar.js';
 import { jstDate } from './utils.js';
-import { KV_SCHEMA_VERSION, ENGINE_VERSION } from './config.js';
+import { KV_SCHEMA_VERSION, ENGINE_VERSION, BUILD_ID } from './config.js';
 import { captureThemeSnapshot } from './services/theme-history.js';
 import { maybeAutoRotateUniverse } from './services/universe-manager.js';
 import { getMarginDataset } from './services/margin-supply.js';
@@ -27,13 +27,12 @@ import {
   recordSchedulerFailure
 } from './services/system-health.js';
 
-const SCHEDULER_MARKER_VERSION='v73.8.13';
+const SCHEDULER_MARKER_VERSION='v73.8.14';
 const MARGIN_MARKER_VERSION='v71-margin-fresh';
 const RETRY_COOLDOWN_SECONDS=600;
-// Every market snapshot must cover the complete registered universe. Processing
-// three batches per five-minute invocation keeps 100+ symbol snapshots current
-// without allowing one incomplete generation to pin the published stage.
-const STAGE_BATCHES_PER_CRON=3;
+// 20 symbols may need 40 provider requests with fallback. Keep each batch in
+// its own invocation, with room for benchmarks under the 50-request limit.
+const STAGE_BATCHES_PER_CRON=1;
 
 async function initializeStorage(env){
   const current=await env.COCKPIT_KV.get(KEYS.schema);
@@ -161,15 +160,16 @@ function nodePriority(node){
 }
 
 function schedulerMarkerVersion(node){
-  return node.action==='margin'?MARGIN_MARKER_VERSION:SCHEDULER_MARKER_VERSION;
+  return node.action==='margin'?MARGIN_MARKER_VERSION:`${SCHEDULER_MARKER_VERSION}:${BUILD_ID}`;
 }
 
 function markerKey(node){
-  return`sched:${schedulerMarkerVersion(node)}:${node.key}:${node.tradeDate}`;
+  const key=node.action==='stage'&&node.kind==='confirmed'?`${schedulerSnapshotLabel(node)}:b${node.part}`:node.key;
+  return`sched:${schedulerMarkerVersion(node)}:${key}:${node.tradeDate}`;
 }
 
 function cooldownKey(node){
-  return`sched:cooldown:${schedulerMarkerVersion(node)}:${node.key}:${node.tradeDate}`;
+  return`${markerKey(node)}:cooldown`;
 }
 
 async function markDone(env,node,details={}){
@@ -317,7 +317,9 @@ export default{
     ctx.waitUntil((async()=>{
       try{
         await initializeStorage(env);
-        await scheduledStage(env);
+        const result=await scheduledStage(env);
+        // Auxiliary fetches share the same invocation's request budget.
+        if(result.node)return;
       }catch(error){
         console.error('[stage cron]',error?.stack||error);
       }

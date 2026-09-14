@@ -1,4 +1,5 @@
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
+import { stageFreshness } from './stage-freshness.js';
 import { LIMITS, MARKET_INDICES, ENGINE_VERSION, BUILD_ID, themeOf } from '../config.js';
 import { fetchYahooChart } from '../data/yahoo.js';
 import { normalizeYahooDaily } from '../data/normalization.js';
@@ -199,7 +200,9 @@ export async function runStageBatch(env,batchKey,options={}){
     freshnessBelowFloor(freshness,'session_ratio',sessionFloor)||
     freshnessBelowFloor(freshness,'confirmed_ratio',confirmedFloor);
 
-  const macro=part===1?(await canonicalMacro(env,await fetchMacro(market))).items:null;
+  // Macro quotes have dedicated scheduled jobs. Do not spend the stock batch's
+  // provider request budget fetching them again.
+  const macro=part===1?parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}}).items:null;
   const payload={market,part,parts,snapshot_id:id,kind,trade_date:tradeDate,created_at:nowIso(),stocks,batch_freshness:freshness,...(macro?{macro}:{})};
   await env.COCKPIT_KV.put(stageWorkingKey(id,part),JSON.stringify(payload),{expirationTtl:WORK_TTL});
 
@@ -238,8 +241,7 @@ export async function getStage(env,market){
   const macro=mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{}),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{},rows=Object.values(stocks);if(m==='jp')await enrichRowsWithMargin(env,rows);applyRiskGate(rows,riskGate);
   const list=parseJson(await env.COCKPIT_KV.get(KEYS.stocklist(m)),[]),bySymbol=new Map((Array.isArray(list)?list:[]).map(x=>[x.symbol,x]));
   for(const row of rows){row.theme_override=bySymbol.get(row.symbol)?.theme_override||null;row.theme=globalThis.VantageThemes.themeName(row);}
-  const expected_trade_date=expectedConfirmedTradingDate(m);
-  return{...stage,market:m,macro,risk_gate:riskGate,stocks,expected_trade_date,is_stale:!stage.trade_date||stage.trade_date<expected_trade_date};
+  return{...stage,market:m,macro,risk_gate:riskGate,stocks,...stageFreshness({...stage,market:m})};
 }
 export async function getMomentum(env,market){
   const m=market==='us'?'us':'jp',stored=parseJson(await env.COCKPIT_KV.get(KEYS.momentum(m)),{ready:false,market:m,rows:[],board:[]}),stage=await getStage(env,m);
