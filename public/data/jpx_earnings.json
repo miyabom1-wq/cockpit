@@ -1,46 +1,22 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-16T13:34:42.724173Z",
+  "generated_at": "2026-09-17T13:36:11.086831Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
       "label": "",
-      "events": 7,
+      "events": 6,
       "bytes": 31665
     },
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0904.xlsx",
       "label": "",
-      "events": 419,
+      "events": 418,
       "bytes": 47687
     }
   ],
   "events": [
-    {
-      "symbol": "2678.T",
-      "code": "2678",
-      "name": "アスクル",
-      "date": "2026-09-15",
-      "time": "2026-09-15T14:59:00.000Z",
-      "period": "2027-05-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7050.T",
-      "code": "7050",
-      "name": "フロンティアインターナショナル",
-      "date": "2026-09-15",
-      "time": "2026-09-15T14:59:00.000Z",
-      "period": "2027-04-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "401A.T",
       "code": "401A",
@@ -5133,8 +5109,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 426,
-    "unique_future_events": 426,
+    "raw_rows": 424,
+    "unique_future_events": 424,
     "warnings": []
   }
 }
