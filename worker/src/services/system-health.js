@@ -39,6 +39,9 @@ async function save(env,next){
 
 export async function recordCronHeartbeat(env,details={}){
   const current=await getSchedulerHealth(env);
+  // Ten-minute persisted heartbeat stays within the 15-minute health window.
+  // runs counts persisted heartbeat samples, not every five-minute invocation.
+  if(Date.now()-Date.parse(current.last_cron_at||'')<600000)return current;
   return save(env,{
     ...current,
     last_cron_at:nowIso(),

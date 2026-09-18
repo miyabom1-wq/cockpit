@@ -328,7 +328,12 @@ async function finalizeCycle(env,s){
   return summary;
 }
 
-export async function runBacktestStep(env,count=1,force=false){
+export async function runBacktestStep(env,count=1,force=false,{scheduled=false}={}){
+  // Reserve KV writes for live analysis and user changes. Manual steps remain immediate.
+  if(scheduled&&!force){
+    const previous=parseJson(await env.COCKPIT_KV.get(STATE),null);
+    if(Date.now()-Date.parse(previous?.updated_at||'')<1800000)return{ok:true,skipped:true,reason:'scheduled write cooldown'};
+  }
   let s=await loadState(env,force);
   if(s.status==='failed'&&!force&&shouldAutoRestartBacktest(s))s=await loadState(env,true);
   if(['complete','failed'].includes(s.status)&&!force)return{ok:true,skipped:true,reason:s.status==='complete'?'fresh complete result':'failed result requires force restart',...summaryFromState(s,s.status==='complete')};

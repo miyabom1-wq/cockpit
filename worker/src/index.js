@@ -324,7 +324,7 @@ export default{
         console.error('[stage cron]',error?.stack||error);
       }
       try{await pushIndex(env)}catch(error){console.error('[push cron]',error?.stack||error)}
-      try{await runBacktestStep(env,1,false)}catch(error){console.error('[backtest cron]',error?.stack||error)}
+      try{await runBacktestStep(env,1,false,{scheduled:true})}catch(error){console.error('[backtest cron]',error?.stack||error)}
     })());
   }
 };
