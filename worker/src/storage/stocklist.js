@@ -17,7 +17,7 @@ export async function getStockList(env,market){
   const list=Object.entries(DEFAULT_STOCKS[m]).map(([symbol,name],i)=>({symbol,name,added_at:nowIso(),source:'seed',pinned:false,focus_tier:focusTier(m,i)}));
   await saveStockList(env,m,list);return list;
 }
-export async function saveStockList(env,market,list){const m=market==='us'?'us':'jp',next=[];for(const raw of list||[]){const x=cleanItem(raw,m);if(x&&!next.some(y=>y.symbol===x.symbol)&&next.length<maxFor(m))next.push(x);}await env.COCKPIT_KV.put(KEYS.stocklist(m),JSON.stringify(next));return next.map((x,i)=>({...x,focus_tier:focusTier(m,i)}));}
+export async function saveStockList(env,market,list){const m=market==='us'?'us':'jp',next=[];for(const raw of list||[]){const x=cleanItem(raw,m);if(x&&!next.some(y=>y.symbol===x.symbol)&&next.length<maxFor(m))next.push(x);}const serialized=JSON.stringify(next);if(await env.COCKPIT_KV.get(KEYS.stocklist(m))!==serialized)await env.COCKPIT_KV.put(KEYS.stocklist(m),serialized);return next.map((x,i)=>({...x,focus_tier:focusTier(m,i)}));}
 export async function handleStockListAction(env,market,body={}){
   const m=market==='us'?'us':'jp',action=body.action||'get';let list=await getStockList(env,m);list=list.map(({focus_tier,...x})=>x);
   if(action==='get')return{ok:true,market:m,count:list.length,max:maxFor(m),active_limit:m==='jp'?LIMITS.jpMax:LIMITS.usLead,core_limit:m==='jp'?LIMITS.jpCore:LIMITS.usLead,list:list.map((x,i)=>({...x,focus_tier:focusTier(m,i)}))};

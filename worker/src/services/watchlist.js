@@ -16,7 +16,8 @@ function normalizeItem(item={}){
 }
 async function read(env){
   const v=parseJson(await env.COCKPIT_KV.get(KEYS.watch),[]),raw=Array.isArray(v)?v:[],list=raw.map(normalizeItem);
-  const changed=raw.some((x,i)=>JSON.stringify(x)!==JSON.stringify(list[i]));if(changed)await save(env,list);return list;
+  // Normalize legacy records in memory; persist only with an actual mutation.
+  return list;
 }
 async function save(env,list){await env.COCKPIT_KV.put(KEYS.watch,JSON.stringify(list));}
 function dataTime(x){return Math.max(Date.parse(x?.price_time||0)||0,Date.parse(x?.updated_at||0)||0,Date.parse(x?.date?`${x.date}T23:59:59Z`:0)||0);}
@@ -36,7 +37,13 @@ export async function mutateWatchlist(env,body={}){
     const signalSnapshot=snapshotOf(body.signal_snapshot||{}),item={id:`w${Date.now()}${Math.random().toString(36).slice(2,5)}`,symbol,name:String(body.name||symbol).slice(0,80),market,status:normalizeStatus(body.status),memo:String(body.memo||'').slice(0,500),source:String(body.source||'manual'),added_at:nowIso(),updated_at:nowIso(),signal_at:String(body.signal_at||signalSnapshot?.price_time||'')||nowIso(),signal_snapshot:signalSnapshot,stage_data:null};list.push(item);await save(env,list);return{ok:true,added:true,item};
   }
   const i=list.findIndex(x=>String(x.id)===String(body.id));if(i<0)return{ok:false,error:'not found'};
-  if(action==='update'){if(body.status!=null)list[i].status=normalizeStatus(body.status);if(body.memo!=null)list[i].memo=String(body.memo).slice(0,500);list[i].updated_at=nowIso();await save(env,list);return{ok:true,item:list[i]};}
+  if(action==='update'){
+    const before=JSON.stringify(list[i]);
+    if(body.status!=null)list[i].status=normalizeStatus(body.status);
+    if(body.memo!=null)list[i].memo=String(body.memo).slice(0,500);
+    if(JSON.stringify(list[i])!==before){list[i].updated_at=nowIso();await save(env,list);}
+    return{ok:true,item:list[i]};
+  }
   if(action==='delete'){const [removed]=list.splice(i,1);await save(env,list);return{ok:true,removed};}
   if(action==='refresh_stage'){
     const w=list[i],a=await analyzeSymbolNow(env,w.symbol,w.name,w.market);if(!a)return{ok:false,error:'再判定できませんでした'};a.updated_at=nowIso();w.stage_data=a;w.stage_refreshed_at=nowIso();w.stage_refresh_note=`${a.close_confirmed?'確定終値':'場中暫定'} / ${a.data_quality?.data_valid?'データ有効':'要確認'} / ${a.date||'—'}`;w.updated_at=nowIso();await save(env,list);return{ok:true,item:w,analysis:a};

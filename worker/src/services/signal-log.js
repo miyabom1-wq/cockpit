@@ -5,7 +5,7 @@ import { ENGINE_VERSION } from '../config.js';
 
 function normalizeStore(raw){
   const v=parseJson(raw,{items:[]});const items=Array.isArray(v)?v:(Array.isArray(v.items)?v.items:[]);
-  return{schema:'signal-v5',analyzer_version:ENGINE_VERSION,items:items.map(normalizeItem)};
+  return{schema:'signal-v5',analyzer_version:ENGINE_VERSION,updated_at:v.updated_at||null,items:items.map(normalizeItem)};
 }
 function normalizeItem(x){
   const observations=Array.isArray(x.observations)?x.observations:[];
@@ -16,7 +16,13 @@ async function read(env){
   const v5=await env.COCKPIT_KV.get(KEYS.signalV5);if(v5)return normalizeStore(v5);
   const v3=await env.COCKPIT_KV.get(KEYS.signalV3);return normalizeStore(v3);
 }
-async function save(env,s){s.updated_at=nowIso();await env.COCKPIT_KV.put(KEYS.signalV5,JSON.stringify(s));}
+async function save(env,s){
+  const raw=await env.COCKPIT_KV.get(KEYS.signalV5),previous=raw?JSON.parse(raw):null;
+  // Timestamps must not turn an unchanged confirmed snapshot into a new write.
+  const content=({updated_at,...rest})=>JSON.stringify(rest);
+  if(previous&&content(previous)===content(s))return;
+  s.updated_at=nowIso();await env.COCKPIT_KV.put(KEYS.signalV5,JSON.stringify(s));
+}
 function upsertObservation(item,date,close){
   if(!date||!finite(close))return false;item.observations=Array.isArray(item.observations)?item.observations:[];
   const existing=item.observations.find(x=>x.date===date);if(existing){existing.close=Number(close);existing.confirmed=true;return true;}

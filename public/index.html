@@ -1645,8 +1645,11 @@ async function deleteUniverseFromButton(button){
   await loadUniverse(true);
  }catch(e){toast('削除できませんでした: '+e.message)}
 }
+const pendingRegisteredWatch=new Set();
 async function addWatchFromRegisteredAnalysis(symbol,name,market){
  const key=String(symbol||'').toUpperCase(),r=state.registeredAnalysis?.[key]||null;
+ if(pendingRegisteredWatch.has(key))return;
+ pendingRegisteredWatch.add(key);
  try{
   const snap=snapshotPayload(r);
   const d=await api('/api/watchlist',{method:'POST',body:{action:'add',symbol:key,name,market,source:'registered',signal_snapshot:snap,signal_at:r?.price_time||r?.updated_at||new Date().toISOString()}});
@@ -1654,7 +1657,7 @@ async function addWatchFromRegisteredAnalysis(symbol,name,market){
   state.watch=null;
   toast(d?.added===false?'すでにウォッチ中です':'ウォッチへ追加しました');
   closeModal();
- }catch(e){toast(e.message)}
+ }catch(e){toast(e.message)}finally{pendingRegisteredWatch.delete(key)}
 }
 async function openRegisteredAnalysis(market,symbol,name){
  const m=market==='us'?'us':'jp',key=String(symbol||'').toUpperCase(),displayName=name||key;
@@ -1678,9 +1681,13 @@ async function openRegisteredAnalysis(market,symbol,name){
   $('modal-body').innerHTML=`<div class="card pad down">${esc(e.message)}</div><div class="actions"><button onclick="openChart('${attr(key)}')">チャート</button></div>`;
  }
 }
+function sortedRegisteredStocks(items=[],market='jp'){
+ const key=x=>String(x.symbol||'').trim().toUpperCase().replace(market==='jp'?/\.T$/:/$^/,'');
+ return [...items].sort((a,b)=>key(a).localeCompare(key(b),'en',{sensitivity:'base'}));
+}
 function universeCurrentBlock(label,items=[],market='jp'){
- const groups=new Map();for(const x of items){const tier=x.tier_label||x.tier||'登録';if(!groups.has(tier))groups.set(tier,[]);groups.get(tier).push(x)}
- return `<details class="card universe-current"><summary class="row"><div class="name grow1">${label}・現在の登録銘柄</div><span class="count">${items.length}件</span></summary><div class="pad">${items.length?[...groups].map(([tier,rows])=>`<div class="section-title">${esc(tier)} ${rows.length}件</div><div class="universe-current-grid">${rows.map(x=>{const displayName=universeDisplayName(x,market);return `<div class="universe-current-row"><div class="universe-stock-main"><span class="name">${esc(displayName)}</span><span class="code">${esc(code(x.symbol))}</span></div><div class="universe-stock-meta">${x.pinned?'<span class="pin-state">固定</span>':''}${x.protected_reason?`<span class="watch-mini">${esc(x.protected_reason)}</span>`:''}</div><div class="universe-stock-actions"><button class="small primary universe-analyze" onclick="event.preventDefault();event.stopPropagation();openRegisteredAnalysis('${market}','${attr(x.symbol)}','${attr(displayName)}')" title="VANTAGE分析を開く">分析</button><button class="universe-delete" data-market="${market}" data-symbol="${attr(x.symbol)}" data-name="${attr(displayName)}" data-protected="${attr(x.protected_reason||'')}" onclick="event.preventDefault();event.stopPropagation();deleteUniverseFromButton(this)" title="登録銘柄から削除" aria-label="${attr(displayName)}を削除">×</button></div><small>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加・固定':'登録済み'}</small></div>`}).join('')}</div>`).join(''):'<div class="empty">登録なし</div>'}</div></details>`;
+ const groups=new Map([[market==='jp'?'証券コード順':'ティッカー順',sortedRegisteredStocks(items,market)]]);
+ return `<details class="card universe-current"><summary class="row"><div class="name grow1">${label}・現在の登録銘柄</div><span class="count">${items.length}件</span></summary><div class="pad">${items.length?[...groups].map(([tier,rows])=>`<div class="section-title">${esc(tier)} ${rows.length}件</div><div class="universe-current-grid">${rows.map(x=>{const displayName=universeDisplayName(x,market);return `<div class="universe-current-row"><div class="universe-stock-main"><span class="name">${esc(displayName)}</span><span class="code">${esc(code(x.symbol))}</span></div><div class="universe-stock-meta"><span class="tier-badge">${esc(x.tier_label||x.tier||'登録')}</span>${x.pinned?'<span class="pin-state">固定</span>':''}${x.protected_reason?`<span class="watch-mini">${esc(x.protected_reason)}</span>`:''}</div><div class="universe-stock-actions"><button class="small primary universe-analyze" onclick="event.preventDefault();event.stopPropagation();openRegisteredAnalysis('${market}','${attr(x.symbol)}','${attr(displayName)}')" title="VANTAGE分析を開く">分析</button><button class="universe-delete" data-market="${market}" data-symbol="${attr(x.symbol)}" data-name="${attr(displayName)}" data-protected="${attr(x.protected_reason||'')}" onclick="event.preventDefault();event.stopPropagation();deleteUniverseFromButton(this)" title="登録銘柄から削除" aria-label="${attr(displayName)}を削除">×</button></div><small>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加・固定':'登録済み'}</small></div>`}).join('')}</div>`).join(''):'<div class="empty">登録なし</div>'}</div></details>`;
 }
 async function loadUniverse(refresh=false){
  const root=$('universe-list');if(!root)return;root.innerHTML='<div class="loading">ユニバースを確認中…</div>';
@@ -1771,7 +1778,7 @@ async function recalcStage(){
 async function openStockEditor(){
  try{const d=await api('/api/stocklist?market='+state.market);$('modal-title').textContent='銘柄編集 '+d.count+'/'+d.max;
  const tierLabel=x=>x.focus_tier==='core'?'コア':x.focus_tier==='radar'?'レーダー':x.focus_tier==='lead'?'リード':'保管';
- $('modal-body').innerHTML=`<div class="note">「未分類」の銘柄はテーマ集計から除外されます。各銘柄のテーマ名を押すと分類を指定できます。日本は先頭80銘柄がコア、81〜160銘柄がレーダー。米国は先頭40銘柄だけを海外リードとして自動更新します。昇格すると境界の最後の銘柄が自動で下位枠へ移ります。</div><div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${(d.list||[]).map((x,i)=>{const upper=x.focus_tier==='core'||x.focus_tier==='lead';const moveLabel=upper?(state.market==='jp'?'レーダーへ':'保管へ'):(state.market==='jp'?'コアへ':'リードへ');const act=upper?'demote':'promote';return `<div class="row"><span class="tier-badge">${tierLabel(x)}</span><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span><div class="meta"><span>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加':'既存'}</span>${x.pinned?'<span class="pin-state">固定</span>':''}</div></div><button class="small" onclick="editStockTheme('${attr(x.symbol)}')">${esc(themeName(x))}</button><button class="small" onclick="pinStock('${attr(x.symbol)}',${!x.pinned})">${x.pinned?'固定解除':'固定'}</button><button class="small" onclick="moveStock('${attr(x.symbol)}','${act}')">${moveLabel}</button><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`}).join('')}</div>`;}catch(e){toast(e.message)}
+ $('modal-body').innerHTML=`<div class="note">「未分類」の銘柄はテーマ集計から除外されます。各銘柄のテーマ名を押すと分類を指定できます。一覧は証券コード・ティッカー順です。日本はコア80銘柄とレーダー最大80銘柄、米国はリード40銘柄を自動更新します。分析枠は各行の表示で確認できます。昇格すると境界の最後の銘柄が自動で下位枠へ移ります。</div><div class="formgrid"><input id="sl-symbol" placeholder="ティッカー"><input id="sl-name" placeholder="名称（空欄可）"><div class="span2 actions"><button class="primary" onclick="addStock()">追加</button></div></div><div class="card">${sortedRegisteredStocks(d.list||[],state.market).map((x,i)=>{const upper=x.focus_tier==='core'||x.focus_tier==='lead';const moveLabel=upper?(state.market==='jp'?'レーダーへ':'保管へ'):(state.market==='jp'?'コアへ':'リードへ');const act=upper?'demote':'promote';return `<div class="row"><span class="tier-badge">${tierLabel(x)}</span><div class="grow1"><span class="name">${esc(x.name)}</span> <span class="code">${esc(x.symbol)}</span><div class="meta"><span>${x.source==='auto_rotation'?'自動追加':x.source==='manual'?'手動追加':'既存'}</span>${x.pinned?'<span class="pin-state">固定</span>':''}</div></div><button class="small" onclick="editStockTheme('${attr(x.symbol)}')">${esc(themeName(x))}</button><button class="small" onclick="pinStock('${attr(x.symbol)}',${!x.pinned})">${x.pinned?'固定解除':'固定'}</button><button class="small" onclick="moveStock('${attr(x.symbol)}','${act}')">${moveLabel}</button><button class="small danger" onclick="deleteStock('${attr(x.symbol)}')">×</button></div>`}).join('')}</div>`;}catch(e){toast(e.message)}
 }
 async function addStock(){try{await api('/api/stocklist?market='+state.market,{method:'POST',body:{action:'add',symbol:$('sl-symbol').value,name:$('sl-name').value}});openStockEditor()}catch(e){toast(e.message)}}
 async function editStockTheme(symbol){
