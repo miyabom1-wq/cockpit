@@ -1,80 +1,10 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-09-18T22:41:36.992683Z",
+  "generated_at": "2026-09-19T22:23:51.427879Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
   "events": [
-    {
-      "symbol": "CELU",
-      "name": "Celularity Inc.",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$36,761,368"
-    },
-    {
-      "symbol": "ENLV",
-      "name": "Enlivex Ltd.",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.31)",
-      "market_cap": "$12,715,428"
-    },
-    {
-      "symbol": "HTLM",
-      "name": "HomesToLife Ltd",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$159,643,744"
-    },
-    {
-      "symbol": "LNAI",
-      "name": "Lunai Bioworks Inc.",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$10,314,600"
-    },
-    {
-      "symbol": "NB",
-      "name": "NioCorp Developments Ltd.",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.03)",
-      "market_cap": "$531,392,736"
-    },
-    {
-      "symbol": "TRT",
-      "name": "Trio-Tech International",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$115,651,584"
-    },
-    {
-      "symbol": "ZONE",
-      "name": "Zone Frontier Inc.",
-      "date": "2026-09-18",
-      "time": "2026-09-18T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$72,401,416"
-    },
     {
       "symbol": "ABVX",
       "name": "Abivax SA",
@@ -39807,8 +39737,8 @@
     }
   ],
   "stats": {
-    "requested_weekdays": 86,
-    "events": 3980,
+    "requested_weekdays": 85,
+    "events": 3973,
     "failed_dates": 0,
     "failures": []
   }
