@@ -1,118 +1,22 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-18T13:01:13.330030Z",
+  "generated_at": "2026-09-21T15:10:25.003542Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
       "label": "",
-      "events": 5,
+      "events": 0,
       "bytes": 31665
     },
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
       "label": "",
-      "events": 443,
+      "events": 440,
       "bytes": 48977
     }
   ],
   "events": [
-    {
-      "symbol": "2796.T",
-      "code": "2796",
-      "name": "ファーマライズホールディングス",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2989.T",
-      "code": "2989",
-      "name": "東海道リート投資法人",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3249.T",
-      "code": "3249",
-      "name": "産業ファンド投資法人",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3269.T",
-      "code": "3269",
-      "name": "アドバンス・レジデンス投資法人",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3463.T",
-      "code": "3463",
-      "name": "いちごホテルリート投資法人",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3471.T",
-      "code": "3471",
-      "name": "三井不動産ロジスティクスパーク投資法人",
-      "date": "2026-09-17",
-      "time": "2026-09-17T14:59:00.000Z",
-      "period": "2026-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan07_0904.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3544.T",
-      "code": "3544",
-      "name": "サツドラホールディングス",
-      "date": "2026-09-18",
-      "time": "2026-09-18T14:59:00.000Z",
-      "period": "2027-05-1500:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6905.T",
-      "code": "6905",
-      "name": "コーセル",
-      "date": "2026-09-18",
-      "time": "2026-09-18T14:59:00.000Z",
-      "period": "2027-05-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "3160.T",
       "code": "3160",
@@ -5397,8 +5301,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 448,
-    "unique_future_events": 448,
+    "raw_rows": 440,
+    "unique_future_events": 440,
     "warnings": []
   }
 }
