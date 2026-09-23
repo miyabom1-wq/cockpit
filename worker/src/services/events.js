@@ -5,6 +5,35 @@ import { parseJson, nowIso, normalizeSymbol } from '../utils.js';
 import { fetchUsEarningsDataset, usEventsFromDataset } from './us-earnings.js';
 
 const DAY=86400000;
+// Monday 00:00 JST, independent of server/browser timezone.
+export function eventWeekStart(now=Date.now()){
+  const d=new Date(Number(now)+9*3600000);
+  d.setUTCHours(0,0,0,0);
+  d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);
+  return d.getTime()-9*3600000;
+}
+export function isOldManualEvent(x,cutoff){
+  return !x.pinned&&!x.read_only&&x.source!=='official'&&x.source!=='provider'&&Date.parse(x.time)<cutoff;
+}
+export async function pruneManualEvents(env,list,now=Date.now()){
+  // Keep this week and the previous week. Invalid dates are never discarded.
+  const next=list.filter(x=>!isOldManualEvent(x,eventWeekStart(now)-7*DAY));
+  if(next.length!==list.length)await save(env,next);
+  return next;
+}
+function resultFields(body){
+  const out={};
+  for(const key of ['actual','forecast','previous','unit']){
+    if(Object.hasOwn(body,key))out[key]=String(body[key]??'').trim().slice(0,80);
+  }
+  if(Object.hasOwn(body,'source_url')){
+    const value=String(body.source_url||'').trim();
+    if(value){let u;try{u=new URL(value);}catch{throw new Error('出典URLを確認してください');}
+      if(!['https:','http:'].includes(u.protocol)||value.length>2000)throw new Error('出典URLを確認してください');}
+    out.source_url=value;
+  }
+  return out;
+}
 const PROVIDER_CACHE_MS=12*60*60*1000;
 const PROVIDER_CACHE_TTL=14*24*60*60;
 const EVENT_BATCH_SIZE=10;
@@ -89,7 +118,7 @@ async function readTracked(env){
 export function officialEvents(now=Date.now(),tracked=null){
   const set=tracked instanceof Set?tracked:null;
   return VERIFIED_EVENTS
-    .filter(x=>Date.parse(x.time)>=now-DAY&&Date.parse(x.time)<=now+120*DAY)
+    .filter(x=>Date.parse(x.time)>=eventWeekStart(now)&&Date.parse(x.time)<=now+120*DAY)
     .filter(x=>!set||x.symbols.some(s=>set.has(s)))
     .map(normalizeEvent);
 }
@@ -231,7 +260,7 @@ export function jpxEventsFromDataset(dataset,tracked=[],now=Date.now()){
     if(!item)continue;
     const time=String(row.time||`${row.date}T14:59:00.000Z`);
     const ms=Date.parse(time);
-    if(!Number.isFinite(ms)||ms<now-DAY||ms>now+120*DAY)continue;
+    if(!Number.isFinite(ms)||ms<eventWeekStart(now)||ms>now+120*DAY)continue;
     out.push(normalizeEvent({
       id:`jpx-${symbol.toLowerCase()}-${time.slice(0,10)}`,
       name:`${item.name||row.name||symbol} 決算予定`,
@@ -307,7 +336,7 @@ export function eventCoverageSummary(tracked=[],automaticEvents=[],checkedSymbol
 }
 
 async function buildEventDashboard(env,now=Date.now(),force=false){
-  const manual=await getManualEvents(env),tracked=await readTracked(env),trackedSet=new Set(tracked.map(x=>x.symbol));
+  const manual=await pruneManualEvents(env,await getManualEvents(env),now),tracked=await readTracked(env),trackedSet=new Set(tracked.map(x=>x.symbol));
   if(force&&tracked.length)await syncRegisteredEventBatch(env,{batch:0});
 
   const [jpxState,usState]=await Promise.all([fetchJpxDataset(env,{force:false}),fetchUsEarningsDataset(env,{force:false})]);
@@ -318,7 +347,7 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
   const dynamic=cachedRows
     .map(({item,cached})=>cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null)
     .filter(Boolean)
-    .filter(x=>Date.parse(x.time)>=now-DAY&&Date.parse(x.time)<=now+120*DAY);
+    .filter(x=>Date.parse(x.time)>=eventWeekStart(now)&&Date.parse(x.time)<=now+120*DAY);
 
   const manualKeys=new Set(manual.map(eventKey));
   const readOnly=[...verified,...jpx,...usCalendar,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));
@@ -370,10 +399,22 @@ export async function mutateEvent(env,body={}){
   const action=body.action||'get',list=await getManualEvents(env);
   if(action==='add'){
     const name=String(body.name||'').trim().slice(0,120),time=String(body.time||'');if(!name||!Number.isFinite(new Date(time).getTime()))throw new Error('イベント名と日時が必要です');
-    const item={id:`e${Date.now()}${Math.random().toString(36).slice(2,6)}`,name,time,category:String(body.category||'other').slice(0,20),symbols:normalizeSymbols(body.symbols),source:'manual',pinned:false,read_only:false,created_at:nowIso()};list.push(item);list.sort((a,b)=>new Date(a.time)-new Date(b.time));await save(env,list);return{ok:true,event:item};
+    const item={id:`e${Date.now()}${Math.random().toString(36).slice(2,6)}`,name,time,category:String(body.category||'other').slice(0,20),symbols:normalizeSymbols(body.symbols),source:'manual',pinned:false,read_only:false,created_at:nowIso(),...resultFields(body)};list.push(item);list.sort((a,b)=>new Date(a.time)-new Date(b.time));await save(env,list);return{ok:true,event:item};
   }
-  if(action==='delete'){const next=list.filter(x=>x.id!==body.id);await save(env,next);return{ok:true,removed:list.length-next.length};}
-  if(action==='toggle_pin'){const x=list.find(x=>x.id===body.id);if(x)x.pinned=!x.pinned;await save(env,list);return{ok:true,changed:x?1:0,pinned:x?.pinned};}
-  if(action==='clear_completed'){const ids=new Set(Array.isArray(body.ids)?body.ids:[]),now=Date.now(),next=list.filter(x=>x.pinned||(!ids.size?new Date(x.time).getTime()>=now:!ids.has(x.id)));await save(env,next);return{ok:true,removed:list.length-next.length};}
+  if(action==='delete'){const next=list.filter(x=>x.id!==body.id);if(next.length!==list.length)await save(env,next);return{ok:true,removed:list.length-next.length};}
+  if(action==='toggle_pin'){const x=list.find(x=>x.id===body.id);if(x){x.pinned=!x.pinned;await save(env,list);}return{ok:true,changed:x?1:0,pinned:x?.pinned};}
+  if(action==='update_results'){
+    const item=list.find(x=>x.id===body.id&&!x.read_only);
+    if(!item)throw new Error('編集できる手動イベントが見つかりません');
+    const fields=resultFields(body),changed=Object.entries(fields).some(([key,value])=>item[key]!==value);
+    if(changed){Object.assign(item,fields);await save(env,list);}
+    return{ok:true,event:item,changed:changed?1:0};
+  }
+  if(action==='clear_completed'){
+    const ids=Array.isArray(body.ids)&&body.ids.length?new Set(body.ids):null;
+    const cutoff=eventWeekStart(),next=list.filter(x=>!(isOldManualEvent(x,cutoff)&&(!ids||ids.has(x.id))));
+    if(next.length!==list.length)await save(env,next);
+    return{ok:true,removed:list.length-next.length};
+  }
   return{ok:false,error:'unknown action'};
 }

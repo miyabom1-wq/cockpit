@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const EVENTS_UI_BUILD='v73.3-compact-event-time-20260814';
+const EVENTS_UI_BUILD='weekly-events-20260923';
 if(window.__vantageEventsUiBuild===EVENTS_UI_BUILD)return;
 window.__vantageEventsUiBuild=EVENTS_UI_BUILD;
 
@@ -36,6 +36,12 @@ function installStyle(){
     .v59-caret{font-size:14px;color:var(--muted,#667085);transition:transform .18s ease}
     .v59-daygroup[open] .v59-caret{transform:rotate(90deg)}
     .v59-eventrow{display:flex;gap:10px;padding:10px 12px;border-top:1px solid var(--line,#eef1f4)}
+    .v59-eventrow.released{background:#f7f8fa}
+    .v59-eventrow.released .v59-eventtitle{color:#747e89;font-weight:500}
+    .v59-results{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;font-size:12px}
+    .v59-eventactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+    .v59-periods{display:flex;gap:7px;margin:12px 0}
+    .v59-periods button[aria-pressed="true"]{background:#0d6c63;color:#fff}
     .v59-eventmain{min-width:0;flex:1}
     .v59-eventtitle{font-size:13px;line-height:1.35;font-weight:700}
     .v59-eventsub{margin-top:4px;font-size:11px;color:var(--muted,#667085);display:flex;gap:8px;flex-wrap:wrap}
@@ -91,25 +97,25 @@ function srcInfo(event){
   const name=String(event?.source_name||'');
   if(event?.official_kind==='jpx'||name.startsWith('JPX'))return{label:'JPX公式',cls:'jpx'};
   if(event?.provider_kind==='nasdaq_zacks')return{label:'Nasdaq参考',cls:'provider'};
-  if(event?.source==='official')return{label:'企業IR',cls:'ir'};
+  if(event?.source==='official')return{label:event.category==='earnings'?'企業IR':'公式',cls:'ir'};
   if(event?.source==='provider')return{label:'Yahoo参考',cls:'provider'};
   return{label:'手動',cls:'manual'};
 }
 function shortDate(iso){
-  const d=new Date(iso);
+  const d=new Date(Date.parse(iso)+9*3600000);
   if(Number.isNaN(d.getTime()))return'';
-  return `${d.getMonth()+1}/${d.getDate()}`;
+  return `${d.getUTCMonth()+1}/${d.getUTCDate()}`;
 }
 function dayKey(iso){
-  const d=new Date(iso);
+  const d=new Date(Date.parse(iso)+9*3600000);
   if(Number.isNaN(d.getTime()))return'unknown';
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
 }
 function dayHeader(iso){
-  const d=new Date(iso);
+  const d=new Date(Date.parse(iso)+9*3600000);
   if(Number.isNaN(d.getTime()))return{month:'?',day:'?',label:'日付不明'};
   const weekdays=['日','月','火','水','木','金','土'];
-  return {month:`${d.getMonth()+1}月`,day:String(d.getDate()),label:`${d.getMonth()+1}/${d.getDate()}(${weekdays[d.getDay()]})`};
+  return {month:`${d.getUTCMonth()+1}月`,day:String(d.getUTCDate()),label:`${d.getUTCMonth()+1}/${d.getUTCDate()}(${weekdays[d.getUTCDay()]})`};
 }
 function looksMacroEvent(event){
   const text=`${event?.name||''} ${event?.source_name||''}`.toUpperCase();
@@ -131,17 +137,18 @@ function timeLabel(event){
     .replace(/^[\s\u30fb\u00b7-]+|[\s\u30fb\u00b7-]+$/g,'')
     .trim();
   if(cleaned)return date?date+' \u30fb '+cleaned:cleaned;
-  // A date-only source should look like a date, not an error/warning state.
+  if(looksMacroEvent(event)||['macro','centralbank'].includes(event.category))return new Intl.DateTimeFormat('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(event.time))+' JST';
   return date;
 }
 function marketOf(event){
   const s=String(event?.symbols?.[0]||'').toUpperCase();
+  if(!s)return event.market==='jp'?'日本':event.market==='us'?'米国':'';
   return /\.T$/.test(s)?'日本':'米国';
 }
 function dText(event){
   const diff=new Date(event.time).getTime()-Date.now();
   if(!Number.isFinite(diff))return'';
-  if(diff<0)return'完了';
+  if(diff<0)return'発表済み';
   if(diff<=86400000)return'24h以内';
   return Math.ceil(diff/86400000)+'日';
 }
@@ -158,24 +165,60 @@ function previewNames(rows){
   const xs=[...new Set(rows.map(cleanName).filter(Boolean))].slice(0,2);
   return xs.join(' / ');
 }
+function weekStart(now=Date.now()){
+  const d=new Date(now+9*3600000);d.setUTCHours(0,0,0,0);
+  d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.getTime()-9*3600000;
+}
+function editable(event){return !event.read_only&&event.source!=='official'&&event.source!=='provider';}
+function safeUrl(value){try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:'';}catch{return '';}}
+function sourceUrl(event){
+  const direct=safeUrl(event.source_url||event.url);if(direct)return direct;
+  const name=String(event.name||'').toUpperCase();
+  if(/日銀/.test(name))return 'https://www.boj.or.jp/mopo/mpmdeci/index.htm';
+  if(/日本.*CPI|全国.*消費者|東京.*消費者/.test(name))return 'https://www.stat.go.jp/data/cpi/';
+  if(/FOMC/.test(name))return 'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm';
+  if(/ECB/.test(name))return 'https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html';
+  if(/PCE/.test(name))return 'https://www.bea.gov/data/personal-consumption-expenditures-price-index';
+  if(/GDP/.test(name)&&event.market==='us')return 'https://www.bea.gov/data/gdp/gross-domestic-product';
+  if(/CPI/.test(name)&&event.market!=='jp')return 'https://www.bls.gov/news.release/cpi.toc.htm';
+  if(/PPI/.test(name)&&event.market!=='jp')return 'https://www.bls.gov/news.release/ppi.toc.htm';
+  if(/雇用統計|非農業/.test(name)&&event.market!=='jp')return 'https://www.bls.gov/news.release/empsit.toc.htm';
+  if(/PMI/.test(name))return 'https://www.pmi.spglobal.com/Public/Release/PressReleases';
+  if(/ISM/.test(name))return 'https://www.ismworld.org/supply-management-news-and-reports/reports/ism-report-on-business/';
+  if(/小売売上高/.test(name)&&event.market==='us')return 'https://www.census.gov/retail/index.html';
+  const symbol=event.symbols?.[0];return symbol?'https://finance.yahoo.com/quote/'+encodeURIComponent(symbol)+'/calendar/':'';
+}
+function numericValue(value){
+  const s=String(value??'').trim().replace(/,/g,'').replace(/−/g,'-');
+  // Compare only matching units; do not silently mix K, M, %, or ranges.
+  const m=s.match(/^([+-]?(?:\d+(?:\.\d*)?|\.\d+))\s*(%|％|K|M|B|万人|人|兆円|億円|円|bp)?$/i);
+  if(!m)return null;return{value:Number(m[1]),unit:(m[2]||'').replace('％','%').toUpperCase()};
+}
+function surprise(event){
+  const a=numericValue(event.actual),f=numericValue(event.forecast);
+  if(!a||!f||a.unit!==f.unit)return '';
+  return '予想比 '+(a.value>f.value?'↑':a.value<f.value?'↓':'＝');
+}
+function resultsHtml(event){
+  if(!looksMacroEvent(event)&&!['macro','centralbank'].includes(event.category)&&!['actual','forecast','previous'].some(k=>event[k]!=null))return '';
+  const values=['actual','forecast','previous'].map((key,i)=>'<span>'+['実績','予想','前回'][i]+' <b>'+esc(event[key]===0?'0':event[key]||'—')+'</b></span>').join('');
+  return '<div class="v59-results">'+values+(event.unit?'<span>'+esc(event.unit)+'</span>':'')+(surprise(event)?'<span>'+esc(surprise(event))+'</span>':'')+'</div>';
+}
 function eventRow(event){
-  const source=srcInfo(event);
+  const source=srcInfo(event),past=Date.parse(event.time)<Date.now(),url=sourceUrl(event);
   return `
-    <div class="v59-eventrow">
+    <div class="v59-eventrow ${past?'released':''}">
       <div class="v59-eventmain">
-        <div class="v59-eventtitle">${esc(cleanName(event))}</div>
-        <div class="v59-eventsub">
-          <span>${esc(timeLabel(event))}</span>
-          <span>${esc(marketOf(event))}</span>
-          <span class="v59-tag ${source.cls}">${source.label}</span>
+        <div class="v59-eventtitle">${esc(cleanName(event))}${event.pinned?' · 固定':''}</div>
+        <div class="v59-eventsub"><span>${esc(timeLabel(event))}</span><span>${esc(marketOf(event))}</span><span class="v59-tag ${source.cls}">${source.label}</span></div>
+        ${resultsHtml(event)}
+        <div class="v59-eventactions">
+          ${url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">公式・データ元 ↗</a>`:''}
+          ${editable(event)?`<button class="small" data-event-action="edit" data-event-id="${esc(event.id)}">実績・数値を編集</button><button class="small" data-event-action="pin" data-event-id="${esc(event.id)}">${event.pinned?'固定解除':'固定'}</button><button class="small danger" data-event-action="delete" data-event-id="${esc(event.id)}">削除</button>`:''}
         </div>
       </div>
-      <div class="v59-side">
-        <b>${esc(dText(event))}</b>
-        <small>${esc(looksMacroEvent(event)?'経済':(isCorporateEarnings(event)?'決算':'予定'))}</small>
-      </div>
-    </div>
-  `;
+      <div class="v59-side"><b>${esc(dText(event))}</b><small>${esc(looksMacroEvent(event)?'経済':(isCorporateEarnings(event)?'決算':'予定'))}</small></div>
+    </div>`;
 }
 function dayGroup(key,rows,openDefault=false){
   const head=dayHeader(rows[0]?.time||key);
@@ -242,7 +285,7 @@ function coveragePanel(cov){
       <span class="v59-pill">米国 ${us.found||0}/${us.total||0}</span>
     </div>
     <div class="v59-note">
-      決算は日付単位で折りたたみ表示します。時刻が公表されていない予定は日付のみを表示し、右側は24時間以内・残り日数で確認できます。FOMCなどの手動イベントは一般イベント側に分けて表示します。
+      決算は日付単位で折りたたみ表示します。時刻が公表されていない予定は日付のみを表示し、右側は24時間以内・残り日数で確認できます。今週は月曜〜日曜（日本時間）です。今週の発表済みも残ります。数値の「—」は未取得です。
     </div>
     ${missingRows.length?`
     <details class="v59-details">
@@ -263,39 +306,57 @@ function section(title,subtitle,rows,empty,maxGroups,openFirst){
   `;
 }
 
+let selectedPeriod='this';
 window.renderEvents=function(){
-  const root=document.getElementById('event-list');
-  if(!root)return;
-  const now=Date.now();
-  const ten=now+10*86400000;
-  const max=now+120*86400000;
-  const mobile=window.innerWidth<=760;
-
-  const rows=(state.events?.events||[])
-    .slice()
-    .sort((a,b)=>new Date(a.time)-new Date(b.time));
-
-  const future=rows.filter(x=>{
-    const t=new Date(x.time).getTime();
-    return Number.isFinite(t)&&t>=now&&t<=max;
-  });
-
-  const near=future.filter(x=>new Date(x.time).getTime()<=ten);
-  const later=future.filter(x=>new Date(x.time).getTime()>ten);
-  const earnings=later.filter(isCorporateEarnings);
-  const general=later.filter(x=>!isCorporateEarnings(x));
-
-  root.innerHTML = `
-    <div class="v59-toolbar">
-      <button class="primary small" onclick="loadEvents(true)">決算予定を更新</button>
-      <span class="fresh">日付タップで展開</span>
-    </div>
+  const root=document.getElementById('event-list');if(!root)return;
+  const start=weekStart(),next=start+7*86400000,after=next+7*86400000;
+  const rows=(state.events?.events||[]).slice().sort((a,b)=>Date.parse(a.time)-Date.parse(b.time));
+  const periods={this:rows.filter(e=>Date.parse(e.time)>=start&&Date.parse(e.time)<next),next:rows.filter(e=>Date.parse(e.time)>=next&&Date.parse(e.time)<after),later:rows.filter(e=>Date.parse(e.time)>=after)};
+  const old=rows.filter(e=>Date.parse(e.time)<start);
+  const count=old.filter(e=>editable(e)&&!e.pinned).length;
+  const clear=document.getElementById('event-clear-old');
+  if(clear){clear.hidden=!count;clear.textContent='先週以前を整理（'+count+'件）';}
+  root.innerHTML=`
+    <div class="v59-toolbar"><button class="primary small" onclick="loadEvents(true)">決算予定を更新</button><span class="fresh">日本時間 · 日付タップで展開</span></div>
     ${coveragePanel(state.events?.coverage||{})}
-    ${section('直近10日の重要日程','売買判断向け',near,'直近10日の重要日程はありません',mobile?5:8,1)}
-    ${section('決算予定','11〜120日先',earnings,'11〜120日先の決算予定はありません',mobile?6:10,0)}
-    ${section('通常イベント・経済指標','11〜120日先',general,'通常イベント・指標はありません',mobile?4:8,0)}
-  `;
+    <div class="v59-periods" aria-label="イベントの期間">${[['this','今週'],['next','来週'],['later','今後']].map(([key,label])=>`<button data-event-period="${key}" aria-pressed="${selectedPeriod===key}">${label}（${periods[key].length}）</button>`).join('')}</div>
+    ${section(({this:'今週',next:'来週',later:'今後'})[selectedPeriod],'重要日程',periods[selectedPeriod],'登録されたイベントはありません',window.innerWidth<=760?5:8,selectedPeriod==='this'?7:1)}
+    ${old.length?`<details class="v59-details"><summary>先週以前・固定済み（${old.length}件）</summary>${groupedList(old,7,0)}</details>`:''}
+    <p class="v59-note">今週分は整理対象に含みません。先週以前の手動イベントは整理できます。2週前以前の未固定イベントは一覧取得時に自動整理されます。予想比の矢印は数値の大小を示します。</p>`;
+  root.onclick=event=>{
+    const period=event.target.closest('[data-event-period]');if(period){selectedPeriod=period.dataset.eventPeriod;window.renderEvents();return;}
+    const button=event.target.closest('[data-event-action]');if(!button)return;
+    const id=button.dataset.eventId;
+    if(button.dataset.eventAction==='edit')openResultsForm(id);
+    if(button.dataset.eventAction==='pin')togglePin(id);
+    if(button.dataset.eventAction==='delete')deleteEvent(id);
+  };
   patchMoreIconFallback();
+};
+function resultInputs(event={}){
+  return ['actual','forecast','previous','unit','source_url'].map((key,i)=>`<label>${['実績','予想','前回','単位（例：%、万人）','出典URL'][i]}<input id="ev-${key}" value="${esc(event[key]??'')}" maxlength="${key==='source_url'?2000:80}" ${key==='source_url'?'type="url"':''}></label>`).join('');
+}
+function formResults(){return Object.fromEntries(['actual','forecast','previous','unit','source_url'].map(key=>[key,document.getElementById('ev-'+key).value]));}
+function openResultsForm(id){
+  const event=(state.events?.events||[]).find(e=>e.id===id);if(!event||!editable(event))return;
+  document.getElementById('modal-title').textContent=event.name+' · 数値';
+  document.getElementById('modal-body').innerHTML='<div class="formgrid">'+resultInputs(event)+'<div class="span2 actions"><button id="ev-save-results" class="primary">保存</button></div></div>';
+  document.getElementById('ev-save-results').onclick=async()=>{
+    try{await api('/api/events',{method:'POST',body:{action:'update_results',id,...formResults()}});closeModal();await loadEvents();}catch(e){toast(e.message);}
+  };openModal();
+}
+const originalOpenEventForm=window.openEventForm;
+window.openEventForm=function(){
+  originalOpenEventForm();
+  const grid=document.querySelector('#modal-body .formgrid');
+  grid.querySelector('.actions').insertAdjacentHTML('beforebegin',resultInputs());
+};
+window.addEvent=async function(){
+  try{
+    const symbols=document.getElementById('ev-symbols').value.split(/[、,\s]+/).map(x=>x.trim()).filter(Boolean);
+    await api('/api/events',{method:'POST',body:{action:'add',name:document.getElementById('ev-name').value,time:new Date(document.getElementById('ev-time').value).toISOString(),category:document.getElementById('ev-cat').value,symbols,...formResults()}});
+    closeModal();await loadEvents();
+  }catch(e){toast(e.message);}
 };
 
 installStyle();

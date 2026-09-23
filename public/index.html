@@ -461,7 +461,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
   <div id="margin-view" class="hidden"><div id="margin-list"></div></div>
   <div id="events-view" class="hidden">
     <div class="toolbar">
-      <button onclick="openEventForm()">＋追加</button><button class="small" onclick="clearPastEvents()">過去分を整理</button>
+      <button onclick="openEventForm()">＋追加</button><button id="event-clear-old" class="small" onclick="clearPastEvents()" hidden>先週以前を整理</button>
     </div>
     <div id="event-list"></div>
   </div>
@@ -1394,7 +1394,7 @@ function openEventForm(){
 async function addEvent(){try{const symbols=$('ev-symbols').value.split(/[、,\s]+/).map(x=>x.trim()).filter(Boolean);await api('/api/events',{method:'POST',body:{action:'add',name:$('ev-name').value,time:new Date($('ev-time').value).toISOString(),category:$('ev-cat').value,symbols}});closeModal();loadEvents()}catch(e){toast(e.message)}}
 async function deleteEvent(id){if(!confirm('削除しますか？'))return;try{await api('/api/events',{method:'POST',body:{action:'delete',id}});loadEvents()}catch(e){toast(e.message)}}
 async function togglePin(id){try{await api('/api/events',{method:'POST',body:{action:'toggle_pin',id}});loadEvents()}catch(e){toast(e.message)}}
-async function clearPastEvents(){if(!confirm('過去の未固定イベントを削除しますか？'))return;try{const d=await api('/api/events',{method:'POST',body:{action:'clear_completed'}});toast(d.removed+'件整理');loadEvents()}catch(e){toast(e.message)}}
+async function clearPastEvents(){if(!confirm('先週以前の未固定・手動イベントを整理しますか？今週分は残ります。'))return;try{const d=await api('/api/events',{method:'POST',body:{action:'clear_completed'}});toast(d.removed+'件整理');loadEvents()}catch(e){toast(e.message)}}
 
 async function copyTextReliably(text){
  try{
@@ -2208,7 +2208,7 @@ async function startVantageFinal(){
 <script src="./reliability-sync.js?build=v73.8.12"></script>
 <script src="./event-resilience.js?build=v73.8.12"></script>
 <script src="./navigation.js?build=v73.8.12"></script>
-<script src="./events-ui.js?build=v73.8.12"></script>
+<script src="./events-ui.js?build=weekly-events-20260923"></script>
 <script>startVantageFinal();</script>
 </body>
 </html>

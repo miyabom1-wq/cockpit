@@ -1,6 +1,10 @@
 import { parseJson, nowIso, normalizeSymbol } from '../utils.js';
 
 const DAY=86400000;
+function jstWeekStart(now){
+  const d=new Date(now+9*3600000);d.setUTCHours(0,0,0,0);
+  d.setUTCDate(d.getUTCDate()-(d.getUTCDay()+6)%7);return d.getTime()-9*3600000;
+}
 const CACHE_KEY='events:us-calendar:v1';
 const CACHE_MS=6*60*60*1000;
 const CACHE_TTL=8*24*60*60;
@@ -66,7 +70,7 @@ export function usEventsFromDataset(dataset,tracked=[],now=Date.now()){
     if(!item)continue;
     const time=String(row.time||`${row.date}T12:00:00.000Z`);
     const ms=Date.parse(time);
-    if(!Number.isFinite(ms)||ms<now-DAY||ms>now+120*DAY)continue;
+    if(!Number.isFinite(ms)||ms<jstWeekStart(now)||ms>now+120*DAY)continue;
     const timing=String(row.timing||'unspecified');
     out.push({
       id:`nasdaq-${symbol.toLowerCase()}-${String(row.date||time).slice(0,10)}`,
