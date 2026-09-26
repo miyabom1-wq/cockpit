@@ -1,100 +1,10 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-09-25T23:23:15.552066Z",
+  "generated_at": "2026-09-26T22:59:33.025887Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
   "events": [
-    {
-      "symbol": "CELU",
-      "name": "Celularity Inc.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$38,208,668"
-    },
-    {
-      "symbol": "ENLV",
-      "name": "Enlivex Ltd.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.31)",
-      "market_cap": "$10,590,944"
-    },
-    {
-      "symbol": "HTLM",
-      "name": "HomesToLife Ltd",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$159,643,744"
-    },
-    {
-      "symbol": "IVA",
-      "name": "Inventiva S.A.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "after_hours",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.20)",
-      "market_cap": "$770,273,470"
-    },
-    {
-      "symbol": "LITS",
-      "name": "Lite Strategy, Inc.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$45,592,188"
-    },
-    {
-      "symbol": "LNAI",
-      "name": "Lunai Bioworks Inc.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$8,795,747"
-    },
-    {
-      "symbol": "NB",
-      "name": "NioCorp Developments Ltd.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.03)",
-      "market_cap": "$515,378,144"
-    },
-    {
-      "symbol": "TBN",
-      "name": "Tamboran Resources Corporation",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "pre_market",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "($0.25)",
-      "market_cap": "$1,263,544,960"
-    },
-    {
-      "symbol": "ZONE",
-      "name": "Zone Frontier Inc.",
-      "date": "2026-09-25",
-      "time": "2026-09-25T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Jun/2026",
-      "eps_forecast": "",
-      "market_cap": "$66,928,632"
-    },
     {
       "symbol": "ADXN",
       "name": "Addex Therapeutics Ltd",
@@ -43917,8 +43827,8 @@
     }
   ],
   "stats": {
-    "requested_weekdays": 86,
-    "events": 4391,
+    "requested_weekdays": 85,
+    "events": 4382,
     "failed_dates": 0,
     "failures": []
   }
