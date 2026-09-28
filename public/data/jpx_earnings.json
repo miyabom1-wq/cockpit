@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-25T13:56:41.752016Z",
+  "generated_at": "2026-09-28T16:49:43.110950Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,83 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
       "label": "",
-      "events": 440,
+      "events": 434,
       "bytes": 48977
     }
   ],
   "events": [
-    {
-      "symbol": "3160.T",
-      "code": "3160",
-      "name": "大光",
-      "date": "2026-09-24",
-      "time": "2026-09-24T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4716.T",
-      "code": "4716",
-      "name": "日本オラクル",
-      "date": "2026-09-24",
-      "time": "2026-09-24T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2742.T",
-      "code": "2742",
-      "name": "ハローズ",
-      "date": "2026-09-25",
-      "time": "2026-09-25T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2778.T",
-      "code": "2778",
-      "name": "パレモ・ホールディングス",
-      "date": "2026-09-25",
-      "time": "2026-09-25T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3333.T",
-      "code": "3333",
-      "name": "あさひ",
-      "date": "2026-09-25",
-      "time": "2026-09-25T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4465.T",
-      "code": "4465",
-      "name": "ニイタカ",
-      "date": "2026-09-25",
-      "time": "2026-09-25T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "7624.T",
       "code": "7624",
@@ -5301,8 +5229,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 440,
-    "unique_future_events": 440,
+    "raw_rows": 434,
+    "unique_future_events": 434,
     "warnings": []
   }
 }
