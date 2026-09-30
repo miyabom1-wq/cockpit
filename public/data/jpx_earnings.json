@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-29T14:53:43.374778Z",
+  "generated_at": "2026-09-30T14:59:44.761153Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,35 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
       "label": "",
-      "events": 434,
+      "events": 432,
       "bytes": 48977
     }
   ],
   "events": [
-    {
-      "symbol": "7624.T",
-      "code": "7624",
-      "name": "NaITO",
-      "date": "2026-09-28",
-      "time": "2026-09-28T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8227.T",
-      "code": "8227",
-      "name": "しまむら",
-      "date": "2026-09-28",
-      "time": "2026-09-28T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2792.T",
       "code": "2792",
@@ -5229,8 +5205,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 434,
-    "unique_future_events": 434,
+    "raw_rows": 432,
+    "unique_future_events": 432,
     "warnings": []
   }
 }
