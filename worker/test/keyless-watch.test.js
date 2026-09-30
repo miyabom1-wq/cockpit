@@ -1,3 +1,4 @@
+import {budgetTestEnv} from './budget-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../src/index.js';
@@ -6,7 +7,7 @@ import { MockKV } from './helpers.js';
 
 const base='https://vantage-radar.miyab.workers.dev';
 test('watch panel can read, add, update and delete with no saved key or server token',async()=>{
-  const kv=new MockKV({'meta:schema':'vantage-kv-v3'}),env={COCKPIT_KV:kv};
+  const kv=new MockKV({'meta:schema':'vantage-kv-v3'}),env={...budgetTestEnv(),COCKPIT_KV:kv};
   const call=async(path,body)=>{
     const response=await worker.fetch(new Request(base+path,body?{method:'POST',headers:{Origin:base,'Content-Type':'application/json'},body:JSON.stringify(body)}:{headers:{'Sec-Fetch-Site':'same-origin'}}),env,{});
     assert.equal(response.status,200);return response.json();

@@ -9,13 +9,13 @@ const nodeMap = now => new Map(scheduleNodes(now).nodes.map(node => [node.key, n
 test('every JP intraday snapshot covers the complete registered capacity', () => {
   const nodes = nodeMap(new Date('2026-07-21T05:20:00.000Z'));
   const expected = marketParts('jp');
-  for (const label of ['jp_0930','jp_1020','jp_1130','jp_1420','jp_1505']) {
+  for (const label of ['jp_0930','jp_1420']) {
     for (let part = 1; part <= expected; part++) {
       assert.ok(nodes.has(`${label}:b${part}`), `${label}:b${part} must exist`);
     }
     assert.equal(nodes.get(`${label}:b1`)?.minSessionRatio, 80);
   }
-  assert.equal(nodes.get('jp_1130:b1')?.window, 170);
+  assert.equal(nodes.get('jp_0930:b1')?.window, 55);
 });
 
 test('confirmed JP retries and recovery reuse one close snapshot generation', () => {

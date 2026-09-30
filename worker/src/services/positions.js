@@ -1,7 +1,7 @@
 import { KEYS } from '../storage/kv-schema.js';
 import { parseJson, nowIso, normalizeSymbol, finite, round } from '../utils.js';
 const DEFAULT={positions:[],position_count:0,last_violation_at:null,cooldown_hours:48,note:''};
-async function read(env){const x=parseJson(await env.COCKPIT_KV.get(KEYS.discipline),{});const s={...DEFAULT,...x};if(!Array.isArray(s.positions))s.positions=[];s.position_count=s.positions.length||s.position_count||0;return s;}
+async function read(env){const x=parseJson(await env.COCKPIT_KV.get(KEYS.discipline),{});const s={...DEFAULT,...x};s.positions=Array.isArray(x.positions)?x.positions:[];s.position_count=s.positions.length||s.position_count||0;return s;}
 async function save(env,s){await env.COCKPIT_KV.put(KEYS.discipline,JSON.stringify(s));}
 function cooldown(s){if(!s.last_violation_at)return{...s,cooldown_active:false,cooldown_remaining_h:0};const remain=(s.cooldown_hours||48)-(Date.now()-new Date(s.last_violation_at).getTime())/3600000;return{...s,cooldown_active:remain>0,cooldown_remaining_h:remain>0?round(remain,1):0};}
 export async function getPositions(env){

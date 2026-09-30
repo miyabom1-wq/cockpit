@@ -548,8 +548,8 @@ function quoteHtml(r,m=marketOf(r?.symbol),compact=false){
 }
 function shareText(v){if(!quoteFinite(v))return'—';const n=Number(v);if(Math.abs(n)>=100000000)return(n/100000000).toLocaleString('ja-JP',{maximumFractionDigits:2})+'億株';if(Math.abs(n)>=10000)return(n/10000).toLocaleString('ja-JP',{maximumFractionDigits:1})+'万株';return n.toLocaleString('ja-JP')+'株'}
 function supplyClass(s){const v=Number(s?.score||0);return v>=4?'good':v<=-7?'bad':'neutral'}
-function marginBadgeHtml(r){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.margin_supply;if(!s)return'<span class="supply-badge neutral">需給待ち</span>';return`<span class="supply-badge ${supplyClass(s)}">${esc(s.label||'需給待ち')}${quoteFinite(s.buy_turnover_days)?' · '+num(s.buy_turnover_days,1)+'日':''}</span>`}
-function marginSupplyHtml(r,compact=false){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.margin_supply||{},f=s.flags||{},flags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);if(!s.available&&!flags.length)return compact?'<span class="supply-badge neutral">需給データ待ち</span>':`<div class="margin-supply neutral"><div class="margin-head"><b>信用需給</b><span>データ待ち</span></div><small>${esc(s.summary||'公式週次データの初回更新待ち')}</small></div>`;const rows=[['信用買残',shareText(s.buy_balance)],['前週比',quoteFinite(s.buy_change_pct)?pct(s.buy_change_pct):'—'],['信用売残',shareText(s.sell_balance)],['信用倍率',quoteFinite(s.ratio)?num(s.ratio,2)+'倍':'—'],['買残回転',quoteFinite(s.buy_turnover_days)?num(s.buy_turnover_days,2)+'日分':'—'],['基準日',s.as_of||'—']];if(compact)return marginBadgeHtml(r);return `<div class="margin-supply ${supplyClass(s)}"><div class="margin-head"><div><b>信用需給 · ${esc(s.label||'中立')}</b><small>価格・市場差RS・出来高の補助判定</small></div><span class="supply-score">${Number(s.score||0)>=0?'+':''}${num(s.score,1)}</span></div><div class="margin-grid">${rows.map(([k,v])=>`<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>${flags.length?`<div class="margin-flags">${flags.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}${s.summary?`<div class="margin-summary">${esc(s.summary)}</div>`:''}<div class="margin-note">週次信用残。日々公表は注意喚起であり、信用規制とは別です。</div></div>`}
+function marginBadgeHtml(r){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.margin_supply;if(!s)return'<span class="supply-badge neutral">需給待ち</span>';return`<span class="supply-badge ${supplyClass(s)}">${esc(s.label||'需給待ち')} · ${esc(s.as_of||'基準日不明')}${quoteFinite(s.buy_turnover_days)?' · '+num(s.buy_turnover_days,1)+'日':''}</span>`}
+function marginSupplyHtml(r,compact=false){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.margin_supply||{},f=s.flags||{},flags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);if(!s.available&&!flags.length)return compact?'<span class="supply-badge neutral">需給データ待ち</span>':`<div class="margin-supply neutral"><div class="margin-head"><b>信用需給</b><span>データ待ち</span></div><small>${esc(s.summary||'公式日次データの初回更新待ち')}</small></div>`;const rows=[['信用買残',shareText(s.buy_balance)],['買残前日比',quoteFinite(s.buy_day_change_pct)?pct(s.buy_day_change_pct):'比較不能'],['買残5営業日前比',quoteFinite(s.buy_5d_change_pct)?pct(s.buy_5d_change_pct):'比較不能'],['信用売残',shareText(s.sell_balance)],['信用倍率',quoteFinite(s.ratio)?num(s.ratio,2)+'倍':'—'],['買残回転',quoteFinite(s.buy_turnover_days)?num(s.buy_turnover_days,2)+'日分':'—'],['基準日',s.as_of||'不明'],['最終取得',s.last_fetched_at?dateText(s.last_fetched_at):'未取得']];if(compact)return marginBadgeHtml(r);return `<div class="margin-supply ${supplyClass(s)}"><div class="margin-head"><div><b>信用需給 · ${esc(s.label||'中立')}</b><small>価格・市場差RS・出来高の補助判定</small></div><span class="supply-score">${Number(s.score||0)>=0?'+':''}${num(s.score,1)}</span></div><div class="margin-grid">${rows.map(([k,v])=>`<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>${flags.length?`<div class="margin-flags">${flags.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}${s.summary?`<div class="margin-summary">${esc(s.summary)}</div>`:''}<div class="margin-note">日次信用残。日々公表は注意喚起であり、信用規制とは別です。</div></div>`}
 function marketGate(m){return state.stage?.[m]?.risk_gate||state.momentum?.[m]?.risk_gate||state.notrade?.[m]?.risk_gate||{level:'normal',label:'通常',block_new_entries:false,reasons:[]}}
 function gateHtml(m){const g=marketGate(m);if(g.level==='normal')return'';const dates=g.data_dates||{},labels={primary:m==='us'?'S&P500':'日経平均',nikkei_futures:'日経先物（CME円建て）',kospi:'KOSPI',sox:'SOX',vix:'VIX'},basis=Object.entries(dates).filter(([,v])=>v).map(([k,v])=>`${labels[k]||k} ${dateOnly(v)}`).join(' / ');return `<div class="risk-gate ${g.level==='caution'?'caution':''}"><b>${esc(g.label)}${g.block_new_entries?' · 新規A/B抑制':''}</b><span>${esc((g.reasons||[]).join(' / ')||'主要指数とボラティリティを再確認')}</span>${g.mixed_dates?`<small>指数ごとの基準日を分離：${esc(basis)}${g.lagged_confirmation?'。遅行確認の重複加点を抑制':''}</small>`:''}</div>`}
 function macroBasis(v){const parts=[];if(v?.date)parts.push('基準 '+dateOnly(v.date));if(v?.price_time)parts.push('価格時刻 '+dateText(v.price_time));return parts.join(' · ')}
@@ -1515,32 +1515,33 @@ async function loadMarginSupply(force=false){
       .filter(x=>Number(x.supply_score)<=-7||x.margin_add_blocked)
       .sort((a,b)=>(a.supply_score??0)-(b.supply_score??0));
     const good=available
-      .filter(x=>Number(x.supply_score)>=4)
+      .filter(x=>!x.margin_supply?.stale&&Number(x.supply_score)>=4)
       .sort((a,b)=>(b.supply_score??0)-(a.supply_score??0));
     const neutral=available
       .filter(x=>Number(x.supply_score)>-7&&Number(x.supply_score)<4&&!x.margin_add_blocked)
       .sort((a,b)=>Math.abs(Number(b.supply_score||0))-Math.abs(Number(a.supply_score||0)));
 
-    let html=`<div class="margin-hero"><h2>日本株・信用需給</h2><p>JPXの週次信用残と、日々公表・特別周知・信用規制を統合。価格・市場差RS・出来高の主判定は変えず、候補順位とポジション注意へ補助的に反映します。</p><div class="margin-kpis"><div class="margin-kpi"><b>${esc(d.weekly?.as_of||'待ち')}</b><span>週次基準日</span></div><div class="margin-kpi"><b>${d.weekly?.count||0}</b><span>公式収録銘柄</span></div><div class="margin-kpi"><b>${covered}/${rows.length}</b><span>登録銘柄カバー</span></div><div class="margin-kpi"><b>${warn.length}</b><span>需給悪化・警戒</span></div></div></div>`;
+    let html=`<div class="margin-hero"><h2>日本株・信用需給</h2><p>JPXの日次信用残と、日々公表・特別周知・信用規制を統合。価格・市場差RS・出来高の主判定は変えず、候補順位とポジション注意へ補助的に反映します。</p><div class="margin-kpis"><div class="margin-kpi"><b>${esc((d.daily||d.weekly)?.as_of||'待ち')}</b><span>残高基準日</span></div><div class="margin-kpi"><b>${(d.daily||d.weekly)?.count||0}</b><span>公式収録銘柄</span></div><div class="margin-kpi"><b>${covered}/${rows.length}</b><span>登録銘柄カバー</span></div><div class="margin-kpi"><b>${warn.length}</b><span>需給悪化・警戒</span></div></div></div>`;
     html+=`<div class="toolbar"><button class="primary small" onclick="loadMarginSupply(true)">最新の配信データを確認</button><span class="fresh">取得データ生成 ${dateText(d.generated_at)}</span></div>`;
-    html+='<div class="note">週次残高は原則、火曜日16:30ごろに公表され、その後の取り込み完了後に反映されます。このボタンは配信済みデータを再取得します。公式公表後も基準日が古い場合は取り込み待ちです。<a href="https://www.jpx.co.jp/markets/statistics-equities/margin/05.html" target="_blank" rel="noopener noreferrer">JPXの公表状況を確認</a></div>';
+    html+='<div class="note">日次残高は原則、前営業日申込分が16:00を目安に公表され、取り込み完了後に反映されます。このボタンは配信済みデータを再取得します。公式公表後も基準日が古い場合は取り込み待ちです。<a href="https://www.jpx.co.jp/markets/statistics-equities/margin/01.html" target="_blank" rel="noopener noreferrer">JPXの公表状況を確認</a></div>';
+    if(d.stale)html+=`<div class="note down">stale（参考値） / 基準日 ${esc(d.as_of||'不明')} / 期待基準日 ${esc(d.expected_as_of||'不明')}。古い残高は需給評価対象外です。</div>`;
     if(d.cache_warning)html+=`<div class="note down">最新ファイルの取得に失敗したため保存済みデータを表示：${esc(d.cache_warning)}</div>`;
-    if(!d.weekly?.count)html+='<div class="note">初回の「Update JP Margin Supply Data」GitHub Actions完了後に、全銘柄の週次残高が表示されます。</div>';
-    if(d.weekly?.count&&rows.length&&covered===0)html+='<div class="note down"><b>反映エラー：</b>公式データは取得済みですが、登録銘柄への信用需給付与が0件です。画面を再読込しても直らない場合はバックエンドの状態を確認してください。</div>';
+    if(!(d.daily||d.weekly)?.count)html+='<div class="note">初回の「Update JP Margin Supply Data」GitHub Actions完了後に、全銘柄の日次残高が表示されます。</div>';
+    if((d.daily||d.weekly)?.count&&rows.length&&covered===0)html+='<div class="note down"><b>反映エラー：</b>公式データは取得済みですが、登録銘柄への信用需給付与が0件です。画面を再読込しても直らない場合はバックエンドの状態を確認してください。</div>';
     if(rows.length&&covered<rows.length)html+=`<div class="note">信用需給を取得できた登録銘柄 ${covered}件 / データ待ち ${rows.length-covered}件</div>`;
-    html+='<div class="note"><b>重要：</b>日々公表銘柄は注意喚起で、増担保などの信用規制そのものではありません。残高は週次なので、必ず基準日を確認します。</div>';
+    html+='<div class="note"><b>重要：</b>日々公表銘柄は注意喚起で、増担保などの信用規制そのものではありません。残高は前営業日申込分なので、必ず基準日を確認します。</div>';
 
     const cards=(title,list,empty,limit=20)=>`<div class="section-title">${title}</div>${list.length?list.slice(0,limit).map(r=>`<div class="compact-row" onclick="openCandidate('${attr(r.symbol)}')"><div class="compact-head"><span class="code">${esc(code(r.symbol))}</span><span class="name grow1">${esc(r.name)}</span>${marginBadgeHtml(r)}</div>${marginSupplyHtml(r)}</div>`).join(''):`<div class="empty">${empty}</div>`}`;
-    const noCoverage=d.weekly?.count&&rows.length&&covered===0;
+    const noCoverage=(d.daily||d.weekly)?.count&&rows.length&&covered===0;
     html+=cards('登録銘柄・需給悪化／警戒',warn,noCoverage?'登録銘柄への反映なし':'現在は該当なし');
     html+=cards('登録銘柄・需給改善／追い風',good,noCoverage?'登録銘柄への反映なし':'現在は該当なし');
-    html+=cards('登録銘柄・中立',neutral,noCoverage?'登録銘柄への反映なし':'中立銘柄なし',30);
+    html+=cards('登録銘柄・中立／参考値',neutral,noCoverage?'登録銘柄への反映なし':'中立銘柄なし',30);
 
     const flagged=d.flagged||[];
     html+=`<div class="section-title">市場全体の注意・規制銘柄</div><div class="card">${flagged.length?flagged.slice(0,40).map(x=>{const f=x.flags||{},tags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);return `<div class="flag-row"><span class="code">${esc(code(x.symbol))}</span><span class="name">${esc(x.name||x.symbol)}</span><span class="flag-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</span></div>`}).join(''):'<div class="empty">該当なし</div>'}</div>`;
-    html+=`<div class="note">週次残高：JPX「銘柄別信用取引週末残高」／注意・規制：JPXの日々公表・特別周知・信用取引規制ページ。発注前の最終確認は証券会社画面を使用してください。</div>`;
+    html+=`<div class="note">日次残高：JPX「銘柄別信用取引残高」／注意・規制：JPXの日々公表・特別周知・信用取引規制ページ。発注前の最終確認は証券会社画面を使用してください。</div>`;
     root.innerHTML=html;
-    if(force)toast(d.cache_warning?'取得に失敗したため保存済みデータを表示しています':`配信データを確認しました（週次基準日 ${d.weekly?.as_of||'待ち'}）`);
+    if(force)toast(d.cache_warning?'取得に失敗したため保存済みデータを表示しています':`配信データを確認しました（残高基準日 ${(d.daily||d.weekly)?.as_of||'待ち'}）`);
   }catch(e){root.innerHTML='<div class="card pad down">'+esc(e.message)+'</div>'}
 }
 
@@ -1738,13 +1739,17 @@ async function checkSystemStatus(){
   const u=uni?.config||{},proposal=uni?.proposal||{};
   const uniText=u.mode==='guarded_auto'?'週次・安全自動':u.mode==='proposal'?'提案のみ':'停止';
   const scheduler=health.scheduler||{};
+  const budget=health.storage_budget,usage=budget?.used||{},limits=budget?.limits||{};
+  const budgetDetail=budget?.limits?`自動 ${usage.background||0}/${limits.background}・分析 ${usage.analysis||0}/${limits.analysis}・管理 ${usage.user||0}/${limits.user}。日本時間9時リセット（予約分を含む）`:'Workerの設定・更新を確認してください';
+  const budgetStopped=budget?.limits&&Object.keys(limits).some(k=>(usage[k]||0)>=limits[k]);
+  const budgetCard=statusCard('保存予算',budget?.limits?(budgetStopped?'一部更新を予算で停止':'無料枠を保護中'):'予算制御未確認',budgetDetail,budgetStopped||!budget?.limits?'warn':'good');
   const cronAlive=scheduler.alive===true;
   const failures=Object.entries(scheduler.node_errors||{});
   const datasetLabels={ranking_jp:'日本ランキング',ranking_us:'米国ランキング',earnings_jp:'日本決算日程',earnings_us:'米国決算日程',margin:'信用需給'};
   const datasetCards=Object.entries(health.datasets||{}).map(([key,d])=>statusCard(datasetLabels[key]||key,d.last_error?'更新失敗・前回分を表示':!d.available?'取得待ち':d.stale?'更新待ち':'取得済み',`基準 ${d.trade_date||'—'} / 更新 ${dateText(d.updated_at)}${d.last_error?' / '+d.last_error:''}`,d.last_error||d.stale||!d.available?'warn':'good')).join('');
   const cronText=scheduler.last_cron_at?`最終 ${dateText(scheduler.last_cron_at)}・${scheduler.age_minutes??'—'}分前`:'実行記録待ち';
   const cronDetail=scheduler.last_error?`最終エラー ${scheduler.last_error}`:`成功 ${scheduler.counters?.successes||0}・再試行 ${scheduler.counters?.retries||0}`;
-  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'} / 作成 ${dateText(health.build_time)} / ${String(health.source_commit||'未記録').slice(0,8)}`,'good')}${statusCard('自動更新',cronAlive?(failures.length?'稼働中・未解決 '+failures.length+'件':'稼働中'):'実行記録を確認',`${cronText} / ${cronDetail}`,cronAlive?(failures.length?'warn':'good'):'bad')}${statusCard('日本株',freshnessText(jp),`確定率 ${jp.close_verification?.ratio??0}%`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`確定率 ${us.close_verification?.ratio??0}%`,freshnessKind(us))}${datasetCards}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line">${failures.map(([key,e])=>`<div>${esc(key)} · ${esc(dateText(e.at))} · ${esc(e.error||'再試行待ち')}</div>`).join('')}<b>自動回復：</b>失敗したバッチだけを再試行し、後続バッチは停止しません。日本株は夜間、米国株は引け後午前中まで未完了分を回収します。</div>`;
+  root.innerHTML=`<div class="system-grid">${statusCard('バックエンド',`正常 · ${health.version||'—'}`,`分析エンジン ${health.engine||'—'} / 作成 ${dateText(health.build_time)} / ${String(health.source_commit||'未記録').slice(0,8)}`,'good')}${statusCard('自動更新',cronAlive?(failures.length?'稼働中・未解決 '+failures.length+'件':'稼働中'):'実行記録を確認',`${cronText} / ${cronDetail}`,cronAlive?(failures.length?'warn':'good'):'bad')}${statusCard('日本株',freshnessText(jp),`確定率 ${jp.close_verification?.ratio??0}%`,freshnessKind(jp))}${statusCard('米国株',freshnessText(us),`確定率 ${us.close_verification?.ratio??0}%`,freshnessKind(us))}${budgetCard}${datasetCards}${statusCard('ユニバース',uniText,proposal.generated_at?`提案更新 ${dateText(proposal.generated_at)}`:'毎営業日18:20頃に提案更新',u.mode==='off'?'warn':'good')}</div><div class="schedule-line">${failures.map(([key,e])=>`<div>${esc(key)} · ${esc(dateText(e.at))} · ${esc(e.error||'再試行待ち')}</div>`).join('')}<b>自動回復：</b>失敗したバッチだけを再試行し、後続バッチは停止しません。日本株は夜間、米国株は引け後午前中まで未完了分を回収します。</div>`;
  }catch(e){
   root.innerHTML=`<div class="status-error">接続確認に失敗しました。${esc(e.message)}</div>`;
  }
@@ -2046,7 +2051,7 @@ window.openSettings=async function(){
  $('modal-title').textContent='設定';
  $('modal-body').innerHTML=`<div class="settings-grid">
   <div class="v52-settings-card"><h3>登録銘柄</h3><p>VANTAGEが日々分析している日本株・米国株の一覧です。</p><div class="actions"><button class="primary" onclick="openRegisteredStocks()">登録銘柄一覧</button><button onclick="closeModal();openStockEditor()">追加・固定・削除</button></div></div>
-  <div class="v52-settings-card"><h3>信用需給</h3><p>週次信用残、日々公表、特別周知、信用規制をまとめて確認します。</p><div class="actions"><button onclick="openMarginDashboard()">信用需給を開く</button></div></div>
+  <div class="v52-settings-card"><h3>信用需給</h3><p>日次信用残、日々公表、特別周知、信用規制をまとめて確認します。</p><div class="actions"><button onclick="openMarginDashboard()">信用需給を開く</button></div></div>
   <div class="v52-settings-card"><h3>通知</h3><p>対応端末ではプッシュ通知を有効化できます。</p><div class="actions"><button onclick="enablePush()">通知を有効化</button><button onclick="testPush()">テスト通知</button></div></div>
   <div class="v52-settings-card"><h3>接続設定</h3><p>VANTAGEの画面からの閲覧・監視銘柄の追加・削除は、キーの入力なしで利用できます。</p><details><summary>外部ツール用キー（通常は設定不要）</summary><input id="write-key" class="v52-settings-input" type="password" value="${esc(localStorage.getItem('vantage_write_key')||'')}" placeholder="アクセスキー"><div class="actions"><button onclick="saveWriteKey()">保存</button></div></details></div>
   <div class="v52-settings-card settings-wide"><div class="settings-head"><div><h3>システム状態</h3><p>バックエンド、日米データ、登録銘柄管理の状態を確認します。</p></div><button onclick="checkSystemStatus()">再確認</button><button onclick="recalcStage()">データを再取得</button></div><div id="system-status"><div class="loading compact">確認中…</div></div></div>

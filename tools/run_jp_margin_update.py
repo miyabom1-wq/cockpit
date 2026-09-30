@@ -310,38 +310,21 @@ def main() -> int:
         entrypoint_self_test()
         return 0
 
+    import jp_margin_daily as daily
     core = load_core()
-
-    def discover_latest_pdf(page_url: str = core.WEEKLY_PAGE):
-        response = requests.get(
-            page_url,
-            headers={"User-Agent": core.UA, "Accept": "text/html,*/*"},
-            timeout=60,
-        )
-        response.raise_for_status()
-        result = discover_pdf_from_html(response.content, page_url, core.LinkWithDate)
-        print(f"JPX weekly PDF selected: {result.date} / {result.url}", file=sys.stderr)
-        return result
-
-    original_build_dataset = core.build_dataset
-
-    def build_dataset_with_validation(records, link, previous, min_count):
-        if not previous_dataset_is_trustworthy(previous):
-            print("Previous JP margin JSON failed quality checks; history was reset.", file=sys.stderr)
-            previous = {}
-        data = original_build_dataset(records, link, previous, min_count)
-        data.setdefault("source", {})["parser"] = PARSER_NAME
-        data["validation"] = {
-            "status": "passed",
-            "parser": PARSER_NAME,
-            "standard_symbol_count": len(records),
-            "history_reset": not previous_dataset_is_trustworthy(previous),
-        }
-        return data
-
+    original_build = core.build_dataset
+    diagnostics = {}
+    def discover_latest_pdf():
+        return daily.discover(core.get(daily.PAGE), core.LinkWithDate)
+    def parse_daily(blob):
+        records, diag = daily.parse_pdf(blob)
+        diagnostics.update(diag)
+        return records, diag
+    def build_daily(records, link, previous, min_count):
+        return daily.build(SimpleNamespace(build_dataset=original_build), records, link, previous, min_count, diagnostics)
     core.discover_latest_pdf = discover_latest_pdf
-    core.parse_weekly_pdf = parse_weekly_pdf_by_coordinates
-    core.build_dataset = build_dataset_with_validation
+    core.parse_weekly_pdf = parse_daily
+    core.build_dataset = build_daily
     return int(core.main())
 
 

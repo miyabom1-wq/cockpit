@@ -1,3 +1,4 @@
+import { getEconomicEvents } from './economic-events.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { getStockList } from '../storage/stocklist.js';
 import { fetchYahooChart } from '../data/yahoo.js';
@@ -357,7 +358,8 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
     if(!old||eventPriority(x)>eventPriority(old)||(eventPriority(x)===eventPriority(old)&&Date.parse(x.time)<Date.parse(old.time)))bySymbol.set(s,x);
   }
 
-  const events=[...manual,...bySymbol.values()].sort((a,b)=>new Date(a.time)-new Date(b.time));
+  const economic=await getEconomicEvents(env,now);
+  const events=[...manual,...bySymbol.values(),...economic].sort((a,b)=>new Date(a.time)-new Date(b.time));
   const checkedSymbols=new Set(verified.flatMap(event=>event.symbols||[]));
   let lastCheckedAt=[jpxState.dataset?.generated_at,usState.dataset?.generated_at].filter(Boolean).sort().at(-1)||null;
 

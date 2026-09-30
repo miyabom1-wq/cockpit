@@ -1,3 +1,4 @@
+import {budgetTestEnv} from './budget-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -36,7 +37,7 @@ test('unsupported mutation methods are rejected before touching storage, even wi
 });
 
 test('authorized settings update works and unauthorized POST cannot write',async()=>{
-  const kv=new MockKV(),env={COCKPIT_KV:kv,WRITE_TOKEN:'secret'};
+  const kv=new MockKV(),env={...budgetTestEnv(),COCKPIT_KV:kv,WRITE_TOKEN:'secret'};
   const options={method:'POST',body:JSON.stringify({action:'config',mode:'off'})};
   assert.equal((await worker.fetch(new Request('https://example.com/api/universe',options),env)).status,403);
   assert.equal(kv.writes,0);
@@ -45,7 +46,7 @@ test('authorized settings update works and unauthorized POST cannot write',async
 });
 
 test('events sync cannot mutate via GET and requires a token for POST',async()=>{
-  const kv=new MockKV(),env={COCKPIT_KV:kv,WRITE_TOKEN:'secret'};
+  const kv=new MockKV(),env={...budgetTestEnv(),COCKPIT_KV:kv,WRITE_TOKEN:'secret'};
   assert.equal((await worker.fetch(new Request('https://example.com/api/events-sync'),env)).status,405);
   assert.equal((await worker.fetch(new Request('https://example.com/api/events-sync',{method:'POST',body:'{}'}),env)).status,403);
   assert.equal(kv.writes,0);

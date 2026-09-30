@@ -79,7 +79,7 @@ test('registered display sorts JP codes including letters and US tickers without
  assert.equal((await getStockList(env,'jp'))[0].symbol,'7203.T');
 });
 
-test('a day of failed background backtests is bounded to 48 attempts, while manual retry stays immediate',async t=>{
+test('a day of failed background backtests is bounded to 24 attempts, while manual retry stays immediate',async t=>{
  t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-09-18T00:00:00Z')});
  const oldFetch=globalThis.fetch;
  globalThis.fetch=async()=>new Response('unavailable',{status:503});
@@ -91,8 +91,8 @@ test('a day of failed background backtests is bounded to 48 attempts, while manu
    if(result.paused)attempts++;
    t.mock.timers.tick(300000);
   }
-  assert.equal(attempts,48);
-  assert.equal(kv.writes,97); // Initial state + lock and error-progress per attempt.
+  assert.equal(attempts,24);
+  assert.equal(kv.writes,49); // Initial state + lock and error-progress per attempt.
   await runBacktestStep(env,1,false,{scheduled:true});
   const before=kv.writes;
   const manual=await runBacktestStep(env,1,false);

@@ -5,19 +5,16 @@ import { batchFreshnessRatios } from '../src/services/stage.js';
 
 const nodeMap = now => new Map(scheduleNodes(now).nodes.map(node => [node.key, node]));
 
-test('JP lunch schedule is ready before the afternoon session', () => {
+test('JP keeps two intraday snapshots and midday macro without redundant full scans', () => {
   const nodes = nodeMap(new Date('2026-07-21T02:30:00.000Z'));
-  assert.equal(nodes.get('jp_1130:b1')?.at, 690);
-  assert.equal(nodes.get('jp_1130:b8')?.at, 690);
-  assert.equal(nodes.get('jp_1130:b1')?.minSessionRatio, 80);
-  assert.equal(nodes.get('macro_1220')?.at, 740);
-  assert.equal(nodes.has('jp_1200:b1'), false);
-  assert.equal(nodes.has('macro_1210'), false);
+  assert.equal(nodes.get('jp_0930:b8')?.at,570);
+  assert.equal(nodes.get('jp_1420:b8')?.at,860);
+  for(const label of ['jp_1020','jp_1130','jp_1505'])assert.equal(nodes.has(label+':b1'),false);
+  assert.equal(nodes.get('macro_1220')?.at,740);
 });
 
 test('JP close schedule is published shortly after the close', () => {
   const nodes = nodeMap(new Date('2026-07-21T06:35:00.000Z'));
-  assert.equal(nodes.get('jp_1505:b1')?.at, 905);
   assert.equal(nodes.get('jp_1535:b1')?.at, 935);
   assert.equal(nodes.get('jp_1535:b8')?.at, 935);
   assert.equal(nodes.get('jp_1535:b1')?.minConfirmedRatio, 90);

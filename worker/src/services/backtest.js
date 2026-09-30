@@ -332,7 +332,7 @@ export async function runBacktestStep(env,count=1,force=false,{scheduled=false}=
   // Reserve KV writes for live analysis and user changes. Manual steps remain immediate.
   if(scheduled&&!force){
     const previous=parseJson(await env.COCKPIT_KV.get(STATE),null);
-    if(Date.now()-Date.parse(previous?.updated_at||'')<1800000)return{ok:true,skipped:true,reason:'scheduled write cooldown'};
+    if(Date.now()-Date.parse(previous?.updated_at||'')<3600000)return{ok:true,skipped:true,reason:'scheduled write cooldown'};
   }
   let s=await loadState(env,force);
   if(s.status==='failed'&&!force&&shouldAutoRestartBacktest(s))s=await loadState(env,true);

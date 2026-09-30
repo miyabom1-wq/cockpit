@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluateMarginSupply, enrichMarginSupply, getMarginDataset, MARGIN_DATA_SCHEMA } from '../src/services/margin-supply.js';
+import { evaluateMarginSupply, enrichMarginSupply, getMarginDataset, MARGIN_DATA_SCHEMA, expectedMarginDate } from '../src/services/margin-supply.js';
 import { MockKV } from './helpers.js';
 
 function item({buy=1000000,sell=100000,buyChange=100000,sellChange=0,flags={}}={}){
-  return{weekly:{as_of:'2026-07-10',published_at:'2026-07-14T07:30:00Z',buy_balance:buy,sell_balance:sell,buy_change:buyChange,sell_change:sellChange,buy_change_pct:buyChange/(buy-buyChange)*100,sell_change_pct:0,ratio:sell?buy/sell:null,buy_4w_change_pct:20},flags};
+  return{daily:{as_of:expectedMarginDate(),published_at:'2026-07-14T07:30:00Z',buy_balance:buy,sell_balance:sell,buy_change:buyChange,sell_change:sellChange,buy_5d_change_pct:buyChange/(buy-buyChange)*100,buy_change_pct:buyChange/(buy-buyChange)*100,sell_change_pct:0,ratio:sell?buy/sell:null,buy_4w_change_pct:20},flags};
 }
 function analysis(overrides={}){return{symbol:'285A.T',name:'キオクシア',market:'jp',ret5:-8,avg_volume20:200000,entry_lane:'C',entry_reason:['25日線近辺'],risk_reason:[],rs_percentile:70,audit:{},...overrides};}
 
@@ -32,7 +32,7 @@ test('daily publication is caution, not a margin restriction or hard stop',()=>{
 
 test('margin enrichment adjusts sort score but never changes A/B/C lane',()=>{
   const row=analysis({entry_lane:'A',rs_percentile:82});
-  const dataset={schema:MARGIN_DATA_SCHEMA,items:{'285A.T':item()}};
+  const dataset={schema:MARGIN_DATA_SCHEMA,daily:{as_of:expectedMarginDate()},items:{'285A.T':item()}};
   enrichMarginSupply([row],dataset);
   assert.equal(row.entry_lane,'A');
   assert.ok(Number.isFinite(row.entry_sort_score));
@@ -41,13 +41,13 @@ test('margin enrichment adjusts sort score but never changes A/B/C lane',()=>{
 
 test('official dataset fetch is cached in KV',async()=>{
   const original=globalThis.fetch,calls=[];
-  globalThis.fetch=async url=>{calls.push(String(url));return new Response(JSON.stringify({schema:MARGIN_DATA_SCHEMA,generated_at:new Date().toISOString(),weekly:{as_of:'2026-07-10',count:1},items:{'285A.T':item()}}),{status:200,headers:{'content-type':'application/json'}})};
+  globalThis.fetch=async url=>{calls.push(String(url));return new Response(JSON.stringify({schema:MARGIN_DATA_SCHEMA,generated_at:new Date().toISOString(),daily:{as_of:expectedMarginDate(),count:1},items:{'285A.T':item()}}),{status:200,headers:{'content-type':'application/json'}})};
   try{
     const env={COCKPIT_KV:new MockKV()};
     const first=await getMarginDataset(env,{force:true});
     const second=await getMarginDataset(env);
-    assert.equal(first.weekly.count,1);
-    assert.equal(second.weekly.count,1);
+    assert.equal(first.daily.count,1);
+    assert.equal(second.daily.count,1);
     assert.equal(calls.length,1);
     assert.ok(env.COCKPIT_KV.map.has('margin:supply:v1'));
   }finally{globalThis.fetch=original;}

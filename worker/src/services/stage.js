@@ -52,8 +52,12 @@ async function resolveManualSnapshot(env,market,part){
 async function getBenchmark(env,market,id){
   const raw=await env.COCKPIT_KV.get(benchmarkKey(id));if(raw){const v=parseJson(raw,null);if(v?.rows&&v?.secondary_rows)return v;}
   const primarySymbol=market==='jp'?'^N225':'^GSPC',secondarySymbol=market==='jp'?'^TOPX':'^IXIC';
-  const [primary,secondary]=await Promise.all([fetchYahooChart(primarySymbol,{range:'2y',cacheTtl:300}),fetchYahooChart(secondarySymbol,{range:'2y',cacheTtl:300})]);
-  const p=normalizeYahooDaily(primary),s=normalizeYahooDaily(secondary),payload={symbol:primarySymbol,rows:p.rows,meta:p.meta,secondary_symbol:secondarySymbol,secondary_rows:s.rows,secondary_meta:s.meta,created_at:nowIso()};
+  const [primary,secondary]=await Promise.allSettled([fetchYahooChart(primarySymbol,{range:'2y',cacheTtl:300}),fetchYahooChart(secondarySymbol,{range:'2y',cacheTtl:300})]);
+  // The primary index is required for market RS. A missing supplementary
+  // index must not prevent fresh stock data from being published.
+  if(primary.status==='rejected')throw primary.reason;
+  const p=normalizeYahooDaily(primary.value),s=secondary.status==='fulfilled'?normalizeYahooDaily(secondary.value):{rows:[],meta:null};
+  const payload={symbol:primarySymbol,rows:p.rows,meta:p.meta,secondary_symbol:secondarySymbol,secondary_rows:s.rows,secondary_meta:s.meta,secondary_error:secondary.status==='rejected'?String(secondary.reason?.message||secondary.reason):null,created_at:nowIso()};
   await env.COCKPIT_KV.put(benchmarkKey(id),JSON.stringify(payload),{expirationTtl:WORK_TTL});return payload;
 }
 async function fetchMacro(market){

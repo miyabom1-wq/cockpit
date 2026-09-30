@@ -28,9 +28,9 @@ test('tiny theme sample is held instead of assertive breakdown',()=>{
   assert.equal(t.code,'WAIT');assert.equal(t.label,'判定保留');assert.ok(t.confidence<35);
 });
 
-test('margin freshness uses generated_at JST date',()=>{
-  const current={schema:MARGIN_DATA_SCHEMA,generated_at:'2026-08-12T10:43:27Z',items:{}};
-  const old={schema:MARGIN_DATA_SCHEMA,generated_at:'2026-08-11T10:43:27Z',items:{}};
+test('margin freshness uses balance date, not regenerated JSON date',()=>{
+  const current={schema:MARGIN_DATA_SCHEMA,generated_at:'2026-08-12T10:43:27Z',daily:{as_of:'2026-08-10'},items:{}};
+  const old={schema:MARGIN_DATA_SCHEMA,generated_at:'2026-08-12T10:43:27Z',daily:{as_of:'2026-08-07'},items:{}};
   assert.equal(marginGeneratedJstDate(current),'2026-08-12');
   assert.equal(marginDatasetFreshForTradeDate(current,'2026-08-12'),true);
   assert.equal(marginDatasetFreshForTradeDate(old,'2026-08-12'),false);

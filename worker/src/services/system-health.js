@@ -1,3 +1,4 @@
+import { marginFreshness } from './margin-supply.js';
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
 import { stageFreshness } from './stage-freshness.js';
 import { KEYS } from '../storage/kv-schema.js';
@@ -121,7 +122,7 @@ export async function getSystemAudit(env){
     const status=name.startsWith('ranking_')?parseJson(await env.COCKPIT_KV.get('ranking:status:'+name.slice(-2)),{}):{};
     const updated=data?.updated_at||data?.generated_at||null,age=updated?(Date.now()-Date.parse(updated))/3600000:Infinity;
     const market=name.endsWith('_us')?'us':'jp';
-    const stale=name.startsWith('ranking_')?(!data?.trade_date||data.trade_date<expectedConfirmedTradingDate(market)):age> (name==='margin'?16*24:4*24);
+    const stale=name.startsWith('ranking_')?(!data?.trade_date||data.trade_date<expectedConfirmedTradingDate(market)):(name==='margin'?marginFreshness(data).stale:age>4*24);
     return[name,{updated_at:updated,trade_date:data?.trade_date||data?.weekly?.as_of||null,available:!!data,stale,last_error:status.last_error||null,last_error_at:status.last_error_at||null}];
   })));
   const jp=stageSummary(parseJson(jpRaw,{market:'jp'}));

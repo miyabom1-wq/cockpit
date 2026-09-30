@@ -599,7 +599,7 @@ def main() -> int:
     tmp = out.with_suffix(out.suffix + ".tmp")
     tmp.write_text(json.dumps(data, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     tmp.replace(out)
-    print(f"Updated {out}: {data['weekly']['as_of']} / {data['weekly']['count']} issues / flags {data['rules']['daily_disclosure_count']} daily, {data['rules']['margin_restriction_count']} restricted")
+    print(f"Updated {out}: {data.get('daily', data.get('weekly', {}))['as_of']} / {data.get('daily', data.get('weekly', {}))['count']} issues / flags {data['rules']['daily_disclosure_count']} daily, {data['rules']['margin_restriction_count']} restricted")
     return 0
 
 

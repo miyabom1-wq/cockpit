@@ -1,3 +1,4 @@
+import { budgetStatus } from '../storage/write-budget.js';
 import { APP_VERSION, BUILD_ID, KV_SCHEMA_VERSION, ENGINE_VERSION, BACKTEST_VERSION, DEPLOYED_AT, SOURCE_COMMIT, BUILD_TIME } from '../config.js';
 import { json } from './http.js';
 import { ensureSchema } from '../storage/kv-schema.js';
@@ -21,7 +22,8 @@ export async function route(request,env){
   const url=new URL(request.url),p=url.pathname;
   if(p==='/api/health'){
     const audit=await getSystemAudit(env);
-    return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA,scheduler:audit.scheduler,stages:audit.stages,datasets:audit.datasets,source_commit:SOURCE_COMMIT,build_time:BUILD_TIME},200,request);
+    const storage_budget=await budgetStatus(env).catch(()=>({available:false}));
+    return json({ok:true,version:APP_VERSION,build:BUILD_ID,schema:KV_SCHEMA_VERSION,engine:ENGINE_VERSION,backtest:BACKTEST_VERSION,deployed_at:DEPLOYED_AT,time:new Date().toISOString(),storage_budget,entrypoint:'src/index.js',cron:'*/5 * * * *',margin:MARGIN_DATA_SCHEMA,scheduler:audit.scheduler,stages:audit.stages,datasets:audit.datasets,source_commit:SOURCE_COMMIT,build_time:BUILD_TIME},200,request);
   }
   if(p==='/api/system-audit')return json(await getSystemAudit(env),200,request);
   if(p==='/api/migrate')return json({ok:true,schema:await ensureSchema(env),migration:await migrateLegacyData(env)},200,request);

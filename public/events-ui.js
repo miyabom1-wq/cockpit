@@ -94,6 +94,7 @@ function patchMoreIconFallback(){
 }
 
 function srcInfo(event){
+  if(event?.official_kind==='economic')return{label:'公式 '+ '★'.repeat(event.importance||2),cls:'ir'};
   const name=String(event?.source_name||'');
   if(event?.official_kind==='jpx'||name.startsWith('JPX'))return{label:'JPX公式',cls:'jpx'};
   if(event?.provider_kind==='nasdaq_zacks')return{label:'Nasdaq参考',cls:'provider'};
@@ -141,6 +142,7 @@ function timeLabel(event){
   return date;
 }
 function marketOf(event){
+  if(event?.official_kind==='economic')return {jp:'日本',us:'米国',eu:'欧州'}[event.market]||'';
   const s=String(event?.symbols?.[0]||'').toUpperCase();
   if(!s)return event.market==='jp'?'日本':event.market==='us'?'米国':'';
   return /\.T$/.test(s)?'日本':'米国';

@@ -11,7 +11,7 @@ kv_namespaces = [
 command = "node scripts/build.mjs"
 
 [triggers]
-crons = ["*/5 * * * *"]
+crons = ["*/5 * * * *", "17 20 * * *"]
 
 [observability]
 enabled = true
@@ -26,3 +26,11 @@ directory = "../public"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 run_worker_first = [ "/api/*" ]
+
+[[durable_objects.bindings]]
+name = "WRITE_BUDGET"
+class_name = "WriteBudget"
+
+[[migrations]]
+tag = "vantage-write-budget-v1"
+new_sqlite_classes = ["WriteBudget"]

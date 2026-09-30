@@ -1,3 +1,6 @@
+import { ECONOMIC_CRON, syncEconomicEvents } from './services/economic-events.js';
+import { scopedStorage, requestLane } from './storage/write-budget.js';
+export { WriteBudget } from './storage/write-budget.js';
 import { corsHeaders, json, authorized, allowedMethods } from './api/http.js';
 import { route } from './api/routes.js';
 import { ensureSchema, KEYS } from './storage/kv-schema.js';
@@ -28,8 +31,8 @@ import {
 } from './services/system-health.js';
 
 const SCHEDULER_MARKER_VERSION='v73.8.14';
-const MARGIN_MARKER_VERSION='v71-margin-fresh';
-const RETRY_COOLDOWN_SECONDS=600;
+const MARGIN_MARKER_VERSION='v74-margin-daily';
+const RETRY_COOLDOWN_SECONDS=1800;
 // 20 symbols may need 40 provider requests with fallback. Keep each batch in
 // its own invocation, with room for benchmarks under the 50-request limit.
 const STAGE_BATCHES_PER_CRON=1;
@@ -103,10 +106,7 @@ export function scheduleNodes(now=new Date()){
   if(isTradingDay('jp',jpObj)){
     const jpParts=marketParts('jp');
     add('jp','jp_0930',570,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
-    add('jp','jp_1020',620,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
-    add('jp','jp_1130',690,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80,window:170});
     add('jp','jp_1420',860,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
-    add('jp','jp_1505',905,'intraday',jpDate,jpParts,'stage',{minSessionRatio:80});
     add('jp','jp_1535',935,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
     add('jp','jp_1640_retry',1000,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
     add('jp','jp_1735_retry2',1055,'confirmed',jpDate,jpParts,'stage',{minConfirmedRatio:90});
@@ -219,7 +219,7 @@ export async function scheduledStage(env,now=new Date()){
       if(node.action==='margin'){
         try{
           const result=await getMarginDataset(env,{force:true,requireGeneratedDate:node.tradeDate});
-          await markDone(env,node,{ok:true,generated_at:result?.generated_at||null,as_of:result?.weekly?.as_of||null});
+          await markDone(env,node,{ok:true,generated_at:result?.generated_at||null,as_of:result?.daily?.as_of||null});
           return{processed:1,node:node.key};
         }catch(error){
           if(error?.code==='MARGIN_DATA_NOT_FRESH'){
@@ -251,8 +251,7 @@ export async function scheduledStage(env,now=new Date()){
       }
 
       if(node.kind==='confirmed'&&await currentCloseReady(env,node.market,node.tradeDate)){
-        await markDone(env,node,{ok:true,skipped:'already-complete'});
-        continue;
+        continue; // Existing published close is itself the completion marker.
       }
 
       const opt=scheduleSnapshotOptions(node.market,schedulerSnapshotLabel(node),node.kind,node.tradeDate);
@@ -304,17 +303,25 @@ export default{
     const methods=allowedMethods(new URL(request.url).pathname);
     if(!methods.includes(request.method))return new Response(JSON.stringify({ok:false,error:'method not allowed'}),{status:405,headers:{'Content-Type':'application/json',Allow:methods.join(', '),...corsHeaders(request)}});
     if(!authorized(request,env))return json({ok:false,error:'接続元を確認できません。VANTAGEの画面を開き直してください。外部ツールからの接続には専用キーが必要です。'},403,request);
+    const body=request.method==='GET'?{}:await request.clone().json().catch(()=>({}));
+    const scoped=scopedStorage(env,requestLane(request,body));
     try{
-      await initializeStorage(env);
-      return await route(request,env);
+      await initializeStorage(scoped.env);
+      return await route(request,scoped.env);
     }catch(error){
       console.error('[fetch]',error?.stack||error);
-      return json({ok:false,error:error?.message||String(error)},500,request);
-    }
+      return json({ok:false,error:error?.message||String(error),code:error?.code||null},error?.status||500,request);
+    }finally{await scoped.finish();}
   },
 
   async scheduled(event,env,ctx){
     ctx.waitUntil((async()=>{
+      const scoped=scopedStorage(env,'background');env=scoped.env;
+      try{
+      if(event.cron===ECONOMIC_CRON){
+        await syncEconomicEvents(env,{now:event.scheduledTime||Date.now()});
+        return;
+      }
       try{
         await initializeStorage(env);
         const result=await scheduledStage(env);
@@ -325,6 +332,7 @@ export default{
       }
       try{await pushIndex(env)}catch(error){console.error('[push cron]',error?.stack||error)}
       try{await runBacktestStep(env,1,false,{scheduled:true})}catch(error){console.error('[backtest cron]',error?.stack||error)}
+      }finally{await scoped.finish();}
     })());
   }
 };
