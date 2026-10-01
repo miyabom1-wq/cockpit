@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-09-30T14:59:44.761153Z",
+  "generated_at": "2026-10-01T15:31:00.009098Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,227 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
       "label": "",
-      "events": 432,
+      "events": 414,
       "bytes": 48977
     }
   ],
   "events": [
-    {
-      "symbol": "2792.T",
-      "code": "2792",
-      "name": "ハニーズホールディングス",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3050.T",
-      "code": "3050",
-      "name": "DCMホールディングス",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3607.T",
-      "code": "3607",
-      "name": "クラウディアホールディングス",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7068.T",
-      "code": "7068",
-      "name": "フィードフォースグループ",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7921.T",
-      "code": "7921",
-      "name": "TAKARA&COMPANY",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8217.T",
-      "code": "8217",
-      "name": "オークワ",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9253.T",
-      "code": "9253",
-      "name": "スローガン",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9976.T",
-      "code": "9976",
-      "name": "セキチュー",
-      "date": "2026-09-29",
-      "time": "2026-09-29T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "192A.T",
-      "code": "192A",
-      "name": "インテグループ",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2354.T",
-      "code": "2354",
-      "name": "YEDIGITAL",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2685.T",
-      "code": "2685",
-      "name": "アンドエスティHD",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2935.T",
-      "code": "2935",
-      "name": "ピックルスホールディングス",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2975.T",
-      "code": "2975",
-      "name": "スター・マイカ・ホールディングス",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3089.T",
-      "code": "3089",
-      "name": "テクノアルファ",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6083.T",
-      "code": "6083",
-      "name": "ERIホールディングス",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9265.T",
-      "code": "9265",
-      "name": "ヤマシタヘルスケアホールディングス",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9369.T",
-      "code": "9369",
-      "name": "キユーソー流通システム",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9651.T",
-      "code": "9651",
-      "name": "日本プロセス",
-      "date": "2026-09-30",
-      "time": "2026-09-30T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_0918.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2493.T",
       "code": "2493",
@@ -5205,8 +4989,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 432,
-    "unique_future_events": 432,
+    "raw_rows": 414,
+    "unique_future_events": 414,
     "warnings": []
   }
 }
