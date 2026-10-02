@@ -4,6 +4,17 @@ import jp_margin_daily as daily
 import update_jp_margin as core
 
 class DailyTests(unittest.TestCase):
+    def test_html_without_charset_header(self):
+        from unittest.mock import patch
+        import requests
+        response=requests.Response()
+        response.status_code=200
+        response.encoding='ISO-8859-1'
+        response._content='<html><meta charset="UTF-8"><table><tr><td>2026年9月30日申込分</td><td><a href="/20260930_mtall.pdf">PDF</a></td></tr></table></html>'.encode('utf-8')
+        with patch.object(core.requests,'get',return_value=response):
+            html=core.get(daily.PAGE)
+        self.assertEqual(daily.discover(html,core.LinkWithDate).date,'2026-09-30')
+
     def test_discovery_ignores_notices_and_weekly(self):
         html='''<a href="/notice.pdf">2026年10月1日</a><table>
 <tr><td>2026年9月29日申込分</td><td><a href="/20260929_mtall.pdf">PDF</a></td></tr>

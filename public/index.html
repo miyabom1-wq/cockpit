@@ -1740,7 +1740,7 @@ async function checkSystemStatus(){
   const uniText=u.mode==='guarded_auto'?'週次・安全自動':u.mode==='proposal'?'提案のみ':'停止';
   const scheduler=health.scheduler||{};
   const budget=health.storage_budget,usage=budget?.used||{},limits=budget?.limits||{};
-  const budgetDetail=budget?.limits?`自動 ${usage.background||0}/${limits.background}・分析 ${usage.analysis||0}/${limits.analysis}・管理 ${usage.user||0}/${limits.user}。日本時間9時リセット（予約分を含む）`:'Workerの設定・更新を確認してください';
+  const budgetDetail=budget?.limits?`自動 ${usage.background||0}/${limits.background}・分析 ${usage.analysis||0}/${limits.analysis}・管理 ${usage.user||0}/${limits.user}。残量180回以下は価格・信用更新を優先。日本時間9時リセット（予約分を含む）`:'Workerの設定・更新を確認してください';
   const budgetStopped=budget?.limits&&Object.keys(limits).some(k=>(usage[k]||0)>=limits[k]);
   const budgetCard=statusCard('保存予算',budget?.limits?(budgetStopped?'一部更新を予算で停止':'無料枠を保護中'):'予算制御未確認',budgetDetail,budgetStopped||!budget?.limits?'warn':'good');
   const cronAlive=scheduler.alive===true;

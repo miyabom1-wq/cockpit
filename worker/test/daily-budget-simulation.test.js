@@ -14,7 +14,7 @@ for(const outage of [false,true])test(`288 cron invocations with 160 JP/40 US sy
  kv.map.set(KEYS.schema,'vantage-kv-v3');
  kv.map.set('stocklist:jp',JSON.stringify(Array.from({length:160},(_,i)=>({symbol:`${2000+i}.T`,name:'JP'}))));
  kv.map.set('stocklist:us',JSON.stringify(Array.from({length:40},(_,i)=>({symbol:`US${i}`,name:'US'}))));
- kv.map.set(`backtest:${BACKTEST_VERSION}:state`,JSON.stringify({updated_at:'2026-09-24T00:00:00Z',status:'complete'}));
+ // Leave backtest uninitialized so background computation runs too.
  const oldFetch=globalThis.fetch,oldError=console.error;console.error=()=>{};
  const rowsCache=new Map();let completedJp=false,completedUs=false;
  globalThis.fetch=async input=>{

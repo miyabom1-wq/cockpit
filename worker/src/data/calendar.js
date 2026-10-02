@@ -86,7 +86,11 @@ export function previousTradingDate(market, value = new Date()) {
 export function expectedTradingDate(market, now = new Date()) {
   const jst = new Date(now.getTime()+9*3600000);
   const jstDate = new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate()));
-  if (market === 'jp') return previousTradingDate('jp', jstDate);
+  if (market === 'jp') {
+    // Before the opening bell, the latest available session is the previous one.
+    const basis=jst.getUTCHours()<9?new Date(jstDate.getTime()-86400000):jstDate;
+    return previousTradingDate('jp', basis);
+  }
   const minute = jst.getUTCHours()*60+jst.getUTCMinutes();
   const openMinute = isUsDst(now) ? 22*60+30 : 23*60+30;
   // 米国の取引日はJST夜の寄りから同日扱い。それまでは直前の米国営業日を期待する。

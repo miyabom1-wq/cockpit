@@ -48,7 +48,7 @@ test('official dataset fetch is cached in KV',async()=>{
     const second=await getMarginDataset(env);
     assert.equal(first.daily.count,1);
     assert.equal(second.daily.count,1);
-    assert.equal(calls.length,1);
+    assert.equal(calls.length,2); // Compare both sources once; cached read does not fetch.
     assert.ok(env.COCKPIT_KV.map.has('margin:supply:v1'));
   }finally{globalThis.fetch=original;}
 });

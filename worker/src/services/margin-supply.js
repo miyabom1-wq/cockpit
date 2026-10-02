@@ -92,23 +92,24 @@ export function evaluateMarginSupply(analysis,item,{now=new Date(),dataset=null}
 }
 
 async function fetchPublicDataset(env){
-  let last=null;
+  let last=null;const candidates=[];
   for(const base of PUBLIC_DATA_URLS){
     try{
-      const res=await fetch(`${base}?v=${Date.now()}`,{headers:{Accept:'application/json','Cache-Control':'no-cache','User-Agent':'VANTAGE/53 margin-supply'},cf:{cacheTtl:0}});
+      const res=await fetch(`${base}?v=${Date.now()}`,{signal:AbortSignal.timeout(15000),headers:{Accept:'application/json','Cache-Control':'no-cache','User-Agent':'VANTAGE/53 margin-supply'},cf:{cacheTtl:0}});
       if(!res.ok){last=new Error(`信用需給データ HTTP ${res.status}`);continue;}
       const data=await res.json();
       if(!validDataset(data)||data.schema!==MARGIN_DATA_SCHEMA){last=new Error('信用需給データ形式が不正です');continue;}
-      return{...data,worker_sync_source:base,worker_synced_at:nowIso()};
+      candidates.push({...data,worker_sync_source:base,worker_synced_at:nowIso()});
     }catch(error){last=error;}
   }
   // A release contains a validated snapshot for initial migration. Freshness still
   // uses its balance date; bundled data never becomes fresh just by redeploying.
   if(env?.ASSETS){
     try{const res=await env.ASSETS.fetch(new Request('https://vantage.local/data/jp-margin.json'));
-      const data=await res.json();if(validDataset(data)&&data.schema===MARGIN_DATA_SCHEMA)return{...data,worker_sync_source:'bundled-jpx-snapshot',worker_synced_at:nowIso()};
+      const data=await res.json();if(validDataset(data)&&data.schema===MARGIN_DATA_SCHEMA)candidates.push({...data,worker_sync_source:'bundled-jpx-snapshot',worker_synced_at:nowIso()});
     }catch(e){last=e;}
   }
+  if(candidates.length)return candidates.sort((a,b)=>String(b.daily?.as_of||'').localeCompare(String(a.daily?.as_of||''))||String(b.generated_at||'').localeCompare(String(a.generated_at||'')))[0];
   throw last||new Error('信用需給データを取得できませんでした');
 }
 export async function getMarginDataset(env,{force=false,fetchIfMissing=true,requireGeneratedDate=null}={}){

@@ -74,7 +74,12 @@ def get(url: str, *, binary: bool = False) -> bytes | str:
         raise RuntimeError("requests がありません")
     r = requests.get(url, headers={"User-Agent": UA, "Accept": "*/*"}, timeout=60)
     r.raise_for_status()
-    return r.content if binary else r.text
+    if binary:
+        return r.content
+    # JPX omits the charset header; requests otherwise defaults HTML to Latin-1.
+    if not r.encoding or r.encoding.lower() in {"iso-8859-1", "latin-1"}:
+        r.encoding = r.apparent_encoding or "utf-8"
+    return r.text
 
 
 def iso_date(text: str) -> Optional[str]:

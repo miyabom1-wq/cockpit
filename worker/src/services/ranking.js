@@ -12,11 +12,13 @@ function nameFrom(segment){const tag=segment.match(/>([^<>]{2,50}?)<\/a>/);if(ta
 function valueFrom(segment,market){const min=market==='jp'?1e7:1000,nums=[];for(const m of segment.matchAll(/([0-9]{1,3}(?:,[0-9]{3})+)(千)?/g)){let v=parseInt(m[1].replace(/,/g,''),10);if(m[2])v*=1000;if(v>=min)nums.push(v);}return nums.length?Math.max(...nums):null;}
 export function parseRanking(html,market,offset=0){const re=/\/quote\/([A-Za-z0-9.\-]+?)(?:["'\/?])/g,pos=[];let m;while((m=re.exec(html))){if(html.slice(m.index,m.index+50).includes('/forum'))continue;const s=normalize(m[1],market);if(s&&!pos.some(x=>x.symbol===s))pos.push({symbol:s,index:m.index});}
   const out=[];for(let i=0;i<pos.length;i++){const seg=html.slice(pos[i].index,pos[i+1]?.index||Math.min(html.length,pos[i].index+4000)),name=nameFrom(seg)||pos[i].symbol;if(fund(pos[i].symbol,name)||/(レポート|アナリスト|広告|sponsored|フィスコ)/i.test(name))continue;out.push({rank:offset+out.length+1,symbol:pos[i].symbol,name,value:valueFrom(seg,market)});}return {items:out,raw_count:pos.length,signature:pos.map(x=>x.symbol).join('|')};}
-async function fetchPage(market,page){const url=SRC[market]+(SRC[market].includes('?')?'&':'?')+'page='+page,res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/35.0)','Accept':'text/html'},cf:{cacheTtl:300}});if(!res.ok)throw new Error(`ranking HTTP ${res.status}`);return res.text();}
+async function fetchPage(market,page){const url=SRC[market]+(SRC[market].includes('?')?'&':'?')+'page='+page,res=await fetch(url,{signal:AbortSignal.timeout(15000),headers:{'User-Agent':'Mozilla/5.0 (compatible; VANTAGE/35.0)','Accept':'text/html'},cf:{cacheTtl:300}});if(!res.ok)throw new Error(`ranking HTTP ${res.status}`);return res.text();}
 async function history(env,market){return parseJson(await env.COCKPIT_KV.get(KEYS.rankingHistory(market)),{snapshots:[]});}
 async function saveHistory(env,market,payload){const h=await history(env,market),date=payload.trade_date;h.snapshots=(h.snapshots||[]).filter(x=>x.date!==date);h.snapshots.push({date,updated_at:payload.updated_at,items:payload.items.map(x=>({symbol:x.symbol,rank:x.rank,value:x.value}))});h.snapshots.sort((a,b)=>String(a.date).localeCompare(String(b.date)));h.snapshots=h.snapshots.slice(-HISTORY_DAYS);await env.COCKPIT_KV.put(KEYS.rankingHistory(market),JSON.stringify(h));return h;}
 export async function refreshRanking(env,market){
   if(!LIMIT[market])throw Error('invalid ranking market');
+  const status=parseJson(await env.COCKPIT_KV.get('ranking:status:'+market),{});
+  if(Date.parse(status.next_retry_at)>Date.now())throw Error(status.last_error||'ranking retry cooldown');
   const old=parseJson(await env.COCKPIT_KV.get(KEYS.ranking(market)),null);
   const max=LIMIT[market],all=[],seen=new Set(),pages=new Set();
   try{
@@ -35,7 +37,7 @@ export async function refreshRanking(env,market){
     await env.COCKPIT_KV.put('ranking:status:'+market,JSON.stringify({last_success_at:payload.updated_at,last_error:null}));
     return payload;
   }catch(error){
-    await env.COCKPIT_KV.put('ranking:status:'+market,JSON.stringify({last_success_at:old?.updated_at||null,last_error_at:nowIso(),last_error:error.message}));
+    await env.COCKPIT_KV.put('ranking:status:'+market,JSON.stringify({last_success_at:old?.updated_at||null,last_error_at:nowIso(),last_error:error.message,next_retry_at:new Date(Date.now()+Math.min(4*3600000,1800000*2**Math.min(3,status.failures||0))).toISOString(),failures:(status.failures||0)+1}));
     throw error;
   }
 }

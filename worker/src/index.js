@@ -1,5 +1,5 @@
 import { ECONOMIC_CRON, syncEconomicEvents } from './services/economic-events.js';
-import { scopedStorage, requestLane } from './storage/write-budget.js';
+import { scopedStorage, requestLane, backgroundCapacity } from './storage/write-budget.js';
 export { WriteBudget } from './storage/write-budget.js';
 import { corsHeaders, json, authorized, allowedMethods } from './api/http.js';
 import { route } from './api/routes.js';
@@ -138,6 +138,7 @@ export function scheduleNodes(now=new Date()){
     const previousJp=new Date(jpObj.getTime()-86400000);
     if(isTradingDay('jp',previousJp)){
       const previousDate=previousJp.toISOString().slice(0,10);
+      add('jp','jp_margin_recovery',0,'confirmed',previousDate,1,'margin',{window:480});
       add('jp','jp_overnight_recovery',0,'confirmed',previousDate,marketParts('jp'),'stage',{minConfirmedRatio:90,window:480});
     }
   }
@@ -197,6 +198,8 @@ export async function scheduledStage(env,now=new Date()){
     if(await env.COCKPIT_KV.get(markerKey(node)))continue;
     if(await env.COCKPIT_KV.get(cooldownKey(node)))continue;
 
+    if(!['stage','margin'].includes(node.action)&&!await backgroundCapacity(env))continue;
+
     try{
       if(node.action==='macro'){
         const result=await refreshMacroSnapshots(env);
@@ -241,11 +244,11 @@ export async function scheduledStage(env,now=new Date()){
           return{processed:0,retry:true,node:node.key};
         }
 
-        await getEnrichedRanking(env,node.market,true);
         if(node.kind==='confirmed'){
           await captureSignalLog(env,node.market,'auto');
           await captureThemeSnapshot(env,'scheduled');
         }
+        await getEnrichedRanking(env,node.market,true);
         await markDone(env,node,{ok:true,action:'enrich'});
         return{processed:1,node:node.key};
       }
@@ -331,7 +334,7 @@ export default{
         console.error('[stage cron]',error?.stack||error);
       }
       try{await pushIndex(env)}catch(error){console.error('[push cron]',error?.stack||error)}
-      try{await runBacktestStep(env,1,false,{scheduled:true})}catch(error){console.error('[backtest cron]',error?.stack||error)}
+      try{if(await backgroundCapacity(env))await runBacktestStep(env,1,false,{scheduled:true})}catch(error){console.error('[backtest cron]',error?.stack||error)}
       }finally{await scoped.finish();}
     })());
   }

@@ -65,3 +65,32 @@ test('explicit refresh never spends management reserve; ordinary GET never persi
  assert.equal(requestLane(req('/api/stage-run?batch=jp1')),'analysis');
  assert.equal(requestLane(req('/api/positions','POST'),{action:'toggle_held'}),'user');
 });
+
+test('one invocation renews leases beyond 32 concurrent writes without overspending',async()=>{
+ const env=setup(),scope=scopedStorage(env,'background');
+ await Promise.all(Array.from({length:80},(_,i)=>scope.env.COCKPIT_KV.put('data:'+i,'value')));
+ await scope.finish();assert.equal(env.COCKPIT_KV.writes,80);
+ assert.equal((await budgetStatus(env)).used.background,80);
+});
+test('scheduler heartbeat and cooldown remain writable after KV budget exhaustion',async t=>{
+ t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-10-01T20:00:00Z')});
+ const env=setup();await assert.rejects(use(env,'background',551));
+ const scope=scopedStorage(env,'background');
+ for(let i=0;i<100;i++)await scope.env.COCKPIT_KV.put('system:scheduler-health:v1',JSON.stringify({last_cron_at:new Date().toISOString()}));
+ await scope.env.COCKPIT_KV.put('sched:test:cooldown','failed',{expirationTtl:1800});
+ assert.equal(await scope.env.COCKPIT_KV.get('sched:test:cooldown'),'failed');
+ t.mock.timers.tick(1800000);
+ assert.equal(await scope.env.COCKPIT_KV.get('sched:test:cooldown'),null);
+ assert.ok(await scope.env.COCKPIT_KV.get('system:scheduler-health:v1'));
+ await scope.finish();assert.equal(env.COCKPIT_KV.writes,550);
+ t.mock.timers.tick(4*3600000);
+ await use(env,'background',2);assert.equal((await budgetStatus(env)).used.background,2);
+});
+test('read-only requests cannot persist coordination; legacy deleted markers cannot resurrect',async()=>{
+ const env=setup();env.COCKPIT_KV.map.set('sched:old','old');
+ const scope=scopedStorage(env,'background');assert.equal(await scope.env.COCKPIT_KV.get('sched:old'),null);
+ await scope.env.COCKPIT_KV.put('sched:old','new');await scope.env.COCKPIT_KV.delete('sched:old');await scope.finish();
+ const read=scopedStorage(env,'read');await read.env.COCKPIT_KV.put('sched:old','overlay');await read.finish();
+ const next=scopedStorage(env,'read');assert.equal(await next.env.COCKPIT_KV.get('sched:old'),null);await next.finish();
+ assert.equal(env.COCKPIT_KV.writes,0);
+});
