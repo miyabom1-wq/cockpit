@@ -94,7 +94,7 @@ function patchMoreIconFallback(){
 }
 
 function srcInfo(event){
-  if(event?.official_kind==='economic')return{label:'公式 '+ '★'.repeat(event.importance||2),cls:'ir'};
+  if(event?.official_kind==='economic')return{label:'公式日程 '+ '★'.repeat(event.importance||2),cls:'ir'};
   const name=String(event?.source_name||'');
   if(event?.official_kind==='jpx'||name.startsWith('JPX'))return{label:'JPX公式',cls:'jpx'};
   if(event?.provider_kind==='nasdaq_zacks')return{label:'Nasdaq参考',cls:'provider'};
@@ -202,6 +202,7 @@ function surprise(event){
   return '予想比 '+(a.value>f.value?'↑':a.value<f.value?'↓':'＝');
 }
 function resultsHtml(event){
+  if(event?.official_kind==='economic'&&!['actual','forecast','previous'].some(k=>event[k]!=null&&String(event[k]).trim()!==''))return '<div class="v59-results">日程のみ自動更新 · 結果の自動取得なし</div>';
   if(!looksMacroEvent(event)&&!['macro','centralbank'].includes(event.category)&&!['actual','forecast','previous'].some(k=>event[k]!=null))return '';
   const values=['actual','forecast','previous'].map((key,i)=>'<span>'+['実績','予想','前回'][i]+' <b>'+esc(event[key]===0?'0':event[key]||'—')+'</b></span>').join('');
   return '<div class="v59-results">'+values+(event.unit?'<span>'+esc(event.unit)+'</span>':'')+(surprise(event)?'<span>'+esc(surprise(event))+'</span>':'')+'</div>';
@@ -215,7 +216,7 @@ function eventRow(event){
         <div class="v59-eventsub"><span>${esc(timeLabel(event))}</span><span>${esc(marketOf(event))}</span><span class="v59-tag ${source.cls}">${source.label}</span></div>
         ${resultsHtml(event)}
         <div class="v59-eventactions">
-          ${url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">公式・データ元 ↗</a>`:''}
+          ${url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${event.official_kind==='economic'?'公式発表ページ ↗':'公式・データ元 ↗'}</a>${event.official_kind==='economic'?'<span class="muted">リンク先の対象月・発表日を確認</span>':''}`:''}
           ${editable(event)?`<button class="small" data-event-action="edit" data-event-id="${esc(event.id)}">実績・数値を編集</button><button class="small" data-event-action="pin" data-event-id="${esc(event.id)}">${event.pinned?'固定解除':'固定'}</button><button class="small danger" data-event-action="delete" data-event-id="${esc(event.id)}">削除</button>`:''}
         </div>
       </div>

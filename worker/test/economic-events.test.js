@@ -79,7 +79,7 @@ test('existing event UI renders JST and unknown BOJ time with the same section/c
  context.queueMicrotask=()=>{};context.window.addEventListener=()=>{};vm.createContext(context);vm.runInContext(ui,context);context.window.renderEvents();
  context.state.events.events=events.filter(e=>e.event_date>='2026-10-19');
  root.onclick({target:{closest:()=>({dataset:{eventPeriod:'later'}})}});
- assert.match(root.innerHTML,/今後/);assert.match(root.innerHTML,/22:15 JST/);assert.match(root.innerHTML,/10\/23\(金\)/);assert.match(root.innerHTML,/時刻未定/);assert.match(root.innerHTML,/欧州/);assert.match(root.innerHTML,/公式 ★★★/);
+ assert.match(root.innerHTML,/今後/);assert.match(root.innerHTML,/22:15 JST/);assert.match(root.innerHTML,/10\/23\(金\)/);assert.match(root.innerHTML,/時刻未定/);assert.match(root.innerHTML,/欧州/);assert.match(root.innerHTML,/公式日程 ★★★/);
 });
 
 test('released NFP remains visible for seven days, including across Monday',async()=>{
@@ -95,4 +95,21 @@ test('successful source refresh preserves recently released rows omitted by sour
  const env={COCKPIT_KV:new MockKV({[ECONOMIC_KEY]:JSON.stringify({v:1,rows:[['nfp',release]]})})};
  await syncEconomicEvents(env,{now:t,load});
  assert.ok((await getEconomicEvents(env,t)).some(e=>e.time===release));
+});
+
+test('economic links open readable releases rather than schedule feeds',async()=>{
+ const events=await getEconomicEvents({COCKPIT_KV:new MockKV()},now);
+ assert.ok(events.length>0);
+ for(const e of events){
+  assert.equal(e.results_status,'link_only');
+  assert.ok(e.source_url.startsWith('https://'));
+  assert.doesNotMatch(e.source_url,/\.(ics|json|xml)(?:$|\?)/);
+ }
+ assert.equal(events.find(e=>e.name.includes('雇用統計')).source_url,'https://www.bls.gov/news.release/empsit.nr0.htm');
+ const ui=readFileSync(new URL('../../public/events-ui.js',import.meta.url),'utf8');
+ const fn=ui.slice(ui.indexOf('function resultsHtml(event){'),ui.indexOf('function eventRow(event){'));
+ const ctx={};vm.createContext(ctx);vm.runInContext(fn,ctx);
+ const html=ctx.resultsHtml(events[0]);
+ assert.match(html,/結果の自動取得なし/);
+ assert.doesNotMatch(html,/実績|予想|前回/);
 });

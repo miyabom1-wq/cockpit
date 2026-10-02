@@ -28,6 +28,20 @@ const TYPES={
   ecb_press:['ECB 総裁会見','eu',2,'ecb']
 };
 const SOURCE_NAMES={bls:'米労働統計局 BLS',bea:'米経済分析局 BEA',fed:'FRB',boj:'日本銀行',jp:'総務省「消費者物価指数」',ecb:'欧州中央銀行 ECB'};
+// Human-readable releases are separate from machine-readable schedule feeds.
+const RELEASE_PAGES={
+ cpi:'https://www.bls.gov/news.release/cpi.nr0.htm',
+ nfp:'https://www.bls.gov/news.release/empsit.nr0.htm',
+ pce:'https://www.bea.gov/news/current-releases',
+ gdp:'https://www.bea.gov/news/current-releases',
+ fomc:'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+ fomc_sep:'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+ fed_press:'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
+ boj:'https://www.boj.or.jp/mopo/mpmdeci/index.htm',
+ jp_cpi:'https://www.stat.go.jp/data/cpi/',
+ ecb:'https://www.ecb.europa.eu/press/govcdec/mopo/html/index.en.html',
+ ecb_press:'https://www.ecb.europa.eu/press/press_conference/html/index.en.html'
+};
 const months=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 const pad=n=>String(n).padStart(2,'0');
 const date=(y,m,d)=>`${y}-${pad(m)}-${pad(d)}`;
@@ -196,7 +210,7 @@ export async function getEconomicEvents(env,now=Date.now()){
       const [name,market,importance,source]=TYPES[type],dateOnly=t.length===10;
       const time=dateOnly?`${t}T14:59:59.999Z`:t; // Sort/expiry boundary only, never displayed as a release time.
       const jst=new Date(Date.parse(time)+9*3600000).toISOString();
-      return {id:`economic-${type}-${t.slice(0,10)}`,name,time,time_note:dateOnly?'時刻未定':`${jst.slice(11,16)} JST`,date_only:dateOnly,event_date:dateOnly?t:jst.slice(0,10),category:'macro',symbols:[],source:'official',official_kind:'economic',source_name:SOURCE_NAMES[source],source_url:SOURCES[source],market,importance,read_only:true,pinned:false};
+      return {id:`economic-${type}-${t.slice(0,10)}`,name,time,time_note:dateOnly?'時刻未定':`${jst.slice(11,16)} JST`,date_only:dateOnly,event_date:dateOnly?t:jst.slice(0,10),category:'macro',symbols:[],source:'official',official_kind:'economic',source_name:SOURCE_NAMES[source],source_url:RELEASE_PAGES[type],results_status:'link_only',market,importance,read_only:true,pinned:false};
     });
   }catch(error){console.error('[economic read]',error.message);return [];}
 }
