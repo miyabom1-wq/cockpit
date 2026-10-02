@@ -128,7 +128,7 @@ export function parseEcb(html){
 }
 export const PARSERS={bls:parseBls,bea:parseBea,fed:parseFed,boj:parseBoj,jp:parseJp,ecb:parseEcb};
 export function normalizeRows(rows,now=Date.now()){
-  const today=new Date(now+9*3600000).toISOString().slice(0,10),end=now+WINDOW_DAYS*DAY;
+  const cutoff=now-7*DAY,today=new Date(cutoff+9*3600000).toISOString().slice(0,10),end=now+WINDOW_DAYS*DAY;
   const unique=new Map();
   for(const row of rows){
     if(!Array.isArray(row)||row.length!==2||!TYPES[row[0]])throw Error('Economic row invalid');
@@ -136,7 +136,7 @@ export function normalizeRows(rows,now=Date.now()){
     if(typeof t!=='string'||!Number.isFinite(Date.parse(t))||!(t.length===10||/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\.000Z$/.test(t)))throw Error('Economic date invalid');
     if(t.length===10&&type!=='boj')throw Error('Release time required');
     if(new Date(t).toISOString().slice(0,10)!==t.slice(0,10))throw Error('Invalid calendar date');
-    if((t.length===10?t<today:Date.parse(t)<now)||Date.parse(t)>end)continue;
+    if((t.length===10?t<today:Date.parse(t)<cutoff)||Date.parse(t)>end)continue;
     unique.set(`${type}|${t}`,row);
   }
   return [...unique.values()].sort((a,b)=>a[1].localeCompare(b[1])||a[0].localeCompare(b[0]));
@@ -174,7 +174,8 @@ export async function syncEconomicEvents(env,{now=Date.now(),load=fetchSource}={
     if(!rows.length)throw Error('No upcoming releases; keep previous schedule');
     return rows;
   }));
-  const rows=[];
+  // Keep recently released rows even when the source switches to future releases.
+  const rows=previous.rows.filter(r=>Date.parse(r[1])<now);
   Object.keys(SOURCES).forEach((source,i)=>{
     const outcome=outcomes[i];
     if(outcome.status==='fulfilled'){rows.push(...outcome.value);results.push({source,ok:true,count:outcome.value.length});}

@@ -56,7 +56,7 @@ window.applyUniverse=async function(force=false){
 const baseLoadMargin=window.loadMarginSupply;
 if(typeof baseLoadMargin==='function')window.loadMarginSupply=async function(force=false){
   const out=await baseLoadMargin.apply(this,arguments);
-  if(force&&state.margin?.weekly?.as_of)toast(`信用需給を${state.margin.weekly.as_of}基準へ同期しました`);
+  if(force&&(state.margin?.daily||state.margin?.weekly)?.as_of)toast(`信用需給を${(state.margin.daily||state.margin.weekly).as_of}基準へ同期しました`);
   return out;
 };
 

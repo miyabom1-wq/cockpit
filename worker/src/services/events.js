@@ -119,7 +119,7 @@ async function readTracked(env){
 export function officialEvents(now=Date.now(),tracked=null){
   const set=tracked instanceof Set?tracked:null;
   return VERIFIED_EVENTS
-    .filter(x=>Date.parse(x.time)>=eventWeekStart(now)&&Date.parse(x.time)<=now+120*DAY)
+    .filter(x=>Date.parse(x.time)>=now-7*DAY&&Date.parse(x.time)<=now+120*DAY)
     .filter(x=>!set||x.symbols.some(s=>set.has(s)))
     .map(normalizeEvent);
 }
@@ -261,7 +261,7 @@ export function jpxEventsFromDataset(dataset,tracked=[],now=Date.now()){
     if(!item)continue;
     const time=String(row.time||`${row.date}T14:59:00.000Z`);
     const ms=Date.parse(time);
-    if(!Number.isFinite(ms)||ms<eventWeekStart(now)||ms>now+120*DAY)continue;
+    if(!Number.isFinite(ms)||ms<now-7*DAY||ms>now+120*DAY)continue;
     out.push(normalizeEvent({
       id:`jpx-${symbol.toLowerCase()}-${time.slice(0,10)}`,
       name:`${item.name||row.name||symbol} 決算予定`,
@@ -348,7 +348,7 @@ async function buildEventDashboard(env,now=Date.now(),force=false){
   const dynamic=cachedRows
     .map(({item,cached})=>cached?.event?normalizeEvent({...cached.event,tracked_scope:item.scope}):null)
     .filter(Boolean)
-    .filter(x=>Date.parse(x.time)>=eventWeekStart(now)&&Date.parse(x.time)<=now+120*DAY);
+    .filter(x=>Date.parse(x.time)>=now-7*DAY&&Date.parse(x.time)<=now+120*DAY);
 
   const manualKeys=new Set(manual.map(eventKey));
   const readOnly=[...verified,...jpx,...usCalendar,...dynamic].filter(x=>!manualKeys.has(eventKey(x)));

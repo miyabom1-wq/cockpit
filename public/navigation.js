@@ -254,7 +254,7 @@ window.openV55More=function(){
         <h3>データ管理</h3>
         <div class="v55-more-actions">
           <button onclick="openV55Area('events')"><b>イベント</b><small>決算予定と手動日程</small></button>
-          <button onclick="openV55Area('margin')"><b>信用需給</b><small>週次データと規制情報</small></button>
+          <button onclick="openV55Area('margin')"><b>信用需給</b><small>日次データと規制情報</small></button>
         </div>
       </section>
       <section class="v55-more-group">
@@ -291,7 +291,7 @@ async function renderMonitorSummary(){
       state.watch?Promise.resolve(state.watch):api('/api/watchlist').catch(()=>({items:[]})),
       state.signals?Promise.resolve(state.signals):api('/api/signal-log?limit=80').catch(()=>({items:[]})),
       state.events?Promise.resolve(state.events):api('/api/events').catch(()=>({events:[]})),
-      state.stage.jp?Promise.resolve(state.stage.jp):api('/api/stage?market=jp').catch(()=>({stocks:{}}))
+      api('/api/stage?market=jp')
     ]);
 
     state.watch=watch;

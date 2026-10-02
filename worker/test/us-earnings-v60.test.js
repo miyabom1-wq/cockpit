@@ -37,3 +37,13 @@ test('JPX raw fiscal date is not appended to company name',()=>{
   assert.equal(events[0].name,'東京エレクトロン 決算予定');
   assert.equal(events[0].name.includes('2027-03-31'),false);
 });
+
+test('US and JP earnings remain visible across Monday for seven days',()=>{
+ const time='2026-10-02T12:30:00.000Z',release=Date.parse(time);
+ for(const [convert,market,symbol] of [[usEventsFromDataset,'us','NVDA'],[jpxEventsFromDataset,'jp','8035.T']]){
+  const dataset={schema:market==='us'?'vantage-us-earnings-v1':'vantage-jpx-earnings-v1',generated_at:time,events:[{symbol,date:'2026-10-02',time}]},tracked=[{symbol,market,name:'test'}];
+  assert.equal(convert(dataset,tracked,release+3*86400000).length,1);
+  assert.equal(convert(dataset,tracked,release+7*86400000).length,1);
+  assert.equal(convert(dataset,tracked,release+7*86400000+1).length,0);
+ }
+});

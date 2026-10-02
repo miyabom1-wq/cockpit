@@ -18,11 +18,11 @@ test('actual BLS ICS uses US-Eastern and supplies all six remaining releases',()
 });
 test('official captures parse upcoming schedules, exclusion, and UTC/JST boundaries',()=>{
  const expected={bls:2,bea:8,fed:4,boj:2,jp:3,ecb:4};
- for(const [key,parser] of Object.entries(PARSERS))assert.equal(normalizeRows(parser(fixtures[key]),now).length,expected[key],key);
+ for(const [key,parser] of Object.entries(PARSERS))assert.equal(normalizeRows(parser(fixtures[key]),now).filter(r=>Date.parse(r[1])>=now).length,expected[key],key);
  assert.ok(PARSERS.fed(fixtures.fed).some(r=>r[1].startsWith('2027-')));
  assert.ok(PARSERS.boj(fixtures.boj).some(r=>r[1].startsWith('2027-')));
- assert.deepEqual(normalizeRows(PARSERS.boj(fixtures.boj),now)[0],['boj','2026-10-30']);
- assert.equal(normalizeRows(PARSERS.jp(fixtures.jp),now)[0][1],'2026-10-22T23:30:00.000Z');
+ assert.deepEqual(normalizeRows(PARSERS.boj(fixtures.boj),now).find(r=>Date.parse(r[1])>=now),['boj','2026-10-30']);
+ assert.equal(normalizeRows(PARSERS.jp(fixtures.jp),now).find(r=>Date.parse(r[1])>=now)[1],'2026-10-22T23:30:00.000Z');
 });
 test('US/European DST, rollover and invalid dates',()=>{
  assert.equal(zonedTime('2026-10-28','14:00','America/New_York'),'2026-10-28T18:00:00.000Z');
@@ -56,7 +56,7 @@ test('bootstrap, all macro kinds survive, date-only stays visible through JST da
  assert.equal(events.find(x=>x.name.startsWith('日本 CPI')).event_date,'2026-10-23');
  assert.equal(events.find(x=>x.name.startsWith('日本 CPI')).time_note,'08:30 JST');
  assert.ok((await getEconomicEvents(env,Date.parse('2026-10-30T14:59:00Z'))).some(x=>x.event_date==='2026-10-30'));
- assert.ok(!(await getEconomicEvents(env,Date.parse('2026-10-30T15:00:00Z'))).some(x=>x.event_date==='2026-10-30'));
+ assert.ok(!(await getEconomicEvents(env,Date.parse('2026-11-06T15:00:00Z'))).some(x=>x.event_date==='2026-10-30'));
  assert.equal(normalizeRows([['boj','2028-01-01'],['boj','2025-01-01']],now).length,0);
 });
 test('daily cron never invokes existing market/earnings jobs',async()=>{
@@ -80,4 +80,19 @@ test('existing event UI renders JST and unknown BOJ time with the same section/c
  context.state.events.events=events.filter(e=>e.event_date>='2026-10-19');
  root.onclick({target:{closest:()=>({dataset:{eventPeriod:'later'}})}});
  assert.match(root.innerHTML,/今後/);assert.match(root.innerHTML,/22:15 JST/);assert.match(root.innerHTML,/10\/23\(金\)/);assert.match(root.innerHTML,/時刻未定/);assert.match(root.innerHTML,/欧州/);assert.match(root.innerHTML,/公式 ★★★/);
+});
+
+test('released NFP remains visible for seven days, including across Monday',async()=>{
+ const release='2026-10-02T12:30:00.000Z',t=Date.parse(release);
+ const env={COCKPIT_KV:new MockKV({[ECONOMIC_KEY]:JSON.stringify({v:1,rows:[['nfp',release]]})})};
+ assert.equal((await getEconomicEvents(env,t+2*3600000)).length,1);
+ assert.equal((await getEconomicEvents(env,t+3*86400000)).length,1);
+ assert.equal((await getEconomicEvents(env,t+7*86400000)).length,1);
+ assert.equal((await getEconomicEvents(env,t+7*86400000+1)).length,0);
+});
+test('successful source refresh preserves recently released rows omitted by source',async()=>{
+ const release='2026-10-02T12:30:00.000Z',t=Date.parse(release)+3600000;
+ const env={COCKPIT_KV:new MockKV({[ECONOMIC_KEY]:JSON.stringify({v:1,rows:[['nfp',release]]})})};
+ await syncEconomicEvents(env,{now:t,load});
+ assert.ok((await getEconomicEvents(env,t)).some(e=>e.time===release));
 });

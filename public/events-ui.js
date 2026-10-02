@@ -287,7 +287,7 @@ function coveragePanel(cov){
       <span class="v59-pill">米国 ${us.found||0}/${us.total||0}</span>
     </div>
     <div class="v59-note">
-      決算は日付単位で折りたたみ表示します。時刻が公表されていない予定は日付のみを表示し、右側は24時間以内・残り日数で確認できます。今週は月曜〜日曜（日本時間）です。今週の発表済みも残ります。数値の「—」は未取得です。
+      決算は日付単位で折りたたみ表示します。時刻が公表されていない予定は日付のみを表示し、右側は24時間以内・残り日数で確認できます。今週は月曜〜日曜（日本時間）です。発表済みの予定は直近7日間残ります。数値の「—」は未取得です。
     </div>
     ${missingRows.length?`
     <details class="v59-details">
@@ -323,7 +323,7 @@ window.renderEvents=function(){
     ${coveragePanel(state.events?.coverage||{})}
     <div class="v59-periods" aria-label="イベントの期間">${[['this','今週'],['next','来週'],['later','今後']].map(([key,label])=>`<button data-event-period="${key}" aria-pressed="${selectedPeriod===key}">${label}（${periods[key].length}）</button>`).join('')}</div>
     ${section(({this:'今週',next:'来週',later:'今後'})[selectedPeriod],'重要日程',periods[selectedPeriod],'登録されたイベントはありません',window.innerWidth<=760?5:8,selectedPeriod==='this'?7:1)}
-    ${old.length?`<details class="v59-details"><summary>先週以前・固定済み（${old.length}件）</summary>${groupedList(old,7,0)}</details>`:''}
+    ${old.length?`<details class="v59-details"><summary>先週以前・直近7日／固定済み（${old.length}件）</summary>${groupedList(old,7,0)}</details>`:''}
     <p class="v59-note">今週分は整理対象に含みません。先週以前の手動イベントは整理できます。2週前以前の未固定イベントは一覧取得時に自動整理されます。予想比の矢印は数値の大小を示します。</p>`;
   root.onclick=event=>{
     const period=event.target.closest('[data-event-period]');if(period){selectedPeriod=period.dataset.eventPeriod;window.renderEvents();return;}
