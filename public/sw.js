@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.22-summary-events-20261002';
+const BUILD='vantage-ui73.8.23-summary-events-20261002';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

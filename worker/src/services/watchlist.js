@@ -23,8 +23,19 @@ async function save(env,list){await env.COCKPIT_KV.put(KEYS.watch,JSON.stringify
 function dataTime(x){return Math.max(Date.parse(x?.price_time||0)||0,Date.parse(x?.updated_at||0)||0,Date.parse(x?.date?`${x.date}T23:59:59Z`:0)||0);}
 function newer(a,b){return dataTime(a)>=dataTime(b)?a:b;}
 export async function getWatchlist(env){
-  const list=await read(env),[jp,us,pos]=await Promise.all([getStage(env,'jp'),getStage(env,'us'),getPositions(env)]),held=new Set((pos.positions||[]).map(x=>x.symbol));
-  return{ok:true,items:list.map(w=>{const stage=(w.market==='us'?us:jp)?.stocks?.[w.symbol]||null,latest=w.stage_data&&stage?newer(w.stage_data,stage):w.stage_data||stage||{};return{...w,held:held.has(w.symbol),current_data:latest,stage_data:latest,status:normalizeStatus(w.status)};})};
+  const list=await read(env),warnings=[];
+  const results=await Promise.allSettled([getStage(env,'jp'),getStage(env,'us'),getPositions(env)]);
+  const values=results.map((r,i)=>{
+    if(r.status==='fulfilled')return r.value;
+    warnings.push(['日本株の判定','米国株の判定','保有情報'][i]+'を取得できません。保存済みデータは更新未確認です。');
+    return null;
+  });
+  const [jp,us,pos]=values,held=new Set((pos?.positions||[]).map(x=>x.symbol));
+  return{ok:true,degraded:warnings.length>0,warnings,items:list.map(w=>{
+    const marketStage=w.market==='us'?us:jp,stage=marketStage?.stocks?.[w.symbol]||null;
+    const latest=w.stage_data&&stage?newer(w.stage_data,stage):w.stage_data||stage||{};
+    return{...w,held:pos?held.has(w.symbol):null,current_data:latest,stage_data:latest,data_stale:!marketStage,status:normalizeStatus(w.status)};
+  })};
 }
 export async function mutateWatchlist(env,body={}){
   const action=body.action||'get',list=await read(env);

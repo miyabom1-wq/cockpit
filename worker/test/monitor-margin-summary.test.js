@@ -11,5 +11,5 @@ test('monitor summary refetches enriched credit scores instead of retaining cach
  vm.createContext(context);vm.runInContext(fn,context);await context.renderMonitorSummary();
  assert.equal(calls,1);assert.match(root.innerHTML,/<b>2<\/b><span>需給警戒/);
  context.api=async()=>{throw Error('offline');};await context.renderMonitorSummary();
- assert.match(root.innerHTML,/集約に失敗/);assert.doesNotMatch(root.innerHTML,/<b>0<\/b><span>需給警戒/);
+ assert.match(root.innerHTML,/<b>—<\/b><span>需給警戒（取得失敗）/);assert.doesNotMatch(root.innerHTML,/<b>0<\/b><span>需給警戒/);
 });

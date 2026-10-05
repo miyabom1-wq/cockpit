@@ -291,27 +291,27 @@ async function renderMonitorSummary(){
       state.watch?Promise.resolve(state.watch):api('/api/watchlist').catch(()=>({items:[]})),
       state.signals?Promise.resolve(state.signals):api('/api/signal-log?limit=80').catch(()=>({items:[]})),
       state.events?Promise.resolve(state.events):api('/api/events').catch(()=>({events:[]})),
-      api('/api/stage?market=jp')
+      api('/api/stage?market=jp').catch(()=>null)
     ]);
 
     state.watch=watch;
     state.signals=signals;
     state.events=events;
-    state.stage.jp=jpStage;
+    if(jpStage)state.stage.jp=jpStage;
 
     const signalItems=signals.items||signals.signals||signals.records||[];
     const activeSignals=signalItems.filter(item=>item.active!==false&&!item.end_date&&!item.completed_at).length;
     const nearEvents=eventRows(events).length;
-    const marginWarnings=Object.values(jpStage.stocks||{}).filter(row=>
+    const marginWarnings=jpStage?Object.values(jpStage.stocks||{}).filter(row=>
       row.margin_add_blocked||Number(row.supply_score??row.margin_supply?.score)<=-7
-    ).length;
+    ).length:'—';
 
     root.innerHTML=`
       <div class="v55-kpi-grid">
         <button class="v55-kpi key-watch" onclick="returnToV55Monitor()"><b>${(watch.items||[]).length}</b><span>ウォッチ</span></button>
         <button class="v55-kpi key-signal" onclick="openV55Area('signals')"><b>${activeSignals}</b><span>継続シグナル</span></button>
         <button class="v55-kpi key-event" onclick="openV55Area('events')"><b>${nearEvents}</b><span>10日予定</span></button>
-        <button class="v55-kpi key-supply" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒</span></button>
+        <button class="v55-kpi key-supply" onclick="openV55Area('margin')"><b>${marginWarnings}</b><span>需給警戒${jpStage?'':'（取得失敗）'}</span></button>
       </div>
     `;
   }catch(error){

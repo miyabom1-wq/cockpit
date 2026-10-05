@@ -652,7 +652,7 @@ async function api(path,opt={}){
    let data=null;
    try{data=await response.json()}catch{}
    if(!response.ok){
-    const error=new Error(data?.error||('API '+response.status));
+    const error=new Error(data?.error||('API '+response.status+'（'+pathname+'）'));
     error.status=response.status;
     throw error;
    }
@@ -1847,14 +1847,25 @@ const finite = v => v != null && Number.isFinite(Number(v));
   window.loadWatch = async function(){
     $('watch-list').innerHTML = '<div class="loading">価格と判定を取得中…</div>';
     try {
+      const warnings=[];
+      const readPart=async(path,cached,label,empty)=>{
+        try{return await api(path)}catch(error){
+          if(error.status===401||error.status===403)throw error;
+          warnings.push(label+'：'+error.message+(cached?'（前回表示を使用・更新未確認）':'（未取得）'));
+          return cached||empty;
+        }
+      };
       const [w,jp,us,p,sjp,sus] = await Promise.all([
-        api('/api/watchlist'),
-        api('/api/momentum?market=jp'),
-        api('/api/momentum?market=us'),
-        api('/api/positions').catch(()=>({positions:[]})),
-        api('/api/stage?market=jp').catch(()=>state.stage.jp || {}),
-        api('/api/stage?market=us').catch(()=>state.stage.us || {})
+        readPart('/api/watchlist',state.watch,'ウォッチ一覧',null),
+        readPart('/api/momentum?market=jp',state.momentum.jp,'日本株の補助判定',{}),
+        readPart('/api/momentum?market=us',state.momentum.us,'米国株の補助判定',{}),
+        readPart('/api/positions',state.positions,'保有情報',{positions:[]}),
+        readPart('/api/stage?market=jp',state.stage.jp,'日本株の判定',{}),
+        readPart('/api/stage?market=us',state.stage.us,'米国株の判定',{})
       ]);
+      if(!w)throw new Error(warnings.join(' / '));
+      warnings.push(...(w.warnings||[]));
+      state.watchLoadWarnings=warnings;
       state.watch=w;state.momentum.jp=jp;state.momentum.us=us;state.positions=p;state.stage.jp=sjp;state.stage.us=sus;state.watchQuotes={};
 
       // 旧Workerでも価格が出るよう、価格欠落銘柄だけ個別照会する後方互換フォールバック。
@@ -1901,6 +1912,7 @@ const finite = v => v != null && Number.isFinite(Number(v));
     const enriched=items.map(w=>({w,r:currentWatchData(w,bm),isHeld:w?.held===true||heldSymbols.has(String(w?.symbol||'').toUpperCase())}));
 
     let html=`<div class="watch-market-bar"><div class="watch-market-switch"><button class="${state.watchMarket==='jp'?'active':''}" onclick="setWatchMarket('jp')">日本 ${jpCount}</button><button class="${state.watchMarket==='us'?'active':''}" onclick="setWatchMarket('us')">米国 ${usCount}</button></div></div>`;
+    if(state.watchLoadWarnings?.length)html='<div class="note down">一部データの更新を確認できません。<br>'+state.watchLoadWarnings.map(esc).join('<br>')+'</div>'+html;
     if(!items.length){$('watch-list').innerHTML=html+'<div class="empty">この市場のウォッチは空です</div>';return}
 
     html+=enriched.map(({w,r,isHeld})=>{
