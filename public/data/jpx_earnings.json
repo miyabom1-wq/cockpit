@@ -1,18 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-10-02T14:47:57.896851Z",
+  "generated_at": "2026-10-05T17:13:55.301412Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
-      "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
-      "label": "",
-      "events": 1,
-      "bytes": 12204
-    },
-    {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
       "label": "",
-      "events": 424,
+      "events": 408,
       "bytes": 48910
     },
     {
@@ -23,198 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "2493.T",
-      "code": "2493",
-      "name": "イーサポートリンク",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3549.T",
-      "code": "3549",
-      "name": "クスリのアオキホールディングス",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2027-05-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "5942.T",
-      "code": "5942",
-      "name": "日本フイルコン",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7447.T",
-      "code": "7447",
-      "name": "ナガイレーベン",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7545.T",
-      "code": "7545",
-      "name": "西松屋チェーン",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8276.T",
-      "code": "8276",
-      "name": "平和堂",
-      "date": "2026-10-01",
-      "time": "2026-10-01T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3035.T",
-      "code": "3035",
-      "name": "ケイティケイ",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2026-08-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3321.T",
-      "code": "3321",
-      "name": "ミタチ産業",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "4394.T",
-      "code": "4394",
-      "name": "エクスモーション",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6279.T",
-      "code": "6279",
-      "name": "瑞光",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2027-02-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6664.T",
-      "code": "6664",
-      "name": "オプトエレクトロニクス",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7611.T",
-      "code": "7611",
-      "name": "ハイデイ日高",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7965.T",
-      "code": "7965",
-      "name": "象印マホービン",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2026-11-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "7975.T",
-      "code": "7975",
-      "name": "リヒトラブ",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8931.T",
-      "code": "8931",
-      "name": "和田興産",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9872.T",
-      "code": "9872",
-      "name": "北恵",
-      "date": "2026-10-02",
-      "time": "2026-10-02T14:59:00.000Z",
-      "period": "2026-11-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "1376.T",
       "code": "1376",
@@ -247,7 +49,7 @@
       "time": "2026-10-05T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1002.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -37693,10 +37495,10 @@
     }
   ],
   "stats": {
-    "links_found": 3,
-    "files_processed": 3,
-    "raw_rows": 3140,
-    "unique_future_events": 3139,
+    "links_found": 2,
+    "files_processed": 2,
+    "raw_rows": 3123,
+    "unique_future_events": 3123,
     "warnings": []
   }
 }
