@@ -1,3 +1,5 @@
+import { expectedConfirmedTradingDate } from '../data/calendar.js';
+import { ENGINE_VERSION } from '../config.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { parseJson, nowIso, normalizeSymbol, finite } from '../utils.js';
 import { lookupSymbol } from '../data/yahoo.js';
@@ -7,7 +9,7 @@ import { getPositions } from './positions.js';
 const VALID_STATUS=new Set(['tracking','waiting','skip']);
 function normalizeStatus(value){return VALID_STATUS.has(String(value||''))?String(value):'tracking';}
 function snapshotOf(value={}){
-  const keys=['symbol','name','market','date','price','change_pct','price_time','entry_lane','entry_label','entry_quality','effective_vol_ratio','vol_ratio','div25','rs5','rs20','long_stage','stage','stage_code','setup_label','snapshot_id'];
+  const keys=['symbol','name','market','date','price','change_pct','price_time','entry_lane','entry_label','entry_quality','effective_vol_ratio','vol_ratio','div25','rs5','rs20','long_stage','stage','stage_code','setup_label','snapshot_id','extensionState','extensionLabel','momentumState','momentumLabel','momentumQuality','climaxRisk','holdingAssessment','entryAssessment','momentumEvidence','momentumProvisional'];
   const out={};for(const k of keys)if(value?.[k]!=null)out[k]=value[k];return Object.keys(out).length?out:null;
 }
 function normalizeItem(item={}){
@@ -33,8 +35,12 @@ export async function getWatchlist(env){
   const [jp,us,pos]=values,held=new Set((pos?.positions||[]).map(x=>x.symbol));
   return{ok:true,degraded:warnings.length>0,warnings,items:list.map(w=>{
     const marketStage=w.market==='us'?us:jp,stage=marketStage?.stocks?.[w.symbol]||null;
-    const latest=w.stage_data&&stage?newer(w.stage_data,stage):w.stage_data||stage||{};
-    return{...w,held:pos?held.has(w.symbol):null,current_data:latest,stage_data:latest,data_stale:!marketStage,status:normalizeStatus(w.status)};
+    const selected=w.stage_data&&stage?newer(w.stage_data,stage):w.stage_data||stage||{};
+    const expected=expectedConfirmedTradingDate(w.market);
+    const stale=!selected.date||selected.date<expected;
+    const schemaMismatch=selected.engine_version!==ENGINE_VERSION||!selected.momentumState;
+    const latest={...selected,data_status:stale?'STALE':schemaMismatch?'SCHEMA_MISMATCH':'CURRENT',assessment_usable:!stale&&!schemaMismatch,expected_trade_date:expected};
+    return{...w,held:pos?held.has(w.symbol):null,current_data:latest,stage_data:latest,data_stale:!marketStage||stale,status:normalizeStatus(w.status)};
   })};
 }
 export async function mutateWatchlist(env,body={}){

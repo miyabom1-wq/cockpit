@@ -5,6 +5,7 @@ import { dailyRegimeAt } from './regime.js';
 import { volumeAt, intradayAdjustedRatio } from './volume.js';
 import { rsAt } from './relative-strength.js';
 import { detectSetup } from './setup.js';
+import { evaluateMomentum, momentumFeatures } from './momentum.js';
 import { classifyCandidate } from './candidate-board.js';
 import { validateRow } from './data-quality.js';
 import { finite, pct, round } from '../utils.js';
@@ -33,12 +34,14 @@ export function analyzePreparedAt(prepared,index,{symbol,name,market,benchmarkMa
     source,engine_version:ENGINE_VERSION,snapshot_id:snapshotId,close_confirmed:!!closeConfirmed
   };
   base.setup=detectSetup(prepared,index,{...volume,candle});base.setup_code=base.setup?.code||null;base.setup_label=base.setup?.label||null;
+  Object.assign(base,evaluateMomentum(base,momentumFeatures(prepared,index,benchmarkMap)));
   const classification=classifyCandidate(base,{...context});
   base.entry_lane=classification.lane;base.entry_label=classification.label;base.entry_quality=classification.quality;base.entry_reason=classification.reasons;base.risk_reason=classification.risks;
   base.audit={
     data:{trade_date:row.date,close_confirmed:!!closeConfirmed,source,snapshot_id:snapshotId,engine:ENGINE_VERSION,quality:data_quality},
     price:{open:base.open,high:base.high,low:base.low,close:base.price,volume:base.volume,avg_volume20:base.avg_volume20,vol_ratio:base.vol_ratio,effective_vol_ratio:base.effective_vol_ratio,volume_curve_fraction:base.volume_curve_fraction,volume_estimation:base.volume_estimation},
     technical:{sma25:base.sma25,sma50:base.sma50,sma200:base.sma200,ema65:base.ema65,div25:base.div25,rsi14_wilder:base.rsi14,atr14_wilder:base.atr14,rs5:base.rs5,rs20:base.rs20,secondary_rs5:base.secondary_rs5,secondary_rs20:base.secondary_rs20,close_pos:base.close_pos,upper_ratio:base.upper_ratio},
+    momentum:{extensionState:base.extensionState,extensionAtr:base.extensionAtr,state:base.momentumState,quality:base.momentumQuality,climaxRisk:base.climaxRisk,evidence:base.momentumEvidence},
     candidate:{lane:base.entry_lane,label:base.entry_label,quality:base.entry_quality,conditions:classification.conditions,reasons:classification.reasons,risks:classification.risks}
   };
   return base;

@@ -1,11 +1,11 @@
 import '../../public/theme-catalog.js';
-export const APP_VERSION = 'v73.8.23';
+export const APP_VERSION = 'v73.8.26';
 export const SOURCE_COMMIT = typeof __VANTAGE_SOURCE_COMMIT__==='string'?__VANTAGE_SOURCE_COMMIT__:'local-unbuilt';
 export const BUILD_TIME = typeof __VANTAGE_BUILD_TIME__==='string'?__VANTAGE_BUILD_TIME__:null;
 export const BUILD_ID = SOURCE_COMMIT;
 export const KV_SCHEMA_VERSION = 'vantage-kv-v3';
-export const ENGINE_VERSION = 'engine-v52-null-safe';
-export const BACKTEST_VERSION = 'registered-bt-v9-null-safe';
+export const ENGINE_VERSION = 'engine-v53-momentum';
+export const BACKTEST_VERSION = 'registered-bt-v10-momentum';
 export const DEPLOYED_AT = BUILD_TIME;
 export const FRONTEND_ORIGIN = 'https://miyabom1-wq.github.io';
 

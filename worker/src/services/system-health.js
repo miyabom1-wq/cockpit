@@ -1,3 +1,4 @@
+import { ENGINE_VERSION, BUILD_ID, BACKTEST_VERSION } from '../config.js';
 import { marginFreshness } from './margin-supply.js';
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
 import { stageFreshness } from './stage-freshness.js';
@@ -102,6 +103,11 @@ function stageSummary(stage){
     trade_date:stage?.trade_date||null,
     kind:stage?.kind||null,
     complete:Boolean(stage?.complete),
+    producer_build:stage?.build||null,
+    producer_engine:stage?.engine_version||null,
+    expected_engine:ENGINE_VERSION,
+    momentum_count:Object.values(stage?.stocks||{}).filter(r=>r.momentumState).length,
+    total_count:Object.keys(stage?.stocks||{}).length,
     confirmed_ratio:Number(stage?.close_verification?.ratio||0),
     updated_at:stage?.updated_at||null,
     age_minutes:Number.isFinite(updated)?Math.max(0,Math.round((Date.now()-updated)/60000)):null,
@@ -127,10 +133,21 @@ export async function getSystemAudit(env){
   })));
   const jp=stageSummary(parseJson(jpRaw,{market:'jp'}));
   const us=stageSummary(parseJson(usRaw,{market:'us'}));
+  const bt=parseJson(await env.COCKPIT_KV.get(`backtest:${BACKTEST_VERSION}:state`),null);
+  const btAge=bt?.updated_at?(Date.now()-Date.parse(bt.updated_at))/60000:Infinity;
+  const components={
+    market_data:[jp,us].every(s=>!s.is_stale)?'CURRENT':'STALE',
+    momentum_engine:[jp,us].every(s=>!s.schema_mismatch)?'CURRENT':'SCHEMA_MISMATCH',
+    credit:datasets.margin.available?(datasets.margin.stale?'STALE':'CURRENT'):'MISSING',
+    backtest:!bt?'MISSING':bt.status==='running'&&btAge>30?'STOPPED':String(bt.status).toUpperCase(),
+    storage:'READ_OK'
+  };
   const cronAt=scheduler.last_cron_at?Date.parse(scheduler.last_cron_at):NaN;
   const cronAge=Number.isFinite(cronAt)?Math.max(0,Math.round((Date.now()-cronAt)/60000)):null;
   return{
-    ok:true,
+    ok:components.market_data==='CURRENT'&&components.momentum_engine==='CURRENT'&&components.credit==='CURRENT'&&cronAge!==null&&cronAge<=15,
+    components,reader_build:BUILD_ID,
+    backtest:{status:components.backtest,last_attempt_at:bt?.updated_at||null,processed_count:bt?.cursor||0,total_count:bt?.queue?.length||0,last_error:bt?.errors?.at(-1)||null},
     checked_at:nowIso(),
     scheduler:{...scheduler,age_minutes:cronAge,alive:cronAge!==null&&cronAge<=15},
     stages:{jp,us},datasets,

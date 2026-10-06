@@ -97,13 +97,14 @@ function deriveContext(stocks,ranking,market){
 }
 function applyRiskGate(rows,riskGate){for(const row of rows){row.market_gate=riskGate.level;row.entry_allowed=!(riskGate.block_new_entries&&['A','B'].includes(row.entry_lane));row.entry_block_reason=row.entry_allowed?null:riskGate.label;}}
 function buildMomentum(market,store){
-  const labels={A:'強い継続候補',B:'反転初動',C:'押し目監視',D:'監視継続',E:'警戒'},rows=Object.values(store.stocks||{}),riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});applyRiskGate(rows,riskGate);
+  const labels={A:'強い継続候補',B:'初動・ブレイク',C:'押し目監視',D:'監視継続',E:'警戒'},rows=Object.values(store.stocks||{}),riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});applyRiskGate(rows,riskGate);
   const board=Object.keys(labels).map(key=>({key,label:labels[key],rows:rows.filter(x=>x.entry_lane===key).sort((a,b)=>(b.entry_sort_score??b.rs_percentile??-1)-(a.entry_sort_score??a.rs_percentile??-1))}));
   return{ready:true,market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,trade_date:store.trade_date,complete:store.complete,risk_gate:riskGate,rows,board,analyzer_version:ENGINE_VERSION};
 }
 function buildNoTrade(market,store){
   const rows=Object.values(store.stocks||{}),hot=rows.filter(x=>finite(x.rsi14)&&x.rsi14>=78).length,extreme=rows.filter(x=>finite(x.div25)&&x.div25>=10).length,dips=rows.filter(x=>x.entry_lane==='C').length,wicks=rows.filter(x=>finite(x.upper_ratio)&&x.upper_ratio>=.4).length,riskGate=store.risk_gate||evaluateRiskGate(market,store.macro||{});
-  let recLevel=riskGate.level==='stress'?'stress':'normal';if(recLevel!=='stress'&&rows.length&&((hot+extreme)/rows.length>=.25))recLevel='strong';else if(recLevel!=='stress'&&rows.length&&((hot+extreme)/rows.length>=.12))recLevel='recommend';
+  const impaired=rows.filter(x=>['climax','fading','breakdown'].includes(x.momentumState)).length;
+  let recLevel=riskGate.level==='stress'?'stress':'normal';if(recLevel!=='stress'&&rows.length&&impaired/rows.length>=.25)recLevel='strong';else if(recLevel!=='stress'&&rows.length&&impaired/rows.length>=.12)recLevel='recommend';
   const signals=riskGate.level==='stress'?[{label:riskGate.label,detail:(riskGate.reasons||[]).join(' / '),block_new_entries:true}]:[];
   return{market,updated_at:store.updated_at,snapshot_id:store.snapshot_id,recLevel,risk_gate:riskGate,summary:{extreme_pct:rows.length?round(extreme/rows.length*100,1):0,rsi_hot:hot,healthy_dips:dips,shooting_stars:wicks},signals};
 }
@@ -244,7 +245,16 @@ export async function getStage(env,market){
   const m=market==='us'?'us':'jp',stage=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m)),{market:m,complete:false,stocks:{},macro:{},focus_counts:{}}),other=parseJson(await env.COCKPIT_KV.get(KEYS.stage(m==='jp'?'us':'jp')),{macro:{}}),canonical=parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}});
   const macro=mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{}),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{},rows=Object.values(stocks);if(m==='jp')await enrichRowsWithMargin(env,rows);applyRiskGate(rows,riskGate);
   const list=parseJson(await env.COCKPIT_KV.get(KEYS.stocklist(m)),[]),bySymbol=new Map((Array.isArray(list)?list:[]).map(x=>[x.symbol,x]));
-  for(const row of rows){row.theme_override=bySymbol.get(row.symbol)?.theme_override||null;row.theme=globalThis.VantageThemes.themeName(row);}
+  for(const row of rows){
+    const expected=expectedConfirmedTradingDate(m),stale=!row.date||row.date<expected;
+    const mismatch=row.engine_version!==ENGINE_VERSION||!row.momentumState;
+    row.data_status=stale?'STALE':mismatch?'SCHEMA_MISMATCH':row.data_quality?.data_valid===false?'FAILED':'CURRENT';
+    row.assessment_usable=row.data_status==='CURRENT';
+    if(!row.assessment_usable){
+      row.entry_allowed=false;row.entry_block_reason=stale?'価格基準日が古いため評価対象外':mismatch?'分析エンジンの版が不一致':'価格データ異常';
+      row.entryAssessment='WAIT';row.holdingAssessment='REVIEW';
+    }
+    row.theme_override=bySymbol.get(row.symbol)?.theme_override||null;row.theme=globalThis.VantageThemes.themeName(row);}
   return{...stage,market:m,macro,risk_gate:riskGate,stocks,...stageFreshness({...stage,market:m})};
 }
 export async function getMomentum(env,market){

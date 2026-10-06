@@ -49,6 +49,11 @@ def integer(text):
         raise ValueError(f'invalid numeric cell: {text!r}')
     return int(text.replace('▲','-').replace('△','-'))
 
+def is_share_marker(char):
+    # JPX's 2026-10-02 and 10-05 PDFs differ by ~1 pt horizontally.
+    # Keep a narrow unit column; ISIN, code and all numeric totals still validate.
+    return char['text'] == '株' and 226 <= char['x0'] <= 230 and char['top'] > 80
+
 def parse_pdf(blob):
     records = {}
     with pdfplumber.open(io.BytesIO(blob)) as pdf:
@@ -69,7 +74,7 @@ def parse_pdf(blob):
                     continue
             if page.width != 842: raise ValueError('unexpected JPX page width')
             chars = page.chars
-            markers = [c for c in chars if c['text']=='株' and abs(c['x0']-228.7114)<0.2 and c['top']>80]
+            markers = [c for c in chars if is_share_marker(c)]
             for marker in markers:
                 top = marker['top']
                 row = sorted((c for c in chars if abs(c['top']-top)<0.65),key=lambda c:c['x0'])

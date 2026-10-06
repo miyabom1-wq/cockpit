@@ -4,6 +4,12 @@ import jp_margin_daily as daily
 import update_jp_margin as core
 
 class DailyTests(unittest.TestCase):
+    def test_share_column_layout_variants(self):
+        for x in [227.75,228.7114]:
+            self.assertTrue(daily.is_share_marker({'text':'株','x0':x,'top':124}))
+        for text,x,top in [('株',70,124),('株',228,50),('金',228,124)]:
+            self.assertFalse(daily.is_share_marker({'text':text,'x0':x,'top':top}))
+
     def test_html_without_charset_header(self):
         from unittest.mock import patch
         import requests

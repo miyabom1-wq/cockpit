@@ -1,3 +1,4 @@
+import { newMomentumStudy, recordMomentumStudy, summarizeMomentumStudy } from '../engine/momentum-study.js';
 import { BACKTEST_VERSION, ENGINE_VERSION, LIMITS } from '../config.js';
 import { getStockList } from '../storage/stocklist.js';
 import { fetchYahooChart } from '../data/yahoo.js';
@@ -196,14 +197,15 @@ function metric(trades){
 function regimeFromBench(b){if(finite(b?.ret5)&&finite(b?.ret20)&&b.ret5>=1&&b.ret20>=0)return'up';if((finite(b?.ret5)&&b.ret5<=-1.5)||(finite(b?.ret20)&&b.ret20<=-3))return'weak';return'neutral';}
 
 export function backtestSeries(rows,benchRows,meta){
-  const primary=Array.isArray(benchRows)?benchRows:(benchRows?.primary||[]),secondary=Array.isArray(benchRows)?[]:(benchRows?.secondary||[]),p=prepareSeries(rows),bm=benchmarkValues(primary),secondaryBm=benchmarkValues(secondary),pools=Object.fromEntries(Object.keys(STRATEGIES).map(k=>[k,[]]));let prev=null;
+  const primary=Array.isArray(benchRows)?benchRows:(benchRows?.primary||[]),secondary=Array.isArray(benchRows)?[]:(benchRows?.secondary||[]),p=prepareSeries(rows),bm=benchmarkValues(primary),secondaryBm=benchmarkValues(secondary),pools=Object.fromEntries(Object.keys(STRATEGIES).map(k=>[k,[]]));const momentumGroups=newMomentumStudy();let prev=null;
   for(let i=200;i<p.rows.length-1;i++){
     const a=analyzePreparedAt(p,i,{symbol:meta.symbol,name:meta.name,market:meta.market,benchmarkMap:bm,secondaryBenchmarkMap:secondaryBm,expectedDate:p.rows[i].date,closeConfirmed:true,requireCloseConfirmed:true,snapshotId:`BT-${p.rows[i].date}`,source:'Yahoo Finance'});if(!a)continue;
+    recordMomentumStudy(momentumGroups,p,i,a);
     const signals=[];if(a.entry_lane==='A'&&prev!=='A')signals.push('A');if(a.entry_lane==='B'&&prev!=='B')signals.push('B');if(prev==='C'&&a.entry_lane==='A')signals.push('C_A');if(prev==='C'&&a.entry_lane==='B')signals.push('C_B');
     const b=bm.get(a.date)||{};for(const key of signals){const sim=simulateBacktestTrade(p,i,STRATEGIES[key].max_hold);pools[key].push({symbol:meta.symbol,name:meta.name,market:meta.market,strategy:key,signal_date:a.date,features:{market_regime:regimeFromBench(b),vol_ratio:a.vol_ratio,rs5:a.rs5,div25:a.div25,close_pos:a.close_pos,setup:a.setup_code},...sim});}prev=a.entry_lane;
   }
   const strategies={};for(const [k,trades] of Object.entries(pools)){const recent=trades.filter(x=>x.signal_date>=new Date(Date.now()-365*86400000).toISOString().slice(0,10));strategies[k]={...STRATEGIES[k],metrics:metric(trades),recent_metrics:metric(recent),trades};}
-  return{version:BACKTEST_VERSION,engine_version:ENGINE_VERSION,symbol:meta.symbol,name:meta.name,market:meta.market,history_start:p.rows[0]?.date||null,history_end:p.rows.at(-1)?.date||null,history_days:p.rows.length,strategies,generated_at:nowIso()};
+  return{version:BACKTEST_VERSION,engine_version:ENGINE_VERSION,symbol:meta.symbol,name:meta.name,market:meta.market,history_start:p.rows[0]?.date||null,history_end:p.rows.at(-1)?.date||null,history_days:p.rows.length,momentumStudy:summarizeMomentumStudy(momentumGroups),strategies,generated_at:nowIso()};
 }
 
 const PREDICATES={regime_up:{label:'市場上向き',fn:f=>f.market_regime==='up'},regime_not_weak:{label:'市場弱気を除外',fn:f=>f.market_regime!=='weak'},vol_1_0:{label:'出来高1.0倍以上',fn:f=>finite(f.vol_ratio)&&f.vol_ratio>=1},vol_1_2:{label:'出来高1.2倍以上',fn:f=>finite(f.vol_ratio)&&f.vol_ratio>=1.2},vol_1_5:{label:'出来高1.5倍以上',fn:f=>finite(f.vol_ratio)&&f.vol_ratio>=1.5},rs5_0:{label:'5日RS 0%以上',fn:f=>finite(f.rs5)&&f.rs5>=0},rs5_2:{label:'5日RS +2%以上',fn:f=>finite(f.rs5)&&f.rs5>=2},rs5_5:{label:'5日RS +5%以上',fn:f=>finite(f.rs5)&&f.rs5>=5},div25_m3_3:{label:'25MA乖離 -3〜+3%',fn:f=>finite(f.div25)&&f.div25>=-3&&f.div25<=3},div25_0_5:{label:'25MA乖離 0〜+5%',fn:f=>finite(f.div25)&&f.div25>=0&&f.div25<=5},close_0_6:{label:'終値位置60%以上',fn:f=>finite(f.close_pos)&&f.close_pos>=.6},close_0_75:{label:'終値位置75%以上',fn:f=>finite(f.close_pos)&&f.close_pos>=.75},setup_thrust:{label:'強い反転セットアップ',fn:f=>['reversal_thrust','ipo_momentum'].includes(f.setup)}};
@@ -272,6 +274,9 @@ function summaryFromState(s,includeSelective=s.status==='complete'){
   return{
     version:BACKTEST_VERSION,engine_version:ENGINE_VERSION,generated_at:nowIso(),status:s.status,result_usable:usable,
     cycle_started_at:s.started_at,cycle_finished_at:s.finished_at,
+    last_attempt_at:s.updated_at||null,last_success_at:s.last_success_at||null,last_processed:s.last_processed||null,
+    processing_state:s.status==='running'&&Date.now()-Date.parse(s.updated_at||s.started_at)>1800000?'STOPPED':s.status.toUpperCase(),
+    remaining_count:integrity.pending+integrity.retrying,retry_count:(s.errors||[]).length,last_error:s.errors?.at(-1)||null,
     progress:{done:integrity.resolved,total:integrity.total,eligible:integrity.eligible,excluded:integrity.excluded,success:integrity.success,failed:integrity.failed,retrying:integrity.retrying,pending:integrity.pending,attempted:Number(s.cursor||0),errors:integrity.failed,error_events:(s.errors||[]).length},
     integrity,error_categories:errorCategories(s.failures||[]),excluded_categories:errorCategories(s.exclusions||[]),attempt_error_categories:errorCategories(s.errors||[]),
     failures:(s.failures||[]).slice(-50),exclusions:(s.exclusions||[]).slice(-50),recent_errors:(s.errors||[]).slice(-12),
@@ -332,7 +337,7 @@ export async function runBacktestStep(env,count=1,force=false,{scheduled=false}=
   // Reserve KV writes for live analysis and user changes. Manual steps remain immediate.
   if(scheduled&&!force){
     const previous=parseJson(await env.COCKPIT_KV.get(STATE),null);
-    if(Date.now()-Date.parse(previous?.updated_at||'')<3600000)return{ok:true,skipped:true,reason:'scheduled write cooldown'};
+    if(Date.now()-Date.parse(previous?.updated_at||'')<(previous?.paused_reason?3600000:240000))return{ok:true,skipped:true,reason:'scheduled write cooldown'};
   }
   let s=await loadState(env,force);
   if(s.status==='failed'&&!force&&shouldAutoRestartBacktest(s))s=await loadState(env,true);
@@ -345,16 +350,17 @@ export async function runBacktestStep(env,count=1,force=false,{scheduled=false}=
       for(const market of [...new Set(s.queue.map(x=>x.market))])benchCache[market]=await benchmark(env,market);
     }catch(error){
       const record={id:'benchmark',symbol:'BENCHMARK',name:'市場指数',market:'global',attempt:1,category:classifyBacktestError(error),error:String(error?.message||error||'benchmark unavailable').slice(0,240),final:false,scope:'benchmark',at:nowIso()};
-      s.errors=[...(s.errors||[]),record].slice(-200);s.updated_at=nowIso();await env.COCKPIT_KV.put(STATE,JSON.stringify(s));
+      s.paused_reason='benchmark_unavailable';s.errors=[...(s.errors||[]),record].slice(-200);s.updated_at=nowIso();await env.COCKPIT_KV.put(STATE,JSON.stringify(s));
       return{ok:true,processed:0,paused:true,paused_reason:'benchmark_unavailable',...summaryFromState(s,false),next_symbol:s.cursor<s.queue.length?s.queue[s.cursor]:s.retry_queue?.[0]||null};
     }
+    s.paused_reason=null;
     for(let z=0;z<Math.max(1,Math.min(5,Number(count)||1));z++){
       const item=nextWork(s);if(!item)break;processed++;
       const id=itemId(item),attempt=Number(s.attempts[id]||0)+1;s.attempts[id]=attempt;
       try{
         const result=await analyzeBacktestItem(env,item,benchCache);
         for(const k of Object.keys(STRATEGIES))s.pools[k].push(...(result.strategies[k]?.trades||[]));
-        upsertSummary(s,item,result);removeFailure(s,id);removeExclusion(s,id);
+        upsertSummary(s,item,result);removeFailure(s,id);removeExclusion(s,id);s.last_success_at=nowIso();s.last_processed=id;
       }catch(error){
         const record=errorRecord(item,error,attempt,false);s.errors=[...(s.errors||[]),record].slice(-200);
         if(retryableCategory(record.category)&&attempt<MAX_RETRIES)enqueueRetry(s,item);

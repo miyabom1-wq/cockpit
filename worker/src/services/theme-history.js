@@ -12,7 +12,7 @@ function stats(rows=[]){
   const n=rows.length;if(!n)return null;
   const count=lane=>rows.filter(x=>x.entry_lane===lane).length;
   const a=count('A'),b=count('B'),c=count('C'),e=count('E');
-  const isOverheated=x=>Number(x?.rsi14)>=78||Number(x?.div25)>=10||Number(x?.change_pct)>=8;
+  const isOverheated=x=>x?.momentumState==='climax';
   const overheatE=rows.filter(x=>x.entry_lane==='E'&&isOverheated(x)).length,weakE=Math.max(0,e-overheatE);
   const improving=rows.filter(x=>finite(x.rs5)&&finite(x.rs20)&&Number(x.rs5)>Number(x.rs20)).length/n*100;
   return{
@@ -21,7 +21,7 @@ function stats(rows=[]){
     rs5:average(rows,'rs5'),rs20:average(rows,'rs20'),
     vol:average(rows,'effective_vol_ratio')??average(rows,'vol_ratio'),
     breadth:rows.filter(x=>Number(x.ret5??x.change_pct)>0).length/n*100,
-    hot:rows.filter(x=>Number(x.rsi14)>=75||Number(x.div25)>=10||Number(x.change_pct)>=8).length/n*100,
+    hot:rows.filter(x=>['strong','extreme'].includes(x.extensionState)).length/n*100,
     improving
   };
 }
@@ -63,7 +63,7 @@ function classify(m,regional={}){
   let code='WAIT',label='待機',kind='neutral',reason='明確な資金集中は未確認';
   if(insufficient){code='WAIT';label='判定保留';kind='neutral';reason='テーマ母数が少なく判定確度が不足';}
   else if(relativeBreakdown||broadBreakdown){code='BREAKDOWN';label='崩壊';kind='bad';reason='相対劣後と悪化型の警戒銘柄が優勢';}
-  else if((hot>=25&&((rs20??0)>=4||(rs5??0)>=6))||eDrivenOverheat){code='OVERHEAT';label='過熱';kind='hot';reason='上昇は強いが過熱型の警戒銘柄が増加';}
+  else if((hot>=25&&((rs20??0)>=4||(rs5??0)>=6))||eDrivenOverheat){code='OVERHEAT';label=eDrivenOverheat?'クライマックス警戒':'強い拡張';kind=eDrivenOverheat?'bad':'good';reason=eDrivenOverheat?'価格反転と出来高を伴う複合警戒が増加':'値幅拡張中。加速・継続と損傷を個別に確認';}
   else if(abRate>=.35&&(rs5??0)>1&&(rs20??0)>=0&&breadth>=55){code='EXPANSION';label='拡大';kind='good';reason='A・B候補と上昇銘柄の広がりを確認';}
   else if((rs20??0)<0&&(rs5??0)>(rs20??0)+2&&bcRate>=.25){code='RECOVERY';label='修復';kind='repair';reason='中期劣後の中で短期相対強度が反転';}
   else if(b>=1&&(rs5??0)>0&&improving>=40){code='GERMINATION';label='発芽';kind='seed';reason='反転初動と短期相対強度の改善を確認';}
@@ -72,7 +72,7 @@ function classify(m,regional={}){
   if(provisional){label+='候補';reason+='。ただし地域またはテーマ母数が少ないため確認継続';}
   const score=round(
     (Number(rs5)||0)*1.8+(Number(rs20)||0)*.8+(breadth-50)*.08+(improving-50)*.04+
-    abRate*18-weakERate*20-(hot>35?(hot-35)*.12:0),1
+    abRate*18-weakERate*20-overheatERate*20,1
   );
   return{
     code,label,kind,reason,score,provisional,

@@ -597,6 +597,7 @@ def main() -> int:
     else:
         link = discover_latest_pdf()
         pdf_bytes = get(link.url, binary=True)
+    write_diagnostics(args.diagnostics_dir, link=link, pdf_bytes=pdf_bytes, diag={'status':'parsing'})
     records, diag = parse_weekly_pdf(pdf_bytes)
     write_diagnostics(args.diagnostics_dir, link=link, pdf_bytes=pdf_bytes, diag=diag)
     data = build_dataset(records, link, previous, args.min_count)

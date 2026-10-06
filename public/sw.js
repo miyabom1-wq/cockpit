@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.23-summary-events-20261002';
+const BUILD='vantage-ui73.8.26-momentum-colors-20261005';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

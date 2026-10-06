@@ -32,8 +32,7 @@ function analysisScore(row={}){
   if(finite(row.effective_vol_ratio??row.vol_ratio))score+=Math.max(-4,Math.min(12,(Number(row.effective_vol_ratio??row.vol_ratio)-1)*12));
   if(row.stage_code==='S2')score+=9;
   if(finite(row.div25)&&Math.abs(Number(row.div25))<=6)score+=5;
-  if(finite(row.rsi14??row.rsi)&&Number(row.rsi14??row.rsi)>=80)score-=10;
-  if(finite(row.div25)&&Number(row.div25)>=14)score-=12;
+  if(['climax','fading','breakdown'].includes(row.momentumState))score-=22;
   return score;
 }
 export function scoreUniverseItem({item={},analysis={},rank=null,presence=0,market='jp',candidate=false}={}){

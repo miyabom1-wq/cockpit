@@ -28,7 +28,8 @@ test('system audit reports scheduler state without exposing secrets',async()=>{
   const res=await worker.fetch(new Request('https://example.com/api/system-audit'),env,{});
   const data=await res.json();
   assert.equal(res.status,200);
-  assert.equal(data.ok,true);
+  assert.equal(data.ok,false);
+  assert.equal(data.components.momentum_engine,"SCHEMA_MISMATCH");
   assert.ok(data.scheduler);
   assert.ok(data.stages.jp);
 });

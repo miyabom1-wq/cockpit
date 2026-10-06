@@ -321,6 +321,11 @@ export default{
     ctx.waitUntil((async()=>{
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
+      if(event.cron==='2-59/5 * * * *'){
+        await initializeStorage(env);
+        if(await backgroundCapacity(env))await runBacktestStep(env,1,false,{scheduled:true});
+        return;
+      }
       if(event.cron===ECONOMIC_CRON){
         await syncEconomicEvents(env,{now:event.scheduledTime||Date.now()});
         return;
@@ -334,7 +339,7 @@ export default{
         console.error('[stage cron]',error?.stack||error);
       }
       try{await pushIndex(env)}catch(error){console.error('[push cron]',error?.stack||error)}
-      try{if(await backgroundCapacity(env))await runBacktestStep(env,1,false,{scheduled:true})}catch(error){console.error('[backtest cron]',error?.stack||error)}
+      // Backtests use an independent, bounded Cron invocation.
       }finally{await scoped.finish();}
     })());
   }

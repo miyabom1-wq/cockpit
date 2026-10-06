@@ -9,11 +9,11 @@ function row(symbol,market,entry_lane,rs5,rs20,ret5,extra={}){
 }
 function stage(market,rows){return{market,complete:true,kind:'confirmed',trade_date:'2026-08-12',snapshot_id:`${market}-2026-08-12`,stocks:Object.fromEntries(rows.map(x=>[x.symbol,x]))};}
 
-test('strong E-lane theme is overheat, not breakdown',()=>{
-  const jp=stage('jp',['5803.T','5801.T','5802.T'].map(s=>row(s,'jp','E',6,3,5,{rsi14:80})));
-  const us=stage('us',['VRT','ETN','GEV'].map(s=>row(s,'us','E',6,3,5,{rsi14:80})));
+test('compound climax E-lane theme warns without declaring breakdown',()=>{
+  const jp=stage('jp',['5803.T','5801.T','5802.T'].map(s=>row(s,'jp','E',6,3,5,{rsi14:80,momentumState:'climax',extensionState:'extreme'})));
+  const us=stage('us',['VRT','ETN','GEV'].map(s=>row(s,'us','E',6,3,5,{rsi14:80,momentumState:'climax',extensionState:'extreme'})));
   const t=buildThemeSnapshotFromStages(jp,us,'2026-08-12').themes['電線・AI物理'];
-  assert.equal(t.code,'OVERHEAT');assert.equal(t.label,'過熱');assert.ok(t.overheatERate>=.3);assert.equal(t.weakERate,0);
+  assert.equal(t.code,'OVERHEAT');assert.equal(t.label,'クライマックス警戒');assert.ok(t.overheatERate>=.3);assert.equal(t.weakERate,0);
 });
 
 test('weak E-lane theme with negative RS still breaks down',()=>{

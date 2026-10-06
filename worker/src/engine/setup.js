@@ -8,8 +8,14 @@ export function detectSetup(prepared,index,metrics){
   const rebound5=finite(low5)?pct(c,low5):null,draw20=finite(high20)?pct(c,high20):null;
   const reclaimed25=finite(m25)&&prev.close<m25&&c>m25,reclaimed50=finite(m50)&&prev.close<m50&&c>m50;
   const thrust=chg>=2&&cd?.close_pos>=.72&&cd?.upper_ratio<=.25&&finite(vr)&&vr>=1.2;
-  if(thrust&&(reclaimed25||reclaimed50||pct(c,low20)>=6))return{code:'reversal_thrust',label:'強い反転',score:9};
+  const highs=prepared.rows.slice(Math.max(0,index-20),index).map(r=>r.high);
+  if(highs.length===20&&highs.every(finite)&&c>Math.max(...highs)&&chg>0&&cd?.close_pos>=.65){
+    const recent=prepared.rows.slice(index-5,index),atr=prepared.atr14[index-1];
+    const tight=recent.every(r=>finite(r.high)&&finite(r.low))&&finite(atr)&&(Math.max(...recent.map(r=>r.high))-Math.min(...recent.map(r=>r.low)))<=2*atr;
+    return {code:tight?'reacceleration':'breakout',label:tight?'再加速':'高値突破',score:9};
+  }
+  if(thrust&&(reclaimed25||reclaimed50))return{code:'reversal_thrust',label:'強い反転',score:9};
   if(chg>0&&cd?.close_pos>=.62&&finite(rebound5)&&rebound5>=3&&finite(draw20)&&draw20<=-5&&finite(vr)&&vr>=.8)return{code:'bottom_reversal',label:'反転初動',score:7};
-  if(index<80&&chg>0&&finite(m25)&&c>m25&&finite(vr)&&vr>=1&&finite(rsi)&&rsi<78)return{code:'ipo_momentum',label:'短期モメンタム',score:7};
+  if(index<80&&chg>0&&finite(m25)&&c>m25&&finite(vr)&&vr>=1)return{code:'ipo_momentum',label:'短期モメンタム',score:7};
   return null;
 }

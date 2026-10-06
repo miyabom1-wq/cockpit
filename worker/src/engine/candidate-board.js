@@ -9,18 +9,18 @@ export function classifyCandidate(analysis,context={}){
     cond('change_positive','前日比',chg,'>',0,finite(chg)&&chg>0),
     cond('volume_confirmed','出来高倍率',vr,'>=',1,finite(vr)&&vr>=1),
     cond('close_position','終値位置',cp,'>=',.60,finite(cp)&&cp>=.60),
-    cond('rsi_limit','RSI14 Wilder',rsi,'<',78,finite(rsi)&&rsi<78),
     cond('upper_wick','上ヒゲ比率',upper,'<',.40,finite(upper)&&upper<.40),
     cond('rs_floor','5日市場RS',rs5,'>',-3,!finite(rs5)||rs5>-3)
   ];
-  const overheat=(finite(rsi)&&rsi>=78)||(finite(div25)&&div25>=10)||(finite(chg)&&chg>=8);
+  const impaired=['climax','fading','breakdown'].includes(a.momentumState);
+  common.push(cond('momentum_intact','モメンタム損傷なし',a.momentumState||'確認中','not in','失速・クライマックス・崩れ',!impaired));
   const wick=finite(upper)&&upper>=.4;
   let lane='D',label='監視継続',qualityLevel='normal',reasons=[],risks=[];
-  if(finite(chg)&&chg<=-7||wick&&finite(chg)&&chg<=0||overheat){lane='E';label='警戒';risks.push(overheat?'過熱':'急落・上ヒゲ');}
-  else if(a.setup&&finite(chg)&&chg>-1.5&&finite(cp)&&cp>=.58&&!wick&&!overheat){lane='B';qualityLevel=finite(vr)&&vr>=1.2?'B+':finite(vr)&&vr>=.8?'B':'B?';label=qualityLevel==='B+'?'反転初動・出来高確認':'反転初動';reasons.push(a.setup.label);}
+  if(impaired||finite(chg)&&chg<=-7){lane='E';label=a.momentumLabel||'急落警戒';risks.push(a.momentumLabel||'急落');}
+  else if(a.setup&&finite(chg)&&chg>-1.5&&finite(cp)&&cp>=.58&&!wick&&!impaired){lane='B';qualityLevel=finite(vr)&&vr>=1.2?'B+':finite(vr)&&vr>=.8?'B':'B?';label=['breakout','reacceleration'].includes(a.setup.code)?a.setup.label:(qualityLevel==='B+'?'反転初動・出来高確認':'反転初動');reasons.push(a.setup.label);}
   else if(st==='S2'&&common.every(x=>x.pass)){lane='A';label='強い継続候補';qualityLevel=(context.turnover_rank<=30&&context.rs_percentile>=80&&vr>=1.2)?'A+':'A';reasons.push(qualityLevel==='A+'?'主役確認条件まで通過':'上昇レジーム内の継続');}
-  else if(st==='S2'&&finite(div25)&&div25>=-3.5&&div25<=3.5&&finite(chg)&&chg>-3.5&&!overheat&&!wick&&(!finite(ret20)||ret20>-2)){lane='C';label='押し目監視';reasons.push('25日線近辺の健全な調整');}
+  else if(st==='S2'&&finite(div25)&&div25>=-3.5&&div25<=3.5&&finite(chg)&&chg>-3.5&&!impaired&&!wick&&(!finite(ret20)||ret20>-2)){lane='C';label='押し目監視';reasons.push('25日線近辺の健全な調整');}
   else reasons.push('A/B/C条件の一部が未達');
-  if(finite(rsi)&&rsi>=72)risks.push('RSI高め');if(finite(div25)&&div25>=10)risks.push('25日線乖離10%以上・過熱');else if(finite(div25)&&div25>=8)risks.push('25日線から拡張');if(finite(rs5)&&rs5<0)risks.push('市場RS弱め');
+  if(finite(div25)&&div25>=5)risks.push(`${a.extensionLabel||'上方拡張'}・ストップ幅とサイズを確認`);if(a.extensionRisk==='high')risks.push('25MAから3ATR以上の値幅拡張');if(finite(rs5)&&rs5<0)risks.push('市場RS弱め');
   return{lane,label,quality:qualityLevel,conditions:common,reasons,risks};
 }
