@@ -1,6 +1,6 @@
 // A strongly consistent SQLite Durable Object owns the counters. Never count
 // KV writes in KV: concurrent invocations could lose increments there.
-export const WRITE_LIMITS=Object.freeze({background:550,analysis:250,user:100});
+export const WRITE_LIMITS=Object.freeze({background:350,analysis:100,user:50});
 const CHUNK=32;
 const coordinationKey=key=>key==='system:scheduler-health:v1'||/^sched:/.test(key)||/^ranking:status:(jp|us)$/.test(key);
 const day=()=>new Date().toISOString().slice(0,10);
@@ -16,7 +16,7 @@ export class WriteBudget {
     const url=new URL(request.url);
     if(url.pathname==='/status'){
       const rows=[...this.sql.exec('SELECT lane,used FROM budgets WHERE day=?',day())];
-      return Response.json({day:day(),limits:WRITE_LIMITS,used:Object.fromEntries(rows.map(x=>[x.lane,x.used])),total_limit:900,reset_at:new Date(Date.parse(day())+86400000).toISOString()});
+      return Response.json({day:day(),limits:WRITE_LIMITS,used:Object.fromEntries(rows.map(x=>[x.lane,x.used])),total_limit:500,reset_at:new Date(Date.parse(day())+86400000).toISOString()});
     }
     const body=await request.json();
     if(url.pathname==='/coord'){
@@ -138,7 +138,7 @@ export function scopedStorage(env,lane){
 }
 
 // Keep room for the remaining price batches and daily margin import.
-export async function backgroundCapacity(env,reserve=180){
+export async function backgroundCapacity(env,reserve=120){
   if(!env.WRITE_BUDGET)return true;
   const status=await budgetStatus(env);
   return status.limits.background-(status.used.background||0)>reserve;

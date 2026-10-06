@@ -61,7 +61,7 @@ test('bootstrap, all macro kinds survive, date-only stays visible through JST da
 });
 test('daily cron never invokes existing market/earnings jobs',async()=>{
  const config=readFileSync(new URL('../wrangler.toml',import.meta.url),'utf8');
- assert.match(config,/crons\s*=\s*\[[^\]]*"17 20 \* \* \*"/);
+ assert.match(config,/crons\s*=\s*\["\*\/5 \* \* \* \*"\]/);
  assert.match(config,/class_name\s*=\s*"WriteBudget"/);
  const old=globalThis.fetch;globalThis.fetch=async url=>new Response(await load(url));
  try{

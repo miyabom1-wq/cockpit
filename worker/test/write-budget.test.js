@@ -12,15 +12,15 @@ async function use(env,lane,count){const scope=scopedStorage(env,lane);try{for(l
 test('concurrent background requests cannot consume analysis or management reserve',async()=>{
  const env=setup();
  await Promise.allSettled(Array.from({length:100},()=>use(env,'background',32)));
- assert.equal(env.COCKPIT_KV.writes,550);
+ assert.equal(env.COCKPIT_KV.writes,350);
  await use(env,'analysis',20);await use(env,'user',2);
- assert.equal(env.COCKPIT_KV.writes,572);
- assert.deepEqual((await budgetStatus(env)).used,{background:550,analysis:20,user:2});
+ assert.equal(env.COCKPIT_KV.writes,372);
+ assert.deepEqual((await budgetStatus(env)).used,{background:350,analysis:20,user:2});
 });
-test('all lanes together stop at 900 attempted writes, leaving 100 account margin',async()=>{
+test('all lanes together stop at 500 attempted writes, leaving 500 account margin',async()=>{
  const env=setup();
  for(const lane of Object.keys(WRITE_LIMITS))await Promise.allSettled(Array.from({length:40},()=>use(env,lane,32)));
- assert.equal(env.COCKPIT_KV.writes,900);
+ assert.equal(env.COCKPIT_KV.writes,500);
 });
 test('viewing has zero durable writes, deletes or budget requests',async()=>{
  const env=setup(),scope=scopedStorage(env,'read');
@@ -82,7 +82,7 @@ test('scheduler heartbeat and cooldown remain writable after KV budget exhaustio
  t.mock.timers.tick(1800000);
  assert.equal(await scope.env.COCKPIT_KV.get('sched:test:cooldown'),null);
  assert.ok(await scope.env.COCKPIT_KV.get('system:scheduler-health:v1'));
- await scope.finish();assert.equal(env.COCKPIT_KV.writes,550);
+ await scope.finish();assert.equal(env.COCKPIT_KV.writes,350);
  t.mock.timers.tick(4*3600000);
  await use(env,'background',2);assert.equal((await budgetStatus(env)).used.background,2);
 });

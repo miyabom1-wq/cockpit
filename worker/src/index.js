@@ -321,6 +321,16 @@ export default{
     ctx.waitUntil((async()=>{
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
+      // Daily economic refresh shares the same account Cron (05:20-05:55 JST).
+      const tick=new Date(event.scheduledTime||Date.now());
+      const econKey='sched:economic-shared:'+tick.toISOString().slice(0,10);
+      if(event.cron==='*/5 * * * *'&&tick.getUTCHours()===20&&tick.getUTCMinutes()>=20&&!await env.COCKPIT_KV.get(econKey)){
+        await initializeStorage(env);
+        await recordCronHeartbeat(env,{lane:'economic'});
+        const synced=await syncEconomicEvents(env,{now:tick.getTime()});
+        if(synced?.ok)await env.COCKPIT_KV.put(econKey,'done',{expirationTtl:172800});
+        return;
+      }
       // Reuse one of the existing five-minute invocations; no new account Cron.
       if(event.cron==='*/5 * * * *'&&new Date(event.scheduledTime||Date.now()).getUTCMinutes()%15===10){
         await initializeStorage(env);
