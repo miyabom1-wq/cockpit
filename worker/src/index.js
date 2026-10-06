@@ -321,10 +321,14 @@ export default{
     ctx.waitUntil((async()=>{
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
-      if(event.cron==='2-59/5 * * * *'){
+      // Reuse one of the existing five-minute invocations; no new account Cron.
+      if(event.cron==='*/5 * * * *'&&new Date(event.scheduledTime||Date.now()).getUTCMinutes()%15===10){
         await initializeStorage(env);
-        if(await backgroundCapacity(env))await runBacktestStep(env,1,false,{scheduled:true});
-        return;
+        await recordCronHeartbeat(env,{lane:'backtest'});
+        if(await backgroundCapacity(env)){
+          const result=await runBacktestStep(env,1,false,{scheduled:true});
+          if(!result?.skipped)return;
+        }
       }
       if(event.cron===ECONOMIC_CRON){
         await syncEconomicEvents(env,{now:event.scheduledTime||Date.now()});
@@ -339,7 +343,7 @@ export default{
         console.error('[stage cron]',error?.stack||error);
       }
       try{await pushIndex(env)}catch(error){console.error('[push cron]',error?.stack||error)}
-      // Backtests use an independent, bounded Cron invocation.
+      // Every third five-minute slot can run one bounded backtest step.
       }finally{await scoped.finish();}
     })());
   }
