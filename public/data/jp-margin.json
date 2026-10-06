@@ -6,7 +6,7 @@
     "source_url": "https://www.jpx.co.jp/markets/statistics-equities/margin/tvdivq0000001rnl-att/20261005_mtall.pdf",
     "status": "official-jpx-daily"
   },
-  "generated_at": "2026-10-06T22:36:11+09:00",
+  "generated_at": "2026-10-06T23:26:10+09:00",
   "items": {
     "1301.T": {
       "daily": {
@@ -267285,7 +267285,7 @@
     "margin_restriction_source": "https://www.jpx.co.jp/markets/equities/margin-reg/index.html",
     "special_notice_count": 0,
     "special_notice_source": "https://www.jpx.co.jp/markets/equities/margin-daily/01.html",
-    "updated_at": "2026-10-06T22:36:11+09:00"
+    "updated_at": "2026-10-06T23:26:10+09:00"
   },
   "schema": "jp-margin-v2",
   "source": {
