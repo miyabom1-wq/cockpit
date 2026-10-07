@@ -27,14 +27,14 @@ for(const outage of [false,true])test(`288 cron invocations with 160 JP/40 US sy
  };
  try{
   for(let i=0;i<288;i++){
-   let work;await worker.scheduled({},env,{waitUntil:p=>{work=p;}});await work;
+   let work;await worker.scheduled({cron:'*/5 * * * *',scheduledTime:Date.now()},env,{waitUntil:p=>{work=p;}});await work;
    completedJp ||=JSON.parse(kv.map.get(KEYS.stage('jp'))||'{}').kind==='confirmed';
    completedUs ||=JSON.parse(kv.map.get(KEYS.stage('us'))||'{}').kind==='confirmed';
    if(i<287)t.mock.timers.tick(300000);
   }
   const status=await budgetStatus(env);
   t.diagnostic(JSON.stringify({outage,writes:kv.writes,deletes:kv.deletes,budget:status.used,completedJp,completedUs}));
-  assert.ok(kv.writes+kv.deletes<=550);
+  assert.ok(kv.writes+kv.deletes<=500);
   assert.equal(status.used.user,undefined);
   if(!outage){assert.equal(completedJp,true);assert.equal(completedUs,true);}
   const r=await worker.fetch(new Request('https://example.com/api/positions',{method:'POST',headers:{Origin:'https://example.com'},body:JSON.stringify({action:'toggle_held',symbol:'MSTR',market:'us'})}),env);

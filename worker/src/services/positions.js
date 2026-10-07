@@ -1,3 +1,4 @@
+import { getTrackedData, latestAnalysis, assessedRow } from './tracked-data.js';
 import { KEYS } from '../storage/kv-schema.js';
 import { parseJson, nowIso, normalizeSymbol, finite, round } from '../utils.js';
 const DEFAULT={positions:[],position_count:0,last_violation_at:null,cooldown_hours:48,note:''};
@@ -6,7 +7,8 @@ async function save(env,s){await env.COCKPIT_KV.put(KEYS.discipline,JSON.stringi
 function cooldown(s){if(!s.last_violation_at)return{...s,cooldown_active:false,cooldown_remaining_h:0};const remain=(s.cooldown_hours||48)-(Date.now()-new Date(s.last_violation_at).getTime())/3600000;return{...s,cooldown_active:remain>0,cooldown_remaining_h:remain>0?round(remain,1):0};}
 export async function getPositions(env){
   const s=await read(env),stages={jp:parseJson(await env.COCKPIT_KV.get(KEYS.stage('jp')),{stocks:{}}),us:parseJson(await env.COCKPIT_KV.get(KEYS.stage('us')),{stocks:{}})};
-  const positions=s.positions.map(p=>{const a=stages[p.market||((p.symbol||'').endsWith('.T')?'jp':'us')]?.stocks?.[p.symbol]||{},price=finite(a.price)?Number(a.price):null;return{...p,current_price:price,change_pct:a.change_pct??null,entry_lane:a.entry_lane??null,long_stage:a.long_stage??null,pnl_pct:finite(price)&&finite(p.avg_price)?round((price/p.avg_price-1)*100):null,pnl:finite(price)&&finite(p.avg_price)&&finite(p.qty)?round((price-p.avg_price)*p.qty,0):null};});
+  const supplemental=await getTrackedData(env);
+  const positions=s.positions.map(p=>{const market=p.market||((p.symbol||'').endsWith('.T')?'jp':'us'),a=assessedRow(latestAnalysis(stages[market]?.stocks?.[p.symbol],supplemental[market+':'+p.symbol]?.row),market),price=a.assessment_usable&&finite(a.price)?Number(a.price):null;return{...p,current_price:price,last_known_price:a.price??null,data_status:a.data_status,assessment_usable:a.assessment_usable,change_pct:a.change_pct??null,entry_lane:a.entry_lane??null,long_stage:a.long_stage??null,pnl_pct:finite(price)&&finite(p.avg_price)?round((price/p.avg_price-1)*100):null,pnl:finite(price)&&finite(p.avg_price)&&finite(p.qty)?round((price-p.avg_price)*p.qty,0):null};});
   return{ok:true,positions,state:cooldown({...s,positions,position_count:positions.length})};
 }
 export async function mutatePosition(env,body={}){

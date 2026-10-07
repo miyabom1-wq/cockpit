@@ -19,8 +19,19 @@ try {
     & npm.cmd run deploy
     if ($LASTEXITCODE -ne 0) { throw 'Cloudflare deployment failed' }
 } finally { Pop-Location }
-$health = Invoke-RestMethod 'https://vantage-radar.miyab.workers.dev/api/health' -TimeoutSec 30
-if ($health.source_commit -ne $commit) { throw "Production commit mismatch: expected $commit / received $($health.source_commit)" }
+$health = $null
+for ($attempt=1; $attempt -le 12; $attempt++) {
+    try {
+        $nonce = [Guid]::NewGuid().ToString('N')
+        $health = Invoke-RestMethod ("https://vantage-radar.miyab.workers.dev/api/health?verify=" + $nonce) -TimeoutSec 15 -Headers @{ 'Cache-Control'='no-cache' }
+        if ($health.source_commit -eq $commit) { break }
+        Write-Host "Waiting for deployment propagation ($attempt/12)"
+    } catch { Write-Host "Health check retry ($attempt/12): $($_.Exception.Message)" }
+    if ($attempt -lt 12) { Start-Sleep -Seconds 5 }
+}
+if (!$health -or $health.source_commit -ne $commit) {
+    throw "Worker was uploaded, but version verification did not finish. Expected $commit. Do not redeploy blindly; inspect /api/health."
+}
 Write-Host "Deployment verified: $commit"
 Write-Host 'Data pipelines must also recover. Inspect /api/health components; code deployment alone is not completion.'
 $health.components | Format-List

@@ -1,3 +1,5 @@
+import { getTrackedData, latestAnalysis, assessedRow } from './tracked-data.js';
+import { readBacktestRuntime } from './backtest-runtime.js';
 import { ENGINE_VERSION, BUILD_ID, BACKTEST_VERSION } from '../config.js';
 import { marginFreshness } from './margin-supply.js';
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
@@ -134,20 +136,28 @@ export async function getSystemAudit(env){
   const jp=stageSummary(parseJson(jpRaw,{market:'jp'}));
   const us=stageSummary(parseJson(usRaw,{market:'us'}));
   const bt=parseJson(await env.COCKPIT_KV.get(`backtest:${BACKTEST_VERSION}:state`),null);
-  const btAge=bt?.updated_at?(Date.now()-Date.parse(bt.updated_at))/60000:Infinity;
+  const runtime=await readBacktestRuntime(env,bt?.status,bt?.updated_at);
+  const [watchRaw,positionsRaw,tracked]=await Promise.all([env.COCKPIT_KV.get(KEYS.watch),env.COCKPIT_KV.get(KEYS.discipline),getTrackedData(env)]);
+  const monitored=[...parseJson(watchRaw,[]),...(parseJson(positionsRaw,{}).positions||[])];
+  const stages={jp:parseJson(jpRaw,{}),us:parseJson(usRaw,{})};
+  const unusable=monitored.filter(w=>{const market=w.market||((w.symbol||'').endsWith('.T')?'jp':'us');return !assessedRow(latestAnalysis(stages[market].stocks?.[w.symbol],tracked[market+':'+w.symbol]?.row,w.stage_data),market).assessment_usable;});
+  const rows=Object.values(stages).flatMap(s=>Object.values(s.stocks||{}));
   const components={
+    watch_data:unusable.length?'STALE':'CURRENT',
+    extension_engine:rows.length&&rows.every(r=>r.extensionState&&r.extensionState!=='unknown')?'CURRENT':'INCOMPLETE',
+    position_decision:rows.length&&rows.every(r=>r.entryAssessment&&r.holdingAssessment)?'CURRENT':'INCOMPLETE',
     market_data:[jp,us].every(s=>!s.is_stale)?'CURRENT':'STALE',
     momentum_engine:[jp,us].every(s=>!s.schema_mismatch)?'CURRENT':'SCHEMA_MISMATCH',
     credit:datasets.margin.available?(datasets.margin.stale?'STALE':'CURRENT'):'MISSING',
-    backtest:!bt?'MISSING':bt.status==='running'&&btAge>30?'STOPPED':String(bt.status).toUpperCase(),
+    backtest:!bt?'MISSING':runtime.status,
     storage:'READ_OK'
   };
   const cronAt=scheduler.last_cron_at?Date.parse(scheduler.last_cron_at):NaN;
   const cronAge=Number.isFinite(cronAt)?Math.max(0,Math.round((Date.now()-cronAt)/60000)):null;
   return{
-    ok:components.market_data==='CURRENT'&&components.momentum_engine==='CURRENT'&&components.credit==='CURRENT'&&cronAge!==null&&cronAge<=15,
-    components,reader_build:BUILD_ID,
-    backtest:{status:components.backtest,last_attempt_at:bt?.updated_at||null,processed_count:bt?.cursor||0,total_count:bt?.queue?.length||0,last_error:bt?.errors?.at(-1)||null},
+    ok:components.market_data==='CURRENT'&&components.momentum_engine==='CURRENT'&&components.credit==='CURRENT'&&components.watch_data==='CURRENT'&&components.extension_engine==='CURRENT'&&components.position_decision==='CURRENT'&&['RUNNING','COMPLETE'].includes(components.backtest)&&cronAge!==null&&cronAge<=15,
+    components,tracked_health:{unusable_count:unusable.length,checked_count:monitored.length},reader_build:BUILD_ID,
+    backtest:{...runtime,status:components.backtest,last_attempt_at:bt?.updated_at||null,last_success_at:bt?.last_success_at||null,last_processed:bt?.last_processed||null,processed_count:bt?.cursor||0,remaining_count:Math.max(0,(bt?.queue?.length||0)-(bt?.cursor||0))+(bt?.retry_queue?.length||0),total_count:bt?.queue?.length||0,retry_count:(bt?.errors||[]).length,last_error:runtime.last_error||bt?.errors?.at(-1)||null},
     checked_at:nowIso(),
     scheduler:{...scheduler,age_minutes:cronAge,alive:cronAge!==null&&cronAge<=15},
     stages:{jp,us},datasets,

@@ -1,3 +1,4 @@
+import { readBacktestRuntime } from './backtest-runtime.js';
 import { newMomentumStudy, recordMomentumStudy, summarizeMomentumStudy } from '../engine/momentum-study.js';
 import { BACKTEST_VERSION, ENGINE_VERSION, LIMITS } from '../config.js';
 import { getStockList } from '../storage/stocklist.js';
@@ -10,7 +11,7 @@ import { finite, mean, median, round, nowIso, parseJson, stableHash } from '../u
 const STATE=`backtest:${BACKTEST_VERSION}:state`;
 const SUMMARY=`backtest:${BACKTEST_VERSION}:summary`;
 const PARTIAL=`backtest:${BACKTEST_VERSION}:partial`;
-const LOCK=`backtest:${BACKTEST_VERSION}:lock`;
+const LOCK=`sched:backtest:${BACKTEST_VERSION}:lock`;
 const RULES=`backtest:${BACKTEST_VERSION}:frozen-rules`;
 const SYMBOL=(m,s)=>`backtest:${BACKTEST_VERSION}:symbol:${m}:${s}`;
 const BENCH=(m,k='primary')=>`backtest:${BACKTEST_VERSION}:benchmark:${m}:${k}`;
@@ -376,7 +377,7 @@ export async function runBacktestStep(env,count=1,force=false,{scheduled=false}=
   }finally{await env.COCKPIT_KV.delete(LOCK);}
 }
 
-export async function getBacktestDashboard(env){
+async function backtestDashboard(env){
   const s=await loadState(env,false),saved=parseJson(await env.COCKPIT_KV.get(SUMMARY),null),partial=parseJson(await env.COCKPIT_KV.get(PARTIAL),null);
   if(['complete','failed'].includes(s.status)&&saved?.version===BACKTEST_VERSION)return{ok:true,...saved};
   if(saved?.version===BACKTEST_VERSION&&saved.result_usable)return{ok:true,...saved,status:'running',progress:summaryFromState(s,false).progress,integrity:integrityFromState(s),using_previous_complete:true,next_symbol:s.queue[s.cursor]||s.retry_queue?.[0]||null};
@@ -384,3 +385,9 @@ export async function getBacktestDashboard(env){
   return{ok:true,...base,status:'running',next_symbol:s.cursor<s.queue.length?s.queue[s.cursor]:s.retry_queue?.[0]||null};
 }
 export async function getBacktestSymbol(env,market,symbol){const v=parseJson(await env.COCKPIT_KV.get(SYMBOL(market==='us'?'us':'jp',String(symbol||'').toUpperCase())),null);return v?{ok:true,result:v}:{ok:false,error:'not tested yet'};}
+
+export async function getBacktestDashboard(env){
+  const result=await backtestDashboard(env);
+  const runtime=await readBacktestRuntime(env,result.status,result.last_attempt_at);
+  return {...result,processing_state:runtime.status,runtime};
+}

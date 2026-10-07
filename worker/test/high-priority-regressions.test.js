@@ -1,3 +1,5 @@
+import { ENGINE_VERSION } from '../src/config.js';
+import { expectedConfirmedTradingDate } from '../src/data/calendar.js';
 import {budgetTestEnv} from './budget-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -98,7 +100,7 @@ test('unavailable quotes never produce a total-loss PnL',async()=>{
   const kv=new MockKV({[KEYS.discipline]:JSON.stringify({positions:[position]})});
   let result=(await getPositions({COCKPIT_KV:kv})).positions[0];
   assert.equal(result.current_price,null);assert.equal(result.pnl_pct,null);assert.equal(result.pnl,null);
-  await kv.put(KEYS.stage('us'),JSON.stringify({stocks:{TEST:{price:110}}}));
+  await kv.put(KEYS.stage('us'),JSON.stringify({stocks:{TEST:{price:110,date:expectedConfirmedTradingDate("us"),engine_version:ENGINE_VERSION,momentumState:"continuation"}}}));
   result=(await getPositions({COCKPIT_KV:kv})).positions[0];
   assert.equal(result.pnl_pct,10);assert.equal(result.pnl,100);
 });

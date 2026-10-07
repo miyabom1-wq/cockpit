@@ -1,3 +1,5 @@
+import { refreshTrackedAnalysis } from './services/tracked-refresh.js';
+import { runScheduledBacktest } from './services/backtest-scheduler.js';
 import { ECONOMIC_CRON, syncEconomicEvents } from './services/economic-events.js';
 import { scopedStorage, requestLane, backgroundCapacity } from './storage/write-budget.js';
 export { WriteBudget } from './storage/write-budget.js';
@@ -319,6 +321,7 @@ export default{
 
   async scheduled(event,env,ctx){
     ctx.waitUntil((async()=>{
+      const rawEnv=env;
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
       // Daily economic refresh shares the same account Cron (05:20-05:55 JST).
@@ -335,10 +338,8 @@ export default{
       if(event.cron==='*/5 * * * *'&&new Date(event.scheduledTime||Date.now()).getUTCMinutes()%15===10){
         await initializeStorage(env);
         await recordCronHeartbeat(env,{lane:'backtest'});
-        if(await backgroundCapacity(env)){
-          const result=await runBacktestStep(env,1,false,{scheduled:true});
-          if(!result?.skipped)return;
-        }
+        const result=await runScheduledBacktest(rawEnv);
+        if(!result?.skipped)return;
       }
       if(event.cron===ECONOMIC_CRON){
         await syncEconomicEvents(env,{now:event.scheduledTime||Date.now()});
@@ -349,6 +350,8 @@ export default{
         const result=await scheduledStage(env);
         // Auxiliary fetches share the same invocation's request budget.
         if(result.node)return;
+        const tracked=await refreshTrackedAnalysis(env);
+        if(tracked.processed)return;
       }catch(error){
         console.error('[stage cron]',error?.stack||error);
       }

@@ -1,3 +1,4 @@
+import { getTrackedData, latestAnalysis, assessedRow } from './tracked-data.js';
 import { expectedConfirmedTradingDate } from '../data/calendar.js';
 import { ENGINE_VERSION } from '../config.js';
 import { KEYS } from '../storage/kv-schema.js';
@@ -32,14 +33,14 @@ export async function getWatchlist(env){
     warnings.push(['日本株の判定','米国株の判定','保有情報'][i]+'を取得できません。保存済みデータは更新未確認です。');
     return null;
   });
+  const supplemental=await getTrackedData(env);
   const [jp,us,pos]=values,held=new Set((pos?.positions||[]).map(x=>x.symbol));
   return{ok:true,degraded:warnings.length>0,warnings,items:list.map(w=>{
     const marketStage=w.market==='us'?us:jp,stage=marketStage?.stocks?.[w.symbol]||null;
-    const selected=w.stage_data&&stage?newer(w.stage_data,stage):w.stage_data||stage||{};
-    const expected=expectedConfirmedTradingDate(w.market);
-    const stale=!selected.date||selected.date<expected;
-    const schemaMismatch=selected.engine_version!==ENGINE_VERSION||!selected.momentumState;
-    const latest={...selected,data_status:stale?'STALE':schemaMismatch?'SCHEMA_MISMATCH':'CURRENT',assessment_usable:!stale&&!schemaMismatch,expected_trade_date:expected};
+    const refresh=supplemental[w.market+':'+w.symbol]||null;
+    const selected=latestAnalysis(w.stage_data,stage,refresh?.row);
+    const latest=assessedRow(selected,w.market),stale=latest.data_status==='STALE';
+    if(refresh)latest.refresh_status={status:refresh.status,last_attempt_at:refresh.last_attempt_at,last_success_at:refresh.last_success_at,last_error:refresh.last_error,retry_eligible:refresh.retry_eligible};
     return{...w,held:pos?held.has(w.symbol):null,current_data:latest,stage_data:latest,data_stale:!marketStage||stale,status:normalizeStatus(w.status)};
   })};
 }
