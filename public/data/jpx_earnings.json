@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-10-06T15:17:58.467857Z",
+  "generated_at": "2026-10-07T15:38:02.204417Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
       "label": "",
-      "events": 394,
+      "events": 385,
       "bytes": 48910
     },
     {
@@ -17,114 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "1377.T",
-      "code": "1377",
-      "name": "サカタのタネ",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2659.T",
-      "code": "2659",
-      "name": "サンエー",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2726.T",
-      "code": "2726",
-      "name": "パルグループホールディングス",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2734.T",
-      "code": "2734",
-      "name": "サーラコーポレーション",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3396.T",
-      "code": "3396",
-      "name": "フェリシモ",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "5243.T",
-      "code": "5243",
-      "name": "note",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2026-11-3000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6469.T",
-      "code": "6469",
-      "name": "放電精密加工研究所",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6496.T",
-      "code": "6496",
-      "name": "中北製作所",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8011.T",
-      "code": "8011",
-      "name": "三陽商会",
-      "date": "2026-10-06",
-      "time": "2026-10-06T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2670.T",
       "code": "2670",
@@ -37317,8 +37209,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 3108,
-    "unique_future_events": 3108,
+    "raw_rows": 3099,
+    "unique_future_events": 3099,
     "warnings": []
   }
 }
