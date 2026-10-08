@@ -1,12 +1,12 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-10-07T15:38:02.204417Z",
+  "generated_at": "2026-10-08T15:43:19.964123Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
       "label": "",
-      "events": 385,
+      "events": 376,
       "bytes": 48910
     },
     {
@@ -17,114 +17,6 @@
     }
   ],
   "events": [
-    {
-      "symbol": "2670.T",
-      "code": "2670",
-      "name": "エービーシー・マート",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "2918.T",
-      "code": "2918",
-      "name": "わらべや日洋ホールディングス",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3391.T",
-      "code": "3391",
-      "name": "ツルハホールディングス",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "428A.T",
-      "code": "428A",
-      "name": "サイプレス・ホールディングス",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "5932.T",
-      "code": "5932",
-      "name": "三協立山",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-05-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6093.T",
-      "code": "6093",
-      "name": "ミトラグループ",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "6255.T",
-      "code": "6255",
-      "name": "エヌ・ピー・シー",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8166.T",
-      "code": "8166",
-      "name": "タカキュー",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "9846.T",
-      "code": "9846",
-      "name": "天満屋ストア",
-      "date": "2026-10-07",
-      "time": "2026-10-07T14:59:00.000Z",
-      "period": "2027-02-2800:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2303.T",
       "code": "2303",
@@ -37209,8 +37101,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 3099,
-    "unique_future_events": 3099,
+    "raw_rows": 3090,
+    "unique_future_events": 3090,
     "warnings": []
   }
 }
