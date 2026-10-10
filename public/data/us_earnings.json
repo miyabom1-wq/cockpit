@@ -1,6 +1,6 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-10-10T00:07:45.987805Z",
+  "generated_at": "2026-10-10T23:41:30.989414Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
