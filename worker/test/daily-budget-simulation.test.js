@@ -11,6 +11,7 @@ import {BACKTEST_VERSION} from '../src/config.js';
 for(const outage of [false,true])test(`288 cron invocations with 160 JP/40 US symbols; outage=${outage}`,async t=>{
  t.mock.timers.enable({apis:['Date'],now:Date.parse('2026-09-24T00:00:00Z')});
  const env=budgetTestEnv(),kv=env.COCKPIT_KV;
+ let macroPublications=0;const put=kv.put.bind(kv);kv.put=async(k,v)=>{if(k===KEYS.macroCurrent)macroPublications++;return put(k,v);};
  kv.map.set(KEYS.schema,'vantage-kv-v3');
  kv.map.set('stocklist:jp',JSON.stringify(Array.from({length:160},(_,i)=>({symbol:`${2000+i}.T`,name:'JP'}))));
  kv.map.set('stocklist:us',JSON.stringify(Array.from({length:40},(_,i)=>({symbol:`US${i}`,name:'US'}))));
@@ -20,10 +21,13 @@ for(const outage of [false,true])test(`288 cron invocations with 160 JP/40 US sy
  globalThis.fetch=async input=>{
   const u=new URL(String(input));
   if(outage||!u.pathname.includes('/chart/'))return new Response('',{status:503});
-  const symbol=decodeURIComponent(u.pathname.split('/').at(-1)),market=symbol.endsWith('.T')||['^N225','^TOPX'].includes(symbol)?'jp':'us';
-  const date=expectedTradingDate(market,new Date());
+  const symbol=decodeURIComponent(u.pathname.split('/').at(-1)),market=symbol.endsWith('.T')||['^N225','^TOPX','^NKVI.OS','^KS11','^KQ11'].includes(symbol)?'jp':'us';
+  const continuous=['BTC-USD','ETH-USD','JPY=X','CL=F','GC=F','SI=F','NIY=F'].includes(symbol);
+  const date=continuous?new Date().toISOString().slice(0,10):expectedTradingDate(market,new Date());
   if(!rowsCache.has(date))rowsCache.set(date,syntheticRows(300,date));
-  return Response.json({chart:{result:[yahooResult(rowsCache.get(date),symbol)]}});
+  const quote=yahooResult(rowsCache.get(date),symbol);
+  quote.meta.regularMarketTime=continuous?Date.now()/1000:Math.min(Date.now(),Date.parse(date+(market==='jp'?'T06:30:00Z':'T20:00:00Z')))/1000;
+  return Response.json({chart:{result:[quote]}});
  };
  try{
   for(let i=0;i<288;i++){
@@ -33,10 +37,10 @@ for(const outage of [false,true])test(`288 cron invocations with 160 JP/40 US sy
    if(i<287)t.mock.timers.tick(300000);
   }
   const status=await budgetStatus(env);
-  t.diagnostic(JSON.stringify({outage,writes:kv.writes,deletes:kv.deletes,budget:status.used,completedJp,completedUs}));
+  t.diagnostic(JSON.stringify({outage,writes:kv.writes,deletes:kv.deletes,budget:status.used,completedJp,completedUs,macroPublications}));
   assert.ok(kv.writes+kv.deletes<=500);
   assert.equal(status.used.user,undefined);
-  if(!outage){assert.equal(completedJp,true);assert.equal(completedUs,true);}
+  if(!outage){assert.ok(macroPublications>=40);assert.equal(completedJp,true);assert.equal(completedUs,true);}
   const r=await worker.fetch(new Request('https://example.com/api/positions',{method:'POST',headers:{Origin:'https://example.com'},body:JSON.stringify({action:'toggle_held',symbol:'MSTR',market:'us'})}),env);
   assert.equal(r.status,200);assert.equal((await r.json()).held,true);
  }finally{globalThis.fetch=oldFetch;console.error=oldError;}

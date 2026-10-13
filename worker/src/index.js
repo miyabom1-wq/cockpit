@@ -1,3 +1,4 @@
+import { MACRO_STATUS_KEY, MACRO_POLL_MS } from './services/macro-freshness.js';
 import { refreshTrackedAnalysis } from './services/tracked-refresh.js';
 import { runScheduledBacktest } from './services/backtest-scheduler.js';
 import { ECONOMIC_CRON, syncEconomicEvents } from './services/economic-events.js';
@@ -200,12 +201,17 @@ export async function scheduledStage(env,now=new Date()){
     if(await env.COCKPIT_KV.get(markerKey(node)))continue;
     if(await env.COCKPIT_KV.get(cooldownKey(node)))continue;
 
-    if(!['stage','margin'].includes(node.action)&&!await backgroundCapacity(env))continue;
+    if(!['stage','margin','macro'].includes(node.action)&&!await backgroundCapacity(env))continue;
 
     try{
       if(node.action==='macro'){
         const result=await refreshMacroSnapshots(env);
-        await markDone(env,node,result);
+        if(result.retry_required){
+          await env.COCKPIT_KV.put(cooldownKey(node),'macro pending',{expirationTtl:1800});
+          await recordSchedulerRetry(env,node,{error:'指数更新待ち: '+result.failed.join(', ')});
+          return{processed:1,retry:true,node:node.key};
+        }
+        await markDone(env,node,{ok:true,received:result.received});
         return{processed:1,node:node.key};
       }
 
@@ -324,6 +330,20 @@ export default{
       const rawEnv=env;
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
+      const macroNow=new Date(event.scheduledTime||Date.now());
+      const macroStatus=JSON.parse(await env.COCKPIT_KV.get(MACRO_STATUS_KEY)||'{}');
+      const lastAttempts=Object.values(macroStatus.attempts||{}).map(x=>Date.parse(x.at)||0);
+      if(event.cron==='*/5 * * * *'&&(!lastAttempts.length||+macroNow-Math.min(...lastAttempts)>=MACRO_POLL_MS)){
+        await initializeStorage(env);
+        await recordCronHeartbeat(env,{lane:'macro'});
+        const result=await refreshMacroSnapshots(env,{now:macroNow});
+        const node={key:'macro_priority',market:'macro',action:'macro'};
+        if(result.ok)await recordSchedulerSuccess(env,node,{received:result.received,changed:result.changed});
+        else await recordSchedulerRetry(env,node,{error:'指数更新待ち: '+result.failed.join(', ')});
+        return;
+      }
+      // Reserve room for the remaining half-hourly one-key macro publications.
+      if(!await backgroundCapacity(env,64)){await recordCronHeartbeat(env,{lane:'macro-reserve'});return;}
       // Daily economic refresh shares the same account Cron (05:20-05:55 JST).
       const tick=new Date(event.scheduledTime||Date.now());
       const econKey='sched:economic-shared:'+tick.toISOString().slice(0,10);

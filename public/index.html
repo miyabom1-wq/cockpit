@@ -404,7 +404,7 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 <div class="offline" id="offline">オフライン</div>
 <header>
   <div class="brand-wrap"><div class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".7"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".55"/><path d="M16 16 24 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M16 5v3M27 16h-3M16 27v-3M5 16h3" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/></svg></div><div><div class="brand">VANTAGE</div><div class="brand-sub">Market &amp; Theme Radar <span class="app-role-badge">RADAR</span></div></div></div>
-  <div class="header-spacer"></div><div class="ui-version">UI v73.8.26</div><div class="clock" id="clock"></div>
+  <div class="header-spacer"></div><div class="ui-version">UI v73.8.27</div><div class="clock" id="clock"></div>
   <div class="header-actions"><button class="iconbtn helpbtn" onclick="openGuide()" aria-label="使い方" title="使い方"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.9 1.9c-1 .8-1.7 1.2-1.7 2.6M12 17h.01"/></svg><span>使い方</span></span></button><button class="iconbtn ai-copy-button" onclick="copyAI(this)" aria-label="AI分析用コピー" title="AI分析用コピー"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span class="ai-copy-label">AIコピー</span></span></button><button class="iconbtn" onclick="openSettings()" aria-label="設定" title="設定"><span class="btn-label"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04-2.78 2.78-.04-.04A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.2V21h-3.2v-.06A1.8 1.8 0 0 0 9 19.4a1.8 1.8 0 0 0-1.98.36l-.04.04-2.78-2.78.04-.04A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.2-.4H2.7v-3.2h.06A1.8 1.8 0 0 0 4.6 9a1.8 1.8 0 0 0-.36-1.98L4.2 6.98 6.98 4.2l.04.04A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.2V2.7h3.2v.06A1.8 1.8 0 0 0 15 4.6a1.8 1.8 0 0 0 1.98-.36l.04-.04 2.78 2.78-.04.04A1.8 1.8 0 0 0 19.4 9a1.8 1.8 0 0 0 .6 1 1.8 1.8 0 0 0 1.2.4h.1v3.2h-.06A1.8 1.8 0 0 0 19.4 15Z"/></svg><span>設定</span></span></button></div>
 </header>
 <nav class="tabs">
@@ -484,10 +484,10 @@ header::after{content:"";position:absolute;right:-38px;top:-58px;width:180px;hei
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="./theme-catalog.js?build=v73.8.26"></script>
+<script src="./theme-catalog.js?build=v73.8.27"></script>
 <script>
 const API_BASE=location.hostname==='localhost'?'http://localhost:8787':location.hostname.endsWith('.workers.dev')?location.origin:'https://vantage-radar.miyab.workers.dev';
-const FRONTEND_BUILD='vantage-ui73.8.26-momentum-colors-20261005';
+const FRONTEND_BUILD='vantage-ui73.8.27-macro-freshness-20261014';
 document.documentElement.dataset.vantageBuild=FRONTEND_BUILD;
 document.documentElement.dataset.themeClassifier='v73-e-split';
 document.documentElement.dataset.mobileLayout='v73.8.9-universe-finish';
@@ -559,8 +559,8 @@ function marginBadgeHtml(r){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.ma
 function marginSupplyHtml(r,compact=false){if(marketOf(r?.symbol)!=='jp')return'';const s=r?.margin_supply||{},f=s.flags||{},flags=[f.daily_disclosure?'日々公表':null,f.special_notice?'特別周知':null,f.margin_restriction?'信用規制':null].filter(Boolean);if(!s.available&&!flags.length)return compact?'<span class="supply-badge neutral">需給データ待ち</span>':`<div class="margin-supply neutral"><div class="margin-head"><b>信用需給</b><span>データ待ち</span></div><small>${esc(s.summary||'公式日次データの初回更新待ち')}</small></div>`;const rows=[['信用買残',shareText(s.buy_balance)],['買残前日比',quoteFinite(s.buy_day_change_pct)?pct(s.buy_day_change_pct):'比較不能'],['買残5営業日前比',quoteFinite(s.buy_5d_change_pct)?pct(s.buy_5d_change_pct):'比較不能'],['信用売残',shareText(s.sell_balance)],['信用倍率',quoteFinite(s.ratio)?num(s.ratio,2)+'倍':'—'],['買残回転',quoteFinite(s.buy_turnover_days)?num(s.buy_turnover_days,2)+'日分':'—'],['基準日',s.as_of||'不明'],['最終取得',s.last_fetched_at?dateText(s.last_fetched_at):'未取得']];if(compact)return marginBadgeHtml(r);return `<div class="margin-supply ${supplyClass(s)}"><div class="margin-head"><div><b>信用需給 · ${esc(s.label||'中立')}</b><small>価格・市場差RS・出来高の補助判定</small></div><span class="supply-score">${Number(s.score||0)>=0?'+':''}${num(s.score,1)}</span></div><div class="margin-grid">${rows.map(([k,v])=>`<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>${flags.length?`<div class="margin-flags">${flags.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}${s.summary?`<div class="margin-summary">${esc(s.summary)}</div>`:''}<div class="margin-note">日次信用残。日々公表は注意喚起であり、信用規制とは別です。</div></div>`}
 function marketGate(m){return state.stage?.[m]?.risk_gate||state.momentum?.[m]?.risk_gate||state.notrade?.[m]?.risk_gate||{level:'normal',label:'通常',block_new_entries:false,reasons:[]}}
 function gateHtml(m){const g=marketGate(m);if(g.level==='normal')return'';const dates=g.data_dates||{},labels={primary:m==='us'?'S&P500':'日経平均',nikkei_futures:'日経先物（CME円建て）',kospi:'KOSPI',sox:'SOX',vix:'VIX'},basis=Object.entries(dates).filter(([,v])=>v).map(([k,v])=>`${labels[k]||k} ${dateOnly(v)}`).join(' / ');return `<div class="risk-gate ${g.level==='caution'?'caution':''}"><b>${esc(g.label)}${g.block_new_entries?' · 新規A/B抑制':''}</b><span>${esc((g.reasons||[]).join(' / ')||'主要指数とボラティリティを再確認')}</span>${g.mixed_dates?`<small>指数ごとの基準日を分離：${esc(basis)}${g.lagged_confirmation?'。遅行確認の重複加点を抑制':''}</small>`:''}</div>`}
-function macroBasis(v){const parts=[];if(v?.date)parts.push('基準 '+dateOnly(v.date));if(v?.price_time)parts.push('価格時刻 '+dateText(v.price_time));return parts.join(' · ')}
-function macroFreshness(macro={}){const keys=['日経平均','日経先物（CME円建て）','韓国KOSPI','SOX','S&P500','VIX','ドル円'],items=keys.map(k=>[k,macro[k]]).filter(([,v])=>v?.date),dates=[...new Set(items.map(([,v])=>v.date))].sort();return{mixed:dates.length>1,label:dates.length>1?'一部データ更新済み':'同一基準日',detail:items.map(([k,v])=>`${k} ${dateOnly(v.date)}`).join(' / ')||'基準日待ち'}}
+function macroBasis(v){const parts=[v?.freshness_label||'鮮度未確認'];if(v?.date)parts.push('基準 '+dateOnly(v.date));if(v?.price_time)parts.push('価格時刻 '+dateText(v.price_time));return parts.join(' · ')}
+function macroFreshness(macro={}){const keys=['日経平均','日経先物（CME円建て）','韓国KOSPI','SOX','S&P500','VIX','ドル円'],items=keys.map(k=>[k,macro[k]]).filter(([,v])=>v?.date),dates=[...new Set(items.map(([,v])=>v.date))].sort();return{mixed:dates.length>1,label:items.some(([,v])=>!v.assessment_usable)?'指数更新待ち・参考値を含む':dates.length>1?'各市場の直近データ':'同一基準日',detail:items.map(([k,v])=>`${k} ${dateOnly(v.date)} ${v.freshness_label||'鮮度未確認'}`).join(' / ')||'基準日待ち'}}
 function heatState(r={}){return (r.extensionLabel||'拡張度は更新待ち')+' / '+(r.momentumLabel||'モメンタムは更新待ち')+' / 新規 '+(r.entryAssessment||'更新待ち')+' / 保有 '+(r.holdingAssessment||'更新待ち')}
 function momentumVisual(r={}){
  if(r.data_status&&r.data_status!=='CURRENT')return ['negative','!',r.data_status==='STALE'?'価格更新停止':r.data_status==='SCHEMA_MISMATCH'?'分析の版不一致':'データ取得失敗'];
@@ -814,15 +814,16 @@ function themePriority(code){return({GERMINATION:0,RECOVERY:1,EXPANSION:2,OVERHE
 function phaseBadge(x){return `<span class="theme-phase ${x.kind}">${esc(x.label)}</span>`}
 function globalRiskState(jpStage,usStage){
  const gates=[jpStage?.risk_gate,usStage?.risk_gate].filter(Boolean),stress=gates.find(x=>x.level==='stress');
- if(stress)return{label:'世界ストレス／価格発見',kind:'bad',score:stress.score??0,seen:gates.length,detail:'主要指数・SOX・KOSPI・VIXの急変を検出。新規A/Bは環境ゲートで抑制'};
+ if(gates.some(g=>g.level==='unknown'))return{label:'指数更新待ち・判定保留',kind:'warn',score:null,seen:gates.length,detail:'古い指数は相場判定に使いません'};
+  if(stress)return{label:'世界ストレス／価格発見',kind:'bad',score:stress.score??0,seen:gates.length,detail:'主要指数・SOX・KOSPI・VIXの急変を検出。新規A/Bは環境ゲートで抑制'};
  const macro={...(usStage?.macro||{}),...(jpStage?.macro||{})},keys=['S&P500','SOX','韓国KOSPI','日経平均'];let score=0,seen=0;
- for(const k of keys){const v=Number(macro[k]?.ret5);if(Number.isFinite(v)){seen++;score+=v>0?1:v<0?-1:0}}
- const vx=Number(macro['VIX']?.ret5);if(Number.isFinite(vx)){seen++;score+=vx<0?1:vx>0?-1:0}
+ for(const k of keys){const v=macro[k]?.assessment_usable?Number(macro[k].ret5):NaN;if(Number.isFinite(v)){seen++;score+=v>0?1:v<0?-1:0}}
+ const vx=macro['VIX']?.assessment_usable?Number(macro['VIX'].ret5):NaN;if(Number.isFinite(vx)){seen++;score+=vx<0?1:vx>0?-1:0}
  if(score>=3)return{label:'世界リスクオン',kind:'good',score,seen,detail:'主要指数の5日方向とVIXが概ね追い風'};
  if(score<=-3)return{label:'世界リスクオフ',kind:'bad',score,seen,detail:'主要指数の弱化とボラティリティ上昇を警戒'};
  return{label:'世界地合い中立',kind:'warn',score,seen,detail:'地域差が大きく、テーマごとの選別が必要'};
 }
-function macroPulse(name,x){if(!x)return'';return `<div class="pulse"><span>${esc(name)}</span><b class="${cls(x.change_pct)}">${pct(x.change_pct)}</b><small>5日 ${pct(x.ret5)}</small></div>`}
+function macroPulse(name,x){if(!x)return'';if(!x.assessment_usable)return `<div class="pulse"><span>${esc(name)}</span><b>更新待ち</b><small>${esc(macroBasis(x))}</small></div>`;return `<div class="pulse"><span>${esc(name)}</span><b class="${cls(x.change_pct)}">${pct(x.change_pct)}</b><small>5日 ${pct(x.ret5)}</small></div>`}
 function historyDelta(v,label){return `<span>${label} ${v==null?'—':(Number(v)>=0?'+':'')+Number(v).toFixed(1)}</span>`}
 function themeSeries(history,name){return (history||[]).map(x=>x?.themes?.[name]?.score).filter(Number.isFinite).slice(-12)}
 function scoreSparkline(values){if(!values.length)return'';const w=88,h=26,p=2,min=Math.min(...values),max=Math.max(...values),span=max-min||1,pts=values.map((v,i)=>`${p+(values.length===1?0:i*(w-p*2)/(values.length-1))},${p+(max-v)*(h-p*2)/span}`).join(' ');return `<svg class="theme-spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><line class="axis" x1="0" y1="${h-1}" x2="${w}" y2="${h-1}"/><polyline class="line" points="${pts}"/></svg>`}
@@ -1039,7 +1040,7 @@ async function loadStage(){
  return state.runtimeStatus[m];
 }
 function marketState(st,m){
- const gate=st?.risk_gate||marketGate(m);if(gate?.level==='stress')return{label:gate.label||'ストレス／価格発見',kind:'bad'};if(gate?.level==='caution')return{label:'警戒・選別',kind:'warn'};
+ const gate=st?.risk_gate||marketGate(m);if(gate?.level==='unknown')return{label:'指数更新待ち・判定保留',kind:'warn'};if(gate?.level==='stress')return{label:gate.label||'ストレス／価格発見',kind:'bad'};if(gate?.level==='caution')return{label:'警戒・選別',kind:'warn'};
  const macro=st?.macro||{};const ix=m==='jp'?macro['日経平均']:macro['S&P500'];
  const d=ix?.change_pct??0,r5=ix?.ret5??0;
  if(d>0&&r5>0)return{label:'上向き',kind:'good'};
@@ -1047,6 +1048,7 @@ function marketState(st,m){
  return{label:'中立',kind:'warn'};
 }
 function momentumState(nt){
+ if(nt?.risk_gate?.level==='unknown')return{label:'指数更新待ち',kind:'warn'};
  if(nt?.recLevel==='stress'||nt?.risk_gate?.block_new_entries)return{label:'新規A/B抑制',kind:'bad'};
  if(nt?.recLevel==='strong')return{label:'市場警戒',kind:'bad'};
  if(nt?.recLevel==='recommend')return{label:'選別',kind:'warn'};
@@ -1083,11 +1085,11 @@ function todayMacroHtml(st){
   ['GOLD','金'],['BTC','BTC']
  ];
  const items=defs.map(([label,key])=>{
-  const x=macro[key];if(!x)return'';
+  const x=macro[key]||{freshness_label:'取得できません'};
   const d=Number(x.change_pct),r5=Number(x.ret5),price=todayMacroPriceText(key,x);
   const move=Number.isFinite(d)?pct(d):'—';
   const five=Number.isFinite(r5)?`5D ${pct(r5)}`:'5D —';
-  return `<button type="button" class="today-macro-item" onclick="openMacroChart('${attr(key)}')" title="${attr(key)}をTradingViewで開く"><span class="today-macro-name">${esc(label)}</span><span class="today-macro-value"><span class="today-macro-price">${esc(price)}</span><span class="today-macro-move ${Number.isFinite(d)?cls(d):''}">${move}</span></span><span class="today-macro-5d">${five}</span></button>`;
+  return `<button type="button" class="today-macro-item" onclick="openMacroChart('${attr(key)}')" title="${attr(key)}をTradingViewで開く"><span class="today-macro-name">${esc(label)}</span><span class="today-macro-value"><span class="today-macro-price">${esc(price)}</span><span class="today-macro-move ${Number.isFinite(d)?cls(d):''}">${move}</span></span><span class="today-macro-5d">${five}</span><span class="today-macro-status" style="display:block;font-size:9px;margin-top:3px;color:${x.assessment_usable?'var(--muted)':'#9b5a00'}">${esc(x.freshness_label||'鮮度未確認')} · ${esc(dateOnly(x.date))}</span></button>`;
  }).filter(Boolean).join('');
  return items?`<section class="today-macro" aria-label="主要市場スナップ">${items}</section>`:'';
 }
@@ -1474,7 +1476,7 @@ async function copyAI(btn){
   for(const [label,m,st,nt,mom] of [['日本','jp',jp,njp,mjp],['米国','us',us,nus,mus]]){
    const ms=marketState(st,m),mm=momentumState(nt),gate=st.risk_gate||mom.risk_gate||nt.risk_gate||{};
    out.push(`\n## ${label}市場\n- 市場地合い: ${ms.label}\n- モメンタム地合い: ${mm.label}\n- リスクゲート: ${gate.label||'通常'} / 新規A・B抑制: ${gate.block_new_entries?'はい':'いいえ'}${(gate.reasons||[]).length?' / '+gate.reasons.join('、'):''}\n- データ: ${st.price_time||st.updated_at||'—'}`);
-   const mac=st.macro||{},mf=macroFreshness(mac);out.push(`- マクロ更新: ${mf.label} / ${mf.detail}`);for(const k of ['日経平均','S&P500','韓国KOSPI','韓国KOSDAQ','SOX','VIX','ドル円'])if(mac[k]){const basis=[mac[k].date?'基準 '+mac[k].date:'',mac[k].price_time?'価格時刻 '+mac[k].price_time:''].filter(Boolean).join(' / ');out.push(`- ${k}: ${pct(mac[k].change_pct)} / 5日 ${pct(mac[k].ret5)}${basis?' / '+basis:''}`)}
+   const mac=st.macro||{},mf=macroFreshness(mac);out.push(`- マクロ更新: ${mf.label} / ${mf.detail}`);for(const k of ['日経平均','S&P500','韓国KOSPI','韓国KOSDAQ','SOX','VIX','ドル円'])if(mac[k]){const basis=[mac[k].freshness_label||'鮮度未確認',mac[k].date?'基準 '+mac[k].date:'',mac[k].price_time?'価格時刻 '+mac[k].price_time:''].filter(Boolean).join(' / ');out.push(`- ${k}: ${pct(mac[k].change_pct)} / 5日 ${pct(mac[k].ret5)}${basis?' / '+basis:''}`)}
    for(const lane of mom.board||[]){
     if(!['A','B','C'].includes(lane.key))continue;const limit=lane.key==='C'?3:lane.rows.length;
     out.push(`\n### ${lane.key}. ${lane.label}${gate.block_new_entries&&['A','B'].includes(lane.key)?'（環境ゲートで新規抑制）':''}`);
@@ -2246,10 +2248,10 @@ async function startVantageFinal(){
 
 </script>
 
-<script src="./frame-sync.js?build=v73.8.26"></script>
-<script src="./reliability-sync.js?build=v73.8.26"></script>
-<script src="./event-resilience.js?build=v73.8.26"></script>
-<script src="./navigation.js?build=v73.8.26"></script>
+<script src="./frame-sync.js?build=v73.8.27"></script>
+<script src="./reliability-sync.js?build=v73.8.27"></script>
+<script src="./event-resilience.js?build=v73.8.27"></script>
+<script src="./navigation.js?build=v73.8.27"></script>
 <script src="./events-ui.js?build=weekly-events-20260923"></script>
 <script>startVantageFinal();</script>
 </body>

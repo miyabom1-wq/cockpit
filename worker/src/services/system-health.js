@@ -1,3 +1,4 @@
+import { macroHealth, MACRO_STATUS_KEY } from './macro-freshness.js';
 import { getTrackedData, latestAnalysis, assessedRow } from './tracked-data.js';
 import { readBacktestRuntime } from './backtest-runtime.js';
 import { ENGINE_VERSION, BUILD_ID, BACKTEST_VERSION } from '../config.js';
@@ -142,7 +143,10 @@ export async function getSystemAudit(env){
   const stages={jp:parseJson(jpRaw,{}),us:parseJson(usRaw,{})};
   const unusable=monitored.filter(w=>{const market=w.market||((w.symbol||'').endsWith('.T')?'jp':'us');return !assessedRow(latestAnalysis(stages[market].stocks?.[w.symbol],tracked[market+':'+w.symbol]?.row,w.stage_data),market).assessment_usable;});
   const rows=Object.values(stages).flatMap(s=>Object.values(s.stocks||{}));
+  const macro=macroHealth(parseJson(await env.COCKPIT_KV.get(KEYS.macroCurrent),{items:{}}).items);
+  const macroUpdate=parseJson(await env.COCKPIT_KV.get(MACRO_STATUS_KEY),{});
   const components={
+    macro_data:macro.status,
     watch_data:unusable.length?'STALE':'CURRENT',
     extension_engine:rows.length&&rows.every(r=>r.extensionState&&r.extensionState!=='unknown')?'CURRENT':'INCOMPLETE',
     position_decision:rows.length&&rows.every(r=>r.entryAssessment&&r.holdingAssessment)?'CURRENT':'INCOMPLETE',
@@ -155,11 +159,11 @@ export async function getSystemAudit(env){
   const cronAt=scheduler.last_cron_at?Date.parse(scheduler.last_cron_at):NaN;
   const cronAge=Number.isFinite(cronAt)?Math.max(0,Math.round((Date.now()-cronAt)/60000)):null;
   return{
-    ok:components.market_data==='CURRENT'&&components.momentum_engine==='CURRENT'&&components.credit==='CURRENT'&&components.watch_data==='CURRENT'&&components.extension_engine==='CURRENT'&&components.position_decision==='CURRENT'&&['RUNNING','COMPLETE'].includes(components.backtest)&&cronAge!==null&&cronAge<=15,
+    ok:components.macro_data==='CURRENT'&&components.market_data==='CURRENT'&&components.momentum_engine==='CURRENT'&&components.credit==='CURRENT'&&components.watch_data==='CURRENT'&&components.extension_engine==='CURRENT'&&components.position_decision==='CURRENT'&&['RUNNING','COMPLETE'].includes(components.backtest)&&cronAge!==null&&cronAge<=15,
     components,tracked_health:{unusable_count:unusable.length,checked_count:monitored.length},reader_build:BUILD_ID,
     backtest:{...runtime,status:components.backtest,last_attempt_at:bt?.updated_at||null,last_success_at:bt?.last_success_at||null,last_processed:bt?.last_processed||null,processed_count:bt?.cursor||0,remaining_count:Math.max(0,(bt?.queue?.length||0)-(bt?.cursor||0))+(bt?.retry_queue?.length||0),total_count:bt?.queue?.length||0,retry_count:(bt?.errors||[]).length,last_error:runtime.last_error||bt?.errors?.at(-1)||null},
     checked_at:nowIso(),
     scheduler:{...scheduler,age_minutes:cronAge,alive:cronAge!==null&&cronAge<=15},
-    stages:{jp,us},datasets,
+    stages:{jp,us},datasets,macro:{...macro,update:macroUpdate},
   };
 }

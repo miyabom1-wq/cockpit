@@ -1,3 +1,4 @@
+import { macroFreshness } from './macro-freshness.js';
 import { finite, round } from '../utils.js';
 
 function isoTime(value){
@@ -5,7 +6,7 @@ function isoTime(value){
   return Number.isFinite(t)?t:0;
 }
 function macroDate(value){return String(value?.date||'');}
-function macroTime(value){return Math.max(isoTime(value?.price_time),isoTime(value?.fetched_at),isoTime(value?.snapshot_updated_at),isoTime(macroDate(value)?`${macroDate(value)}T00:00:00Z`:''));}
+function macroTime(value){return isoTime(value?.price_time)||isoTime(value?.fetched_at)||isoTime(value?.snapshot_updated_at);}
 
 export function mergeMacroSnapshots(...snapshots){
   const out={};
@@ -46,7 +47,12 @@ function result(level,label,block,score,reasons,referenceDate,meta){
   return{level,label,block_new_entries:block,score,reasons:[...new Set(reasons)].slice(0,7),reference_date:referenceDate,...meta};
 }
 
-export function evaluateRiskGate(market,macro={}){
+export function evaluateRiskGate(market,macro={},now=new Date()){
+  const required=[market==='us'?'S&P500':'日経平均','SOX','韓国KOSPI','VIX'];
+  const unavailable=required.filter(name=>!macroFreshness(name,macro[name],now).assessment_usable);
+  if(unavailable.length)return {level:'unknown',label:'指数更新待ち・相場判定保留',block_new_entries:true,score:null,
+    reasons:unavailable.map(name=>`${name} 未取得または更新遅延`),unavailable,reference_date:null,
+    data_dates:Object.fromEntries(required.map(name=>[name,macro[name]?.date||null])),mixed_dates:false};
   const primaryName=market==='us'?'S&P500':'日経平均',primary=macro[primaryName]||{},sox=macro.SOX||{},kospi=macro['韓国KOSPI']||{},vix=macro.VIX||{};
   const dates=Object.values(macro).map(x=>x?.date).filter(Boolean).sort(),referenceDate=dates.at(-1)||null;
   const keyDates={primary:primary.date||null,nikkei_futures:macro['日経先物（CME円建て）']?.date||null,kospi:kospi.date||null,sox:sox.date||null,vix:vix.date||null};

@@ -16,10 +16,11 @@ test('crash conditions force stress gate and block new A/B entries',()=>{
   const macro={
     '日経平均':{date:'2026-07-17',change_pct:-5.5,ret5:-7.9},
     'SOX':{date:'2026-07-16',change_pct:-4.3,ret5:-8.4},
-    '韓国KOSPI':{date:'2026-07-16',change_pct:-6.4,ret5:-6.5},
+    '韓国KOSPI':{date:'2026-07-17',change_pct:-6.4,ret5:-6.5},
     'VIX':{date:'2026-07-16',change_pct:6.8,ret5:5.6}
   };
-  const gate=evaluateRiskGate('jp',macro);
+  for(const [name,v] of Object.entries(macro)){v.price=100;v.price_time=v.date+(name==='日経平均'||name==='韓国KOSPI'?'T06:30:00Z':'T20:00:00Z');}
+  const gate=evaluateRiskGate('jp',macro,new Date('2026-07-17T07:00:00Z'));
   assert.equal(gate.level,'stress');
   assert.equal(gate.block_new_entries,true);
   assert.ok(gate.reasons.some(x=>x.includes('日経平均')));

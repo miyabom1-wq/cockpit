@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.26-momentum-colors-20261005';
+const BUILD='vantage-ui73.8.27-macro-freshness-20261014';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

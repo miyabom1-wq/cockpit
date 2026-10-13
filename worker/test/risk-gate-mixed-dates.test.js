@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 import { evaluateRiskGate } from '../src/services/integrity.js';
 
 test('keeps stress but caps a delayed Korean confirmation of the same regional shock',()=>{
-  const gate=evaluateRiskGate('jp',{
+  const macro={
     '日経平均':{date:'2026-07-17',change_pct:-4.03,ret5:-6.4},
     '日経先物（CME円建て）':{date:'2026-07-20',change_pct:1.2,ret5:-4.1},
     '韓国KOSPI':{date:'2026-07-20',change_pct:-4.46,ret5:-6.5},
     'SOX':{date:'2026-07-17',change_pct:-4.3,ret5:-8.4},
     'VIX':{date:'2026-07-17',change_pct:6.8,ret5:5.6}
-  });
+  };
+  for(const [name,v] of Object.entries(macro)){v.price=100;v.price_time=v.date+(name==='日経平均'||name==='韓国KOSPI'?'T06:30:00Z':'T20:00:00Z');}
+  const gate=evaluateRiskGate('jp',macro,new Date('2026-07-20T08:00:00Z'));
   assert.equal(gate.level,'stress');
   assert.equal(gate.mixed_dates,true);
   assert.equal(gate.lagged_confirmation,true);
