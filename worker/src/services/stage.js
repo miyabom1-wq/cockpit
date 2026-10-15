@@ -32,13 +32,18 @@ function modeNow(market,now=new Date()){
   return min>=open||min<close?'intraday':'confirmed';
 }
 function expectedDateFor(market,now=new Date()){return expectedTradingDate(market,now);}
-function confirmedByProvider(market,meta,expectedDate,requestedKind){
+export function confirmedByProvider(market,meta,expectedDate,requestedKind){
   if(requestedKind!=='confirmed')return false;
   const state=String(meta?.market_state||'').toUpperCase();
   if(['CLOSED','POST','POSTPOST'].includes(state))return true;
   const t=Number(meta?.regular_market_time||0);if(!(t>0)||!expectedDate)return false;
   const threshold=market==='jp'?Date.parse(`${expectedDate}T06:30:00Z`):Date.parse(`${expectedDate}T${isUsDst(new Date(`${expectedDate}T12:00:00Z`))?'20':'21'}:00:00Z`);
-  return t*1000>=threshold;
+  if(t*1000>=threshold)return true;
+  // The last trade often precedes the bell (e.g. 15:59:59). Once the
+  // completed-session publication window has passed, that is not evidence
+  // of an unconfirmed close. Daily-row date validity is checked separately.
+  const open=market==='jp'?Date.parse(`${expectedDate}T00:00:00Z`):threshold-6.5*3600000;
+  return expectedConfirmedTradingDate(market)>=expectedDate&&t*1000>=open&&t*1000<threshold;
 }
 function snapshotId(market,tradeDate,kind,label='manual'){return`${market.toUpperCase()}-${tradeDate}-${String(kind).toUpperCase()}-${label}-${BUILD_ID}`;}
 async function resolveManualSnapshot(env,market,part){
@@ -260,12 +265,12 @@ export async function getStage(env,market){
   const macro=annotateMacro(mergeMacroSnapshots(macroWithSnapshotTime(other),macroWithSnapshotTime(stage),canonical.items||{})),riskGate=evaluateRiskGate(m,macro),stocks=stage.stocks||{},rows=Object.values(stocks);if(m==='jp')await enrichRowsWithMargin(env,rows);applyRiskGate(rows,riskGate);
   const list=parseJson(await env.COCKPIT_KV.get(KEYS.stocklist(m)),[]),bySymbol=new Map((Array.isArray(list)?list:[]).map(x=>[x.symbol,x]));
   for(const row of rows){
-    const expected=expectedConfirmedTradingDate(m),stale=!row.date||row.date<expected;
+    const expected=expectedConfirmedTradingDate(m),stale=!row.date||row.date<expected||(row.date===expected&&row.data_quality?.close_confirmed===false);
     const mismatch=row.engine_version!==ENGINE_VERSION||!row.momentumState;
     row.data_status=stale?'STALE':mismatch?'SCHEMA_MISMATCH':row.data_quality?.data_valid===false?'FAILED':'CURRENT';
     row.assessment_usable=row.data_status==='CURRENT';
     if(!row.assessment_usable){
-      row.entry_allowed=false;row.entry_block_reason=stale?'価格基準日が古いため評価対象外':mismatch?'分析エンジンの版が不一致':'価格データ異常';
+      row.entry_allowed=false;row.entry_block_reason=stale?'価格または終値確定情報が未更新のため評価対象外':mismatch?'分析エンジンの版が不一致':'価格データ異常';
       row.entryAssessment='WAIT';row.holdingAssessment='REVIEW';
     }
     row.theme_override=bySymbol.get(row.symbol)?.theme_override||null;row.theme=globalThis.VantageThemes.themeName(row);}

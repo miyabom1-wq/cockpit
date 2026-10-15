@@ -25,12 +25,23 @@ export function macroFreshness(name,value,now=new Date()){
     if(!live)closeTime=close;
   }else{
     const crypto=name==='BTC'||name==='ETH';
-    live=crypto||![0,6].includes(now.getUTCDay());
-    expected=crypto?now.toISOString().slice(0,10):weekdayDate(now.toISOString().slice(0,10));
-    if(!crypto&&!live)expected=weekdayDate(now.toISOString().slice(0,10));
+    if(crypto){live=true;expected=now.toISOString().slice(0,10);}
+    else{
+      // Futures use exchange-local trading dates, not the UTC calendar date.
+      // Check quote age, allowing the CME daily maintenance break and weekend.
+      const parts=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now).map(x=>[x.type,x.value]));
+      const nyDate=parts.year+'-'+parts.month+'-'+parts.day,ny=new Date(nyDate+'T00:00:00Z'),dow=ny.getUTCDay(),mins=Number(parts.hour)*60+Number(parts.minute);
+      const futures=name!=='ドル円',weekend=dow===6||(dow===5&&mins>=1020)||(dow===0&&mins<(futures?1110:1050));
+      const maintenance=futures&&dow>=1&&dow<=4&&mins>=1020&&mins<1110;
+      live=!weekend&&!maintenance;expected=value?.date||null;
+      if(!live){
+        const back=dow===6?1:dow===0?2:0,closedDate=new Date(+ny-back*86400000).toISOString().slice(0,10);
+        closeTime=Date.parse(closedDate+(isUsDst(new Date(closedDate+'T12:00:00Z'))?'T21:00:00Z':'T22:00:00Z'));
+      }
+    }
   }
   const priceTime=Date.parse(value?.price_time||''),valid=value?.price!=null&&Number.isFinite(Number(value.price))&&Number(value.price)>0;
-  let status=!valid?'MISSING':!value?.date||value.date<expected?'STALE':'CURRENT';
+  let status=!valid?'MISSING':!value?.date||(expected&&value.date<expected)?'STALE':'CURRENT';
   if(status==='CURRENT'&&(!Number.isFinite(priceTime)||priceTime>+now+5*60000||(live&&+now-priceTime>60*60000)||(closeTime&&priceTime<closeTime-20*60000)))status='STALE';
   return {data_status:status,assessment_usable:status==='CURRENT',expected_trade_date:expected,
     freshness_label:status==='MISSING'?'取得できません':status==='STALE'?'更新遅延・参考値':live?'場中・遅延配信':'直近終値',

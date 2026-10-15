@@ -1,8 +1,9 @@
+import { updateCapacity } from './services/update-capacity.js';
 import { MACRO_STATUS_KEY, MACRO_POLL_MS } from './services/macro-freshness.js';
 import { refreshTrackedAnalysis } from './services/tracked-refresh.js';
 import { runScheduledBacktest } from './services/backtest-scheduler.js';
 import { ECONOMIC_CRON, syncEconomicEvents } from './services/economic-events.js';
-import { scopedStorage, requestLane, backgroundCapacity } from './storage/write-budget.js';
+import { scopedStorage, requestLane } from './storage/write-budget.js';
 export { WriteBudget } from './storage/write-budget.js';
 import { corsHeaders, json, authorized, allowedMethods } from './api/http.js';
 import { route } from './api/routes.js';
@@ -181,7 +182,7 @@ async function markDone(env,node,details={}){
   await recordSchedulerSuccess(env,node,details);
 }
 
-export async function scheduledStage(env,now=new Date()){
+export async function scheduledStage(env,now=new Date(),{confirmedOnly=false}={}){
   const {minute,nodes}=scheduleNodes(now);
   await recordCronHeartbeat(env,{minute,eligible:nodes.filter(n=>eligible(minute,n)).length});
 
@@ -190,6 +191,7 @@ export async function scheduledStage(env,now=new Date()){
   const ordered=[...nodes].sort((a,b)=>nodePriority(a)-nodePriority(b)||a.at-b.at||a.key.localeCompare(b.key));
   for(const sourceNode of ordered){
     if(!eligible(minute,sourceNode))continue;
+    if(confirmedOnly&&!(sourceNode.action==='stage'&&sourceNode.kind==='confirmed'))continue;
     const node={...sourceNode};
 
     if(['jp','us'].includes(node.market)&&(node.action==='stage'||node.action==='enrich')){
@@ -201,7 +203,8 @@ export async function scheduledStage(env,now=new Date()){
     if(await env.COCKPIT_KV.get(markerKey(node)))continue;
     if(await env.COCKPIT_KV.get(cooldownKey(node)))continue;
 
-    if(!['stage','margin','macro'].includes(node.action)&&!await backgroundCapacity(env))continue;
+    const capacity=await updateCapacity(env,node.action==='macro'?'macro':node.action==='stage'?(node.kind==='confirmed'?'close':'intraday'):'auxiliary',now);
+    if(!capacity.allowed)continue;
 
     try{
       if(node.action==='macro'){
@@ -331,9 +334,10 @@ export default{
       const scoped=scopedStorage(env,'background');env=scoped.env;
       try{
       const macroNow=new Date(event.scheduledTime||Date.now());
+      await recordCronHeartbeat(env,{lane:'scheduled',capacity:await updateCapacity(env,'close',macroNow)});
       const macroStatus=JSON.parse(await env.COCKPIT_KV.get(MACRO_STATUS_KEY)||'{}');
       const lastAttempts=Object.values(macroStatus.attempts||{}).map(x=>Date.parse(x.at)||0);
-      if(event.cron==='*/5 * * * *'&&(!lastAttempts.length||+macroNow-Math.min(...lastAttempts)>=MACRO_POLL_MS)){
+      if(event.cron==='*/5 * * * *'&&(!lastAttempts.length||+macroNow-Math.min(...lastAttempts)>=MACRO_POLL_MS)&&(await updateCapacity(env,'macro',macroNow)).allowed){
         await initializeStorage(env);
         await recordCronHeartbeat(env,{lane:'macro'});
         const result=await refreshMacroSnapshots(env,{now:macroNow});
@@ -342,12 +346,21 @@ export default{
         else await recordSchedulerRetry(env,node,{error:'指数更新待ち: '+result.failed.join(', ')});
         return;
       }
-      // Reserve room for the remaining half-hourly one-key macro publications.
-      if(!await backgroundCapacity(env,64)){await recordCronHeartbeat(env,{lane:'macro-reserve'});return;}
+      // Essential prices get their own invocation before rankings, economics or backtests.
+      // A low reserve can skip one class of job, not disable all stock updates.
+      if(event.cron==='*/5 * * * *'){
+        await initializeStorage(env);
+        const close=await scheduledStage(env,macroNow,{confirmedOnly:true});
+        if(close.node)return;
+        if((await updateCapacity(env,'tracked',macroNow)).allowed){
+          const tracked=await refreshTrackedAnalysis(env);
+          if(tracked.processed)return;
+        }
+      }
       // Daily economic refresh shares the same account Cron (05:20-05:55 JST).
       const tick=new Date(event.scheduledTime||Date.now());
       const econKey='sched:economic-shared:'+tick.toISOString().slice(0,10);
-      if(event.cron==='*/5 * * * *'&&tick.getUTCHours()===20&&tick.getUTCMinutes()>=20&&!await env.COCKPIT_KV.get(econKey)){
+      if(event.cron==='*/5 * * * *'&&(await updateCapacity(env,'auxiliary',tick)).allowed&&tick.getUTCHours()===20&&tick.getUTCMinutes()>=20&&!await env.COCKPIT_KV.get(econKey)){
         await initializeStorage(env);
         await recordCronHeartbeat(env,{lane:'economic'});
         const synced=await syncEconomicEvents(env,{now:tick.getTime()});
@@ -367,11 +380,10 @@ export default{
       }
       try{
         await initializeStorage(env);
-        const result=await scheduledStage(env);
+        const result=await scheduledStage(env,macroNow);
         // Auxiliary fetches share the same invocation's request budget.
         if(result.node)return;
-        const tracked=await refreshTrackedAnalysis(env);
-        if(tracked.processed)return;
+
       }catch(error){
         console.error('[stage cron]',error?.stack||error);
       }

@@ -1,5 +1,5 @@
 'use strict';
-const BUILD='vantage-ui73.8.27-macro-freshness-20261014';
+const BUILD='vantage-ui73.8.28-budget-recovery-20261016';
 const NETWORK_MODE='notification-only';
 
 self.addEventListener('install',event=>{

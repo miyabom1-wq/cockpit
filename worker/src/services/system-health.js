@@ -1,3 +1,4 @@
+import { updateCapacity } from './update-capacity.js';
 import { macroHealth, MACRO_STATUS_KEY } from './macro-freshness.js';
 import { getTrackedData, latestAnalysis, assessedRow } from './tracked-data.js';
 import { readBacktestRuntime } from './backtest-runtime.js';
@@ -164,6 +165,7 @@ export async function getSystemAudit(env){
     backtest:{...runtime,status:components.backtest,last_attempt_at:bt?.updated_at||null,last_success_at:bt?.last_success_at||null,last_processed:bt?.last_processed||null,processed_count:bt?.cursor||0,remaining_count:Math.max(0,(bt?.queue?.length||0)-(bt?.cursor||0))+(bt?.retry_queue?.length||0),total_count:bt?.queue?.length||0,retry_count:(bt?.errors||[]).length,last_error:runtime.last_error||bt?.errors?.at(-1)||null},
     checked_at:nowIso(),
     scheduler:{...scheduler,age_minutes:cronAge,alive:cronAge!==null&&cronAge<=15},
+    update_capacity:await updateCapacity(env,'close'),
     stages:{jp,us},datasets,macro:{...macro,update:macroUpdate},
   };
 }

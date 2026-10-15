@@ -9,12 +9,14 @@ export function latestAnalysis(...rows){
     if(date)return date;
     const valid=x=>x.engine_version===ENGINE_VERSION&&!!x.momentumState;
     if(valid(a)!==valid(b))return valid(b)?1:-1;
+    const confirmed=x=>x.data_quality?.close_confirmed===true;
+    if(confirmed(a)!==confirmed(b))return confirmed(b)?1:-1;
     return (Date.parse(b.price_time||b.updated_at)||0)-(Date.parse(a.price_time||a.updated_at)||0);
   })[0]||{};
 }
 export function assessedRow(row,market){
   const expected=expectedConfirmedTradingDate(market);
-  const stale=!row.date||row.date<expected;
+  const stale=!row.date||row.date<expected||(row.date===expected&&row.data_quality?.close_confirmed===false);
   const mismatch=row.engine_version!==ENGINE_VERSION||!row.momentumState;
   const failed=row.data_quality?.data_valid===false||!Number.isFinite(row.price);
   return {...row,expected_trade_date:expected,data_status:stale?'STALE':failed?'FAILED':mismatch?'SCHEMA_MISMATCH':'CURRENT',assessment_usable:!stale&&!failed&&!mismatch};
