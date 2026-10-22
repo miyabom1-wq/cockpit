@@ -1,88 +1,28 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-10-21T13:56:44.395356Z",
+  "generated_at": "2026-10-22T13:55:07.780370Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "label": "",
-      "events": 4,
-      "bytes": 12703
+      "events": 8,
+      "bytes": 13129
     },
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
       "label": "",
-      "events": 8,
+      "events": 5,
       "bytes": 48910
     },
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
       "label": "",
-      "events": 2877,
+      "events": 2875,
       "bytes": 236372
     }
   ],
   "events": [
-    {
-      "symbol": "3226.T",
-      "code": "3226",
-      "name": "三井不動産アコモデーションファンド投資法人",
-      "date": "2026-10-20",
-      "time": "2026-10-20T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "3466.T",
-      "code": "3466",
-      "name": "ラサールロジポート投資法人",
-      "date": "2026-10-20",
-      "time": "2026-10-20T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "5933.T",
-      "code": "5933",
-      "name": "アルインコ",
-      "date": "2026-10-20",
-      "time": "2026-10-20T14:59:00.000Z",
-      "period": "2027-03-2000:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "5990.T",
-      "code": "5990",
-      "name": "スーパーツール",
-      "date": "2026-10-20",
-      "time": "2026-10-20T14:59:00.000Z",
-      "period": "2027-03-1500:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
-    {
-      "symbol": "8968.T",
-      "code": "8968",
-      "name": "福岡リート投資法人",
-      "date": "2026-10-20",
-      "time": "2026-10-20T14:59:00.000Z",
-      "period": "2026-08-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan08_1002.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "296A.T",
       "code": "296A",
@@ -163,7 +103,7 @@
       "time": "2026-10-22T14:59:00.000Z",
       "period": "2027-03-2000:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -175,7 +115,7 @@
       "time": "2026-10-22T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -187,7 +127,7 @@
       "time": "2026-10-22T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -211,7 +151,7 @@
       "time": "2026-10-22T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -235,7 +175,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -271,7 +211,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -295,7 +235,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -307,7 +247,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -331,7 +271,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-2000:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -343,7 +283,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -367,7 +307,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -379,7 +319,7 @@
       "time": "2026-10-23T14:59:00.000Z",
       "period": "2027-03-3100:00:00",
       "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan09_1016.xlsx",
+      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan.xlsx",
       "source_label": "",
       "sheet": "List"
     },
@@ -34647,8 +34587,8 @@
   "stats": {
     "links_found": 3,
     "files_processed": 3,
-    "raw_rows": 2889,
-    "unique_future_events": 2885,
+    "raw_rows": 2888,
+    "unique_future_events": 2880,
     "warnings": []
   }
 }
