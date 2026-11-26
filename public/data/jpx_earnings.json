@@ -1,6 +1,6 @@
 {
   "schema": "vantage-jpx-earnings-v1",
-  "generated_at": "2026-11-25T18:42:11.666626Z",
+  "generated_at": "2026-11-26T18:29:47.126843Z",
   "source_page": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/",
   "source_files": [
     {
@@ -12,23 +12,11 @@
     {
       "url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan10_1120.xlsx",
       "label": "",
-      "events": 223,
+      "events": 222,
       "bytes": 31671
     }
   ],
   "events": [
-    {
-      "symbol": "2391.T",
-      "code": "2391",
-      "name": "プラネット",
-      "date": "2026-11-25",
-      "time": "2026-11-25T14:59:00.000Z",
-      "period": "2027-07-3100:00:00",
-      "source_name": "JPX 決算発表予定日",
-      "source_url": "https://www.jpx.co.jp/listing/event-schedules/financial-announcement/tvdivq0000001ofb-att/kessan10_1120.xlsx",
-      "source_label": "",
-      "sheet": "List"
-    },
     {
       "symbol": "2590.T",
       "code": "2590",
@@ -2697,8 +2685,8 @@
   "stats": {
     "links_found": 2,
     "files_processed": 2,
-    "raw_rows": 223,
-    "unique_future_events": 223,
+    "raw_rows": 222,
+    "unique_future_events": 222,
     "warnings": []
   }
 }
