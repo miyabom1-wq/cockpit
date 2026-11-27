@@ -1,160 +1,10 @@
 {
   "schema": "vantage-us-earnings-v1",
-  "generated_at": "2026-11-26T02:56:56.912724Z",
+  "generated_at": "2026-11-27T02:58:43.066194Z",
   "source_page": "https://www.nasdaq.com/market-activity/earnings",
   "source_api": "https://api.nasdaq.com/api/calendar/earnings",
   "source_note": "Nasdaq calendar; expected dates supplied by Zacks and subject to change.",
   "events": [
-    {
-      "symbol": "BNR",
-      "name": "Burning Rock Biotech Limited",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$147,965,184"
-    },
-    {
-      "symbol": "BZAI",
-      "name": "Blaize Holdings, Inc.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "($0.17)",
-      "market_cap": "$19,054,764"
-    },
-    {
-      "symbol": "DOYU",
-      "name": "DouYu International Holdings Limited",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$101,250,072"
-    },
-    {
-      "symbol": "DTSS",
-      "name": "Datasea Intelligent Technology Ltd.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$6,779,694"
-    },
-    {
-      "symbol": "FORTY",
-      "name": "Formula Systems (1985) Ltd.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$1,678,408,830"
-    },
-    {
-      "symbol": "HUBG",
-      "name": "Hub Group, Inc.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.26",
-      "market_cap": "$1,409,588,350"
-    },
-    {
-      "symbol": "ICG",
-      "name": "Intchains Group Limited",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$157,017,776"
-    },
-    {
-      "symbol": "ITP",
-      "name": "IT Tech Packaging, Inc.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$1,187,944"
-    },
-    {
-      "symbol": "MTR",
-      "name": "Mesa Royalty Trust",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$3,988,083"
-    },
-    {
-      "symbol": "PRT",
-      "name": "PermRock Royalty Trust",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$11,441,871"
-    },
-    {
-      "symbol": "QUIT",
-      "name": "Achieve Life Sciences, Inc.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "($0.19)",
-      "market_cap": "$678,912,580"
-    },
-    {
-      "symbol": "RBNE",
-      "name": "Robin Energy Ltd.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$3,472,560"
-    },
-    {
-      "symbol": "SEGG",
-      "name": "Sports Entertainment Gaming Global Corporation",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$3,512,624"
-    },
-    {
-      "symbol": "SHPH",
-      "name": "Shuttle Pharmaceuticals Holdings, Inc.",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$15,389,968"
-    },
-    {
-      "symbol": "TPCS",
-      "name": "TechPrecision Corporation",
-      "date": "2026-11-26",
-      "time": "2026-11-26T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "",
-      "market_cap": "$49,399,648"
-    },
     {
       "symbol": "AAME",
       "name": "Atlantic American Corporation",
@@ -286,16 +136,6 @@
       "market_cap": "$208,595,856"
     },
     {
-      "symbol": "ANTA",
-      "name": "Antalpha Platform Holding Company",
-      "date": "2026-11-30",
-      "time": "2026-11-30T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.09",
-      "market_cap": "$45,120,000"
-    },
-    {
       "symbol": "BOSC",
       "name": "B.O.S. Better Online Solutions",
       "date": "2026-11-30",
@@ -304,6 +144,16 @@
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
       "market_cap": "$30,498,380"
+    },
+    {
+      "symbol": "CANG",
+      "name": "Cango Inc.",
+      "date": "2026-11-30",
+      "time": "2026-11-30T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "($0.35)",
+      "market_cap": "$52,508,120"
     },
     {
       "symbol": "CBAT",
@@ -322,7 +172,7 @@
       "time": "2026-11-30T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$0.34",
+      "eps_forecast": "$0.33",
       "market_cap": "$2,083,135,490"
     },
     {
@@ -346,6 +196,16 @@
       "market_cap": "$3,663,000"
     },
     {
+      "symbol": "GDEV",
+      "name": "GDEV Inc.",
+      "date": "2026-11-30",
+      "time": "2026-11-30T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$1.33",
+      "market_cap": "$139,758,768"
+    },
+    {
       "symbol": "HMR",
       "name": "Heidmar Maritime Holdings Corp.",
       "date": "2026-11-30",
@@ -356,6 +216,16 @@
       "market_cap": "$63,121,436"
     },
     {
+      "symbol": "HTT",
+      "name": "High Templar Tech Limited",
+      "date": "2026-11-30",
+      "time": "2026-11-30T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$208,079,888"
+    },
+    {
       "symbol": "IPST",
       "name": "IP Strategy Holdings, Inc.",
       "date": "2026-11-30",
@@ -364,6 +234,16 @@
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
       "market_cap": "$1,459,341"
+    },
+    {
+      "symbol": "LOT",
+      "name": "Lotus Technology Inc.",
+      "date": "2026-11-30",
+      "time": "2026-11-30T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$123,602,304"
     },
     {
       "symbol": "MOB",
@@ -686,6 +566,16 @@
       "market_cap": "$95,187,912"
     },
     {
+      "symbol": "AACG",
+      "name": "ATA Creativity Global",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$30,945,736"
+    },
+    {
       "symbol": "AEO",
       "name": "American Eagle Outfitters, Inc.",
       "date": "2026-12-02",
@@ -694,6 +584,16 @@
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0.49",
       "market_cap": "$3,818,996,220"
+    },
+    {
+      "symbol": "AEXA",
+      "name": "American Exceptionalism Acquisition Corp. A",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": ""
     },
     {
       "symbol": "AI",
@@ -722,7 +622,7 @@
       "time": "2026-12-02T12:00:00.000Z",
       "timing": "after_hours",
       "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "$1.42",
+      "eps_forecast": "$1.33",
       "market_cap": "$1,770,795,650"
     },
     {
@@ -742,8 +642,38 @@
       "time": "2026-12-02T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$1.55",
+      "eps_forecast": "$1.54",
       "market_cap": "$104,282,898,000"
+    },
+    {
+      "symbol": "BRLS",
+      "name": "Borealis Foods Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$16,312,113"
+    },
+    {
+      "symbol": "BRTX",
+      "name": "BioRestorative Therapies, Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "($2.60)",
+      "market_cap": "$1,588,297"
+    },
+    {
+      "symbol": "CAAS",
+      "name": "China Automotive Systems, Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$117,665,736"
     },
     {
       "symbol": "CBRL",
@@ -754,6 +684,16 @@
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0",
       "market_cap": "$1,680,679,170"
+    },
+    {
+      "symbol": "CETY",
+      "name": "Clean Energy Technologies, Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$11,162,402"
     },
     {
       "symbol": "CRM",
@@ -806,6 +746,16 @@
       "market_cap": "$7,823,455,200"
     },
     {
+      "symbol": "EDVA",
+      "name": "Endovia Health Sciences, Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$1,838,886"
+    },
+    {
       "symbol": "FIVE",
       "name": "Five Below, Inc.",
       "date": "2026-12-02",
@@ -834,6 +784,16 @@
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
       "market_cap": "$2,931,097,340"
+    },
+    {
+      "symbol": "LITB",
+      "name": "LightInTheBox Holding Co., Ltd.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$52,669,976"
     },
     {
       "symbol": "M",
@@ -866,6 +826,16 @@
       "market_cap": "$10,431,245,300"
     },
     {
+      "symbol": "NWCL",
+      "name": "newcleo plc",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$816,451,330"
+    },
+    {
       "symbol": "PHR",
       "name": "Phreesia, Inc.",
       "date": "2026-12-02",
@@ -884,6 +854,16 @@
       "fiscal_quarter_ending": "Aug/2026",
       "eps_forecast": "",
       "market_cap": "$13,512,509"
+    },
+    {
+      "symbol": "REBN",
+      "name": "Reborn Coffee, Inc.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$7,500,368"
     },
     {
       "symbol": "SIG",
@@ -906,6 +886,16 @@
       "market_cap": "$95,640,551,000"
     },
     {
+      "symbol": "SRTM",
+      "name": "Stratum Holdings Corp.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$236,646"
+    },
+    {
       "symbol": "SY",
       "name": "So-Young International Inc.",
       "date": "2026-12-02",
@@ -924,6 +914,16 @@
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0.09",
       "market_cap": "$123,266,680"
+    },
+    {
+      "symbol": "UCFI",
+      "name": "CN Healthy Food Tech Group Corp.",
+      "date": "2026-12-02",
+      "time": "2026-12-02T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$287,814,752"
     },
     {
       "symbol": "VFS",
@@ -962,7 +962,7 @@
       "time": "2026-12-03T12:00:00.000Z",
       "timing": "after_hours",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$3.34",
+      "eps_forecast": "$3.39",
       "market_cap": "$3,803,490,050"
     },
     {
@@ -1096,6 +1096,16 @@
       "market_cap": "$4,466,427,900"
     },
     {
+      "symbol": "DSC",
+      "name": "DSC Holdings Ltd.",
+      "date": "2026-12-03",
+      "time": "2026-12-03T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "($0.11)",
+      "market_cap": "$99,143,536"
+    },
+    {
       "symbol": "DXLG",
       "name": "Destination XL Group, Inc.",
       "date": "2026-12-03",
@@ -1196,6 +1206,16 @@
       "market_cap": "$260,284,000"
     },
     {
+      "symbol": "LX",
+      "name": "LexinFintech Holdings Ltd.",
+      "date": "2026-12-03",
+      "time": "2026-12-03T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$85,409,760"
+    },
+    {
       "symbol": "MNY",
       "name": "MoneyHero Limited",
       "date": "2026-12-03",
@@ -1252,7 +1272,7 @@
       "time": "2026-12-03T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$2.93",
+      "eps_forecast": "$2.94",
       "market_cap": "$261,535,613,000"
     },
     {
@@ -1302,7 +1322,7 @@
       "time": "2026-12-03T12:00:00.000Z",
       "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$1.77",
+      "eps_forecast": "$1.76",
       "market_cap": "$188,859,302,000"
     },
     {
@@ -1322,7 +1342,7 @@
       "time": "2026-12-03T12:00:00.000Z",
       "timing": "after_hours",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$5.62",
+      "eps_forecast": "$5.64",
       "market_cap": "$27,407,538,200"
     },
     {
@@ -1416,16 +1436,6 @@
       "market_cap": "$39,978,624"
     },
     {
-      "symbol": "CANG",
-      "name": "Cango Inc.",
-      "date": "2026-12-07",
-      "time": "2026-12-07T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Sep/2026",
-      "eps_forecast": "($0.35)",
-      "market_cap": "$52,508,120"
-    },
-    {
       "symbol": "MOMO",
       "name": "Hello Group Inc.",
       "date": "2026-12-07",
@@ -1476,6 +1486,16 @@
       "market_cap": "$5,356,553"
     },
     {
+      "symbol": "ANTA",
+      "name": "Antalpha Platform Holding Company",
+      "date": "2026-12-08",
+      "time": "2026-12-08T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "$0.09",
+      "market_cap": "$45,120,000"
+    },
+    {
       "symbol": "ARQQ",
       "name": "Arqit Quantum Inc.",
       "date": "2026-12-08",
@@ -1500,7 +1520,7 @@
       "name": "AeroVironment, Inc.",
       "date": "2026-12-08",
       "time": "2026-12-08T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "after_hours",
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0.46",
       "market_cap": "$4,543,370,800"
@@ -1552,7 +1572,7 @@
       "time": "2026-12-08T12:00:00.000Z",
       "timing": "after_hours",
       "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$6.01",
+      "eps_forecast": "$5.92",
       "market_cap": "$25,392,373,800"
     },
     {
@@ -1646,16 +1666,6 @@
       "market_cap": "$4,068,999,170"
     },
     {
-      "symbol": "LAKE",
-      "name": "Lakeland Industries, Inc.",
-      "date": "2026-12-08",
-      "time": "2026-12-08T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$0.09",
-      "market_cap": "$84,416,440"
-    },
-    {
       "symbol": "LULU",
       "name": "lululemon athletica inc.",
       "date": "2026-12-08",
@@ -1666,14 +1676,34 @@
       "market_cap": "$11,198,250,000"
     },
     {
+      "symbol": "MAMA",
+      "name": "Mama's Creations, Inc.",
+      "date": "2026-12-08",
+      "time": "2026-12-08T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Oct/2026",
+      "eps_forecast": "$0.06",
+      "market_cap": "$527,580,192"
+    },
+    {
       "symbol": "MIND",
       "name": "MIND Technology, Inc.",
       "date": "2026-12-08",
       "time": "2026-12-08T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "after_hours",
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "",
       "market_cap": "$21,268,388"
+    },
+    {
+      "symbol": "NAVN",
+      "name": "Navan, Inc.",
+      "date": "2026-12-08",
+      "time": "2026-12-08T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Oct/2026",
+      "eps_forecast": "($0.01)",
+      "market_cap": "$6,880,045,100"
     },
     {
       "symbol": "OLLI",
@@ -1764,6 +1794,16 @@
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0",
       "market_cap": "$718,912,580"
+    },
+    {
+      "symbol": "YEXT",
+      "name": "Yext, Inc.",
+      "date": "2026-12-08",
+      "time": "2026-12-08T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Oct/2026",
+      "eps_forecast": "$0.12",
+      "market_cap": "$742,131,840"
     },
     {
       "symbol": "YQ",
@@ -1890,7 +1930,7 @@
       "name": "J. Jill, Inc.",
       "date": "2026-12-09",
       "time": "2026-12-09T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "$0.59",
       "market_cap": "$300,975,296"
@@ -2046,6 +2086,16 @@
       "market_cap": "$483,768,730,000"
     },
     {
+      "symbol": "DLTH",
+      "name": "Duluth Holdings Inc.",
+      "date": "2026-12-10",
+      "time": "2026-12-10T12:00:00.000Z",
+      "timing": "pre_market",
+      "fiscal_quarter_ending": "Oct/2026",
+      "eps_forecast": "($0.32)",
+      "market_cap": "$140,998,560"
+    },
+    {
       "symbol": "FEIM",
       "name": "Frequency Electronics, Inc.",
       "date": "2026-12-10",
@@ -2106,6 +2156,16 @@
       "market_cap": "$1,595,660,540"
     },
     {
+      "symbol": "LAKE",
+      "name": "Lakeland Industries, Inc.",
+      "date": "2026-12-10",
+      "time": "2026-12-10T12:00:00.000Z",
+      "timing": "after_hours",
+      "fiscal_quarter_ending": "Oct/2026",
+      "eps_forecast": "$0.09",
+      "market_cap": "$84,416,440"
+    },
+    {
       "symbol": "LIVE",
       "name": "Live Ventures Incorporated",
       "date": "2026-12-10",
@@ -2120,7 +2180,7 @@
       "name": "The Lovesac Company",
       "date": "2026-12-10",
       "time": "2026-12-10T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "($0.69)",
       "market_cap": "$193,274,000"
@@ -2220,7 +2280,7 @@
       "name": "Vera Bradley, Inc.",
       "date": "2026-12-10",
       "time": "2026-12-10T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "pre_market",
       "fiscal_quarter_ending": "Oct/2026",
       "eps_forecast": "($0.20)",
       "market_cap": "$157,500,768"
@@ -2260,7 +2320,7 @@
       "name": "Johnson Outdoors Inc.",
       "date": "2026-12-11",
       "time": "2026-12-11T12:00:00.000Z",
-      "timing": "unspecified",
+      "timing": "pre_market",
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "($0.74)",
       "market_cap": "$499,146,688"
@@ -2326,16 +2386,6 @@
       "market_cap": "$59,172,052"
     },
     {
-      "symbol": "MAMA",
-      "name": "Mama's Creations, Inc.",
-      "date": "2026-12-14",
-      "time": "2026-12-14T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$0.06",
-      "market_cap": "$527,580,192"
-    },
-    {
       "symbol": "ORCL",
       "name": "Oracle Corporation",
       "date": "2026-12-14",
@@ -2366,16 +2416,6 @@
       "market_cap": "$94,740,528"
     },
     {
-      "symbol": "YEXT",
-      "name": "Yext, Inc.",
-      "date": "2026-12-14",
-      "time": "2026-12-14T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "$0.12",
-      "market_cap": "$742,131,840"
-    },
-    {
       "symbol": "CSPI",
       "name": "CSP Inc.",
       "date": "2026-12-15",
@@ -2384,16 +2424,6 @@
       "fiscal_quarter_ending": "Sep/2026",
       "eps_forecast": "",
       "market_cap": "$75,604,840"
-    },
-    {
-      "symbol": "DLTH",
-      "name": "Duluth Holdings Inc.",
-      "date": "2026-12-15",
-      "time": "2026-12-15T12:00:00.000Z",
-      "timing": "unspecified",
-      "fiscal_quarter_ending": "Oct/2026",
-      "eps_forecast": "($0.32)",
-      "market_cap": "$140,998,560"
     },
     {
       "symbol": "GNSS",
@@ -3546,6 +3576,16 @@
       "market_cap": "$842,093,760,000"
     },
     {
+      "symbol": "LEXX",
+      "name": "Lexaria Bioscience Corp.",
+      "date": "2027-01-12",
+      "time": "2027-01-12T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Nov/2026",
+      "eps_forecast": "",
+      "market_cap": "$9,121,266"
+    },
+    {
       "symbol": "PKE",
       "name": "Park Aerospace Corp.",
       "date": "2027-01-12",
@@ -4364,11 +4404,461 @@
       "fiscal_quarter_ending": "Dec/2026",
       "eps_forecast": "$1.70",
       "market_cap": "$9,072,167,900"
+    },
+    {
+      "symbol": "ALLY",
+      "name": "Ally Financial Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.37",
+      "market_cap": "$11,208,661,000"
+    },
+    {
+      "symbol": "BANC",
+      "name": "Banc of California, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.48",
+      "market_cap": "$2,649,285,120"
+    },
+    {
+      "symbol": "BANR",
+      "name": "Banner Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.57",
+      "market_cap": "$2,549,851,140"
+    },
+    {
+      "symbol": "BKU",
+      "name": "BankUnited, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.04",
+      "market_cap": "$2,900,108,540"
+    },
+    {
+      "symbol": "CACI",
+      "name": "CACI International, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$7.15",
+      "market_cap": "$13,391,960,100"
+    },
+    {
+      "symbol": "CFG",
+      "name": "Citizens Financial Group, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.48",
+      "market_cap": "$25,642,160,100"
+    },
+    {
+      "symbol": "CHCO",
+      "name": "City Holding Company",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$2.40",
+      "market_cap": "$1,960,519,170"
+    },
+    {
+      "symbol": "CTBI",
+      "name": "Community Trust Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.62",
+      "market_cap": "$1,235,066,880"
+    },
+    {
+      "symbol": "CVBF",
+      "name": "CVB Financial Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.47",
+      "market_cap": "$3,822,151,680"
+    },
+    {
+      "symbol": "DCOM",
+      "name": "Dime Commercial Bancshares, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.94",
+      "market_cap": "$1,738,686,850"
+    },
+    {
+      "symbol": "EGBN",
+      "name": "Eagle Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.39",
+      "market_cap": "$1,011,139,140"
+    },
+    {
+      "symbol": "EQBK",
+      "name": "Equity Bancshares, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.30",
+      "market_cap": "$974,859,330"
+    },
+    {
+      "symbol": "FBK",
+      "name": "FB Financial Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.16",
+      "market_cap": "$2,567,892,740"
+    },
+    {
+      "symbol": "FBNC",
+      "name": "First Bancorp",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.19",
+      "market_cap": "$2,573,790,210"
+    },
+    {
+      "symbol": "FNLC",
+      "name": "First Bancorp, Inc (ME)",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "",
+      "market_cap": "$402,941,376"
+    },
+    {
+      "symbol": "FSBW",
+      "name": "FS Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.03",
+      "market_cap": "$324,952,800"
+    },
+    {
+      "symbol": "FULT",
+      "name": "Fulton Financial Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.59",
+      "market_cap": "$4,358,986,800"
+    },
+    {
+      "symbol": "GCBC",
+      "name": "Greene Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "",
+      "market_cap": "$592,146,370"
+    },
+    {
+      "symbol": "GDHG",
+      "name": "Golden Heaven Group Holdings Ltd.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Sep/2026",
+      "eps_forecast": "",
+      "market_cap": "$7,439,766"
+    },
+    {
+      "symbol": "GSBC",
+      "name": "Great Southern Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.57",
+      "market_cap": "$837,613,250"
+    },
+    {
+      "symbol": "HAL",
+      "name": "Halliburton Company",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.63",
+      "market_cap": "$25,558,204,400"
+    },
+    {
+      "symbol": "HBNC",
+      "name": "Horizon Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.55",
+      "market_cap": "$1,031,577,410"
+    },
+    {
+      "symbol": "JNJ",
+      "name": "Johnson & Johnson",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$2.91",
+      "market_cap": "$665,525,030,000"
+    },
+    {
+      "symbol": "KMI",
+      "name": "Kinder Morgan, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.37",
+      "market_cap": "$69,237,391,000"
+    },
+    {
+      "symbol": "KNX",
+      "name": "Knight Transportation, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.82",
+      "market_cap": "$10,014,041,100"
+    },
+    {
+      "symbol": "LOB",
+      "name": "Live Oak Bancshares, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.86",
+      "market_cap": "$1,513,773,820"
+    },
+    {
+      "symbol": "LSBK",
+      "name": "Lake Shore Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "",
+      "market_cap": "$141,017,104"
+    },
+    {
+      "symbol": "MMYT",
+      "name": "MakeMyTrip Limited",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.51",
+      "market_cap": "$4,654,022,700"
+    },
+    {
+      "symbol": "MPB",
+      "name": "Mid Penn Bancorp",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.88",
+      "market_cap": "$860,902,910"
+    },
+    {
+      "symbol": "NVEC",
+      "name": "NVE Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "",
+      "market_cap": "$354,392,832"
+    },
+    {
+      "symbol": "ONB",
+      "name": "Old National Bancorp",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.66",
+      "market_cap": "$9,040,366,600"
+    },
+    {
+      "symbol": "OSBC",
+      "name": "Old Second Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.58",
+      "market_cap": "$1,212,781,700"
+    },
+    {
+      "symbol": "PLBC",
+      "name": "Plumas Bancorp",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.52",
+      "market_cap": "$426,030,848"
+    },
+    {
+      "symbol": "PLD",
+      "name": "Prologis, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.55",
+      "market_cap": "$121,019,318,000"
+    },
+    {
+      "symbol": "PNFP",
+      "name": "Pinnacle Financial Partners, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$2.71",
+      "market_cap": "$14,475,931,600"
+    },
+    {
+      "symbol": "RDY",
+      "name": "Dr. Reddy's Laboratories Ltd",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.15",
+      "market_cap": "$12,661,746,700"
+    },
+    {
+      "symbol": "RLI",
+      "name": "RLI Corp.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.70",
+      "market_cap": "$6,527,651,300"
+    },
+    {
+      "symbol": "SCHW",
+      "name": "The Charles Schwab Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.72",
+      "market_cap": "$162,089,386,000"
+    },
+    {
+      "symbol": "SMBC",
+      "name": "Southern Missouri Bancorp, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.70",
+      "market_cap": "$737,831,940"
+    },
+    {
+      "symbol": "TCBX",
+      "name": "Third Coast Bancshares, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$0.97",
+      "market_cap": "$630,486,080"
+    },
+    {
+      "symbol": "TDY",
+      "name": "Teledyne Technologies Incorporated",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$6.76",
+      "market_cap": "$28,646,160,400"
+    },
+    {
+      "symbol": "TEL",
+      "name": "TE Connectivity plc",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$3.30",
+      "market_cap": "$59,836,133,000"
+    },
+    {
+      "symbol": "TFC",
+      "name": "Truist Financial Corporation",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$1.22",
+      "market_cap": "$56,904,229,000"
+    },
+    {
+      "symbol": "TRST",
+      "name": "TrustCo Bank Corp NY",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "",
+      "market_cap": "$946,378,370"
+    },
+    {
+      "symbol": "TRV",
+      "name": "The Travelers Companies, Inc.",
+      "date": "2027-01-20",
+      "time": "2027-01-20T12:00:00.000Z",
+      "timing": "unspecified",
+      "fiscal_quarter_ending": "Dec/2026",
+      "eps_forecast": "$9.73",
+      "market_cap": "$82,156,839,000"
     }
   ],
   "stats": {
-    "requested_weekdays": 87,
-    "events": 436,
+    "requested_weekdays": 86,
+    "events": 485,
     "failed_dates": 0,
     "failures": []
   }
